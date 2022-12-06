@@ -1,0 +1,1405 @@
+"'Add Board Item Screen' As screen":
+    Fill: =gblAppStyles.Background.Fill
+    OnVisible: |-
+        =Reset(rdoItemType_AddBoardItem);
+        Reset(txtLink_AddBoardItem);
+        Reset(txtTitle_AddBoardItem);
+        Reset(txtDesc_AddBoardItem);
+        SetFocus(txtLink_AddBoardItem)
+
+    lblAnnounce_AddBoardItem As label:
+        Height: =0
+        Live: =Live.Assertive
+        Text: =locScreenReaderAnnouncedText 
+        Width: =0
+        X: =Parent.Width - Self.Width
+        Y: =Parent.Height - Self.Height
+        ZIndex: =1
+
+    conAddBoardItem As groupContainer:
+        DisplayMode: =DisplayMode.Edit
+        Height: =Parent.Height
+        LayoutAlignItems: =LayoutAlignItems.Start
+        LayoutDirection: =LayoutDirection.Horizontal
+        LayoutJustifyContent: =LayoutJustifyContent.Start
+        LayoutMode: =LayoutMode.Manual
+        LayoutOverflowX: =LayoutOverflow.Hide
+        LayoutOverflowY: =LayoutOverflow.Hide
+        Width: =Parent.Width
+        X: =0*1
+        Y: =0*1
+        ZIndex: =2
+
+        cnvAddBoardItem As fluidGrid.fluidGridWithBlankCard:
+            BorderThickness: =0
+            Height: =Parent.Height - Self.Y
+            Width: =Parent.Width
+            Y: =0*0
+            ZIndex: =1
+
+            dtcAddBoardItem As dataCard:
+                BorderColor: =RGBA(0, 0, 0, 1)
+                BorderStyle: =BorderStyle.Solid
+                BorderThickness: =0
+                DisplayMode: =DisplayMode.Edit
+                Fill: =RGBA(0, 0, 0, 0)
+                Height: |-
+                    =If(
+                        'Add Board Item Screen'.Size = ScreenSize.ExtraLarge || 'Add Board Item Screen'.Size = ScreenSize.Large,
+                        galPreview_AddBoardItem.Y + galPreview_AddBoardItem.Height + 20,
+                        galPreview_AddBoardItem.Y + galPreview_AddBoardItem.Height + 20 + btnSave_AddBoardItem.Height + 60
+                    )
+                Width: =Parent.Width
+                X: =0
+                Y: =0
+                ZIndex: =1
+
+                imgBack_AddBoardItem As image:
+                    AccessibleLabel: |-
+                        =With({varDefault: "Click to go back",varOOBTextId: "imgBack_AddBoardItem__locAccessibleText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    BorderColor: =gblAppStyles.ButtonPrimary.Fill
+                    DisabledFill: |-
+                        =With(
+                            {
+                                varImageIsCategory: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Back"
+                                ).staticIconIsCategory
+                            },
+                            If(
+                                varImageIsCategory,
+                                gblAppStyles.Icons.DisabledFill_Category,
+                                Transparent
+                            )
+                        )
+                    Fill: |-
+                        =With(
+                            {
+                                varImageIsCategory: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Back"
+                                ).staticIconIsCategory
+                            },
+                            If(
+                                varImageIsCategory,
+                                gblAppStyles.Icons.Fill_Category,
+                                Transparent
+                            )
+                        )
+                    Height: =22*1
+                    Image: |
+                        =With(
+                            {
+                                varImageRecord: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Back"
+                                ),
+                                varColor: If(
+                                    Self.DisplayMode = DisplayMode.Disabled,
+                                    gblAppStyles.Icons.DisabledColor,
+                                    gblAppStyles.Icons.Color
+                                )
+                            },
+                            With(
+                                {
+                                    varImageData: Concatenate(
+                                        "data:image/svg+xml;utf8, ",
+                                        EncodeUrl(
+                                            Concatenate(
+                                                "<svg viewBox='",
+                                                varImageRecord.staticIconViewbox,
+                                                "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                varImageRecord.staticIconPath,
+                                                "' fill='#",
+                                                varColor,
+                                                "'/></svg>"
+                                            )
+                                        )
+                                    )
+                                },
+                                varImageData
+                            )
+                        )
+                    OnSelect: |-
+                        =//screen reader start
+                            UpdateContext(
+                                {
+                                    locScreenReaderAnnouncedText: With(
+                                        {
+                                            varAnnouncedText: With(
+                                                {
+                                                    varDefault: "Navigating back to Board items screen",
+                                                    varOOBTextId: "lblBack_AddBoarditem_Announcement"
+                                                },
+                                                With(
+                                                    {
+                                                        varLocalizedText: LookUp(
+                                                            colLocalization,
+                                                            OOBTextID = varOOBTextId,
+                                                            LocalizedText
+                                                        )
+                                                    },
+                                                    Coalesce(
+                                                        varLocalizedText,
+                                                        varDefault
+                                                    )
+                                                )
+                                            )
+                                        },
+                                        If(
+                                            locScreenReaderAnnouncedText = varAnnouncedText,
+                                            Concatenate(
+                                                varAnnouncedText,
+                                                " "
+                                            ),
+                                            varAnnouncedText
+                                        )
+                                    )
+                                }
+                            );
+                            
+                        //screen reader end
+                        
+                        Navigate(
+                            'Board Items Screen',
+                            ScreenTransition.Fade
+                        )
+                    RadiusBottomLeft: =5
+                    RadiusBottomRight: =5
+                    RadiusTopLeft: =5
+                    RadiusTopRight: =5
+                    TabIndex: =0
+                    Tooltip: |-
+                        =With({varDefault: "Click to go back",varOOBTextId: "imgBack_AddBoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Width: =22*1
+                    X: |-
+                        =If(
+                            'Add Board Item Screen'.Size = ScreenSize.ExtraLarge || 'Add Board Item Screen'.Size = ScreenSize.Large,
+                            20 * 1,
+                            ('Add Board Item Screen'.Width - If(
+                                'Add Board Item Screen'.Size = ScreenSize.ExtraLarge || 'Add Board Item Screen'.Size = ScreenSize.Large,
+                                400,
+                                'Add Board Item Screen'.Width - 20
+                            )) / 2
+                        )
+                    Y: =lblBack_AddBoardItem.Y + (lblBack_AddBoardItem.Height - Self.Height) / 2 + 1
+                    ZIndex: =1
+
+                lblBack_AddBoardItem As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =40*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: |-
+                        =//screen reader start
+                            UpdateContext(
+                                {
+                                    locScreenReaderAnnouncedText: With(
+                                        {
+                                            varAnnouncedText: With(
+                                                {
+                                                    varDefault: "Navigating back to Board items screen",
+                                                    varOOBTextId: "lblBack_AddBoarditem_Announcement"
+                                                },
+                                                With(
+                                                    {
+                                                        varLocalizedText: LookUp(
+                                                            colLocalization,
+                                                            OOBTextID = varOOBTextId,
+                                                            LocalizedText
+                                                        )
+                                                    },
+                                                    Coalesce(
+                                                        varLocalizedText,
+                                                        varDefault
+                                                    )
+                                                )
+                                            )
+                                        },
+                                        If(
+                                            locScreenReaderAnnouncedText = varAnnouncedText,
+                                            Concatenate(
+                                                varAnnouncedText,
+                                                " "
+                                            ),
+                                            varAnnouncedText
+                                        )
+                                    )
+                                }
+                            );
+                            
+                        //screen reader end
+                        
+                        Navigate(
+                            'Board Items Screen',
+                            ScreenTransition.Fade
+                        )
+                    PaddingBottom: =0
+                    PaddingTop: =0
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Role: =TextRole.Heading1
+                    Size: =gblAppStyles.Label.Size.Medium
+                    TabIndex: |-
+                        =If(
+                            true,
+                            -1,
+                            0
+                        )
+                    Text: |-
+                        =With({varDefault: "Back",varOOBTextId: "lblBack_AddBoardItem__locText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Tooltip: |-
+                        =With({varDefault: "Back",varOOBTextId: "lblBack_AddBoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Width: =150*1
+                    X: =imgBack_AddBoardItem.X + imgBack_AddBoardItem.Width
+                    Y: =20*1
+                    ZIndex: =2
+
+                lblHeader_AddBoardItem As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Bold
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Role: =TextRole.Heading1
+                    Size: =gblAppStyles.Label.Size.Large
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Add to board",
+                                varOOBTextId: "lblHeader_AddBoardItem__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Tooltip: |-
+                        =With({varDefault: "Add to board",varOOBTextId: "lblHeader_AddBoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Width: |-
+                        =If(
+                            'Add Board Item Screen'.Size = ScreenSize.ExtraLarge || 'Add Board Item Screen'.Size = ScreenSize.Large,
+                            Parent.Width/2,
+                            Parent.Width - Self.X*2
+                        )
+                    Wrap: =false
+                    X: =20*1
+                    Y: =lblBack_AddBoardItem.Y + lblBack_AddBoardItem.Height + 20
+                    ZIndex: =3
+
+                lblLink_AddBoardItem As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With({varDefault: "Link *",varOOBTextId: "lblLink_AddBoardItem__locText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Tooltip: |-
+                        =With({varDefault: "Link *",varOOBTextId: "lblLink_AddBoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Width: =lblHeader_AddBoardItem.Width
+                    Wrap: =false
+                    X: =20*1
+                    Y: =rdoItemType_AddBoardItem.Y + rdoItemType_AddBoardItem.Height + 10
+                    ZIndex: =4
+
+                txtLink_AddBoardItem As text:
+                    AccessibleLabel: |-
+                        ="Required" & With({varDefault: "Add a destination link",varOOBTextId: "txtLink_AddBoardItem__locAccessibleText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    BorderColor: =gblAppStyles.TextInput.BorderColor
+                    BorderThickness: =gblAppStyles.TextInput.BorderThickness
+                    Color: =gblAppStyles.TextInput.Color
+                    Default: =""
+                    DisabledBorderColor: =gblAppStyles.TextInput.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.TextInput.DisabledColor
+                    DisabledFill: =gblAppStyles.TextInput.DisabledFill
+                    Fill: =gblAppStyles.TextInput.Fill
+                    FocusedBorderColor: =gblAppStyles.TextInput.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.TextInput.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HintText: |-
+                        =With({varDefault: "Add a destination link",varOOBTextId: "txtLink_AddBoardItem__locHintText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    HoverBorderColor: =gblAppStyles.TextInput.HoverBorderColor
+                    HoverColor: =gblAppStyles.TextInput.HoverColor
+                    HoverFill: =gblAppStyles.TextInput.HoverFill
+                    OnChange: |
+                        =UpdateContext(
+                            {
+                                locBoardItemTeam: If(
+                                    rdoItemType_AddBoardItem.Selected.Value = "Teams team",
+                                    MicrosoftTeams.GetTeam(
+                                        GUID(
+                                            Left(
+                                                Right(
+                                                    Self.Text,
+                                                    Len(Self.Text) - Find(
+                                                        "groupId",
+                                                        Self.Text
+                                                    ) - 7
+                                                ),
+                                                Find(
+                                                    "tenantId",
+                                                    Right(
+                                                        Self.Text,
+                                                        Len(Self.Text) - Find(
+                                                            "groupId",
+                                                            Self.Text
+                                                        ) - 7
+                                                    )
+                                                ) - 2
+                                            )
+                                        )
+                                    )
+                                )
+                            }
+                        );
+                        UpdateContext(
+                            {
+                                locBoardItemChannel: If(
+                                    rdoItemType_AddBoardItem.Selected.Value = "Teams channel",
+                                    LookUp(
+                                    //First(
+                                        //Filter(
+                                        MicrosoftTeams.GetChannelsForGroup(
+                                            GUID(
+                                                Left(
+                                                    Right(
+                                                        Self.Text,
+                                                        Len(Self.Text) - Find(
+                                                            "groupId",
+                                                            Self.Text
+                                                        ) - 7
+                                                    ),
+                                                    Find(
+                                                        "tenantId",
+                                                        Right(
+                                                            Self.Text,
+                                                            Len(Self.Text) - Find(
+                                                                "groupId",
+                                                                Self.Text
+                                                            ) - 7
+                                                        )
+                                                    ) - 2
+                                                )
+                                            )
+                                        ).value,
+                                        id = Substitute(
+                                            Substitute(
+                                                Substitute(
+                                                    Left(
+                                                        Right(
+                                                            Self.Text,
+                                                            Len(Self.Text) - Find(
+                                                                "channel/",
+                                                                Self.Text
+                                                            ) - 7
+                                                        ),
+                                                        Find(
+                                                            "tacv2/",
+                                                            Right(
+                                                                Self.Text,
+                                                                Len(Self.Text) - Find(
+                                                                    "channel/",
+                                                                    Self.Text
+                                                                ) - 7
+                                                            )
+                                                        ) - 2 + 6
+                                                    ),
+                                                    "%3A",
+                                                    ":"
+                                                ),
+                                                "%3a",
+                                                ":"
+                                            ),
+                                            "%40",
+                                            "@"
+                                        )
+                                    )
+                                )
+                                //)
+                            }
+                        );
+                        //
+                        UpdateContext(
+                            {
+                                locBoardItemConversation: If(
+                                    rdoItemType_AddBoardItem.Selected.Value = "Conversation",
+                                    LookUp(
+                                    //First(
+                                        //Filter(
+                                        MicrosoftTeams.GetMessagesFromChannel(
+                                            GUID(
+                                                Left(
+                                                    Right(
+                                                        Self.Text,
+                                                        Len(Self.Text) - Find(
+                                                            "groupId",
+                                                            Self.Text
+                                                        ) - 7
+                                                    ),
+                                                    Find(
+                                                        "parent",
+                                                        Right(
+                                                            Self.Text,
+                                                            Len(Self.Text) - Find(
+                                                                "groupId",
+                                                                Self.Text
+                                                            ) - 7
+                                                        )
+                                                    ) - 2
+                                                )
+                                            ),
+                                            Substitute(
+                                                Substitute(
+                                                    Substitute(
+                                                        Left(
+                                                            Right(
+                                                                Self.Text,
+                                                                Len(Self.Text) - Find(
+                                                                    "message/",
+                                                                    Self.Text
+                                                                ) - 7
+                                                            ),
+                                                            Find(
+                                                                "tacv2/",
+                                                                Right(
+                                                                    Self.Text,
+                                                                    Len(Self.Text) - Find(
+                                                                        "message/",
+                                                                        Self.Text
+                                                                    ) - 7
+                                                                )
+                                                            ) - 2 + 6
+                                                        ),
+                                                        "%3A",
+                                                        ":"
+                                                    ),
+                                                    "%3a",
+                                                    ":"
+                                                ),
+                                                "%40",
+                                                "@"
+                                            )
+                                        ).value,
+                                        etag = Left(
+                                            Right(
+                                                Self.Text,
+                                                Len(Self.Text) - Find(
+                                                    "tacv2/",
+                                                    Self.Text
+                                                ) - 5
+                                            ),
+                                            Find(
+                                                "?tenant",
+                                                Right(
+                                                    Self.Text,
+                                                    Len(Self.Text) - Find(
+                                                        "tacv2/",
+                                                        Self.Text
+                                                    ) - 7
+                                                )
+                                            ) + 1
+                                        )
+                                    )
+                                )
+                                //)
+                            }
+                        );
+                    PressedBorderColor: =gblAppStyles.TextInput.PressedBorderColor
+                    PressedColor: =gblAppStyles.TextInput.PressedColor
+                    PressedFill: =gblAppStyles.TextInput.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.TextInput.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.TextInput.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.TextInput.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.TextInput.RadiusTopRight
+                    Size: =gblAppStyles.TextInput.Size
+                    TabIndex: =1
+                    Tooltip: |-
+                        =With({varDefault: "Add a destination link",varOOBTextId: "txtLink_AddBoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Width: =lblHeader_AddBoardItem.Width
+                    X: =lblLink_AddBoardItem.X
+                    Y: =lblLink_AddBoardItem.Y + lblLink_AddBoardItem.Height
+                    ZIndex: =5
+
+                lblDesc_AddBoardItem As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Description * (" & 2000 - Len(txtDesc_AddBoardItem.Text) & " characters remaining)",
+                                varOOBTextId: "lblDesc_AddBoardItem__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Tooltip: |-
+                        =With({varDefault: "Description *",varOOBTextId: "lblDesc_AddBoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Width: =lblHeader_AddBoardItem.Width
+                    Wrap: =false
+                    X: =20*1
+                    Y: =txtTitle_AddBoardItem.Y + txtTitle_AddBoardItem.Height + 20
+                    ZIndex: =6
+
+                txtDesc_AddBoardItem As text:
+                    AccessibleLabel: |-
+                        ="Required" & With({varDefault: "Tell everyone what this item is about",varOOBTextId: "txtDesc_AddBoardItem__locAccessibleText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    BorderColor: =gblAppStyles.TextInput.BorderColor
+                    BorderThickness: =gblAppStyles.TextInput.BorderThickness
+                    Color: =gblAppStyles.TextInput.Color
+                    Default: |-
+                        =Switch(
+                            rdoItemType_AddBoardItem.Selected.Value,
+                            "Teams team",
+                            locBoardItemTeam.description,
+                            "Teams channel",
+                            locBoardItemChannel.description,
+                            "Conversation",
+                            locBoardItemConversation.body.content,
+                            ""
+                        )
+                    DisabledBorderColor: =gblAppStyles.TextInput.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.TextInput.DisabledColor
+                    DisabledFill: =gblAppStyles.TextInput.DisabledFill
+                    Fill: =gblAppStyles.TextInput.Fill
+                    FocusedBorderColor: =gblAppStyles.TextInput.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.TextInput.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*4
+                    HintText: |-
+                        =With({varDefault: "Tell everyone what this item is about",varOOBTextId: "txtDesc_AddBoardItem__locHintText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    HoverBorderColor: =gblAppStyles.TextInput.HoverBorderColor
+                    HoverColor: =gblAppStyles.TextInput.HoverColor
+                    HoverFill: =gblAppStyles.TextInput.HoverFill
+                    MaxLength: =2000
+                    Mode: =TextMode.MultiLine
+                    PressedBorderColor: =gblAppStyles.TextInput.PressedBorderColor
+                    PressedColor: =gblAppStyles.TextInput.PressedColor
+                    PressedFill: =gblAppStyles.TextInput.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.TextInput.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.TextInput.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.TextInput.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.TextInput.RadiusTopRight
+                    Size: =gblAppStyles.TextInput.Size
+                    TabIndex: =1
+                    Tooltip: |-
+                        =With({varDefault: "Tell everyone what this item is about",varOOBTextId: "txtDesc_AddBoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Width: =lblHeader_AddBoardItem.Width
+                    X: =lblDesc_AddBoardItem.X
+                    Y: =lblDesc_AddBoardItem.Y + lblDesc_AddBoardItem.Height
+                    ZIndex: =7
+
+                lblItemType_AddBoardItem As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With({varDefault: "Pick an item type",varOOBTextId: "lblItemType_AddBoardItem__locText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Tooltip: |-
+                        =With({varDefault: "Pick an item type",varOOBTextId: "lblItemType_AddBoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Width: =lblHeader_AddBoardItem.Width
+                    Wrap: =false
+                    X: =20*1
+                    Y: =lblHeader_AddBoardItem.Y + lblHeader_AddBoardItem.Height + 20
+                    ZIndex: =8
+
+                rdoItemType_AddBoardItem As radio:
+                    AccessibleLabel: |-
+                        =With({varDefault: "Select an Item type",varOOBTextId: "rdoItemType_AddBoardItem__locAccessibleText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    BorderColor: =gblAppStyles.Radio.BorderColor
+                    BorderThickness: =gblAppStyles.Radio.BorderThickness
+                    Color: =gblAppStyles.Radio.Color
+                    Default: ="Website"
+                    DisabledBorderColor: =gblAppStyles.Radio.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Radio.DisabledColor
+                    DisabledFill: =gblAppStyles.Radio.DisabledFill
+                    Fill: =gblAppStyles.Radio.Fill
+                    FocusedBorderColor: =gblAppStyles.Radio.FocusedBorderColor
+                    FocusedBorderThickness: =1//gblAppStyles.Radio.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: |-
+                        =If(
+                            'Add Board Item Screen'.Width > 1610,
+                            64+15,
+                            'Add Board Item Screen'.Width > 860,
+                            64+15,
+                            'Add Board Item Screen'.Width > 600,
+                            128,
+                            128
+                        )
+                    HoverColor: =gblAppStyles.Radio.HoverColor
+                    HoverFill: =gblAppStyles.Radio.HoverFill
+                    Items: |-
+                        =[
+                            "Website",
+                            "Teams team",
+                            "Teams channel",
+                            "Channel tab",
+                            "Conversation",
+                            "Apps",
+                            "File",
+                            "Yammer"
+                        ]
+                    Layout: =Layout.Horizontal
+                    OnSelect: |-
+                        =Reset(txtTitle_AddBoardItem); 
+                        Reset(txtDesc_AddBoardItem);
+                        Reset(txtLink_AddBoardItem)
+                    PaddingBottom: =0
+                    PaddingTop: =0
+                    PressedColor: =gblAppStyles.Radio.PressedColor
+                    PressedFill: =gblAppStyles.Radio.PressedFill
+                    RadioBackgroundFill: =gblAppStyles.Radio.RadioBackgroundFill
+                    RadioBorderColor: =gblAppStyles.Radio.RadioBorderSelectionColor
+                    RadioSelectionFill: =gblAppStyles.Radio.RadioSelectionFill
+                    RadioSize: =25
+                    Size: =gblAppStyles.Radio.Size
+                    TabIndex: =2
+                    Tooltip: |-
+                        =With({varDefault: "Select an Item type",varOOBTextId: "rdoItemType_AddBoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Width: |-
+                        =Max(
+                            Parent.Width / 2,
+                            300
+                        )
+                    X: =lblHeader_AddBoardItem.X - 10
+                    Y: =lblItemType_AddBoardItem.Y + lblItemType_AddBoardItem.Height
+                    ZIndex: =10
+
+                lblTitle_AddBoardItem As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Title * (" & 100 - Len(txtTitle_AddBoardItem.Text) & " characters remaining)",  
+                                varOOBTextId: "lblTitle_AddBoardItem__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Tooltip: |-
+                        =With({varDefault: "Title *",varOOBTextId: "lblTitle_AddBoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Width: =lblHeader_AddBoardItem.Width
+                    Wrap: =false
+                    X: =20*1
+                    Y: =txtLink_AddBoardItem.Y + txtLink_AddBoardItem.Height + 20
+                    ZIndex: =12
+
+                txtTitle_AddBoardItem As text:
+                    AccessibleLabel: |-
+                        ="Required" & With({varDefault: "Add item title",varOOBTextId: "txtTitle_AddBoardItem__locAccessibleText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    BorderColor: =gblAppStyles.TextInput.BorderColor
+                    BorderThickness: =gblAppStyles.TextInput.BorderThickness
+                    Color: =gblAppStyles.TextInput.Color
+                    Default: |-
+                        =Switch(
+                            rdoItemType_AddBoardItem.Selected.Value,
+                            "Teams team",
+                            locBoardItemTeam.displayName,
+                            "Teams channel",
+                            locBoardItemChannel.displayName,
+                            "Conversation",
+                            locBoardItemConversation.subject,
+                            ""
+                        )
+                    DisabledBorderColor: =gblAppStyles.TextInput.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.TextInput.DisabledColor
+                    DisabledFill: =gblAppStyles.TextInput.DisabledFill
+                    Fill: =gblAppStyles.TextInput.Fill
+                    FocusedBorderColor: =gblAppStyles.TextInput.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.TextInput.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HintText: |-
+                        =With({varDefault: "Add item title",varOOBTextId: "txtTitle_AddBoardItem__locHintText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    HoverBorderColor: =gblAppStyles.TextInput.HoverBorderColor
+                    HoverColor: =gblAppStyles.TextInput.HoverColor
+                    HoverFill: =gblAppStyles.TextInput.HoverFill
+                    MaxLength: =100
+                    PressedBorderColor: =gblAppStyles.TextInput.PressedBorderColor
+                    PressedColor: =gblAppStyles.TextInput.PressedColor
+                    PressedFill: =gblAppStyles.TextInput.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.TextInput.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.TextInput.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.TextInput.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.TextInput.RadiusTopRight
+                    Size: =gblAppStyles.TextInput.Size
+                    TabIndex: =1
+                    Tooltip: |-
+                        =With({varDefault: "Add item title",varOOBTextId: "txtTitle_AddBoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Width: =lblHeader_AddBoardItem.Width
+                    X: =lblTitle_AddBoardItem.X
+                    Y: =lblTitle_AddBoardItem.Y + lblTitle_AddBoardItem.Height
+                    ZIndex: =13
+
+                shpSeparator_AddBoardItem As rectangle:
+                    Fill: =gblAppStyles.Dividers.Elements
+                    Height: =1
+                    Width: =lblHeader_AddBoardItem.Width
+                    X: =lblHeader_AddBoardItem.X
+                    Y: =txtDesc_AddBoardItem.Y + txtDesc_AddBoardItem.Height + 20
+                    ZIndex: =14
+
+                lblPreview_AddBoardItem As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With({varDefault: "Preview",varOOBTextId: "lblPreview_AddBoardItem__locText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Tooltip: |-
+                        =With({varDefault: "Preview",varOOBTextId: "lblPreview_AddBoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Width: =lblHeader_AddBoardItem.Width
+                    Wrap: =false
+                    X: =20*1
+                    Y: =shpSeparator_AddBoardItem.Y + shpSeparator_AddBoardItem.Height + 20
+                    ZIndex: =15
+
+                galPreview_AddBoardItem As gallery.variableTemplateHeightGallery:
+                    AccessibleLabel: ="Gallery to preview board item"
+                    BorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                    FocusedBorderThickness: =1
+                    Height: =Value(lblCardHeight_AddBoardItem.Text)
+                    Items: =Sequence(1)
+                    Layout: =Layout.Vertical
+                    TabIndex: |-
+                        =If(
+                            true,
+                            -1,
+                            0
+                        )
+                    TemplatePadding: =0
+                    TemplateSize: =280
+                    Width: =350*1
+                    X: =lblHeader_AddBoardItem.X
+                    Y: =lblPreview_AddBoardItem.Y + lblPreview_AddBoardItem.Height + 10
+                    ZIndex: =16
+
+                    lblBackgroundPreview_AddBoardItem As label:
+                        Fill: |-
+                            =If(
+                                gblThemeDark,
+                                gblAppColors.NeutralWebGray220,
+                                gblThemeHiCo,
+                                Black,
+                                White
+                            )
+                        Height: |-
+                            =Max(
+                                shpFlexHeightPreview_AddBoardItem.Y + shpFlexHeightPreview_AddBoardItem.Height,
+                                imgCreatedByPreview_AddBoardItem.Y + imgCreatedByPreview_AddBoardItem.Height
+                            )
+                        OnSelect: =Select(Parent)
+                        Text: =
+                        Width: =Parent.Width - Self.X
+                        ZIndex: =1
+
+                    btnItemTypePreview_AddBoardItem As button:
+                        BorderThickness: =0
+                        DisabledFill: |-
+                            =If(
+                                gblThemeDark || gblThemeHiCo,
+                                ColorValue("#6264A7"),
+                                ColorValue("#FCF2FA")
+                            )
+                        DisplayMode: =DisplayMode.Disabled
+                        Height: =48
+                        OnSelect: =Select(Parent)
+                        RadiusBottomLeft: =5
+                        RadiusBottomRight: =5
+                        RadiusTopLeft: =5
+                        RadiusTopRight: =5
+                        Text: =""
+                        Tooltip: |-
+                            =With({varDefault: "Item Type Preview",varOOBTextId: "btnItemTypePreview_AddBoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                        Width: =48
+                        X: =10
+                        Y: =10
+                        ZIndex: =2
+
+                    shpItemTypePreview_AddBoardItem As rectangle:
+                        Height: =48
+                        OnSelect: =Select(Parent)
+                        Tooltip: |-
+                            =With({varDefault: "Item Type Preview",varOOBTextId: "shpItemTypePreview_AddBoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                        Visible: =false
+                        Width: =48
+                        X: =10
+                        Y: =10
+                        ZIndex: =3
+
+                    imgItemTypePreview_AddBoardItem As image:
+                        Height: =32
+                        Image: |-
+                            =Switch(
+                                rdoItemType_AddBoardItem.Selected.Value,
+                                "Apps",
+                                If(
+                                    gblThemeDark || gblThemeHiCo,
+                                    App_Dark,
+                                    App_1
+                                ),
+                                "Channel tab",
+                                If(
+                                    gblThemeDark || gblThemeHiCo,
+                                    Tab_Dark,
+                                    Tab_Default
+                                ),
+                                "Conversation",
+                                If(
+                                    gblThemeDark || gblThemeHiCo,
+                                    Chat_Dark,
+                                    Chat_Default
+                                ),
+                                "File",
+                                If(
+                                    gblThemeDark || gblThemeHiCo,
+                                    File_Dark,
+                                    File_Default
+                                ),
+                                "Teams channel",
+                                If(
+                                    gblThemeDark || gblThemeHiCo,
+                                    Channel_Dark,
+                                    Channel_Default
+                                ),
+                                "Teams team",
+                                If(
+                                    gblThemeDark || gblThemeHiCo,
+                                    Team_Dark,
+                                    Team_Default
+                                ),
+                                "Website",
+                                If(
+                                    gblThemeDark || gblThemeHiCo,
+                                    Website_Dark,
+                                    Website_Default
+                                ),
+                                "Yammer",
+                                If(
+                                    gblThemeDark || gblThemeHiCo,
+                                    Yammer_Dark,
+                                    Yammer_Default
+                                )
+                            )
+                        OnSelect: =Select(Parent)
+                        Tooltip: |-
+                            =With({varDefault: "Item Type Preview",varOOBTextId: "imgItemTypePreview_AddBoardItem__locTooltiptext"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                        Width: =32
+                        X: =shpItemTypePreview_AddBoardItem.X + (shpItemTypePreview_AddBoardItem.Width - Self.Width)/2
+                        Y: =shpItemTypePreview_AddBoardItem.Y + (shpItemTypePreview_AddBoardItem.Height - Self.Height)/2
+                        ZIndex: =4
+
+                    lblTitlePreview_AddBoardItem As label:
+                        Color: =gblAppStyles.Label.Color
+                        Font: =Font.'Segoe UI'
+                        FontWeight: =FontWeight.Bold
+                        Height: =Self.Size * 1.8
+                        OnSelect: =Select(Parent)
+                        PaddingBottom: =0
+                        PaddingLeft: =0
+                        PaddingRight: =0
+                        PaddingTop: =0
+                        Size: =gblAppStyles.Label.Size.Medium
+                        Text: =txtTitle_AddBoardItem.Text
+                        Tooltip: |-
+                            =With({varDefault: "Title",varOOBTextId: "lblTitlePreview_AddBoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                        VerticalAlign: =VerticalAlign.Top
+                        Width: =Parent.TemplateWidth - 112
+                        X: =imgItemTypePreview_AddBoardItem.X + imgItemTypePreview_AddBoardItem.Width + 20
+                        Y: =10*1
+                        ZIndex: =5
+
+                    lblDescPreview_AddBoardItem As label:
+                        AutoHeight: =true
+                        Color: =gblAppStyles.Label.Color
+                        Font: =Font.'Segoe UI'
+                        Height: =
+                        OnSelect: =Select(Parent)
+                        PaddingBottom: =0
+                        PaddingLeft: =0
+                        PaddingRight: =0
+                        PaddingTop: =0
+                        Size: =10.5
+                        Text: =txtDesc_AddBoardItem.Text
+                        Tooltip: |-
+                            =With({varDefault: "Description",varOOBTextId: "lblDescPreview_AddBoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                        VerticalAlign: =VerticalAlign.Top
+                        Width: =Parent.TemplateWidth - Self.X - 20
+                        X: =imgItemTypePreview_AddBoardItem.X + imgItemTypePreview_AddBoardItem.Width + 20
+                        Y: =lblTitlePreview_AddBoardItem.Y + lblTitlePreview_AddBoardItem.Height
+                        ZIndex: =6
+
+                    shpFlexHeightPreview_AddBoardItem As rectangle:
+                        Height: =1
+                        OnSelect: =Select(Parent)
+                        Tooltip: =lblBackgroundPreview_AddBoardItem.Y + lblBackgroundPreview_AddBoardItem.Height
+                        Visible: =false
+                        Width: =321
+                        Y: =imgCreatedByPreview_AddBoardItem.Y + imgCreatedByPreview_AddBoardItem.Height + 12
+                        ZIndex: =7
+
+                    lblCardHeight_AddBoardItem As label:
+                        Color: =RGBA(255, 255, 255, 1)
+                        OnSelect: =Select(Parent)
+                        Size: =10
+                        Text: =lblFlexHeightPreview_AddBoardItem.Y + lblFlexHeightPreview_AddBoardItem.Height
+                        Visible: =false
+                        Width: =50
+                        X: =300
+                        Y: =40
+                        ZIndex: =8
+
+                    lblCreatedByPreview_AddBoardItem As label:
+                        Color: =gblAppStyles.Label.Color
+                        Font: =Font.'Segoe UI'
+                        Height: =26
+                        OnSelect: =Select(Parent)
+                        PaddingLeft: =0
+                        Size: =gblAppStyles.Label.Size.Medium
+                        Text: |-
+                            =gblCurrUser.'Full Name'
+                            //LookUp(Users, 'Primary Email' = gblCurrUserEmail).'Full Name'
+                        Tooltip: |-
+                            =With(
+                                {
+                                    varDefault: Concatenate(
+                                        "Created By ",
+                                        gblCurrUser.'Full Name'
+                                        /*
+                                        LookUp(
+                                            Users,
+                                            'Primary Email' = gblCurrUserEmail
+                                        ).'Full Name'
+                                        */
+                                    ),
+                                    varOOBTextId: "lblCreatedByPreview_AddBoardItem__locTooltipText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        Width: =Parent.Width - Self.X*2
+                        X: =imgCreatedByPreview_AddBoardItem.X + imgCreatedByPreview_AddBoardItem.Width + 10
+                        Y: =Max(lblDescPreview_AddBoardItem.Y + lblDescPreview_AddBoardItem.Height, 70) + 10
+                        ZIndex: =9
+
+                    imgCreatedByPreview_AddBoardItem As image:
+                        AccessibleLabel: |-
+                            =With({varDefault: "Created By",varOOBTextId: "imgCreatedByPreview_AddBoardItem__locAccessibleText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                        Height: =22
+                        Image: |-
+                            =If(
+                                !IsBlank(gblCurrUserEmail),
+                                Office365Users.UserPhotoV2(gblCurrUserEmail)
+                            )
+                        OnSelect: =Select(Parent)
+                        RadiusBottomLeft: =22
+                        RadiusBottomRight: =22
+                        RadiusTopLeft: =22
+                        RadiusTopRight: =22
+                        Tooltip: |-
+                            =With({varDefault: "Created By",varOOBTextId: "imgCreatedByPreview_AddBoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                        Width: =22
+                        X: =16
+                        Y: =lblCreatedByPreview_AddBoardItem.Y + (lblCreatedByPreview_AddBoardItem.Height - Self.Height)/2
+                        ZIndex: =10
+
+                    lblFlexHeightPreview_AddBoardItem As label:
+                        Color: =RGBA(0, 0, 0, 0)
+                        Height: =10
+                        OnSelect: =Select(Parent)
+                        Text: =gblCurrUserEmail
+                        X: =171
+                        Y: =lblBackgroundPreview_AddBoardItem.Y + lblBackgroundPreview_AddBoardItem.Height
+                        ZIndex: =11
+
+                    imgOpenLinkPreview_AddBoardItem As image:
+                        AccessibleLabel: |-
+                            =With({varDefault: "Open Link Preview",varOOBTextId: "imgOpenLinkPreview_AddBoardItem__locAccessibleText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                        Height: =imgCreatedByPreview_AddBoardItem.Height
+                        Image: |-
+                            =If(
+                                gblThemeDark || gblThemeHiCo,
+                                Open_Dark,
+                                Open_Default
+                            )
+                        PaddingBottom: =2
+                        PaddingLeft: =2
+                        PaddingRight: =2
+                        PaddingTop: =2
+                        TabIndex: |-
+                            =If(
+                                true,
+                                -1,
+                                0
+                            )
+                        Tooltip: |-
+                            =With({varDefault: "Open Link Preview",varOOBTextId: "imgOpenLinkPreview_AddBoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                        Visible: =rdoItemType_AddBoardItem.Selected.Value = "Website"
+                        Width: =imgCreatedByPreview_AddBoardItem.Width
+                        X: =Parent.Width - Self.Width - 20
+                        Y: =imgCreatedByPreview_AddBoardItem.Y
+                        ZIndex: =12
+
+                btnSave_AddBoardItem As button:
+                    BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+                    BorderThickness: =gblAppStyles.ButtonPrimary.BorderThickness
+                    Color: =gblAppStyles.ButtonPrimary.Color
+                    DisabledBorderColor: =gblAppStyles.ButtonPrimary.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.ButtonPrimary.DisabledColor
+                    DisabledFill: =gblAppStyles.ButtonPrimary.DisabledFill
+                    DisplayMode: |-
+                        =If(
+                            IsBlank(txtLink_AddBoardItem.Text) || IsBlank(txtDesc_AddBoardItem.Text) || IsBlank(txtTitle_AddBoardItem.Text),
+                            DisplayMode.Disabled,
+                            DisplayMode.Edit
+                        )
+                    Fill: =gblAppStyles.ButtonPrimary.Fill
+                    FocusedBorderColor: =gblAppStyles.ButtonPrimary.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.ButtonPrimary.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Bold
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.ButtonPrimary.HoverBorderColor
+                    HoverColor: =gblAppStyles.ButtonPrimary.HoverColor
+                    HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+                    OnSelect: |
+                        =If(
+                            IsError(
+                                Patch(
+                                    'Board Items',
+                                    Defaults('Board Items'),
+                                    {
+                                        Board: locSelectedBoard,
+                                        Description: txtDesc_AddBoardItem.Text,
+                                        Link: txtLink_AddBoardItem.Text,
+                                        Name: txtTitle_AddBoardItem.Text,
+                                        Category: Switch(
+                                            rdoItemType_AddBoardItem.Selected.Value,
+                                            "Website",
+                                            'Board Item Categories'.Website,
+                                            "Teams team",
+                                            'Board Item Categories'.'Teams team',
+                                            "Teams channel",
+                                            'Board Item Categories'.'Teams channel',
+                                            "Channel tab",
+                                            'Board Item Categories'.'Channel tab',
+                                            "Conversation",
+                                            'Board Item Categories'.Conversation,
+                                            "Apps",
+                                            'Board Item Categories'.App,
+                                            "File",
+                                            'Board Item Categories'.File,
+                                            "Yammer",
+                                            'Board Item Categories'.Yammer
+                                        )
+                                    }
+                                )
+                            ),
+                            Notify(
+                                "Error saving record",
+                                NotificationType.Error
+                            )
+                        );
+                        //screen reader start
+                        UpdateContext(
+                            {
+                                locScreenReaderAnnouncedText: With(
+                                    {
+                                        varAnnouncedText: With(
+                                            {
+                                                varDefault: "Saved successfully and navigating to the Board items Screen",
+                                                varOOBTextId: "btnSave_AddBoarditem__locAnnouncement"
+                                            },
+                                            With(
+                                                {
+                                                    varLocalizedText: LookUp(
+                                                        colLocalization,
+                                                        OOBTextID = varOOBTextId,
+                                                        LocalizedText
+                                                    )
+                                                },
+                                                Coalesce(
+                                                    varLocalizedText,
+                                                    varDefault
+                                                )
+                                            )
+                                        )
+                                    },
+                                    If(
+                                        locScreenReaderAnnouncedText = varAnnouncedText,
+                                        Concatenate(
+                                            varAnnouncedText,
+                                            " "
+                                        ),
+                                        varAnnouncedText
+                                    )
+                                )
+                            }
+                        );
+                        //screen reader end
+                        Navigate(
+                            'Board Items Screen',
+                            ScreenTransition.Fade
+                        );
+                    PressedBorderColor: =gblAppStyles.ButtonPrimary.PressedBorderColor
+                    PressedColor: =gblAppStyles.ButtonPrimary.PressedColor
+                    PressedFill: =gblAppStyles.ButtonPrimary.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.ButtonPrimary.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+                    Size: =gblAppStyles.ButtonPrimary.Size
+                    Text: |-
+                        =With({varDefault: "Save",varOOBTextId: "btnSave_AddBoardItem__locText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Tooltip: |-
+                        =With({varDefault: "Save",varOOBTextId: "btnSave_AddBoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Width: =100*1
+                    X: |-
+                        =If(
+                            'Add Board Item Screen'.Size = ScreenSize.ExtraLarge || 'Add Board Item Screen'.Size = ScreenSize.Large,
+                            Parent.Width - Self.Width - 20,
+                            Parent.Width - Self.Width - 20
+                        )
+                    Y: |-
+                        =If(
+                            'Add Board Item Screen'.Size = ScreenSize.ExtraLarge || 'Add Board Item Screen'.Size = ScreenSize.Large,
+                            lblBack_AddBoardItem.Y,
+                            Parent.Height - Self.Height - 20
+                        )
+                    ZIndex: =17
+
+                btnCancel_AddBoardItem As button:
+                    BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+                    BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+                    Color: =gblAppStyles.ButtonSecondary.Color
+                    DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+                    DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+                    Fill: =gblAppStyles.ButtonSecondary.Fill
+                    FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+                    HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+                    HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+                    OnSelect: |-
+                        =//screen reader start
+                            UpdateContext(
+                                {
+                                    locScreenReaderAnnouncedText: With(
+                                        {
+                                            varAnnouncedText: With(
+                                                {
+                                                    varDefault: "Cancelled and navigating to Board items screen",
+                                                    varOOBTextId: "btnCancel_AddBoarditem__locAnnouncement"
+                                                },
+                                                With(
+                                                    {
+                                                        varLocalizedText: LookUp(
+                                                            colLocalization,
+                                                            OOBTextID = varOOBTextId,
+                                                            LocalizedText
+                                                        )
+                                                    },
+                                                    Coalesce(
+                                                        varLocalizedText,
+                                                        varDefault
+                                                    )
+                                                )
+                                            )
+                                        },
+                                        If(
+                                            locScreenReaderAnnouncedText = varAnnouncedText,
+                                            Concatenate(
+                                                varAnnouncedText,
+                                                " "
+                                            ),
+                                            varAnnouncedText
+                                        )
+                                    )
+                                }
+                            );
+                            
+                        //screen reader end
+                        Navigate(
+                            'Board Items Screen',
+                            ScreenTransition.Fade
+                        )
+                    PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+                    PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+                    PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.ButtonSecondary.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.ButtonSecondary.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.ButtonSecondary.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.ButtonSecondary.RadiusTopRight
+                    Size: =gblAppStyles.ButtonSecondary.Size
+                    Text: |-
+                        =With({varDefault: "Cancel",varOOBTextId: "btnCancel_AddBoardItem__locText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Tooltip: |-
+                        =With({varDefault: "Cancel",varOOBTextId: "btnCancel_AddBoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Width: =100*1
+                    X: =Parent.Width - btnSave_AddBoardItem.Width - Self.Width - 20*2
+                    Y: =btnSave_AddBoardItem.Y
+                    ZIndex: =18
+
+                lblValidation As label:
+                    Color: =Red
+                    DisplayMode: =DisplayMode.View
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =lblLink_AddBoardItem.Height
+                    Size: =10.5
+                    Text: ="Invalid Input!"
+                    Visible: |-
+                        =If(IsBlank(txtLink_AddBoardItem.Text),false,If(IsMatch(txtLink_AddBoardItem.Text, "(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$"),false,true))
+                    X: =lblLink_AddBoardItem.X+70
+                    Y: =lblLink_AddBoardItem.Y
+                    ZIndex: =19
+

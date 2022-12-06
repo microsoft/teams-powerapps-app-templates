@@ -1,0 +1,781 @@
+<application xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:service="https://unitedstates-002.azure-apim.net/apim/planner" xmlns:siena="http://schemas.microsoft.com/MicrosoftProjectSiena/WADL/2014/11" siena:serviceId="Planner" xmlns="http://wadl.dev.java.net/2009/02">
+  <doc title="Planner">Microsoft Planner lets you easily bring together teams, tasks, documents, and conversations for better results.</doc>
+  <grammars>
+    <jsonTypes targetNamespace="https://unitedstates-002.azure-apim.net/apim/planner" xmlns="http://schemas.microsoft.com/MicrosoftProjectSiena/WADL/2014/11">
+      <string name="ListBuckets_Response_value_def_items_def_name_def" />
+      <string name="ListBuckets_Response_value_def_items_def_planId_def" />
+      <string name="ListBuckets_Response_value_def_items_def_id_def" />
+      <object name="ListBuckets_Response_value_def_items_def">
+        <property name="name" type="string" />
+        <property name="planId" type="string" />
+        <property name="id" type="string" />
+      </object>
+      <array typeRef="ListBuckets_Response_value_def_items_def" name="ListBuckets_Response_value_def" />
+      <object name="ListBuckets_Response">
+        <property name="value" typeRef="ListBuckets_Response_value_def" />
+      </object>
+      <string name="ListMyPlans_Response_value_def_items_def_title_def" />
+      <string name="ListMyPlans_Response_value_def_items_def_id_def" />
+      <object name="ListMyPlans_Response_value_def_items_def">
+        <property name="title" type="string" />
+        <property name="id" type="string" />
+      </object>
+      <array typeRef="ListMyPlans_Response_value_def_items_def" name="ListMyPlans_Response_value_def" />
+      <object name="ListMyPlans_Response">
+        <property name="value" typeRef="ListMyPlans_Response_value_def" />
+      </object>
+      <string name="GetTaskDetails_Response_description_def" />
+      <string name="GetTaskDetails_Response_id_def" />
+      <object name="GetTaskDetails_Response">
+        <property name="description" type="string" />
+        <property name="id" type="string" />
+      </object>
+      <string name="UpdateTaskDetails_Request_description_def" />
+      <string name="UpdateTaskDetails_Request_references_def_items_def_alias_def" />
+      <string dtype="hyperlink" name="UpdateTaskDetails_Request_references_def_items_def_resourceLink_def" />
+      <object name="UpdateTaskDetails_Request_references_def_items_def">
+        <property name="alias" type="string" />
+        <property name="resourceLink" type="string" dtype="hyperlink" />
+      </object>
+      <array typeRef="UpdateTaskDetails_Request_references_def_items_def" name="UpdateTaskDetails_Request_references_def" />
+      <object name="UpdateTaskDetails_Request">
+        <property name="description" type="string" />
+        <property name="references" typeRef="UpdateTaskDetails_Request_references_def" />
+      </object>
+      <string name="CreateBucket_Response_name_def" />
+      <string name="CreateBucket_Response_planId_def" />
+      <string name="CreateBucket_Response_orderHint_def" />
+      <string name="CreateBucket_Response_id_def" />
+      <object name="CreateBucket_Response">
+        <property name="name" type="string" />
+        <property name="planId" type="string" />
+        <property name="orderHint" type="string" />
+        <property name="id" type="string" />
+      </object>
+      <string name="ListGroups_Response_value_def_items_def_id_def" />
+      <string name="ListGroups_Response_value_def_items_def_displayName_def" />
+      <object name="ListGroups_Response_value_def_items_def">
+        <property name="id" type="string" />
+        <property name="displayName" type="string" />
+      </object>
+      <array typeRef="ListGroups_Response_value_def_items_def" name="ListGroups_Response_value_def" />
+      <object name="ListGroups_Response">
+        <property name="value" typeRef="ListGroups_Response_value_def" />
+      </object>
+      <string name="GetTask_Response_V2_createdBy_def_user_def_displayName_def" />
+      <string name="GetTask_Response_V2_createdBy_def_user_def_id_def" />
+      <object name="GetTask_Response_V2_createdBy_def_user_def">
+        <property name="displayName" type="string" />
+        <property name="id" type="string" />
+      </object>
+      <object name="GetTask_Response_V2_createdBy_def">
+        <property name="user" typeRef="GetTask_Response_V2_createdBy_def_user_def" />
+      </object>
+      <string name="GetTask_Response_V2_planId_def" />
+      <string name="GetTask_Response_V2_bucketId_def" />
+      <string name="GetTask_Response_V2_title_def" />
+      <integer name="GetTask_Response_V2_percentComplete_def" />
+      <dateTimeString name="GetTask_Response_V2_startDateTime_def" />
+      <dateTimeString name="GetTask_Response_V2_createdDateTime_def" />
+      <dateTimeString name="GetTask_Response_V2_dueDateTime_def" />
+      <boolean name="GetTask_Response_V2_hasDescription_def" />
+      <dateTimeString name="GetTask_Response_V2_completedDateTime_def" />
+      <integer name="GetTask_Response_V2_referenceCount_def" />
+      <string name="GetTask_Response_V2_id_def" />
+      <string name="GetTask_Response_V2__assignments_def_items_def_userId_def" />
+      <string name="GetTask_Response_V2__assignments_def_items_def_value_def_assignedBy_def_user_def_id_def" />
+      <object name="GetTask_Response_V2__assignments_def_items_def_value_def_assignedBy_def_user_def">
+        <property name="id" type="string" />
+      </object>
+      <object name="GetTask_Response_V2__assignments_def_items_def_value_def_assignedBy_def">
+        <property name="user" typeRef="GetTask_Response_V2__assignments_def_items_def_value_def_assignedBy_def_user_def" />
+      </object>
+      <dateTimeString name="GetTask_Response_V2__assignments_def_items_def_value_def_assignedDateTime_def" />
+      <string name="GetTask_Response_V2__assignments_def_items_def_value_def_orderHint_def" />
+      <object name="GetTask_Response_V2__assignments_def_items_def_value_def">
+        <property name="assignedBy" typeRef="GetTask_Response_V2__assignments_def_items_def_value_def_assignedBy_def" />
+        <property name="assignedDateTime" typeRef="GetTask_Response_V2__assignments_def_items_def_value_def_assignedDateTime_def" />
+        <property name="orderHint" type="string" />
+      </object>
+      <object name="GetTask_Response_V2__assignments_def_items_def">
+        <property name="userId" type="string" />
+        <property name="value" typeRef="GetTask_Response_V2__assignments_def_items_def_value_def" />
+      </object>
+      <array typeRef="GetTask_Response_V2__assignments_def_items_def" name="GetTask_Response_V2__assignments_def" />
+      <object name="GetTask_Response_V2">
+        <property name="createdBy" typeRef="GetTask_Response_V2_createdBy_def" />
+        <property name="planId" type="string" />
+        <property name="bucketId" type="string" />
+        <property name="title" type="string" />
+        <property name="percentComplete" type="integer" />
+        <property name="startDateTime" typeRef="GetTask_Response_V2_startDateTime_def" />
+        <property name="createdDateTime" typeRef="GetTask_Response_V2_createdDateTime_def" />
+        <property name="dueDateTime" typeRef="GetTask_Response_V2_dueDateTime_def" />
+        <property name="hasDescription" type="boolean" />
+        <property name="completedDateTime" typeRef="GetTask_Response_V2_completedDateTime_def" />
+        <property name="referenceCount" type="integer" />
+        <property name="id" type="string" />
+        <property name="_assignments" typeRef="GetTask_Response_V2__assignments_def" />
+      </object>
+      <array typeRef="GetTask_Response_V2" name="ListTasks_Response_V2_value_def" />
+      <object name="ListTasks_Response_V2">
+        <property name="value" typeRef="ListTasks_Response_V2_value_def" />
+      </object>
+      <string name="UpdateTask_Request_V3_title_def" />
+      <dateTimeString name="UpdateTask_Request_V3_dueDateTime_def" />
+      <dateTimeString name="UpdateTask_Request_V3_startDateTime_def" />
+      <integer name="UpdateTask_Request_V3_percentComplete_def" />
+      <object name="UpdateTask_Request_V3">
+        <property name="title" type="string" />
+        <property name="dueDateTime" typeRef="UpdateTask_Request_V3_dueDateTime_def" />
+        <property name="startDateTime" typeRef="UpdateTask_Request_V3_startDateTime_def" />
+        <property name="percentComplete" type="integer" />
+      </object>
+      <string name="CreateTask_Request_V3_groupId_def" />
+      <string name="CreateTask_Request_V3_planId_def" />
+      <string name="CreateTask_Request_V3_title_def" />
+      <string name="CreateTask_Request_V3_bucketId_def" />
+      <dateTimeString name="CreateTask_Request_V3_startDateTime_def" />
+      <dateTimeString name="CreateTask_Request_V3_dueDateTime_def" />
+      <string name="CreateTask_Request_V3_assignments_def" />
+      <object name="CreateTask_Request_V3">
+        <property name="groupId" type="string" />
+        <property name="planId" type="string" />
+        <property name="title" type="string" />
+        <property name="bucketId" type="string" />
+        <property name="startDateTime" typeRef="CreateTask_Request_V3_startDateTime_def" />
+        <property name="dueDateTime" typeRef="CreateTask_Request_V3_dueDateTime_def" />
+        <property name="assignments" type="string" />
+      </object>
+      <string name="GetTask_Response_createdBy_def_user_def_displayName_def" />
+      <string name="GetTask_Response_createdBy_def_user_def_id_def" />
+      <object name="GetTask_Response_createdBy_def_user_def">
+        <property name="displayName" type="string" />
+        <property name="id" type="string" />
+      </object>
+      <object name="GetTask_Response_createdBy_def">
+        <property name="user" typeRef="GetTask_Response_createdBy_def_user_def" />
+      </object>
+      <string name="GetTask_Response_planId_def" />
+      <string name="GetTask_Response_bucketId_def" />
+      <string name="GetTask_Response_title_def" />
+      <integer name="GetTask_Response_percentComplete_def" />
+      <dateTimeString name="GetTask_Response_startDateTime_def" />
+      <dateTimeString name="GetTask_Response_createdDateTime_def" />
+      <dateTimeString name="GetTask_Response_dueDateTime_def" />
+      <boolean name="GetTask_Response_hasDescription_def" />
+      <dateTimeString name="GetTask_Response_completedDateTime_def" />
+      <integer name="GetTask_Response_referenceCount_def" />
+      <string name="GetTask_Response_id_def" />
+      <object name="GetTask_Response">
+        <property name="createdBy" typeRef="GetTask_Response_createdBy_def" />
+        <property name="planId" type="string" />
+        <property name="bucketId" type="string" />
+        <property name="title" type="string" />
+        <property name="percentComplete" type="integer" />
+        <property name="startDateTime" typeRef="GetTask_Response_startDateTime_def" />
+        <property name="createdDateTime" typeRef="GetTask_Response_createdDateTime_def" />
+        <property name="dueDateTime" typeRef="GetTask_Response_dueDateTime_def" />
+        <property name="hasDescription" type="boolean" />
+        <property name="completedDateTime" typeRef="GetTask_Response_completedDateTime_def" />
+        <property name="referenceCount" type="integer" />
+        <property name="id" type="string" />
+      </object>
+      <string name="UpdateTask_Request_title_def" />
+      <dateTimeString name="UpdateTask_Request_dueDateTime_def" />
+      <dateTimeString name="UpdateTask_Request_startDateTime_def" />
+      <string name="UpdateTask_Request_percentComplete_def" />
+      <string name="UpdateTask_Request_assignments_def" />
+      <object name="UpdateTask_Request">
+        <property name="title" type="string" />
+        <property name="dueDateTime" typeRef="UpdateTask_Request_dueDateTime_def" />
+        <property name="startDateTime" typeRef="UpdateTask_Request_startDateTime_def" />
+        <property name="percentComplete" type="string" />
+        <property name="assignments" type="string" />
+      </object>
+      <string name="UpdateTask_Request_V2_title_def" />
+      <dateTimeString name="UpdateTask_Request_V2_dueDateTime_def" />
+      <dateTimeString name="UpdateTask_Request_V2_startDateTime_def" />
+      <string name="UpdateTask_Request_V2_percentComplete_def" />
+      <string name="UpdateTask_Request_V2_assignments_def" />
+      <string name="UpdateTask_Request_V2_unassignedUsers_def" />
+      <object name="UpdateTask_Request_V2">
+        <property name="title" type="string" />
+        <property name="dueDateTime" typeRef="UpdateTask_Request_V2_dueDateTime_def" />
+        <property name="startDateTime" typeRef="UpdateTask_Request_V2_startDateTime_def" />
+        <property name="percentComplete" type="string" />
+        <property name="assignments" type="string" />
+        <property name="unassignedUsers" type="string" />
+      </object>
+      <string name="CreateTask_Request_planId_def" />
+      <string name="CreateTask_Request_title_def" />
+      <string name="CreateTask_Request_bucketId_def" />
+      <dateTimeString name="CreateTask_Request_startDateTime_def" />
+      <dateTimeString name="CreateTask_Request_dueDateTime_def" />
+      <string name="CreateTask_Request_assignments_def" />
+      <object name="CreateTask_Request">
+        <property name="planId" type="string" />
+        <property name="title" type="string" />
+        <property name="bucketId" type="string" />
+        <property name="startDateTime" typeRef="CreateTask_Request_startDateTime_def" />
+        <property name="dueDateTime" typeRef="CreateTask_Request_dueDateTime_def" />
+        <property name="assignments" type="string" />
+      </object>
+      <string name="CreateTask_Request_V2_planId_def" />
+      <string name="CreateTask_Request_V2_title_def" />
+      <string name="CreateTask_Request_V2_bucketId_def" />
+      <dateTimeString name="CreateTask_Request_V2_startDateTime_def" />
+      <dateTimeString name="CreateTask_Request_V2_dueDateTime_def" />
+      <string name="CreateTask_Request_V2_assignments_def" />
+      <object name="CreateTask_Request_V2">
+        <property name="planId" type="string" />
+        <property name="title" type="string" />
+        <property name="bucketId" type="string" />
+        <property name="startDateTime" typeRef="CreateTask_Request_V2_startDateTime_def" />
+        <property name="dueDateTime" typeRef="CreateTask_Request_V2_dueDateTime_def" />
+        <property name="assignments" type="string" />
+      </object>
+      <string name="ListTasks_Response_value_def_items_def_createdBy_def_user_def_displayName_def" />
+      <string name="ListTasks_Response_value_def_items_def_createdBy_def_user_def_id_def" />
+      <object name="ListTasks_Response_value_def_items_def_createdBy_def_user_def">
+        <property name="displayName" type="string" />
+        <property name="id" type="string" />
+      </object>
+      <object name="ListTasks_Response_value_def_items_def_createdBy_def">
+        <property name="user" typeRef="ListTasks_Response_value_def_items_def_createdBy_def_user_def" />
+      </object>
+      <string name="ListTasks_Response_value_def_items_def_completedBy_def_user_def_displayName_def" />
+      <string name="ListTasks_Response_value_def_items_def_completedBy_def_user_def_id_def" />
+      <object name="ListTasks_Response_value_def_items_def_completedBy_def_user_def">
+        <property name="displayName" type="string" />
+        <property name="id" type="string" />
+      </object>
+      <object name="ListTasks_Response_value_def_items_def_completedBy_def">
+        <property name="user" typeRef="ListTasks_Response_value_def_items_def_completedBy_def_user_def" />
+      </object>
+      <string name="ListTasks_Response_value_def_items_def_planId_def" />
+      <string name="ListTasks_Response_value_def_items_def_bucketId_def" />
+      <string name="ListTasks_Response_value_def_items_def_title_def" />
+      <integer name="ListTasks_Response_value_def_items_def_percentComplete_def" />
+      <dateTimeString name="ListTasks_Response_value_def_items_def_startDateTime_def" />
+      <dateTimeString name="ListTasks_Response_value_def_items_def_createdDateTime_def" />
+      <dateTimeString name="ListTasks_Response_value_def_items_def_dueDateTime_def" />
+      <boolean name="ListTasks_Response_value_def_items_def_hasDescription_def" />
+      <dateTimeString name="ListTasks_Response_value_def_items_def_completedDateTime_def" />
+      <integer name="ListTasks_Response_value_def_items_def_referenceCount_def" />
+      <string name="ListTasks_Response_value_def_items_def_id_def" />
+      <object name="ListTasks_Response_value_def_items_def">
+        <property name="createdBy" typeRef="ListTasks_Response_value_def_items_def_createdBy_def" />
+        <property name="completedBy" typeRef="ListTasks_Response_value_def_items_def_completedBy_def" />
+        <property name="planId" type="string" />
+        <property name="bucketId" type="string" />
+        <property name="title" type="string" />
+        <property name="percentComplete" type="integer" />
+        <property name="startDateTime" typeRef="ListTasks_Response_value_def_items_def_startDateTime_def" />
+        <property name="createdDateTime" typeRef="ListTasks_Response_value_def_items_def_createdDateTime_def" />
+        <property name="dueDateTime" typeRef="ListTasks_Response_value_def_items_def_dueDateTime_def" />
+        <property name="hasDescription" type="boolean" />
+        <property name="completedDateTime" typeRef="ListTasks_Response_value_def_items_def_completedDateTime_def" />
+        <property name="referenceCount" type="integer" />
+        <property name="id" type="string" />
+      </object>
+      <array typeRef="ListTasks_Response_value_def_items_def" name="ListTasks_Response_value_def" />
+      <object name="ListTasks_Response">
+        <property name="value" typeRef="ListTasks_Response_value_def" />
+      </object>
+      <string name="UnassignUsers_param_body_def_assignments_def" />
+      <object name="UnassignUsers_param_body_def">
+        <property name="assignments" type="string" />
+      </object>
+      <string name="AssignUsers_param_body_def_assignments_def" />
+      <object name="AssignUsers_param_body_def">
+        <property name="assignments" type="string" />
+      </object>
+      <string name="CreateBucket_V2_param_body_def_name_def" />
+      <string name="CreateBucket_V2_param_body_def_groupId_def" />
+      <string name="CreateBucket_V2_param_body_def_planId_def" />
+      <object name="CreateBucket_V2_param_body_def">
+        <property name="name" type="string" />
+        <property name="groupId" type="string" />
+        <property name="planId" type="string" />
+      </object>
+      <string name="CreateBucket_param_body_def_name_def" />
+      <string name="CreateBucket_param_body_def_planId_def" />
+      <object name="CreateBucket_param_body_def">
+        <property name="name" type="string" />
+        <property name="planId" type="string" />
+      </object>
+    </jsonTypes>
+  </grammars>
+  <resources siena:authenticationProviderHref="#PowerAppAuth" base="https://unitedstates-002.azure-apim.net/apim/planner">
+    <resource path="/{connectionId}/v1.0/planner/tasks/{id}">
+      <param style="template" name="connectionId" type="xs:string" required="true" />
+      <param style="template" name="id" type="xs:string" required="true">
+        <doc title="The unique identifier of the task to update." />
+      </param>
+      <method siena:requiresAuthentication="true" name="GET" id="GetTaskV2" siena:isDeprecated="false" siena:family="GetTask" siena:revision="2" siena:status="Production">
+        <doc title="Get a task&#xA;Get an existing Planner task." />
+        <request />
+        <response>
+          <representation mediaType="application/json" element="service:GetTask_Response_V2" />
+        </response>
+      </method>
+    </resource>
+    <resource path="/{connectionId}/v1.0/planner/tasks/{id}">
+      <param style="template" name="connectionId" type="xs:string" required="true" />
+      <param style="template" name="id" type="xs:string" required="true">
+        <doc title="The unique identifier of the task to update." />
+      </param>
+      <method siena:requiresAuthentication="true" name="PATCH" id="UpdateTaskV2" siena:isDeprecated="false" siena:family="UpdateTask" siena:revision="2" siena:status="Production">
+        <doc title="Update a task&#xA;Update an existing Planner task." />
+        <request>
+          <param style="header" name="prefer" type="xs:string" required="true" fixed=" return=representation">
+            <doc title="prefer" />
+          </param>
+          <representation mediaType="application/json">
+            <param style="plain" name="title" path="/title" type="xs:string" />
+            <param style="plain" name="dueDateTime" path="/dueDateTime" type="service:UpdateTask_Request_V2_dueDateTime_def" />
+            <param style="plain" name="startDateTime" path="/startDateTime" type="service:UpdateTask_Request_V2_startDateTime_def" />
+            <param style="plain" name="percentComplete" path="/percentComplete" type="xs:string">
+              <option value="Not Started" />
+              <option value="In Progress" />
+              <option value="Completed" />
+            </param>
+            <param style="plain" name="assignments" path="/assignments" type="xs:string" />
+            <param style="plain" name="unassignedUsers" path="/unassignedUsers" type="xs:string" />
+          </representation>
+        </request>
+        <response>
+          <representation mediaType="application/json" element="service:GetTask_Response_V2" />
+        </response>
+      </method>
+    </resource>
+    <resource path="/{connectionId}/v2/v1.0/planner/tasks/{id}">
+      <param style="template" name="connectionId" type="xs:string" required="true" />
+      <param style="template" name="id" type="xs:string" required="true">
+        <doc title="The unique identifier of the task to update." />
+      </param>
+      <method siena:requiresAuthentication="true" name="PATCH" id="UpdateTaskV3" siena:isDeprecated="false" siena:family="UpdateTask" siena:revision="3" siena:status="Preview">
+        <doc title="Update a task (V2)&#xA;Update an existing Planner task." />
+        <request>
+          <param style="header" name="prefer" type="xs:string" required="true" fixed=" return=representation">
+            <doc title="prefer" />
+          </param>
+          <representation mediaType="application/json">
+            <param style="plain" name="title" path="/title" type="xs:string" />
+            <param style="plain" name="dueDateTime" path="/dueDateTime" type="service:UpdateTask_Request_V3_dueDateTime_def" />
+            <param style="plain" name="startDateTime" path="/startDateTime" type="service:UpdateTask_Request_V3_startDateTime_def" />
+            <param style="plain" name="percentComplete" path="/percentComplete" type="xs:int" />
+          </representation>
+        </request>
+        <response>
+          <representation mediaType="application/json" element="service:GetTask_Response_V2" />
+        </response>
+      </method>
+    </resource>
+    <resource path="/{connectionId}/v2/v1.0/planner/tasks">
+      <param style="template" name="connectionId" type="xs:string" required="true" />
+      <method siena:requiresAuthentication="true" name="POST" id="CreateTaskV3" visibility="important" siena:isDeprecated="false" siena:family="CreateTask" siena:revision="3" siena:status="Production">
+        <doc title="Create a task&#xA;Create a new task in Planner." />
+        <request>
+          <param style="header" name="prefer" type="xs:string" required="true" fixed=" return=representation">
+            <doc title="prefer" />
+          </param>
+          <representation mediaType="application/json">
+            <param style="plain" name="groupId" path="/groupId" type="xs:string" required="true" />
+            <param style="plain" name="planId" path="/planId" type="xs:string" required="true" />
+            <param style="plain" name="title" path="/title" type="xs:string" required="true" />
+            <param style="plain" name="bucketId" path="/bucketId" type="xs:string" />
+            <param style="plain" name="startDateTime" path="/startDateTime" type="service:CreateTask_Request_V3_startDateTime_def" />
+            <param style="plain" name="dueDateTime" path="/dueDateTime" type="service:CreateTask_Request_V3_dueDateTime_def" />
+            <param style="plain" name="assignments" path="/assignments" type="xs:string" />
+          </representation>
+        </request>
+        <response>
+          <representation mediaType="application/json" element="service:GetTask_Response_V2" />
+        </response>
+      </method>
+    </resource>
+    <resource path="/{connectionId}/v2/v1.0/planner/plans/{id}/tasks">
+      <param style="template" name="connectionId" type="xs:string" required="true" />
+      <param style="template" name="id" type="xs:string" required="true">
+        <doc title="The unique identifier of the plan." />
+      </param>
+      <method siena:requiresAuthentication="true" name="GET" id="ListTasksV3" siena:isDeprecated="false" siena:family="ListTasks" siena:revision="3" siena:status="Production">
+        <doc title="List tasks&#xA;List the tasks in a plan." />
+        <request>
+          <param style="query" name="groupId" type="xs:string" required="true">
+            <doc title="The group to retrieve the plan." />
+          </param>
+        </request>
+        <response>
+          <representation mediaType="application/json" element="service:ListTasks_Response_V2" />
+        </response>
+      </method>
+    </resource>
+    <resource path="/{connectionId}/v1.0/me/planner/tasks">
+      <param style="template" name="connectionId" type="xs:string" required="true" />
+      <method siena:requiresAuthentication="true" name="GET" id="ListMyTasksV2" siena:isDeprecated="false" siena:family="ListMyTasks" siena:revision="2" siena:status="Production">
+        <doc title="List my tasks&#xA;List the tasks assigned to me." />
+        <request />
+        <response>
+          <representation mediaType="application/json" element="service:ListTasks_Response_V2" />
+        </response>
+      </method>
+    </resource>
+    <resource path="/{connectionId}/v1.0/planner/tasks/{id}/unassignusers">
+      <param style="template" name="connectionId" type="xs:string" required="true" />
+      <param style="template" name="id" type="xs:string" required="true">
+        <doc title="The unique identifier of the task to update." />
+      </param>
+      <method siena:requiresAuthentication="true" name="PATCH" id="UnassignUsers" siena:isDeprecated="false">
+        <doc title="Unassign users from a task&#xA;Unassign users from an existing Planner task." />
+        <request>
+          <param style="header" name="prefer" type="xs:string" required="true" fixed=" return=representation">
+            <doc title="prefer" />
+          </param>
+          <representation mediaType="application/json">
+            <param style="plain" name="assignments" path="/assignments" type="xs:string" required="true" />
+          </representation>
+        </request>
+        <response>
+          <representation mediaType="application/json" element="service:GetTask_Response_V2" />
+        </response>
+      </method>
+    </resource>
+    <resource path="/{connectionId}/v1.0/planner/tasks/{id}/assignusers">
+      <param style="template" name="connectionId" type="xs:string" required="true" />
+      <param style="template" name="id" type="xs:string" required="true">
+        <doc title="The unique identifier of the task to update." />
+      </param>
+      <method siena:requiresAuthentication="true" name="PATCH" id="AssignUsers" siena:isDeprecated="false">
+        <doc title="Add assignees to a task&#xA;Add assignees an existing Planner task." />
+        <request>
+          <param style="header" name="prefer" type="xs:string" required="true" fixed=" return=representation">
+            <doc title="prefer" />
+          </param>
+          <representation mediaType="application/json">
+            <param style="plain" name="assignments" path="/assignments" type="xs:string" required="true" />
+          </representation>
+        </request>
+        <response>
+          <representation mediaType="application/json" element="service:GetTask_Response_V2" />
+        </response>
+      </method>
+    </resource>
+    <resource path="/{connectionId}/v2/v1.0/planner/plans/{id}/buckets">
+      <param style="template" name="connectionId" type="xs:string" required="true" />
+      <param style="template" name="id" type="xs:string" required="true">
+        <doc title="The unique identifier of the plan." />
+      </param>
+      <method siena:requiresAuthentication="true" name="GET" id="ListBucketsV3" siena:isDeprecated="false" siena:family="ListBuckets" siena:revision="3" siena:status="Production">
+        <doc title="List buckets&#xA;List the buckets in a plan." />
+        <request>
+          <param style="query" name="groupId" type="xs:string" required="true">
+            <doc title="The group to retrieve the plan." />
+          </param>
+        </request>
+        <response>
+          <representation mediaType="application/json" element="service:ListBuckets_Response" />
+        </response>
+      </method>
+    </resource>
+    <resource path="/{connectionId}/v2/v1.0/planner/buckets">
+      <param style="template" name="connectionId" type="xs:string" required="true" />
+      <method siena:requiresAuthentication="true" name="POST" id="CreateBucketV2" siena:isDeprecated="false" siena:family="CreateBucket" siena:revision="2" siena:status="Production">
+        <doc title="Create a bucket&#xA;Create a bucket in Planner for the specified plan and group." />
+        <request>
+          <representation mediaType="application/json">
+            <param style="plain" name="name" path="/name" type="xs:string" required="true" />
+            <param style="plain" name="groupId" path="/groupId" type="xs:string" required="true" />
+            <param style="plain" name="planId" path="/planId" type="xs:string" required="true" />
+          </representation>
+        </request>
+        <response>
+          <representation mediaType="application/json" element="service:CreateBucket_Response" />
+        </response>
+      </method>
+    </resource>
+    <resource path="/{connectionId}/v1.0/planner/tasks/{id}/details">
+      <param style="template" name="connectionId" type="xs:string" required="true" />
+      <param style="template" name="id" type="xs:string" required="true">
+        <doc title="The unique identifier of the task to update." />
+      </param>
+      <method siena:requiresAuthentication="true" name="GET" id="GetTaskDetailsV2" visibility="advanced" siena:isDeprecated="false" siena:family="GetTaskDetails" siena:revision="2" siena:status="Production">
+        <doc title="Get task details&#xA;Get the task details for an existing task." />
+        <request />
+        <response>
+          <representation mediaType="application/json" element="service:GetTaskDetails_Response" />
+        </response>
+      </method>
+    </resource>
+    <resource path="/{connectionId}/v1.0/planner/tasks/{id}/details">
+      <param style="template" name="connectionId" type="xs:string" required="true" />
+      <param style="template" name="id" type="xs:string" required="true">
+        <doc title="The unique identifier of the task to update." />
+      </param>
+      <method siena:requiresAuthentication="true" name="PATCH" id="UpdateTaskDetailsV2" visibility="advanced" siena:isDeprecated="false" siena:family="UpdateTaskDetails" siena:revision="2" siena:status="Production">
+        <doc title="Update task details&#xA;Update the task details for an existing task." />
+        <request>
+          <param style="header" name="prefer" type="xs:string" required="true" fixed=" return=representation">
+            <doc title="prefer" />
+          </param>
+          <representation mediaType="application/json">
+            <param style="plain" name="description" path="/description" type="xs:string" />
+            <param style="plain" name="references" path="/references" type="service:UpdateTaskDetails_Request_references_def" />
+          </representation>
+        </request>
+        <response>
+          <representation mediaType="application/json" element="service:GetTaskDetails_Response" />
+        </response>
+      </method>
+    </resource>
+    <resource path="/{connectionId}/v1.0/groups/{groupId}/planner/plans">
+      <param style="template" name="connectionId" type="xs:string" required="true" />
+      <param style="template" name="groupId" type="xs:string" required="true">
+        <doc title="Id of the group." />
+      </param>
+      <method siena:requiresAuthentication="true" name="GET" id="ListGroupPlans" siena:isDeprecated="false" siena:family="ListGroupPlans" siena:revision="1" siena:status="Production">
+        <doc title="List plans for a group&#xA;List plans owned by the group specified." />
+        <request />
+        <response>
+          <representation mediaType="application/json" element="service:ListMyPlans_Response" />
+        </response>
+      </method>
+    </resource>
+    <resource path="/{connectionId}/v1.0/me/memberOf">
+      <param style="template" name="connectionId" type="xs:string" required="true" />
+      <method siena:requiresAuthentication="true" name="GET" id="ListGroups" visibility="internal" siena:isDeprecated="false">
+        <doc title="List groups that I am member of&#xA;Get groups that the user is a direct member of." />
+        <request />
+        <response>
+          <representation mediaType="application/json" element="service:ListGroups_Response" />
+        </response>
+      </method>
+    </resource>
+    <resource path="/{connectionId}/beta/planner/tasks/{id}">
+      <param style="template" name="connectionId" type="xs:string" required="true" />
+      <param style="template" name="id" type="xs:string" required="true">
+        <doc title="The unique identifer of the task." />
+      </param>
+      <method siena:requiresAuthentication="true" name="GET" id="GetTask" siena:isDeprecated="true" siena:family="GetTask" siena:revision="1" siena:status="Production">
+        <doc title="Get a task&#xA;Get an existing Planner task." />
+        <request />
+        <response>
+          <representation mediaType="application/json" element="service:GetTask_Response" />
+        </response>
+      </method>
+    </resource>
+    <resource path="/{connectionId}/beta/planner/tasks/{id}">
+      <param style="template" name="connectionId" type="xs:string" required="true" />
+      <param style="template" name="id" type="xs:string" required="true">
+        <doc title="The unique identifier of the tast to update." />
+      </param>
+      <method siena:requiresAuthentication="true" name="PATCH" id="UpdateTask" siena:isDeprecated="true" siena:family="UpdateTask" siena:revision="1" siena:status="Production">
+        <doc title="Update a task&#xA;Update an existing Planner task." />
+        <request>
+          <param style="header" name="prefer" type="xs:string" required="true" fixed=" return=representation">
+            <doc title="prefer" />
+          </param>
+          <representation mediaType="application/json">
+            <param style="plain" name="title" path="/title" type="xs:string" />
+            <param style="plain" name="dueDateTime" path="/dueDateTime" type="service:UpdateTask_Request_dueDateTime_def" />
+            <param style="plain" name="startDateTime" path="/startDateTime" type="service:UpdateTask_Request_startDateTime_def" />
+            <param style="plain" name="percentComplete" path="/percentComplete" type="xs:string">
+              <option value="Not Started" />
+              <option value="In Progress" />
+              <option value="Completed" />
+            </param>
+            <param style="plain" name="assignments" path="/assignments" type="xs:string" />
+          </representation>
+        </request>
+        <response>
+          <representation mediaType="application/json" element="service:GetTask_Response" />
+        </response>
+      </method>
+    </resource>
+    <resource path="/{connectionId}/beta/planner/plans/{id}/buckets">
+      <param style="template" name="connectionId" type="xs:string" required="true" />
+      <param style="template" name="id" type="xs:string" required="true">
+        <doc title="The unique identifier of the plan." />
+      </param>
+      <method siena:requiresAuthentication="true" name="GET" id="ListBuckets" siena:isDeprecated="true" siena:family="ListBuckets" siena:revision="1" siena:status="Production">
+        <doc title="List buckets&#xA;List the buckets in a plan." />
+        <request />
+        <response>
+          <representation mediaType="application/json" element="service:ListBuckets_Response" />
+        </response>
+      </method>
+    </resource>
+    <resource path="/{connectionId}/beta/planner/tasks">
+      <param style="template" name="connectionId" type="xs:string" required="true" />
+      <method siena:requiresAuthentication="true" name="POST" id="CreateTask" visibility="important" siena:isDeprecated="true" siena:family="CreateTask" siena:revision="1" siena:status="Production">
+        <doc title="Create a task&#xA;Create a new task in Planner." />
+        <request>
+          <param style="header" name="prefer" type="xs:string" required="true" fixed=" return=representation">
+            <doc title="prefer" />
+          </param>
+          <representation mediaType="application/json">
+            <param style="plain" name="planId" path="/planId" type="xs:string" required="true" />
+            <param style="plain" name="title" path="/title" type="xs:string" required="true" />
+            <param style="plain" name="bucketId" path="/bucketId" type="xs:string" />
+            <param style="plain" name="startDateTime" path="/startDateTime" type="service:CreateTask_Request_startDateTime_def" />
+            <param style="plain" name="dueDateTime" path="/dueDateTime" type="service:CreateTask_Request_dueDateTime_def" />
+            <param style="plain" name="assignments" path="/assignments" type="xs:string" />
+          </representation>
+        </request>
+        <response>
+          <representation mediaType="application/json" element="service:GetTask_Response" />
+        </response>
+      </method>
+    </resource>
+    <resource path="/{connectionId}/beta/planner/plans/{id}/tasks">
+      <param style="template" name="connectionId" type="xs:string" required="true" />
+      <param style="template" name="id" type="xs:string" required="true">
+        <doc title="The unique identifier of the plan." />
+      </param>
+      <method siena:requiresAuthentication="true" name="GET" id="ListTasks" siena:isDeprecated="true" siena:family="ListTasks" siena:revision="1" siena:status="Production">
+        <doc title="List tasks&#xA;List the tasks in a plan." />
+        <request />
+        <response>
+          <representation mediaType="application/json" element="service:ListTasks_Response" />
+        </response>
+      </method>
+    </resource>
+    <resource path="/{connectionId}/beta/me/planner/tasks">
+      <param style="template" name="connectionId" type="xs:string" required="true" />
+      <method siena:requiresAuthentication="true" name="GET" id="ListMyTasks" siena:isDeprecated="true" siena:family="ListMyTasks" siena:revision="1" siena:status="Production">
+        <doc title="List my tasks&#xA;List the tasks assigned to me." />
+        <request />
+        <response>
+          <representation mediaType="application/json" element="service:ListTasks_Response" />
+        </response>
+      </method>
+    </resource>
+    <resource path="/{connectionId}/beta/me/planner/plans">
+      <param style="template" name="connectionId" type="xs:string" required="true" />
+      <method siena:requiresAuthentication="true" name="GET" id="ListMyPlans" siena:isDeprecated="true" siena:family="ListMyPlans" siena:revision="1" siena:status="Production">
+        <doc title="List my plans&#xA;List the plans the user has subscribed to." />
+        <request />
+        <response>
+          <representation mediaType="application/json" element="service:ListMyPlans_Response" />
+        </response>
+      </method>
+    </resource>
+    <resource path="/{connectionId}/beta/planner/tasks/{id}/details">
+      <param style="template" name="connectionId" type="xs:string" required="true" />
+      <param style="template" name="id" type="xs:string" required="true">
+        <doc title="The unique identifer of the task." />
+      </param>
+      <method siena:requiresAuthentication="true" name="GET" id="GetTaskDetails" visibility="advanced" siena:isDeprecated="true" siena:family="GetTaskDetails" siena:revision="1" siena:status="Production">
+        <doc title="Get task details&#xA;Get the task details for an existing task." />
+        <request />
+        <response>
+          <representation mediaType="application/json" element="service:GetTaskDetails_Response" />
+        </response>
+      </method>
+    </resource>
+    <resource path="/{connectionId}/beta/planner/tasks/{id}/details">
+      <param style="template" name="connectionId" type="xs:string" required="true" />
+      <param style="template" name="id" type="xs:string" required="true">
+        <doc title="The unique identifer of the task." />
+      </param>
+      <method siena:requiresAuthentication="true" name="PATCH" id="UpdateTaskDetails" visibility="advanced" siena:isDeprecated="true" siena:family="UpdateTaskDetails" siena:revision="1" siena:status="Production">
+        <doc title="Update task details&#xA;Update the task details for an existing task." />
+        <request>
+          <param style="header" name="prefer" type="xs:string" required="true" fixed=" return=representation">
+            <doc title="prefer" />
+          </param>
+          <representation mediaType="application/json">
+            <param style="plain" name="description" path="/description" type="xs:string" />
+            <param style="plain" name="references" path="/references" type="service:UpdateTaskDetails_Request_references_def" />
+          </representation>
+        </request>
+        <response>
+          <representation mediaType="application/json" element="service:GetTaskDetails_Response" />
+        </response>
+      </method>
+    </resource>
+    <resource path="/{connectionId}/v1.0/planner/plans/{id}/buckets">
+      <param style="template" name="connectionId" type="xs:string" required="true" />
+      <param style="template" name="id" type="xs:string" required="true">
+        <doc title="The unique identifier of the plan." />
+      </param>
+      <method siena:requiresAuthentication="true" name="GET" id="ListBucketsV2" siena:isDeprecated="true" siena:family="ListBuckets" siena:revision="2" siena:status="Production">
+        <doc title="List buckets&#xA;List the buckets in a plan." />
+        <request />
+        <response>
+          <representation mediaType="application/json" element="service:ListBuckets_Response" />
+        </response>
+      </method>
+    </resource>
+    <resource path="/{connectionId}/v1.0/planner/buckets">
+      <param style="template" name="connectionId" type="xs:string" required="true" />
+      <method siena:requiresAuthentication="true" name="POST" id="CreateBucket" siena:isDeprecated="true" siena:family="CreateBucket" siena:revision="1" siena:status="Production">
+        <doc title="Create a bucket&#xA;Create a bucket in Planner." />
+        <request>
+          <representation mediaType="application/json">
+            <param style="plain" name="name" path="/name" type="xs:string" required="true" />
+            <param style="plain" name="planId" path="/planId" type="xs:string" required="true" />
+          </representation>
+        </request>
+        <response>
+          <representation mediaType="application/json" element="service:CreateBucket_Response" />
+        </response>
+      </method>
+    </resource>
+    <resource path="/{connectionId}/v1.0/planner/tasks">
+      <param style="template" name="connectionId" type="xs:string" required="true" />
+      <method siena:requiresAuthentication="true" name="POST" id="CreateTaskV2" visibility="important" siena:isDeprecated="true" siena:family="CreateTask" siena:revision="2" siena:status="Production">
+        <doc title="Create a task&#xA;Create a new task in Planner." />
+        <request>
+          <param style="header" name="prefer" type="xs:string" required="true" fixed=" return=representation">
+            <doc title="prefer" />
+          </param>
+          <representation mediaType="application/json">
+            <param style="plain" name="planId" path="/planId" type="xs:string" required="true" />
+            <param style="plain" name="title" path="/title" type="xs:string" required="true" />
+            <param style="plain" name="bucketId" path="/bucketId" type="xs:string" />
+            <param style="plain" name="startDateTime" path="/startDateTime" type="service:CreateTask_Request_V2_startDateTime_def" />
+            <param style="plain" name="dueDateTime" path="/dueDateTime" type="service:CreateTask_Request_V2_dueDateTime_def" />
+            <param style="plain" name="assignments" path="/assignments" type="xs:string" />
+          </representation>
+        </request>
+        <response>
+          <representation mediaType="application/json" element="service:GetTask_Response_V2" />
+        </response>
+      </method>
+    </resource>
+    <resource path="/{connectionId}/v1.0/planner/plans/{id}/tasks">
+      <param style="template" name="connectionId" type="xs:string" required="true" />
+      <param style="template" name="id" type="xs:string" required="true">
+        <doc title="The unique identifier of the plan." />
+      </param>
+      <method siena:requiresAuthentication="true" name="GET" id="ListTasksV2" siena:isDeprecated="true" siena:family="ListTasks" siena:revision="2" siena:status="Production">
+        <doc title="List tasks&#xA;List the tasks in a plan." />
+        <request />
+        <response>
+          <representation mediaType="application/json" element="service:ListTasks_Response_V2" />
+        </response>
+      </method>
+    </resource>
+    <resource path="/{connectionId}/v1.0/me/planner/plans">
+      <param style="template" name="connectionId" type="xs:string" required="true" />
+      <method siena:requiresAuthentication="true" name="GET" id="ListMyPlansV2" siena:isDeprecated="true" siena:family="ListMyPlans" siena:revision="2" siena:status="Production">
+        <doc title="List my plans&#xA;List the plans the user has subscribed to." />
+        <request />
+        <response>
+          <representation mediaType="application/json" element="service:ListMyPlans_Response" />
+        </response>
+      </method>
+    </resource>
+  </resources>
+  <authenticationProviders xmlns="http://schemas.microsoft.com/MicrosoftProjectSiena/WADL/2014/11">
+    <connectionProvider id="PowerAppAuth" siena:connectionProviderId="shared_planner" />
+  </authenticationProviders>
+  <template xmlns="http://schemas.microsoft.com/MicrosoftProjectSiena/WADL/2014/11">
+    <variable name="connectionId">
+      <modifyParams style="template" name="connectionId" attribute="fixed" />
+    </variable>
+  </template>
+</application>

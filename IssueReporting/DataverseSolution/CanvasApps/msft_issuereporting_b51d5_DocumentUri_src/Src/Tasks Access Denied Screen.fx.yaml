@@ -1,0 +1,215 @@
+"'Tasks Access Denied Screen' As screen":
+    Fill: =gblAppStyles.Background.Fill
+
+    conAppBoundary_TasksAccessDenied As groupContainer:
+        Height: =Parent.Height
+        Width: =Min(gblAppBoundaryWidth,Parent.Width)
+        X: |-
+            =(Parent.Width - Min(
+                Parent.Width,
+                gblAppBoundaryWidth
+            )) / 2
+        Y: =0*0
+        ZIndex: =4
+
+        lblTasksAccessDenied As label:
+            Align: =Align.Center
+            BorderColor: =gblAppStyles.Label.BorderColor
+            BorderThickness: =gblAppStyles.Label.BorderThickness
+            Color: |
+                =// Non-variable colors, while variable is established
+                Switch(
+                    Param("theme"),
+                    "contrast",
+                    White,
+                    "dark",
+                    White,
+                    ColorValue("#252423") // NeutralWebGray190
+                )
+            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+            DisabledColor: =gblAppStyles.Label.DisabledColor
+            DisabledFill: =gblAppStyles.Label.DisabledFill
+            DisplayMode: =DisplayMode.View
+            Fill: =Transparent
+            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            FontWeight: =FontWeight.Semibold
+            Height: =240
+            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+            HoverColor: =gblAppStyles.Label.HoverColor
+            HoverFill: =gblAppStyles.Label.HoverFill
+            PaddingLeft: =24
+            PaddingRight: =24
+            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+            PressedColor: =gblAppStyles.Label.PressedColor
+            PressedFill: =gblAppStyles.Label.PressedFill
+            Size: =gblAppStyles.Label.Size.ExtraLarge
+            Text: |-
+                =With(
+                    {
+                        varDefault: "Oops! You do not have access to the Tasks instance where issue reporting tasks are stored. Please contact your manager.",
+                        varOOBTextId: "lblTasksAccessDenied__locText"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                staticLocalizations,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            VerticalAlign: =VerticalAlign.Top
+            Width: =Parent.Width - Self.X - Self.X
+            X: =gblPadding.Page * 5
+            Y: =imgTasksAccessDenied.Y + imgTasksAccessDenied.Height + gblPadding.Page
+            ZIndex: =1
+
+        imgTasksAccessDenied As image:
+            AccessibleLabel: =lblTasksAccessDenied.Text
+            Height: =Self.Width / 1.6
+            Image: =Image_SomethingWentWrong
+            Width: =Parent.Width * .5
+            X: =(Parent.Width -Self.Width) / 2
+            Y: =((Parent.Height -Self.Height) / 2) -100
+            ZIndex: =2
+
+        btnTasksAccessDenied_Exit As button:
+            BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+            BorderThickness: =gblAppStyles.ButtonPrimary.BorderThickness
+            Color: =gblAppStyles.ButtonPrimary.Color
+            DisabledBorderColor: =gblAppStyles.ButtonPrimary.DisabledBorderColor
+            DisabledColor: =gblAppStyles.ButtonPrimary.DisabledColor
+            DisabledFill: =gblAppStyles.ButtonPrimary.DisabledFill
+            Fill: =gblAppStyles.ButtonPrimary.Fill
+            FocusedBorderColor: =gblAppStyles.ButtonPrimary.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.ButtonPrimary.FocusedBorderThickness
+            Font: ='Segoe UI'
+            FontWeight: =FontWeight.Normal
+            Height: =60
+            HoverBorderColor: =gblAppStyles.ButtonPrimary.HoverBorderColor
+            HoverColor: =gblAppStyles.ButtonPrimary.HoverColor
+            HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+            OnSelect: =Exit(false)
+            PaddingBottom: =4
+            PaddingLeft: =8
+            PaddingRight: =8
+            PaddingTop: =4
+            PressedBorderColor: =gblAppStyles.ButtonPrimary.PressedBorderColor
+            PressedColor: =gblAppStyles.ButtonPrimary.PressedColor
+            PressedFill: =gblAppStyles.ButtonPrimary.PressedFill
+            RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+            RadiusBottomRight: =gblAppStyles.ButtonPrimary.RadiusBottomRight
+            RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+            RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+            Size: =gblAppStyles.ButtonPrimary.Size
+            Text: |-
+                =With(
+                    {
+                        varDefault: "Close app",
+                        varOOBTextId: "_translateCommon__Closeapp",
+                        varParam0: Blank(),
+                        varParam1: Blank(),
+                        varParam2: Blank()
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                staticLocalizations,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        If(
+                            IsBlankOrError(varParam0),
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            ),
+                            Coalesce(
+                                Substitute(
+                                    Substitute(
+                                        Substitute(
+                                            varLocalizedText,
+                                            "{0}",
+                                            Text(varParam0)
+                                        ),
+                                        "{1}",
+                                        Text(varParam1)
+                                    ),
+                                    "{2}",
+                                    Text(varParam2)
+                                ),
+                                varDefault
+                            )
+                        )
+                    )
+                )
+            Tooltip: =Self.Text
+            Width: =Parent.Width - (2 * Self.X)
+            X: =gblPadding.Page
+            Y: =Parent.Height - gblPadding.Page - Self.Height
+            ZIndex: =3
+
+        btnSettingsMissing_Hidden_StyleErrorFallback_1 As button:
+            Fill: =RGBA(166, 166, 166, 1)
+            Font: =Font.'Segoe UI'
+            Height: =btnTasksAccessDenied_Exit.Height
+            HoverFill: =ColorFade(Self.Fill, -20%)
+            OnSelect: =Select(btnTasksAccessDenied_Exit)
+            Size: =gblAppStyles.ButtonPrimary.Size
+            Text: |-
+                =With(
+                    {
+                        varDefault: "Close app",
+                        varOOBTextId: "_translateCommon__Closeapp",
+                        varParam0: Blank(),
+                        varParam1: Blank(),
+                        varParam2: Blank()
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                staticLocalizations,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        If(
+                            IsBlankOrError(varParam0),
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            ),
+                            Coalesce(
+                                Substitute(
+                                    Substitute(
+                                        Substitute(
+                                            varLocalizedText,
+                                            "{0}",
+                                            Text(varParam0)
+                                        ),
+                                        "{1}",
+                                        Text(varParam1)
+                                    ),
+                                    "{2}",
+                                    Text(varParam2)
+                                ),
+                                varDefault
+                            )
+                        )
+                    )
+                )
+            Tooltip: =Self.Text
+            Visible: =IsBlankOrError(gblAppStyles)
+            Width: =btnTasksAccessDenied_Exit.Width
+            X: =btnTasksAccessDenied_Exit.X
+            Y: =btnTasksAccessDenied_Exit.Y
+            ZIndex: =4
+

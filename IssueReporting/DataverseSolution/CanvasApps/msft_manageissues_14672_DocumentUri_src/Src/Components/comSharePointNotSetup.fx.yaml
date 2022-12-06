@@ -1,0 +1,58 @@
+comSharePointNotSetup As CanvasComponent:
+    Fill: |-
+        =ColorValue("#EDEBE9")
+    Height: =32
+    inputSettingsScreen: =App.ActiveScreen
+    inputTextColor: =RGBA(0, 0, 0, 1)
+    inputWarningIcon: =SampleImage
+    inputWarningText: ="Image storage needs to be configured. Click to go to Settings."
+    Width: =App.Width
+    X: =0
+    Y: =0
+    ZIndex: =1
+
+    imgSharePointNotSetup As image:
+        Height: =32
+        Image: =comSharePointNotSetup.inputWarningIcon
+        PaddingBottom: =4
+        PaddingLeft: =4
+        PaddingRight: =4
+        PaddingTop: =4
+        Width: =32
+        X: =16
+        ZIndex: =1
+
+    htmSharePointNotSetup As htmlViewer:
+        Color: =comSharePointNotSetup.inputTextColor
+        Font: =Font.'Segoe UI'
+        Height: =32
+        HtmlText: =Parent.inputWarningText
+        PaddingLeft: =0
+        Tooltip: ="Image storage needs to be configured"
+        Width: =Parent.Width -Self.X
+        X: =60
+        ZIndex: =2
+
+    btnSharePointNotSetup As button:
+        BorderColor: =Transparent
+        BorderThickness: =0
+        DisabledBorderColor: =Transparent
+        DisabledColor: =Transparent
+        DisabledFill: =Transparent
+        Fill: =Transparent
+        FocusedBorderColor: =Transparent
+        FocusedBorderThickness: =0.5
+        Height: =16
+        HoverFill: =RGBA(0,0,0,.025)
+        OnSelect: =Navigate(comSharePointNotSetup.inputSettingsScreen,ScreenTransition.Fade)
+        PressedFill: =Self.Fill
+        RadiusBottomLeft: =0
+        RadiusBottomRight: =0
+        RadiusTopLeft: =0
+        RadiusTopRight: =0
+        Text: =""
+        Width: =60
+        X: =320
+        Y: =(Parent.Height - Self.Height) / 2
+        ZIndex: =3
+

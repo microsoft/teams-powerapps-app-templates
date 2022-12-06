@@ -1,0 +1,450 @@
+App As appinfo:
+    BackEnabled: =false
+    MinScreenHeight: =600
+    MinScreenWidth: =600
+    OnStart: |
+        =/**READ ME START**
+        Welcome to the app!
+        Please note that modifying anything in this app may result in unexpected behavior. Please do so, at your own risk. As of this writing, the app has been documented in minimal fashion with annotations in functions, and the Documentation linked on the Help screen.
+        In subsequent releases, this app will be updated to include helpful annotations and documentation to support users in customizing the app, and understanding the patterns/functions included here within.
+        **READ ME END**/
+        // App Loading
+        Set(
+            gblAppLoaded,
+            false
+        );
+        // App Context
+        Set(
+            gblAppContext,
+            Or(
+                (Param("hostClientType") in [
+                    "web",
+                    "desktop"
+                ]),
+                //ipad
+                (And(
+                    Param("hostClientType") = "ios",
+                    App.Width > 900
+                )),
+                // Use to enable for Studio
+                (tglAdmin_Context.Value)
+            )
+        );
+        // Load Based on Context
+        If(
+            !gblAppContext,// App Loaded (Incorrect Context), speed load
+            Set(
+                gblAppLoaded,
+                true
+            )
+        );
+        // Localization
+        // User Language
+        Set(
+            gblUserLanguage,
+            Switch(
+                Left(
+                    Language(),
+                    2
+                ),
+                "de",
+                "de-DE",
+                "en",
+                "en-US",
+                "es",
+                "es-ES",
+                "fr",
+                "fr-FR",
+                "it",
+                "it-IT",
+                "ja",
+                "ja-JP",
+                "nl",
+                "nl-NL",
+                "pt",
+                "pt-BR",
+                // Default
+                "en-US"
+            )
+        );
+        // Build Localization Collection, with User Language
+        ClearCollect(
+            colLocalization,
+            Filter(
+                staticLocalizations,
+                LanguageTag = gblUserLanguage
+            )
+        );
+        Collect(
+            colLocalization,
+            Filter(
+                staticLocalizations_Common,
+                LanguageTag = gblUserLanguage
+            )
+        );
+        // Default Load
+        // Params
+        Concurrent(
+            Set(
+                gblThemeDark,
+                Param("theme") = "dark" Or (tglAdmin_DarkMode.Value)// Use to enable for Studio
+            ),
+            Set(
+                gblThemeHiCo,
+                Param("theme") = "contrast" Or (tglAdmin_ContrastMode.Value)// Use to enable for Studio
+            ),
+            Set(
+                gblParamTeamId,
+                Param("groupId")
+            ),
+            Set(
+                gblParamChannelId,
+                Param("channelId")
+            ),
+            // App Mode
+            Set(
+                gblAppManager,
+                Param("userTeamRole") = "0" Or (tglAdmin_Manager.Value)// Use to enable for Studio
+            ),
+            Set(
+                gblIsHostClientWeb,
+                Param("hostClientType") = "web"
+            )
+        );
+        // App Settings
+        Set(
+            gblRecordSettings,
+            LookUp(
+                'Issue Report Settings',
+                true
+                // 'Parameter (Team Id)' = gblParamTeamId And 'Parameter (Channel Id)' = gblParamChannelId
+            )
+        );
+        With(
+            {
+                varTeamName: Concatenate(
+                    IfError(
+                        MicrosoftTeams.GetTeam(gblParamTeamId).displayName,
+                        "Team Unknown"
+                    ),
+                    " | ",
+                    IfError(
+                        LookUp(
+                            MicrosoftTeams.GetChannelsForGroup(gblParamTeamId).value,
+                            id = gblParamChannelId,
+                            displayName
+                        ),
+                        "Channel Unknown"
+                    )
+                )
+            },
+            If(
+                IsBlank(gblRecordSettings),
+                Set(
+                    gblRecordSettings,
+                    IfError(
+                        Patch(
+                            'Issue Report Settings',
+                            Defaults('Issue Report Settings'),
+                            {
+                                Name: varTeamName,
+                                'Parameter (Team Id)': gblParamTeamId,
+                                'Parameter (Channel Id)': gblParamChannelId,
+                                'Team Owner Restricted?': 'Team Owner Restricted? (Issue Report Settings)'.No
+                            }
+                        ),
+                        LookUp(
+                            'Issue Report Settings',
+                            true
+                        )
+                    )
+                )
+            )
+        );
+        // App Variables
+        Concurrent(
+            Set(
+                gblSettingPlannerPlanId,
+                gblRecordSettings.'Parameter (Planner Id)'
+            ),
+            Set(
+                gblSettingTeamId,
+                gblRecordSettings.'Parameter (Team Id)'
+            ),
+            Set(
+                gblSettingSharePointLocation,
+                gblRecordSettings.'Parameter (SharePoint Location)'
+            ),
+            Set(
+                gblPadding,
+                {
+                    Page: 20,
+                    ButtonShape: 12,
+                    ButtonText: 24,
+                    Container: 32,
+                    GalleryHeader: 16
+                }
+            ),
+            Set(
+                gblToday,
+                Today()
+            ),
+            ClearCollect(
+                colIcons,
+                [
+                    Icon_Category_Beauty,
+                    Icon_Category_Bike,
+                    Icon_Category_Bus,
+                    Icon_Category_Car1,
+                    Icon_Category_Car2,
+                    Icon_Category_Clothing,
+                    Icon_Category_Communication,
+                    Icon_Category_External,
+                    Icon_Category_Factory,
+                    Icon_Category_Focus,
+                    Icon_Category_Food,
+                    Icon_Category_Gifts,
+                    Icon_Category_Globe,
+                    Icon_Category_Hardware,
+                    Icon_Category_Home,
+                    Icon_Category_Index,
+                    Icon_Category_Interior,
+                    Icon_Category_Inventory,
+                    Icon_Category_Office,
+                    Icon_Category_Organization,
+                    Icon_Category_Outdoor,
+                    Icon_Category_Outdoors,
+                    Icon_Category_People,
+                    Icon_Category_Phone,
+                    Icon_Category_Rocket,
+                    Icon_Category_Rooms,
+                    Icon_Category_Sales,
+                    Icon_Category_Scan,
+                    Icon_Category_Science,
+                    Icon_Category_Security,
+                    Icon_Category_Service,
+                    Icon_Category_Stock,
+                    Icon_Category_Store,
+                    Icon_Category_Train,
+                    Icon_Category_Travel,
+                    Icon_Category_Truck,
+                    Icon_Category_Wine,
+                    Icon_Category_Work,
+                    Icon_Category_World
+                ]
+            )
+        );
+        // App Header Settings
+        Set(
+            gblAppHeader,
+            {
+                Main: With(
+                    {
+                        varLabel: With(
+                            {
+                                varDefault: "Manage issues",
+                                varOOBTextId: "_translateCommon__Manageissues"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    },
+                    {
+                        headerLabel: varLabel,
+                        headerTooltip: varLabel,
+                        headerWidth: Switch(
+                            gblUserLanguage,
+                            "de-DE",
+                            210,
+                            "en-US",
+                            160,
+                            "es-ES",
+                            225,
+                            "fr-FR",
+                            205,
+                            "it-IT",
+                            185,
+                            "ja-JP",
+                            130,
+                            "nl-NL",
+                            200,
+                            "pt-BR",
+                            210,
+                            160
+                        ),
+                        headerScreen: 'Insights Screen'
+                    }
+                ),
+                Insights: With(
+                    {
+                        varLabel: With(
+                            {
+                                varDefault: "Insights",
+                                varOOBTextId: "_translateCommon__Insights"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    },
+                    {
+                        menuLabel: varLabel,
+                        menuWidth: Switch(
+                            gblUserLanguage,
+                            "de-DE",
+                            110,
+                            "en-US",
+                            70,
+                            "es-ES",
+                            115,
+                            "fr-FR",
+                            120,
+                            "it-IT",
+                            160,
+                            "ja-JP",
+                            70,
+                            "nl-NL",
+                            80,
+                            "pt-BR",
+                            70,
+                            70
+                        ),
+                        menuScreen: 'Insights Screen'
+                    }
+                ),
+                IssueTemplates: With(
+                    {
+                        varLabel: With(
+                            {
+                                varDefault: "Issue templates",
+                                varOOBTextId: "_translateCommon__IssueTemplates"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    },
+                    {
+                        menuLabel: varLabel,
+                        menuWidth: Switch(
+                            gblUserLanguage,
+                            "de-DE",
+                            185,
+                            "en-US",
+                            135,
+                            "es-ES",
+                            190,
+                            "fr-FR",
+                            185,
+                            "it-IT",
+                            160,
+                            "ja-JP",
+                            135,
+                            "nl-NL",
+                            165,
+                            "pt-BR",
+                            180,
+                            135
+                        ),
+                        menuScreen: 'Issue Templates Screen'
+                    }
+                ),
+                ViewInTasks: With(
+                    {
+                        varLabel: With(
+                            {
+                                varDefault: "View Tasks",
+                                varOOBTextId: "_translateCommon__ViewTasks"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    },
+                    {
+                        linkLabel: varLabel,
+                        linkWidth: Switch(
+                            gblUserLanguage,
+                            "de-DE",
+                            155,
+                            "en-US",
+                            110,
+                            "es-ES",
+                            120,
+                            "fr-FR",
+                            185,
+                            "it-IT",
+                            150,
+                            "ja-JP",
+                            140,
+                            "nl-NL",
+                            155,
+                            "pt-BR",
+                            130,
+                            110
+                        ),
+                        linkURL: Concatenate(
+                            "https://tasks.office.com/Home/Planner#/plantaskboard?",
+                            "groupId=",
+                            gblSettingTeamId,
+                            "&planId=",
+                            gblSettingPlannerPlanId
+                        )
+                    }
+                )
+            }
+        );
+        // App Loaded (Correct Context)
+        Set(
+            gblAppLoaded,
+            true
+        );
+    SizeBreakpoints: |-
+        =[
+            680,
+            880,
+            1200,
+            1400
+        ]
+

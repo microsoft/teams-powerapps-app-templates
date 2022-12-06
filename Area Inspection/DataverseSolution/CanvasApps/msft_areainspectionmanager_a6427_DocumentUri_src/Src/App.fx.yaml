@@ -1,0 +1,651 @@
+App As appinfo:
+    BackEnabled: =false
+    OnStart: |
+        =//app loading
+        Set(
+            gblAppLoaded,
+            false
+        );
+        // App Context
+        Set(
+            gblAppContext,
+            ((Param("source") = "teamstab") And Param("hostClientType") in [
+                "web",
+                "desktop"
+            ]) Or ((Param("source") = "teamstab") And Param("hostClientType") = "ios" And App.Width > 900)//ipad
+        );
+        // Localization
+        // User Language
+        Set(
+            gblUserLanguage,
+            Switch(
+                Left(
+                    Language(),
+                    2
+                ),
+                "de",
+                "de-DE",
+                "en",
+                "en-US",
+                "es",
+                "es-ES",
+                "fr",
+                "fr-FR",
+                "it",
+                "it-IT",
+                "ja",
+                "ja-JP",
+                "nl",
+                "nl-NL",
+                "pt",
+                "pt-BR",
+                // Default
+                "en-US"
+            )
+        );
+        // Build Localization Collection, with User Language
+        ClearCollect(
+            colLocalization,
+            Filter(
+                staticLocalizations,
+                LanguageTag = gblUserLanguage
+            )
+        );
+        Collect(
+            colLocalization,
+            Filter(
+                staticLocalizations_Common,
+                LanguageTag = gblUserLanguage
+            )
+        );
+        Collect(
+            colLocalization,
+            Filter(
+                staticLocalizationsDialog,
+                LanguageTag = gblUserLanguage
+            )
+        );
+        Collect(
+            colLocalization,
+            Filter(
+                staticLocalizationsNewMessages,
+                LanguageTag = gblUserLanguage
+            )
+        );
+        Collect(
+            colLocalization,
+            Filter(
+                staticLocalizationsAppNames,
+                LanguageTag = gblUserLanguage
+            )
+        );
+        Set(
+            gblFirstRun,
+            false
+        );
+        ClearCollect(
+            colLabelSettings,
+            {
+                Value: "Inspection",
+                Icon: Inspection
+            },
+            {
+                Value: "Audit",
+                Icon: Audit
+            },
+            {
+                Value: "Walk",
+                Icon: Walk
+            }
+        );
+        //load work type - inspection, walk, or audit, if none exists, then set it to inspection
+        Set(
+            gblWorkType,
+            If(
+                IsBlank(First('Area Inspection Labels').'Work type'),
+                Text('Work types'.Inspection),
+                Text(First('Area Inspection Labels').'Work type')
+            )
+        );
+        Set(
+            gblSelectedWorkType,
+            If(
+                IsBlank(First('Area Inspection Labels').'Work type'),
+                Text('Work types'.Inspection),
+                Text(First('Area Inspection Labels').'Work type')
+            )
+        );
+        //params
+        Concurrent(
+            Set(
+                gblParamChannelId,
+                Param("channelId")
+            ),
+            Set(
+                gblThemeDark,
+                Param("theme") = "dark"
+            ),
+            Set(
+                gblThemeContrast,
+                Param("theme") = "contrast"
+            ),
+            Set(
+                gblIsHostClientWeb,
+                Param("hostClientType") = "web"
+            ),
+        //app mode
+            Set(
+                gblAppManager,
+                Param("userTeamRole") = "0" Or (tglAdmin_Manager.Value)//Param("userTeamRole") <> "1"
+            )
+        );
+        //app variables
+        ClearCollect(// Collect User Settings CDS Record, if it exists
+            colUserSettings,
+            Filter(
+                'Area Inspection User Settings',
+                'Area Inspection User Settings (Views)'.'My Area Inspection User Setting Record'
+            )
+        );
+        If(
+            // Record does not exist, or was not found, create and collect
+            CountRows(colUserSettings) = 0,
+            ClearCollect(
+                colUserSettings,
+                IfError(Patch(
+                    'Area Inspection User Settings',
+                    Defaults('Area Inspection User Settings'),
+                    {Name: User().FullName}
+                ),Blank())
+            )
+        );
+        Set(
+            gblRecordUserSettings,// Use Oldest Record, if multiple exist
+            First(
+                SortByColumns(
+                    colUserSettings,
+                    "createdon",
+                    Ascending
+                )
+            )
+        );
+        //app settings (app-specific)
+        Concurrent(
+            Set(
+                gblFontSizes,
+                {
+                    fontLarge: 13,
+                    fontSmall: 11,
+                    fontXSmall: 9
+                }
+            ),
+            Set(
+                gblPadding,
+                {
+                    Page: 20,
+                    ButtonShape: 12,
+                    ButtonText: 24,
+                    Container: 32,
+                    GalleryHeader: 16
+                }
+            ),
+            Set(
+                gblScreenHeightMin,
+                400
+            ),
+            Set(
+                gblScreenWidthMin,
+                708
+            ),
+            Set(
+                gblEditLocation,
+                false
+            ),
+            Set(
+                gblView,
+                "Locations"
+            ),
+            Set(
+                gblViewInspection,
+                false
+            ),
+            Set(
+                gblManageLocationTypes,
+                false
+            ),
+            Set(
+                gblTempAddLocType,
+                false
+            ),
+            Set(
+                gblWarningType,
+                ""
+            ),
+            Set(
+                gblDisplayWarning,
+                false
+            ),
+            Set(
+                gblAddLocation,
+                false
+            ),
+            Set(
+                gblShowLocationTypeIcons,
+                false
+            ),
+            Set(
+                gblParamTeamId,
+                Param("groupId")
+            ),
+            Set(
+                gblParamChannelId,
+                Param("channelId")
+            ),
+        //area type icons
+            ClearCollect(
+                colLocationTypeIcons,
+                {
+                    appIcon: Icon_Category_Beauty,
+                    Name: "Beauty",
+                    Order: 1
+                },
+                {
+                    appIcon: Icon_Category_Bike,
+                    Name: "Bike",
+                    Order: 2
+                },
+                {
+                    appIcon: Icon_Category_Bus,
+                    Name: "Bus",
+                    Order: 3
+                },
+                {
+                    appIcon: Icon_Category_Car,
+                    Name: "Car",
+                    Order: 4
+                },
+                {
+                    appIcon: Icon_Category_Car1,
+                    Name: "Car1",
+                    Order: 5
+                },
+                {
+                    appIcon: Icon_Category_Car2,
+                    Name: "Car2",
+                    Order: 6
+                },
+                {
+                    appIcon: Icon_Category_Clothing,
+                    Name: "Clothing",
+                    Order: 7
+                },
+                {
+                    appIcon: Icon_Category_Communication,
+                    Name: "Communication",
+                    Order: 8
+                },
+                {
+                    appIcon: Icon_Category_External,
+                    Name: "External",
+                    Order: 9
+                },
+                {
+                    appIcon: Icon_Category_Factory,
+                    Name: "Factory",
+                    Order: 10
+                },
+                {
+                    appIcon: Icon_Category_Focus,
+                    Name: "Focus",
+                    Order: 11
+                },
+                {
+                    appIcon: Icon_Category_Food,
+                    Name: "Food",
+                    Order: 12
+                },
+                {
+                    appIcon: Icon_Category_Gifts,
+                    Name: "Gifts",
+                    Order: 13
+                },
+                {
+                    appIcon: Icon_Category_Globe,
+                    Name: "Globe",
+                    Order: 14
+                },
+                {
+                    appIcon: Icon_Category_Hardware,
+                    Name: "Hardware",
+                    Order: 15
+                },
+                {
+                    appIcon: Icon_Category_Home,
+                    Name: "Home",
+                    Order: 16
+                },
+                {
+                    appIcon: Icon_Category_Index,
+                    Name: "Index",
+                    Order: 17
+                },
+                {
+                    appIcon: Icon_Category_Interior,
+                    Name: "Interior",
+                    Order: 18
+                },
+                {
+                    appIcon: Icon_Category_Inventory,
+                    Name: "Inventory",
+                    Order: 19
+                },
+                {
+                    appIcon: Icon_Category_Office,
+                    Name: "Office",
+                    Order: 20
+                },
+                {
+                    appIcon: Icon_Category_Organization,
+                    Name: "Organization",
+                    Order: 21
+                },
+                {
+                    appIcon: Icon_Category_Outdoor,
+                    Name: "Outdoor",
+                    Order: 22
+                },
+                {
+                    appIcon: Icon_Category_People,
+                    Name: "People",
+                    Order: 23
+                },
+                {
+                    appIcon: Icon_Category_Phone,
+                    Name: "Phone",
+                    Order: 24
+                },
+                {
+                    appIcon: Icon_Category_Rocket,
+                    Name: "Rocket",
+                    Order: 25
+                },
+                {
+                    appIcon: Icon_Category_Rooms,
+                    Name: "Rooms",
+                    Order: 26
+                },
+                {
+                    appIcon: Icon_Category_Sales,
+                    Name: "Sales",
+                    Order: 27
+                },
+                {
+                    appIcon: Icon_Category_Scan,
+                    Name: "Scan",
+                    Order: 28
+                },
+                {
+                    appIcon: Icon_Category_Science,
+                    Name: "Science",
+                    Order: 29
+                },
+                {
+                    appIcon: Icon_Category_Security,
+                    Name: "Security",
+                    Order: 30
+                },
+                {
+                    appIcon: Icon_Category_Service,
+                    Name: "Service",
+                    Order: 31
+                },
+                {
+                    appIcon: Icon_Category_Stock,
+                    Name: "Stock",
+                    Order: 32
+                },
+                {
+                    appIcon: Icon_Category_Store,
+                    Name: "Store",
+                    Order: 33
+                },
+                {
+                    appIcon: Icon_Category_Train,
+                    Name: "Train",
+                    Order: 34
+                },
+                {
+                    appIcon: Icon_Category_Travel,
+                    Name: "Travel",
+                    Order: 35
+                },
+                {
+                    appIcon: Icon_Category_Truck,
+                    Name: "Truck",
+                    Order: 35
+                },
+                {
+                    appIcon: Icon_Category_Wine,
+                    Name: "Wine",
+                    Order: 37
+                },
+                {
+                    appIcon: Icon_Category_Work,
+                    Name: "Work",
+                    Order: 38
+                }
+            );
+            
+        );
+        /*
+        // START MOVED TO tmrLoadingDelay
+        // App Settings (Initial Data Call)
+        ClearCollect(
+            colLabelRecords,
+            Filter(
+                'Area Inspection Labels',
+                'Area Inspection Labels (Views)'.'Active Area Inspection Labels'
+            )
+        );
+        Concurrent(
+            Set(
+                gblCheckLabelSettings,
+                CountRows(colLabelRecords)
+            ),
+            With(
+                {varRecord: First('Area Inspection Labels')},
+                ClearCollect(
+                    colLocConfig,
+                    {
+                        Name: If(
+                            IsBlank(varRecord.'Main section label'),
+                            "Area",
+                            varRecord.'Main section label'
+                        ),
+                        Type: "Main section"
+                    },
+                    {
+                        Name: If(
+                            IsBlank(varRecord.'Sub section label'),
+                            "Area type",
+                            varRecord.'Sub section label'
+                        ),
+                        Type: "Sub section"
+                    }
+                )
+            ),
+            Set(
+                gblRecordSettings,
+                LookUp(
+                    //First(
+                    //Filter(
+                        'Area Inspection Settings',
+                        //'Area Inspection Settings (Views)'.'Active Teams Settings'
+                        true
+                    )
+                //)
+            )
+        );
+        // App Settings (Post Initial Data Call)
+        Concurrent(
+            If(
+                gblCheckLabelSettings = 0,
+                IfError(Patch(
+                    'Area Inspection Labels',
+                    Defaults('Area Inspection Labels'),
+                    {
+                        Name: "Labels",
+                        'Main section label': "Area",
+                        'Sub section label': "Area type",
+                        'Work type': 'Work types'.Inspection
+                    }
+                ),Blank())
+            ),
+            ClearCollect(
+                colLocTypeSettings,
+                {
+                    Name: "General",
+                    Icon: "Settings",
+                    LocName: With(
+                        {
+                            varDefault: "General",
+                            varOOBTextId: "_translateCommon_SettingsGeneralHeader"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                },
+                {
+                    Name: Last(colLocConfig).Name,
+                    Icon: "Layers",
+                    LocName: Last(colLocConfig).Name
+                },
+                {
+                    Name: "Customize experience",
+                    Icon: "Text box",
+                    LocName: With(
+                        {
+                            varDefault: "Customize experience",
+                            varOOBTextId: "lblSettings_ExperienceHeader__locText"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                }
+            ),
+            If(
+                IsBlank(gblRecordSettings),
+                Set(
+                    gblFirstRun,
+                    true
+                )
+            )
+        );
+        // Reset Controls
+        Reset(galAreas);
+        // App Data and Final Variables
+        Concurrent(
+            Set(
+                gblSettingPlannerPlanId,
+                gblRecordSettings.'Parameter (Planner Id)'
+            ),
+            Set(
+                gblSettingTeamId,
+                gblRecordSettings.'Parameter (Team Id)'
+            ),
+            Set(
+                gblSettingSharePointLocation,
+                gblRecordSettings.'Parameter (SharePoint Location)'
+            ),
+            ClearCollect(
+                colInspections,
+                Filter(
+                    'Area Inspections',
+                    Location.'Area Inspection Location' = First(galAreas.AllItems).'Area Inspection Location'
+                )
+            ),
+            Set(
+                gblLocation,
+                First(
+                    SortByColumns(
+                        'Area Inspection Locations',
+                        "msft_name",
+                        Ascending
+                    )
+                )
+            )
+        );
+        //check if user has access to  
+        Set(
+            gblUserCanAccessPlanner,
+            gblSettingPlannerPlanId in Planner.ListMyPlansV2().value.id
+        );
+        // Planner Data
+        If(
+            !IsBlank(gblSettingPlannerPlanId) And !IsBlank(gblSettingTeamId) && gblUserCanAccessPlanner,
+            Concurrent(
+        	// Planner Buckets
+                ClearCollect(
+                    colPlannerBuckets,
+                    Planner.ListBucketsV3(
+                        gblSettingPlannerPlanId,
+                        gblSettingTeamId
+                    ).value
+                ),
+        	// Planner Tasks
+                ClearCollect(
+                    colPlannerTasks,
+                    Planner.ListTasksV3(
+                        gblSettingPlannerPlanId,
+                        gblSettingTeamId
+                    ).value
+                )
+            )
+        );
+        // END MOVED to tmrLoadingDelay
+        */
+        //collection used for auto width of header buttons
+        ClearCollect(
+            colCharsWidth,
+            staticCharWidths
+        );
+        //variable to denote navigation to settings from other screens
+        Set(
+            gblNavToSettings,
+            false
+        );
+        // App Loaded
+        Set(
+            gblAppLoaded,
+            true
+        );
+    SizeBreakpoints: |-
+        =[
+            680,
+            880,
+            1200,
+            1400
+        ]
+

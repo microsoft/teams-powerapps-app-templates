@@ -1,0 +1,83 @@
+App As appinfo:
+    BackEnabled: =false
+    ConfirmExitMessage: =""
+    MinScreenHeight: =600
+    OnStart: |
+        =/**READ ME START**
+        Welcome to the app!
+        Please note that modifying anything in this app may result in unexpected behavior. Please do so, at your own risk. As of this writing, the app has been documented in minimal fashion with annotations in functions, and the Documentation linked on the Help screen.
+        In subsequent releases, this app will be updated to include helpful annotations and documentation to support users in customizing the app, and understanding the patterns/functions included here within.
+        **READ ME END**/
+        // App Loading
+        Set(
+            gblAppLoaded,
+            false
+        );
+        // Localization
+        // User Language
+        Set(
+            gblUserLanguage,
+            Switch(
+                Left(
+                    Language(),
+                    2
+                ),
+                "de",
+                "de-DE",
+                "en",
+                "en-US",
+                "es",
+                "es-ES",
+                "fr",
+                "fr-FR",
+                "it",
+                "it-IT",
+                "ja",
+                "ja-JP",
+                "nl",
+                "nl-NL",
+                "pt",
+                "pt-BR",
+                // Default
+                "en-US"
+            )
+        );
+        // Build Localization Collection, with User Language
+        ClearCollect(
+            colLocalization,
+            Filter(
+                staticLocalizations,
+                LanguageTag = gblUserLanguage
+            )
+        );
+        Collect(
+            colLocalization,
+            Filter(
+                staticLocalizations_Common,
+                LanguageTag = gblUserLanguage
+            )
+        );
+        // App Loaded (Correct Context)
+        Set(
+            gblAppLoaded,
+            true
+        );
+    SizeBreakpoints: |-
+        =[
+            680,
+            900,
+            1200,
+            1400
+        ]
+        /*
+        [
+            320, // App Minimum
+            579, // Teams Web Minimum
+            800,
+            1024,
+            1400,
+            1920,
+            2560,
+            3440
+        ]*/
+

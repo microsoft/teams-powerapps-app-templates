@@ -1,0 +1,253 @@
+App As appinfo:
+    BackEnabled: =false
+    OnStart: |
+        =//app loading
+        Set(
+            gblAppLoaded,
+            false
+        );
+        //user language
+        Set(
+            gblUserLanguage,
+            Switch(
+                Left(
+                    Language(),
+                    2
+                ),
+                "de",
+                "de-DE",
+                "en",
+                "en-US",
+                "es",
+                "es-ES",
+                "fr",
+                "fr-FR",
+                "it",
+                "it-IT",
+                "ja",
+                "ja-JP",
+                "nl",
+                "nl-NL",
+                "pt",
+                "pt-BR",
+                "en-US"//default
+            )
+        );
+        //build localization collection, with user's language
+        ClearCollect(
+            colLocalization,
+            Filter(
+                staticLocalizations,
+                LanguageTag = gblUserLanguage
+            )
+        );
+        //params
+        Concurrent(
+            Set(
+                gblThemeDark,
+                Param("theme") = "dark" Or (tglAdmin_DarkMode.Value)//for testing within studio
+            ),
+            Set(
+                gblThemeHiCo,
+                Param("theme") = "contrast" Or (tglAdmin_ContrastMode.Value)//for testing within studio
+            ),
+            Set(
+                gblMobileMode,
+                true
+            ),
+            Set(
+                gblIsManager,
+                Param("userTeamRole") = "0" Or (tglAdmin_Manager.Value)//for testing within studio
+            ),
+            Set(
+                gblTeamsTabContext,
+                !(IsBlank(Param("groupId")) || Param("groupId") = "{groupId}") || tglAdmin_AppPinnedLeftNav.Value//for testing within studio
+            ),
+            Set(
+                gblIsHostClientWeb,
+                Param("hostClientType") = "web"
+            )
+        );
+        Set(
+            gblAppSetting_inputMobileOnWeb,
+            false
+        );
+        Set(
+            gblAppSetting_inputMobile,
+            gblMobileMode
+        );
+        Set(
+            gblAppSetting_inputScaleFontsBy,
+            0
+        );
+        //board cover colors
+        ClearCollect(
+            colBoardCoverColors,
+            {
+                Color: "#F4B9B9",
+                Theme: "default",
+                Base: 7
+            },
+            {
+                Color: "#94BFFF",
+                Theme: "default",
+                Base: 8
+            },
+            {
+                Color: "#C5E9EA",
+                Theme: "default",
+                Base: 3
+            },
+            {
+                Color: "#F0F9FA",
+                Theme: "default",
+                Base: 4
+            },
+            {
+                Color: "#F4D2DC",
+                Theme: "default",
+                Base: 5
+            },
+            {
+                Color: "#CEF0CD",
+                Theme: "default",
+                Base: 6
+            },
+            {
+                Color: "#BDBDE6",
+                Theme: "default",
+                Base: 1
+            },
+            {
+                Color: "#E2E2F6",
+                Theme: "default",
+                Base: 2
+            },
+            {
+                Color: "#F4F4FC",
+                Theme: "default",
+                Base: 9
+            },
+            {
+                Color: "#FBF6D9",
+                Theme: "default",
+                Base: 10
+            },
+            {
+                Color: "#791818",
+                Theme: "dark",
+                Base: 7
+            },
+            {
+                Color: "#053385",
+                Theme: "dark",
+                Base: 8
+            },
+            {
+                Color: "#025C5F",
+                Theme: "dark",
+                Base: 3
+            },
+            {
+                Color: "#03787C",
+                Theme: "dark",
+                Base: 4
+            },
+            {
+                Color: "#EA5788",
+                Theme: "dark",
+                Base: 5
+            },
+            {
+                Color: "#043615",
+                Theme: "dark",
+                Base: 6
+            },
+            {
+                Color: "#33344A",
+                Theme: "dark",
+                Base: 1
+            },
+            {
+                Color: "#6264A7",
+                Theme: "dark",
+                Base: 2
+            },
+            {
+                Color: "#464775",
+                Theme: "dark",
+                Base: 9
+            },
+            {
+                Color: "#FFAA44",
+                Theme: "dark",
+                Base: 10
+            }
+        );
+        //stock board cover images
+        ClearCollect(
+            colStockImages,
+            {appStockImage: Blank(),ID:0},
+            {appStockImage: Stock_HikingBoards,ID:1},
+            {appStockImage: Stock_PhotographyBoards,ID:2},
+            {appStockImage: Stock_PaintingBoards,ID:3},
+            {appStockImage: Stock_BookBoards,ID:4},
+            {appStockImage: Stock_Abstract1Boards,ID:5},
+            {appStockImage: Stock_Abstract2Boards,ID:6},
+            {appStockImage: Stock_Abstract3Boards,ID:7},
+            {appStockImage: Stock_Abstract4Boards,ID:8},
+            {appStockImage: Stock_Abstract5Boards,ID:9},
+            {appStockImage: Stock_Abstract6Boards,ID:10},
+            {appStockImage: Stock_Abstract7Boards,ID:11},
+            {appStockImage: Stock_Abstract8Boards,ID:12},
+            {appStockImage: Stock_Abstract9Boards,ID:13},
+            {appStockImage: Stock_Abstract10Boards,ID:14}
+        );
+        //stock board cover icons
+        ClearCollect(
+            colStockIcons,
+            Icon_Beauty,
+            Icon_Bike,
+            Icon_Bus,
+            Icon_Car1,
+            Icon_Car2,
+            Icon_Clothing,
+            Icon_Communication,
+            Icon_External,
+            Icon_Factory,
+            Icon_Focus,
+            Icon_Food,
+            Icon_Gifts,
+            Icon_Globe,
+            Icon_Hardware,
+            Icon_Home,
+            Icon_Index,
+            Icon_Interior,
+            Icon_Inventory,
+            Icon_Office,
+            Icon_Organization,
+            Icon_Outdoors,
+            Icon_People,
+            Icon_Phone,
+            Icon_Rocket,
+            Icon_Rooms,
+            Icon_Sales,
+            Icon_Scan,
+            Icon_Science,
+            Icon_Security,
+            Icon_Service,
+            Icon_Stock,
+            Icon_Store,
+            Icon_Train,
+            Icon_Travel,
+            Icon_Truck,
+            Icon_Wine,
+            Icon_Work,
+            Icon_World
+        );
+        //app loaded
+        Set(
+            gblAppLoaded,
+            true
+        );
+

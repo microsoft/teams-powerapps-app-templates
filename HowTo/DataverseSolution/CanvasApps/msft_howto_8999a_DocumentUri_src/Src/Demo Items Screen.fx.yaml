@@ -1,0 +1,821 @@
+"'Demo Items Screen' As screen.'tabletAutoLayout_SplitScreen_ver1.0'":
+    Fill: =gblAppStyles.Background.Fill
+    OnVisible: |-
+        =UpdateContext(
+            {
+                locShowItems: false,
+                locSelectedItemType: First('Item Types')
+            }
+        );
+        
+        SetFocus(imgCheckout_Demo)
+
+    conParent_Items_Demo As groupContainer.horizontalAutoLayoutContainer:
+        DisplayMode: =DisplayMode.Edit
+        Height: =Parent.Height
+        LayoutAlignItems: =LayoutAlignItems.Stretch
+        LayoutDirection: |-
+            =//If(
+                //'Items Screen'.Size = ScreenSize.Small,
+                //LayoutDirection.Vertical,
+                LayoutDirection.Horizontal
+            //)
+        LayoutOverflowY: =LayoutOverflow.Scroll
+        Width: =Parent.Width
+        ZIndex: =1
+
+        conItemTypes_Demo As groupContainer.verticalAutoLayoutContainer:
+            AlignInContainer: =AlignInContainer.SetByContainer
+            DisplayMode: =DisplayMode.Edit
+            Fill: |-
+                =If(
+                    gblThemeDark,
+                    ColorValue("#141414"),
+                    gblThemeHiCo,
+                    Black,
+                    White
+                )
+            FillPortions: |-
+                =If(
+                    'Demo Items Screen'.Size = ScreenSize.Small,
+                    If(
+                        locShowItems,
+                        0,
+                        1
+                    ),
+                    1
+                )
+            LayoutGap: =20
+            LayoutMinHeight: =100
+            LayoutMinWidth: =300
+            LayoutOverflowY: =LayoutOverflow.Scroll
+            PaddingBottom: =20
+            PaddingTop: =20
+            Visible: |-
+                =If(
+                    'Demo Items Screen'.Size = ScreenSize.Small,
+                    !locShowItems,
+                    true
+                )
+            ZIndex: =2
+
+            conItemTypesHeader_Demo As groupContainer.horizontalAutoLayoutContainer:
+                DisplayMode: =DisplayMode.Edit
+                FillPortions: =2
+                LayoutAlignItems: =LayoutAlignItems.Center
+                LayoutMinHeight: =0
+                LayoutMinWidth: =0
+                PaddingRight: =10
+                Width: =Parent.Width
+                ZIndex: =1
+
+                lblAllAssetsHeader_Demo As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FillPortions: =1
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Bold
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PaddingLeft: =20
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Role: =TextRole.Heading1
+                    Size: =gblAppStyles.Label.Size.Large
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "All assets",
+                                varOOBTextId: "_translatecommon_AllassetsHeader__LocText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Tooltip: =Self.Text
+                    Width: =150*1
+                    Wrap: =false
+                    X: =707*1
+                    Y: =265*1
+                    ZIndex: =1
+
+                imgCheckout_Demo As image:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "Checkout Icon",
+                                varOOBTextId: "_translatecommon_imgcheckout__locAccessibleText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Height: =26
+                    Image: |-
+                        =If(
+                            gblThemeDark || gblThemeHiCo,
+                            Checkout_Dark,
+                            Checkout
+                        )
+                    OnSelect: |-
+                        =Navigate(
+                            'Demo My Checkouts Screen',
+                            ScreenTransition.Fade
+                        )
+                    PaddingBottom: =2
+                    TabIndex: =0
+                    Tooltip: =Self.AccessibleLabel
+                    Width: =32
+                    Y: =1
+                    ZIndex: =2
+
+            conItemTypesHeader_Demo_1 As groupContainer.horizontalAutoLayoutContainer:
+                DisplayMode: =DisplayMode.Edit
+                FillPortions: =20
+                LayoutAlignItems: =LayoutAlignItems.Center
+                LayoutMinHeight: =0
+                LayoutMinWidth: =0
+                PaddingRight: =10
+                Width: =Parent.Width
+                ZIndex: =3
+
+                galItemTypes_Demo_1 As gallery.galleryVertical:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "Gallery for Item types table",
+                                varOOBTextId: "_translatecommon_galItemTypes_Demo__locAccessibleText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        ) & " for all assets"
+                    AlignInContainer: =AlignInContainer.Start
+                    FillPortions: =19
+                    FocusedBorderThickness: =2
+                    Items: ='Item Types'
+                    Layout: =Layout.Vertical
+                    LayoutMinHeight: =0
+                    LayoutMinWidth: =320
+                    OnSelect: |-
+                        =UpdateContext(
+                            {
+                                locSelectedItemType: ThisItem,
+                                locShowItems: true
+                            }
+                        )
+                    TabIndex: =0
+                    TemplateFill: |-
+                        =If(
+                            !('Demo Items Screen'.Size = ScreenSize.Small),
+                            If(
+                                ThisItem.IsSelected,
+                                gblAppStyles.Gallery.SelectedItem,
+                                Transparent
+                            ), 
+                            Transparent
+                        )
+                    TemplatePadding: =0
+                    TemplateSize: =70
+                    Width: =Parent.Width-1
+                    ZIndex: =1
+
+                    lblIName_Demo_1 As label:
+                        BorderColor: =gblAppStyles.Label.BorderColor
+                        BorderThickness: =gblAppStyles.Label.BorderThickness
+                        Color: =gblAppStyles.Label.Color
+                        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.Label.DisabledColor
+                        DisabledFill: =gblAppStyles.Label.DisabledFill
+                        Fill: =gblAppStyles.Label.Fill
+                        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        FontWeight: |-
+                            =If(
+                                ThisItem.IsSelected,
+                                FontWeight.Semibold,
+                                FontWeight.Normal
+                            )
+                        Height: =32*1
+                        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                        HoverColor: =gblAppStyles.Label.HoverColor
+                        HoverFill: =gblAppStyles.Label.HoverFill
+                        OnSelect: =Select(Parent)
+                        PaddingLeft: =20
+                        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                        PressedColor: =gblAppStyles.Label.PressedColor
+                        PressedFill: =gblAppStyles.Label.PressedFill
+                        Size: =gblAppStyles.Label.Size.Medium
+                        Text: =ThisItem.Name
+                        Tooltip: =Self.Text
+                        Width: =Parent.Width
+                        Wrap: =false
+                        Y: =5
+                        ZIndex: =1
+
+                    lblItemCount_Demo_1 As label:
+                        BorderColor: =gblAppStyles.Label.BorderColor
+                        BorderThickness: =gblAppStyles.Label.BorderThickness
+                        Color: =gblAppStyles.Label.Color
+                        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.Label.DisabledColor
+                        DisabledFill: =gblAppStyles.Label.DisabledFill
+                        Fill: =gblAppStyles.Label.Fill
+                        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        Height: =32*1
+                        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                        HoverColor: =gblAppStyles.Label.HoverColor
+                        HoverFill: =gblAppStyles.Label.HoverFill
+                        OnSelect: =Select(Parent)
+                        PaddingBottom: =15
+                        PaddingLeft: =20
+                        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                        PressedColor: =gblAppStyles.Label.PressedColor
+                        PressedFill: =gblAppStyles.Label.PressedFill
+                        Size: =gblAppStyles.Label.Size.Medium
+                        Text: |-
+                            =CountRows(ThisItem.Items.Item)&" " & With(
+                                {
+                                    varDefault: "items",
+                                    varOOBTextId: "_translatecommon_lblItemCount_Demo__locText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        Tooltip: =Self.Text
+                        VerticalAlign: =VerticalAlign.Bottom
+                        Width: =Parent.Width
+                        Wrap: =false
+                        Y: =lblIName_Demo_1.Y + lblIName_Demo_1.Height
+                        ZIndex: =2
+
+                    btnItemTypeForeground_1 As button:
+                        BorderColor: =Transparent
+                        BorderThickness: =0
+                        Color: =Transparent
+                        DisabledBorderColor: =Transparent
+                        DisabledColor: =Transparent
+                        DisabledFill: =Transparent
+                        Fill: =Transparent
+                        FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                        FocusedBorderThickness: =1
+                        Height: =Parent.TemplateHeight
+                        HoverBorderColor: =Transparent
+                        HoverColor: =Transparent
+                        HoverFill: =Transparent
+                        OnSelect: =Select(Parent)
+                        PaddingBottom: =0
+                        PaddingLeft: =0
+                        PaddingRight: =0
+                        PaddingTop: =0
+                        PressedBorderColor: =Transparent
+                        PressedColor: =Transparent
+                        RadiusBottomLeft: =0
+                        RadiusBottomRight: =0
+                        RadiusTopLeft: =0
+                        RadiusTopRight: =
+                        Text: |-
+                            =ThisItem.Name & 
+                                If(
+                                    ThisItem.IsSelected,
+                                    "Selected",
+                                    "Not Selected"
+                                )
+                        Width: =Parent.TemplateWidth
+                        ZIndex: =3
+
+        conItems_Demo As groupContainer.verticalAutoLayoutContainer:
+            AlignInContainer: =AlignInContainer.SetByContainer
+            DisplayMode: =DisplayMode.Edit
+            FillPortions: |-
+                =If(
+                    'Demo Items Screen'.Size = ScreenSize.Small,
+                    If(
+                        locShowItems,
+                        1,
+                        0
+                    ),
+                    3
+                )
+            LayoutGap: =20
+            LayoutMinHeight: =100
+            LayoutMinWidth: =250
+            LayoutOverflowY: =LayoutOverflow.Scroll
+            PaddingLeft: =20
+            PaddingRight: =20
+            PaddingTop: =20
+            Visible: |-
+                =If(
+                    'Demo Items Screen'.Size = ScreenSize.Small,
+                    locShowItems,
+                    true
+                )
+            ZIndex: =3
+
+            btnBack_Items_Demo As button:
+                Align: =Align.Left
+                BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+                Color: =gblAppStyles.ButtonTransparent.Color
+                DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+                DisabledColor: =gblAppStyles.ButtonTransparent.DisabledColor
+                DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                Fill: =gblAppStyles.ButtonTransparent.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =32*1
+                HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                HoverColor: =gblAppStyles.ButtonTransparent.HoverColor
+                HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+                OnSelect: |-
+                    =UpdateContext({locShowItems: false})
+                PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                PressedColor: =gblAppStyles.ButtonTransparent.PressedColor
+                PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+                RadiusBottomLeft: =gblAppStyles.ButtonTransparent.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.ButtonTransparent.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.ButtonTransparent.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.ButtonTransparent.RadiusTopRight
+                Size: =gblAppStyles.ButtonTransparent.Size
+                Text: |-
+                    =With(
+                        {
+                            varDefault: "Back",
+                            varOOBTextId: "_translatecommon_backbutton__locText"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                Tooltip: =Self.Text
+                Visible: ='Demo Items Screen'.Size = ScreenSize.Small
+                Width: =160*1
+                X: =56*1
+                Y: =250*1
+                ZIndex: =1
+
+            lblRelatedItemsHeader_Demo As label:
+                AlignInContainer: =AlignInContainer.Stretch
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Semibold
+                Height: =32*1
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Role: =TextRole.Heading2
+                Size: =gblAppStyles.Label.Size.Large
+                Text: |-
+                    =CountRows(locSelectedItemType.Items.Item)&" " & With(
+                        {
+                            varDefault: "items available",
+                            varOOBTextId: "lblRelatedItemsHeader_Demo__locText"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                Tooltip: =Self.Text
+                Width: =150*1
+                Wrap: =false
+                X: =707*1
+                Y: =265*1
+                ZIndex: =2
+
+            galItems_Demo As gallery.galleryVertical:
+                AccessibleLabel: |-
+                    =With(
+                        {
+                            varDefault: "Gallery of items for the selected Item type",
+                            varOOBTextId: "galItems_Demo__locAccessibleText"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                FocusedBorderThickness: =2
+                Items: =locSelectedItemType.Items
+                Layout: =Layout.Vertical
+                LayoutMinHeight: =287
+                LayoutMinWidth: =320
+                OnSelect: |-
+                    =If(
+                        ThisItem.Quantity - CountRows(
+                            Filter(
+                                'Item Checkouts',
+                                Item.Item = ThisItem.Item,
+                                'Checkout Status' = 'Checkout Statuses'.Active
+                            )
+                        ) > 0,
+                        Navigate(
+                            'Demo Checkout Screen',
+                            ScreenTransition.Fade,
+                            {locSelectedItem: ThisItem}
+                        )
+                    )
+                TabIndex: =0
+                TemplateFill: =Transparent
+                TemplatePadding: =0
+                TemplateSize: =imgItem_Demo.Height + 20
+                Width: =Parent.Width
+                ZIndex: =3
+
+                btnItemsBackground_Demo As button:
+                    BorderThickness: =0
+                    Color: =Transparent
+                    DisabledBorderColor: =Self.BorderColor
+                    DisabledColor: =Self.Color
+                    DisabledFill: =Self.Fill
+                    Fill: |-
+                        =If(
+                            gblThemeDark,
+                            gblAppColors.NeutralWebGray220,
+                            gblThemeHiCo,
+                            Black,
+                            White
+                        )
+                    FocusedBorderThickness: =1
+                    Font: =Font.'Segoe UI'
+                    Height: =Parent.TemplateHeight - 20
+                    HoverBorderColor: =Self.BorderColor
+                    HoverColor: =Self.Color
+                    HoverFill: =Self.Fill
+                    OnSelect: =Select(Parent)
+                    PressedBorderColor: =Self.BorderColor
+                    PressedColor: =Self.Color
+                    PressedFill: =Self.Fill
+                    RadiusBottomLeft: =8
+                    RadiusBottomRight: =8
+                    RadiusTopLeft: =8
+                    RadiusTopRight: =8
+                    Size: =gblAppStyles.ButtonTransparent.Size
+                    TabIndex: =-1
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Background button for gallery items",
+                                varOOBTextId: "btnItemsBackground_Demo__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Tooltip: =Self.Text
+                    Width: =Parent.TemplateWidth - Self.X*2
+                    X: =5*1
+                    Y: =imgItem_Demo.Y
+                    ZIndex: =1
+
+                lblItemName_Demo As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PaddingLeft: =20
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: =ThisItem.Name
+                    Tooltip: =Self.Text
+                    Width: =btnItemsBackground_Demo.Width - Self.X
+                    Wrap: =false
+                    X: =imgItem_Demo.X + imgItem_Demo.Width
+                    Y: =imgItem_Demo.Y + 5
+                    ZIndex: =2
+
+                lblItemQuantity_Demo As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PaddingBottom: =15
+                    PaddingLeft: =20
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =// N+1 avoided below
+                        With(
+                            {varRows: ThisItem.'Item Checkouts'},
+                            ThisItem.Quantity - CountRows(
+                                Filter(
+                                    varRows,
+                                    //'Item Checkouts',
+                                    //Item.Item = ThisItem.Item,
+                                    'Checkout Status' = 'Checkout Statuses'.Active
+                                )
+                            ) & " " & With(
+                                {
+                                    varDefault: "available",
+                                    varOOBTextId: "lblItemQuantity_Demo__locText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        )
+                    Tooltip: =Self.Text
+                    VerticalAlign: =VerticalAlign.Bottom
+                    Width: =btnItemsBackground_Demo.Width - Self.X
+                    Wrap: =false
+                    X: =lblItemName_Demo.X
+                    Y: =lblItemName_Demo.Y + lblItemName_Demo.Height
+                    ZIndex: =3
+
+                lblItemDesc_Demo As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PaddingBottom: =15
+                    PaddingLeft: =20
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: =ThisItem.Description
+                    Tooltip: =Self.Text
+                    VerticalAlign: =VerticalAlign.Bottom
+                    Visible: =!('Demo Items Screen'.Size = ScreenSize.Small)
+                    Width: =btnItemsBackground_Demo.Width - Self.X
+                    Wrap: =false
+                    X: =lblItemName_Demo.X
+                    Y: =lblItemQuantity_Demo.Y + lblItemQuantity_Demo.Height
+                    ZIndex: =4
+
+                imgItem_Demo As image:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "Item's image",
+                                varOOBTextId: "_translatecommon_imgItem_Demo__locAccessibleText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    BorderColor: =Transparent
+                    BorderThickness: =1
+                    Height: =110*1
+                    Image: =ThisItem.Image.Full
+                    ImagePosition: =ImagePosition.Fill
+                    OnSelect: =Select(Parent)
+                    RadiusBottomLeft: =8
+                    RadiusTopLeft: =8
+                    Tooltip: =Self.AccessibleLabel
+                    Width: =125 * 1
+                    X: =5
+                    Y: =0*1
+                    ZIndex: =5
+
+                btnItemsForeground_Demo As button:
+                    BorderThickness: =0
+                    Color: =Transparent
+                    DisabledBorderColor: =Self.BorderColor
+                    DisabledColor: =Self.Color
+                    DisabledFill: =Self.Fill
+                    Fill: =Transparent
+                    FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                    FocusedBorderThickness: =1
+                    Font: =Font.'Segoe UI'
+                    Height: =Parent.TemplateHeight - 20
+                    HoverBorderColor: =Self.BorderColor
+                    HoverColor: =Self.Color
+                    HoverFill: =gblAppStyles.Gallery.HoverFill
+                    OnSelect: =Select(Parent)
+                    PressedBorderColor: =Self.BorderColor
+                    PressedColor: =Self.Color
+                    PressedFill: =Self.Fill
+                    RadiusBottomLeft: =8
+                    RadiusBottomRight: =8
+                    RadiusTopLeft: =8
+                    RadiusTopRight: =8
+                    Size: =gblAppStyles.ButtonTransparent.Size
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Foreground button for gallery items",
+                                varOOBTextId: "btnItemsForeground_Demo__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                        & ThisItem.Name
+                    Tooltip: =Self.Text
+                    Width: =btnItemsBackground_Demo.Width
+                    X: =btnItemsBackground_Demo.X
+                    Y: =btnItemsBackground_Demo.Y+1
+                    ZIndex: =6
+
+            btnEndPreviewApp_Items As button:
+                AlignInContainer: =AlignInContainer.End
+                BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+                BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+                Color: =gblAppStyles.ButtonSecondary.Color
+                DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+                DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+                DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+                Fill: =gblAppStyles.ButtonSecondary.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =32*1
+                HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+                HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+                HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+                OnSelect: |-
+                    =Navigate(
+                        'Welcome Screen',
+                        ScreenTransition.Fade
+                    )
+                PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+                PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+                PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+                RadiusBottomLeft: =gblAppStyles.ButtonSecondary.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.ButtonSecondary.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.ButtonSecondary.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.ButtonSecondary.RadiusTopRight
+                Size: =gblAppStyles.ButtonSecondary.Size
+                TabIndex: =1
+                Text: ="End preview"
+                Tooltip: =Self.Text
+                Width: =140
+                X: =Parent.Width - Self.Width - 20
+                Y: |-
+                    =If(
+                        'Demo Items Screen'.Size = ScreenSize.ExtraLarge || 'Demo Items Screen'.Size = ScreenSize.Large,
+                        20*1,
+                        Parent.Height - Self.Height - 20
+                    )
+                ZIndex: =4
+

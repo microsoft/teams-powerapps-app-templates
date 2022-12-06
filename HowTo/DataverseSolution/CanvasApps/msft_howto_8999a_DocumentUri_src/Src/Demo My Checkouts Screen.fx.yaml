@@ -1,0 +1,1001 @@
+"'Demo My Checkouts Screen' As screen.'tabletAutoLayout_SplitScreen_ver1.0'":
+    Fill: =gblAppStyles.Background.Fill
+    OnVisible: |-
+        =UpdateContext({locShowReturnConfirmation: false});
+        SetFocus(imgCheckout_MyCheckouts_Demo)
+
+    conParent_MyCheckouts_Demo As groupContainer.horizontalAutoLayoutContainer:
+        DisplayMode: =DisplayMode.Edit
+        Height: =Parent.Height
+        LayoutAlignItems: =LayoutAlignItems.Stretch
+        LayoutDirection: |-
+            =//If(
+                //'Items Screen'.Size = ScreenSize.Small,
+                //LayoutDirection.Vertical,
+                LayoutDirection.Horizontal
+            //)
+        LayoutOverflowY: =LayoutOverflow.Scroll
+        Width: =Parent.Width
+        ZIndex: =1
+
+        conItemTypes_MyCheckouts_Demo As groupContainer.verticalAutoLayoutContainer:
+            AlignInContainer: =AlignInContainer.SetByContainer
+            DisplayMode: =DisplayMode.Edit
+            Fill: |-
+                =If(
+                    gblThemeDark,
+                    ColorValue("#141414"),
+                    gblThemeHiCo,
+                    Black,
+                    White
+                )
+            FillPortions: |-
+                =If(
+                    'Demo My Checkouts Screen'.Size = ScreenSize.Small,
+                    0,
+                    1
+                )
+            LayoutGap: =20
+            LayoutMinHeight: =100
+            LayoutMinWidth: =300
+            LayoutOverflowY: =LayoutOverflow.Scroll
+            PaddingBottom: =20
+            PaddingTop: =20
+            Visible: =!('Demo My Checkouts Screen'.Size = ScreenSize.Small)
+            ZIndex: =2
+
+            conItemTypesHeader_MyCheckouts_Demo As groupContainer.horizontalAutoLayoutContainer:
+                DisplayMode: =DisplayMode.Edit
+                FillPortions: =2
+                LayoutAlignItems: =LayoutAlignItems.Center
+                LayoutMinHeight: =0
+                LayoutMinWidth: =0
+                PaddingRight: =10
+                Width: =0
+                ZIndex: =1
+
+                lblAllAssetsHeader_MyCheckouts_Demo As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FillPortions: =1
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Bold
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    LayoutMinWidth: =0
+                    PaddingLeft: =20
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Role: =TextRole.Heading1
+                    Size: =gblAppStyles.Label.Size.Large
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "All assets",
+                                varOOBTextId: "_translatecommon_AllassetsHeader__LocText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Tooltip: =Self.Text
+                    Width: =150*1
+                    Wrap: =false
+                    X: =707*1
+                    Y: =265*1
+                    ZIndex: =1
+
+                imgCheckout_MyCheckouts_Demo As image:
+                    Height: =26
+                    Image: |-
+                        =If(
+                            gblThemeDark || gblThemeHiCo,
+                            Checkout_Dark,
+                            Checkout
+                        )
+                    PaddingBottom: =2
+                    TabIndex: =0
+                    Width: =32
+                    ZIndex: =2
+
+            galItemTypes_MyCheckouts As gallery.galleryVertical:
+                AccessibleLabel: |-
+                    =With(
+                        {
+                            varDefault: "Gallery for Item types table",
+                            varOOBTextId: "_translatecommon_galItemTypes_Demo__locAccessibleText"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    ) & " for all assets"
+                AlignInContainer: =AlignInContainer.SetByContainer
+                FillPortions: =20
+                Items: ='Item Types'
+                Layout: =Layout.Vertical
+                LayoutMinHeight: =0
+                LayoutMinWidth: =320
+                OnSelect: |-
+                    =Navigate(
+                        'Demo Items Screen',
+                        ScreenTransition.Fade,
+                        {
+                            locSelectedItemType: ThisItem,
+                            locShowItems: true
+                        }
+                    )
+                TabIndex: =0
+                TemplateFill: |-
+                    =If(
+                        ThisItem.IsSelected,
+                        gblAppStyles.Gallery.SelectedItem,
+                        Transparent
+                    )
+                TemplatePadding: =0
+                TemplateSize: =70
+                Width: =Parent.Width
+                ZIndex: =5
+
+                lblIName_MyCheckouts As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: |-
+                        =If(
+                            ThisItem.IsSelected,
+                            FontWeight.Semibold,
+                            FontWeight.Normal
+                        )
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =Select(Parent)
+                    PaddingLeft: =20
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: =ThisItem.Name
+                    Tooltip: =Self.Text
+                    Width: =Parent.Width
+                    Wrap: =false
+                    Y: =5
+                    ZIndex: =1
+
+                lblItemCount_MyCheckouts As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =Select(Parent)
+                    PaddingBottom: =15
+                    PaddingLeft: =20
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =CountRows(ThisItem.Items.Item)&" " & With(
+                            {
+                                varDefault: "items",
+                                varOOBTextId: "_translatecommon_lblItemCount_Demo__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Tooltip: =Self.Text
+                    VerticalAlign: =VerticalAlign.Bottom
+                    Width: =Parent.Width
+                    Wrap: =false
+                    Y: =lblIName_MyCheckouts.Y + lblIName_MyCheckouts.Height
+                    ZIndex: =2
+
+                btnItemTypeMycheckoutsForeground As button:
+                    BorderColor: =Transparent
+                    BorderThickness: =0
+                    Color: =Transparent
+                    DisabledBorderColor: =Transparent
+                    DisabledColor: =Transparent
+                    DisabledFill: =Transparent
+                    Fill: =Transparent
+                    FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                    FocusedBorderThickness: =1
+                    Height: =Parent.TemplateHeight
+                    HoverBorderColor: =Transparent
+                    HoverColor: =Transparent
+                    HoverFill: =Transparent
+                    OnSelect: =Select(Parent)
+                    PaddingBottom: =0
+                    PaddingLeft: =0
+                    PaddingRight: =0
+                    PaddingTop: =0
+                    PressedBorderColor: =Transparent
+                    PressedColor: =Transparent
+                    RadiusBottomLeft: =0
+                    RadiusBottomRight: =0
+                    RadiusTopLeft: =0
+                    RadiusTopRight: =
+                    Text: |-
+                        =ThisItem.Name & If(
+                                ThisItem.IsSelected,
+                                "Selected",
+                                "Not Selected"
+                            )
+                    Width: =Parent.TemplateWidth
+                    ZIndex: =3
+
+        conMyCheckouts_Demo As groupContainer.verticalAutoLayoutContainer:
+            AlignInContainer: =AlignInContainer.SetByContainer
+            DisplayMode: =DisplayMode.Edit
+            FillPortions: |-
+                =If(
+                    'Demo My Checkouts Screen'.Size = ScreenSize.Small,
+                    1,
+                    3
+                )
+            LayoutGap: =20
+            LayoutMinHeight: =100
+            LayoutMinWidth: =250
+            LayoutOverflowY: =LayoutOverflow.Scroll
+            PaddingLeft: =20
+            PaddingRight: =20
+            PaddingTop: =20
+            Visible: =!locShowReturnConfirmation
+            ZIndex: =3
+
+            btnBack_MyCheckouts_Demo As button:
+                Align: =Align.Left
+                BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+                Color: =gblAppStyles.ButtonTransparent.Color
+                DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+                DisabledColor: =gblAppStyles.ButtonTransparent.DisabledColor
+                DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                Fill: =gblAppStyles.ButtonTransparent.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =32*1
+                HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                HoverColor: =gblAppStyles.ButtonTransparent.HoverColor
+                HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+                OnSelect: |-
+                    =Navigate(
+                        'Demo Items Screen',
+                        ScreenTransition.Fade
+                    )
+                PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                PressedColor: =gblAppStyles.ButtonTransparent.PressedColor
+                PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+                RadiusBottomLeft: =gblAppStyles.ButtonTransparent.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.ButtonTransparent.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.ButtonTransparent.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.ButtonTransparent.RadiusTopRight
+                Size: =gblAppStyles.ButtonTransparent.Size
+                TabIndex: =-1
+                Text: ="Back"
+                Tooltip: =Self.Text
+                Visible: ='Demo My Checkouts Screen'.Size = ScreenSize.Small
+                Width: =160*1
+                X: =56*1
+                Y: =250*1
+                ZIndex: =1
+
+            lblMyCheckoutsHeader_Demo As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Semibold
+                Height: =32*1
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Role: =TextRole.Heading2
+                Size: =gblAppStyles.Label.Size.Large
+                Text: ="My checkouts"
+                Tooltip: =Self.Text
+                Width: =150*1
+                Wrap: =false
+                X: =707*1
+                Y: =265*1
+                ZIndex: =2
+
+            galMyCheckouts_Demo As gallery.galleryVertical:
+                AccessibleLabel: ="Gallery of my checkouts"
+                Items: |-
+                    =Sort(
+                        Filter(
+                            'Item Checkouts',
+                            'Created By'.User = gblCurrUser.User,
+                            'Checkout Status' = 'Checkout Statuses'.Active
+                        ),
+                        'Created On',
+                        Ascending
+                    )
+                Layout: =Layout.Vertical
+                LayoutMinHeight: =287
+                LayoutMinWidth: =320
+                TabIndex: =0
+                TemplateFill: =Transparent
+                TemplatePadding: =0
+                TemplateSize: =imgMyCheckouts_Item_Demo.Height + 20
+                Width: =Parent.Width
+                ZIndex: =3
+
+                btnMyCheckouts_Background_Demo As button:
+                    BorderThickness: =0
+                    Color: =Transparent
+                    DisabledBorderColor: =Self.BorderColor
+                    DisabledColor: =Self.Color
+                    DisabledFill: =Self.Fill
+                    Fill: |-
+                        =If(
+                            gblThemeDark,
+                            gblAppColors.NeutralWebGray220,
+                            gblThemeHiCo,
+                            Black,
+                            White
+                        )
+                    FocusedBorderThickness: =1
+                    Font: =Font.'Segoe UI'
+                    Height: =Parent.TemplateHeight - 20
+                    HoverBorderColor: =Self.BorderColor
+                    HoverColor: =Self.Color
+                    HoverFill: =Self.Fill
+                    OnSelect: =Select(Parent)
+                    PressedBorderColor: =Self.BorderColor
+                    PressedColor: =Self.Color
+                    PressedFill: =Self.Fill
+                    RadiusBottomLeft: =8
+                    RadiusBottomRight: =8
+                    RadiusTopLeft: =8
+                    RadiusTopRight: =8
+                    Size: =gblAppStyles.ButtonTransparent.Size
+                    TabIndex: =-1
+                    Text: =""
+                    Width: =Parent.TemplateWidth - Self.X*2
+                    X: =5
+                    Y: =imgMyCheckouts_Item_Demo.Y
+                    ZIndex: =1
+
+                lblIMyCheckouts_ItemName_Demo As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PaddingLeft: =20
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: =ThisItem.Item.Name
+                    Tooltip: =Self.Text
+                    Width: =btnMyCheckouts_Background_Demo.Width - Self.X
+                    Wrap: =false
+                    X: =imgMyCheckouts_Item_Demo.X + imgMyCheckouts_Item_Demo.Width
+                    Y: =imgMyCheckouts_Item_Demo.Y + 5
+                    ZIndex: =2
+
+                lblMyCheckouts_DueDate_Demo As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PaddingBottom: =15
+                    PaddingLeft: =20
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                            {
+                                varDaysDue: DateDiff(
+                                    Today(),
+                                    Switch(
+                                        ThisItem.'Checkout Duration',
+                                        'Checkout Durations'.'7 days',
+                                        DateAdd(
+                                            ThisItem.'Created On',
+                                            7,
+                                            Days
+                                        ),
+                                        'Checkout Durations'.'30 days',
+                                        DateAdd(
+                                            ThisItem.'Created On',
+                                            30,
+                                            Days
+                                        )
+                                    )
+                                )
+                            },
+                            If(
+                                varDaysDue > 0,
+                                "Due in " & DateDiff(
+                                    Today(),
+                                    Switch(
+                                        ThisItem.'Checkout Duration',
+                                        'Checkout Durations'.'7 days',
+                                        DateAdd(
+                                            ThisItem.'Created On',
+                                            7,
+                                            Days
+                                        ),
+                                        'Checkout Durations'.'30 days',
+                                        DateAdd(
+                                            ThisItem.'Created On',
+                                            30,
+                                            Days
+                                        )
+                                    )
+                                ) & " days",
+                                If(
+                                    varDaysDue = 0,
+                                    "Due today",
+                                    "Overdue"
+                                )
+                            )
+                        )
+                    Tooltip: =Self.Text
+                    VerticalAlign: =VerticalAlign.Bottom
+                    Width: =btnMyCheckouts_Background_Demo.Width - Self.X
+                    Wrap: =false
+                    X: =lblIMyCheckouts_ItemName_Demo.X
+                    Y: =lblIMyCheckouts_ItemName_Demo.Y + lblIMyCheckouts_ItemName_Demo.Height
+                    ZIndex: =3
+
+                imgMyCheckouts_Item_Demo As image:
+                    BorderColor: =Transparent
+                    BorderThickness: =1
+                    Height: =110*1
+                    Image: =ThisItem.Item.Image.Full
+                    ImagePosition: =ImagePosition.Fill
+                    OnSelect: =Select(Parent)
+                    RadiusBottomLeft: =8
+                    RadiusTopLeft: =8
+                    Width: |-
+                        =If(
+                            'Demo My Checkouts Screen'.Size = ScreenSize.ExtraLarge || 'Demo My Checkouts Screen'.Size = ScreenSize.Large,
+                            125 * 1,
+                            125 * 1 //Parent.Width - Self.X
+                        )
+                    X: =5
+                    Y: =0*1
+                    ZIndex: =4
+
+                btnMyCheckouts_Foreground_Demo As button:
+                    BorderThickness: =0
+                    Color: =Transparent
+                    DisabledBorderColor: =Self.BorderColor
+                    DisabledColor: =Self.Color
+                    DisabledFill: =Self.Fill
+                    Fill: =Transparent
+                    FocusedBorderThickness: =1
+                    Font: =Font.'Segoe UI'
+                    Height: =Parent.TemplateHeight - 20
+                    HoverBorderColor: =Self.BorderColor
+                    HoverColor: =Self.Color
+                    HoverFill: =gblAppStyles.Gallery.HoverFill
+                    PressedBorderColor: =Self.BorderColor
+                    PressedColor: =Self.Color
+                    PressedFill: =Self.Fill
+                    RadiusBottomLeft: =8
+                    RadiusBottomRight: =8
+                    RadiusTopLeft: =8
+                    RadiusTopRight: =8
+                    Size: =gblAppStyles.ButtonTransparent.Size
+                    TabIndex: =-1
+                    Text: =""
+                    Width: =btnMyCheckouts_Background_Demo.Width
+                    X: =1
+                    Y: =btnMyCheckouts_Background_Demo.Y
+                    ZIndex: =5
+
+                btnMyCheckouts_Return_Demo As button:
+                    BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+                    BorderThickness: =gblAppStyles.ButtonPrimary.BorderThickness
+                    Color: =gblAppStyles.ButtonPrimary.Color
+                    DisabledBorderColor: =gblAppStyles.ButtonPrimary.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.ButtonPrimary.DisabledColor
+                    DisabledFill: =gblAppStyles.ButtonPrimary.DisabledFill
+                    Fill: =gblAppStyles.ButtonPrimary.Fill
+                    FocusedBorderColor: =gblAppStyles.ButtonPrimary.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.ButtonPrimary.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.ButtonPrimary.HoverBorderColor
+                    HoverColor: =gblAppStyles.ButtonPrimary.HoverColor
+                    HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+                    OnSelect: |-
+                        =If(
+                            IsError(
+                                Patch(
+                                    'Item Checkouts',
+                                    ThisItem,
+                                    {'Checkout Status': 'Checkout Statuses'.Returned}
+                                )
+                            ),
+                            Notify(
+                                "Item Checkout record not updated",
+                                NotificationType.Error
+                            )
+                        );
+                        UpdateContext(
+                            {
+                                locSelectedItemForReturn: ThisItem.Item,
+                                locShowReturnConfirmation: true
+                            }
+                        );
+                        SetFocus(btnReturnBackToHome_Demo)
+                    PressedBorderColor: =gblAppStyles.ButtonPrimary.PressedBorderColor
+                    PressedColor: =gblAppStyles.ButtonPrimary.PressedColor
+                    PressedFill: =gblAppStyles.ButtonPrimary.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.ButtonPrimary.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+                    Size: =gblAppStyles.ButtonPrimary.Size
+                    Text: ="Return"
+                    Tooltip: =Self.Text
+                    Width: =96
+                    X: =lblIMyCheckouts_ItemName_Demo.X + 20
+                    Y: =lblMyCheckouts_DueDate_Demo.Y + lblMyCheckouts_DueDate_Demo.Height
+                    ZIndex: =6
+
+        conReturnConfirmation_Demo As groupContainer.verticalAutoLayoutContainer:
+            AlignInContainer: =AlignInContainer.SetByContainer
+            DisplayMode: =DisplayMode.Edit
+            FillPortions: =3
+            LayoutAlignItems: =LayoutAlignItems.Center
+            LayoutGap: =20
+            LayoutMinHeight: =100
+            LayoutMinWidth: =250
+            PaddingLeft: =20
+            PaddingRight: =20
+            PaddingTop: =80
+            Visible: =locShowReturnConfirmation
+            ZIndex: =4
+
+            imgReturnConfirmation_Demo As image:
+                Height: =200
+                Image: =Confirmation
+                ImagePosition: =ImagePosition.Fill
+                Width: =200
+                ZIndex: =1
+
+            lblReturnInfoMessage_Demo As label:
+                Align: =Align.Center
+                AutoHeight: =true
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =32*1
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: |-
+                    ="You're all set! Please return the " & locSelectedItemForReturn.Name & " to " & LookUp(
+                        Items,
+                        Item = locSelectedItemForReturn.Item
+                    ).'Item Type'.'Checkout Address' & "."
+                Tooltip: =Self.Text
+                Width: =300*1
+                X: =707*1
+                Y: =225*1
+                ZIndex: =2
+
+            lblReturnHelpMessage_Demo As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =32*1
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: |-
+                    ="For cancellation and help, please contact:"
+                Tooltip: =Self.Text
+                VerticalAlign: =VerticalAlign.Bottom
+                Width: =400*1
+                X: =707*1
+                Y: =225*1
+                ZIndex: =3
+
+            galReturnAdminContact_Demo As gallery.galleryVertical:
+                AccessibleLabel: ="Gallery for checkout admin contact info"
+                AlignInContainer: =AlignInContainer.SetByContainer
+                Fill: |-
+                    =If(
+                        gblThemeDark,
+                        ColorValue("#141414"),
+                        gblThemeHiCo,
+                        Black,
+                        White
+                    )
+                FillPortions: =0
+                Height: =100
+                Items: |-
+                    =// Updated to avoid N+1 calls
+                    With(
+                        {
+                            varRecord: LookUp(
+                                Items,
+                                Item = locSelectedItemForReturn.Item
+                            ).'Item Type'.'Checkout Admin'
+                        },
+                        If(
+                            IsBlank(varRecord),
+                            Table(
+                                {
+                                    itmPhoto: Blank(),
+                                    itmJobTitle: Blank(),
+                                    itmDisplayName: Blank(),
+                                    itmUserName: Blank()
+                                }
+                            ),
+                            With(
+                                {varProfile: Office365Users.UserProfileV2(varRecord)},
+                                Table(
+                                    {
+                                        itmPhoto: Office365Users.UserPhotoV2(varRecord),
+                                        itmJobTitle: varProfile.jobTitle,
+                                        itmDisplayName: varProfile.displayName,
+                                        itmUserName: varProfile.userPrincipalName
+                                    }
+                                )
+                            )
+                        )
+                    )
+                Layout: =Layout.Vertical
+                LayoutMinHeight: =0
+                LayoutMinWidth: =320
+                ShowScrollbar: =false
+                TemplatePadding: =0
+                TemplateSize: =100
+                Width: =400
+                ZIndex: =4
+
+                lblReturnAdmin_DisplayName_Demo As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =ThisItem.itmDisplayName
+                        /*
+                        If(
+                            !IsBlank(
+                                LookUp(
+                                    Items,
+                                    Item = locSelectedItemForReturn.Item
+                                ).'Item Type'.'Checkout Admin'
+                            ),
+                            Office365Users.UserProfileV2(
+                                LookUp(
+                                    Items,
+                                    Item = locSelectedItemForReturn.Item
+                                ).'Item Type'.'Checkout Admin'
+                            ).displayName
+                        )
+                        */
+                    Tooltip: =Self.Text
+                    VerticalAlign: =VerticalAlign.Top
+                    Width: =Parent.Width - Self.X - 80
+                    X: =imgReturnAdmin_Photo_Demo.X + imgReturnAdmin_Photo_Demo.Width + 10
+                    Y: =imgReturnAdmin_Photo_Demo.Y
+                    ZIndex: =1
+
+                lblReturnAdmin_JobTitle_Demo As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =ThisItem.itmJobTitle
+                        /*
+                        If(
+                            !IsBlank(
+                                LookUp(
+                                    Items,
+                                    Item = locSelectedItemForReturn.Item
+                                ).'Item Type'.'Checkout Admin'
+                            ),
+                            Office365Users.UserProfileV2(
+                                LookUp(
+                                    Items,
+                                    Item = locSelectedItemForReturn.Item
+                                ).'Item Type'.'Checkout Admin'
+                            ).jobTitle
+                        )
+                        */
+                    Tooltip: =Self.Text
+                    Width: =Parent.Width - Self.X - 80
+                    X: =imgReturnAdmin_Photo_Demo.X + imgReturnAdmin_Photo_Demo.Width + 10
+                    Y: =lblReturnAdmin_DisplayName_Demo.Y + lblReturnAdmin_DisplayName_Demo.Height
+                    ZIndex: =2
+
+                imgReturnAdmin_Photo_Demo As image:
+                    Fill: |-
+                        =If(
+                            gblThemeDark,
+                            ColorValue("#141414"),
+                            gblThemeHiCo,
+                            Black,
+                            White
+                        )
+                    Height: =64
+                    Image: |-
+                        =ThisItem.itmPhoto
+                        /*
+                        If(
+                            !IsBlank(
+                                LookUp(
+                                    Items,
+                                    Item = locSelectedItemForReturn.Item
+                                ).'Item Type'.'Checkout Admin'
+                            ),
+                            Office365Users.UserPhotoV2(
+                                LookUp(
+                                    Items,
+                                    Item = locSelectedItemForReturn.Item
+                                ).'Item Type'.'Checkout Admin'
+                            )
+                        )*/
+                    OnSelect: =Select(Parent)
+                    RadiusBottomLeft: =64
+                    RadiusBottomRight: =64
+                    RadiusTopLeft: =64
+                    RadiusTopRight: =64
+                    Width: =64
+                    X: =10
+                    Y: =(Parent.TemplateHeight - Self.Height) / 2
+                    ZIndex: =3
+
+                imgReturnAdmin_Chat_Demo As image:
+                    Height: =32
+                    Image: |-
+                        =If(
+                            gblThemeDark || gblThemeHiCo,
+                            ChatDark,
+                            Chat
+                        )
+                    OnSelect: |-
+                        =If(
+                            Param("hostClientType") = "web",
+                            Launch(
+                                "https://teams.microsoft.com/l/chat/0/0?users=" & ThisItem.itmUserName & "&topicName=&message=Hi!",
+                                {},
+                                LaunchTarget.New
+                            ),
+                            Launch(
+                                "msteams://teams.microsoft.com/l/chat/0/0?users=" & ThisItem.itmUserName & "&topicName=&message=Hi!",
+                                {},
+                                LaunchTarget.New
+                            )
+                        )
+                    PaddingBottom: =4
+                    PaddingLeft: =4
+                    PaddingRight: =4
+                    PaddingTop: =4
+                    Width: =32
+                    X: =Parent.Width - Self.Width - 20
+                    Y: =(Parent.TemplateHeight - Self.Height)/2
+                    ZIndex: =4
+
+            btnReturnBackToHome_Demo As button:
+                BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+                BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+                Color: =gblAppStyles.ButtonSecondary.Color
+                DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+                DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+                DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+                Fill: =gblAppStyles.ButtonSecondary.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =32*1
+                HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+                HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+                HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+                OnSelect: |-
+                    =Navigate(
+                        'Demo Items Screen',
+                        ScreenTransition.Fade
+                    )
+                PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+                PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+                PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+                RadiusBottomLeft: =gblAppStyles.ButtonSecondary.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.ButtonSecondary.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.ButtonSecondary.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.ButtonSecondary.RadiusTopRight
+                Size: =gblAppStyles.ButtonSecondary.Size
+                TabIndex: =If(Self.Visible,0,-1)
+                Text: ="Return to home"
+                Tooltip: =Self.Text
+                X: =40
+                Y: =105
+                ZIndex: =5
+
+    btnEndPreviewApp_MyCheckouts As button:
+        BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+        BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+        Color: =gblAppStyles.ButtonSecondary.Color
+        DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+        DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+        DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+        Fill: =gblAppStyles.ButtonSecondary.Fill
+        FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+        FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+        Font: =Font.'Segoe UI'
+        Height: =32*1
+        HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+        HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+        HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+        OnSelect: |-
+            =Navigate(
+                'Welcome Screen',
+                ScreenTransition.Fade
+            )
+        PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+        PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+        PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+        RadiusBottomLeft: =gblAppStyles.ButtonSecondary.RadiusBottomLeft
+        RadiusBottomRight: =gblAppStyles.ButtonSecondary.RadiusBottomRight
+        RadiusTopLeft: =gblAppStyles.ButtonSecondary.RadiusTopLeft
+        RadiusTopRight: =gblAppStyles.ButtonSecondary.RadiusTopRight
+        Size: =gblAppStyles.ButtonSecondary.Size
+        Text: ="End preview"
+        Tooltip: =Self.Text
+        Width: =140
+        X: =Parent.Width - Self.Width - 20
+        Y: |-
+            =If(
+                'Demo My Checkouts Screen'.Size = ScreenSize.ExtraLarge || 'Demo My Checkouts Screen'.Size = ScreenSize.Large,
+                20 * 1,
+                Parent.Height - Self.Height - 20
+            )
+        ZIndex: =2
+

@@ -1,0 +1,2152 @@
+"'Mobile Category Settings Screen' As screen":
+    Fill: =gblAppStyles.Background.Fill
+    LoadingSpinner: =LoadingSpinner.Data
+    LoadingSpinnerColor: |-
+        =If(
+            gblThemeHiCo,
+            gblAppColors.HighContrastHyperlinks,
+            gblThemeDark,
+            gblAppColors.TeamsDarkPrimary,
+            gblAppColors.TeamsDefaultPrimary
+        )
+    OnVisible: |-
+        =Clear(colMobileCategories);
+        ForAll(
+            Sort(
+                Filter(
+                    'Project Work Item Categories',
+                    'Project Work Item Categories (Views)'.'Active Project Work Item Categories'
+                ),
+                'Created On',
+                Ascending
+            ),
+            Collect(
+                colMobileCategories,
+                {
+                    CategoryName: Name,
+                    CategoryColor: Color,
+                    DarkColor: 'Color Dark',
+                    ID: 'Project Work Item Category',
+                    Order: CountRows(colMobileCategories) + 1
+                }
+            )
+        );
+        ClearCollect(
+            colMobileRemovedCategories,
+            First(colMobileCategories)
+        );
+        Clear(colMobileRemovedCategories);
+        UpdateContext(
+            {
+                locMobileGalleryDefaultCategory: Blank(),
+                locMobileDeleteSettings: false
+            }
+        );
+        //set focus start
+        UpdateContext({locSetFocusTimerStart: false});
+        UpdateContext({locSetFocusControlTarget: "btnMobileCategoryBackToSettings"});
+        UpdateContext({locSetFocusTimerStart: true});
+        //set focus end
+
+    tmrSetFocus_MobileCategorySettings As timer:
+        AutoStart: =locSetFocusTimerStart
+        Color: =RGBA(0, 0, 0, 0)
+        Duration: =100
+        Fill: =RGBA(0, 0, 0, 0)
+        Height: =0
+        HoverFill: =Transparent
+        OnTimerEnd: |
+            =Switch(
+                locSetFocusControlTarget,
+                "btnMobileCategoryBackToSettings",
+                SetFocus(btnMobileCategoryBackToSettings),
+                "btnMobileCancelDelete_Category",
+                SetFocus(btnMobileCancelDelete_Category)
+            );
+        OnTimerStart: =
+        Size: =0
+        TabIndex: =-1
+        Width: =0
+        X: =Parent.Width - Self.Width
+        Y: =Parent.Height - Self.Height
+        ZIndex: =1
+
+    lblAnnounce_MobileCategorySettings As label:
+        DisplayMode: =DisplayMode.Disabled
+        Font: =Font.'Segoe UI'
+        Height: =0*0
+        Live: =Live.Assertive
+        PaddingBottom: =0
+        PaddingLeft: =0
+        PaddingRight: =0
+        PaddingTop: =0
+        Text: =locScreenReaderAnnouncedText //this text is announced by screen readers, when the variable is updated
+        Visible: =false
+        Width: =0*0
+        X: =Parent.Width - Self.Width
+        Y: =Parent.Height - Self.Height
+        ZIndex: =2
+
+    conMobileCategory As groupContainer:
+        Fill: =gblAppStyles.Background.Fill
+        Height: =Parent.Height - Self.Y
+        Width: =Parent.Width
+        Y: =conMobileCategoryNav.Y + conMobileCategoryNav.Height
+        ZIndex: =3
+
+        "galMobileCategories As gallery.'BrowseLayout_Vertical_OneTextVariant_ver4.0'":
+            AccessibleLabel: |-
+                =With(
+                    {
+                        varDefault: "List of categories",
+                        varOOBTextId: "galCategories__locAccessibleText"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            BorderColor: =Transparent
+            Default: |-
+                =If(
+                    IsBlank(locMobileGalleryDefaultCategory),
+                    {},
+                    LookUp(
+                        colMobileCategories,
+                        Order = locMobileGalleryDefaultCategory.Order
+                    )
+                )
+            Fill: =Transparent
+            Height: |-
+                =Min(
+                    Parent.Height - Self.Y - 175,
+                    Self.TemplateHeight * CountRows(Self.AllItems)
+                )
+            Items: =colMobileCategories
+            Layout: =Layout.Vertical
+            LoadingSpinner: =App.ActiveScreen.LoadingSpinner
+            TabIndex: |-
+                =If(
+                    locMobileDeleteSettings,
+                    -1,
+                    If(
+                        Self.Visible,
+                        0,
+                        -1
+                    )
+                )
+            TemplateFill: =Transparent
+            TemplatePadding: =0
+            TemplateSize: =75
+            Width: =Parent.Width - Self.X
+            X: =lblMobileCategory.X - 5
+            Y: =lblMobileCategory.Y + lblMobileCategory.Height + 20
+            ZIndex: =2
+
+            galMobileCategoryColorPicker As gallery.galleryHorizontal:
+                AccessibleLabel: |-
+                    =With(
+                        {
+                            varDefault: "List of colors",
+                            varOOBTextId: "galCategoryColorPicker__locAccessibleText"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                BorderColor: =gblAppStyles.ButtonPrimary.Fill
+                BorderThickness: =1
+                Default: |-
+                    =If(
+                        gblThemeDark,
+                        LookUp(
+                            colMobileProjectCoverColors,
+                            Color = ThisItem.DarkColor
+                        ),
+                        LookUp(
+                            colMobileProjectCoverColors,
+                            Color = ThisItem.CategoryColor
+                        )
+                    )
+                Fill: =gblAppStyles.ButtonSecondary.Fill
+                Height: =48*1
+                Items: |-
+                    =Filter(
+                        colMobileProjectCoverColors,
+                        Theme = If(
+                            gblThemeDark,
+                            "dark",
+                            "default"
+                        )
+                    )
+                OnSelect: |
+                    =UpdateContext(
+                        {
+                            locMobileCategoryColorPicker: false,
+                            locMobileSettingsChanged: true
+                        }
+                    );
+                TabIndex: |-
+                    =If(
+                        true,
+                        -1,
+                        0
+                    )
+                TemplatePadding: =0
+                TemplateSize: =38
+                Visible: =ThisItem.IsSelected && locMobileCategoryColorPicker
+                Width: =Parent.TemplateWidth - Self.X - 20
+                X: =imgMobileCategoryCloseColorPicker.X + imgMobileCategoryCloseColorPicker.Width + 5
+                Y: =txtMobileCategoryName.Y
+                ZIndex: =1
+
+                btnMobileCategoryColorPickerPreview As button:
+                    BorderColor: |-
+                        =If(
+                            gblThemeDark,
+                            ColorValue("#616161"),
+                            White
+                        )
+                    Color: =Transparent
+                    Fill: =ColorValue(ThisItem.Color)
+                    FocusedBorderThickness: =2
+                    Font: =Font.'Segoe UI'
+                    Height: =24*1
+                    HoverBorderColor: =Self.BorderColor
+                    HoverColor: =Self.Color
+                    HoverFill: =Self.Fill
+                    OnSelect: =Select(Parent)
+                    PressedBorderColor: =Self.BorderColor
+                    PressedColor: =Self.Color
+                    PressedFill: =Self.Fill
+                    RadiusBottomLeft: =5
+                    RadiusBottomRight: =5
+                    RadiusTopLeft: =5
+                    RadiusTopRight: =5
+                    TabIndex: |-
+                        =If(
+                            true,
+                            -1,
+                            0
+                        )
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Color preview",
+                                varOOBTextId: "btnCategoryColorPickerPreview__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Width: =24*1
+                    Y: =4*1
+                    ZIndex: =1
+
+                imgMobileCategoryColorPicker As image:
+                    Height: =22
+                    Image: |
+                        =With(
+                            {
+                                varImageRecord: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Check"
+                                ),
+                                varColor: If(
+                                    Self.DisplayMode = DisplayMode.Disabled,
+                                    gblAppStyles.Icons.DisabledColor,
+                                    gblAppStyles.Icons.Color
+                                )
+                            },
+                            With(
+                                {
+                                    varImageData: Concatenate(
+                                        "data:image/svg+xml;utf8, ",
+                                        EncodeUrl(
+                                            Concatenate(
+                                                "<svg viewBox='",
+                                                varImageRecord.staticIconViewbox,
+                                                "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                varImageRecord.staticIconPath,
+                                                "' fill='#",
+                                                varColor,
+                                                "'/></svg>"
+                                            )
+                                        )
+                                    )
+                                },
+                                varImageData
+                            )
+                        )
+                    OnSelect: =Select(Parent)
+                    PaddingBottom: =2
+                    PaddingLeft: =2
+                    PaddingRight: =2
+                    PaddingTop: =2
+                    Tooltip: =Self.AccessibleLabel
+                    Visible: =ThisItem.IsSelected
+                    Width: =22
+                    X: =btnMobileCategoryColorPickerPreview.X + (btnMobileCategoryColorPickerPreview.Width - Self.Width) / 2
+                    Y: =btnMobileCategoryColorPickerPreview.Y + (btnMobileCategoryColorPickerPreview.Width - Self.Height) / 2
+                    ZIndex: =2
+
+            txtMobileCategoryName As text:
+                AccessibleLabel: =Self.HintText
+                BorderColor: =gblAppStyles.TextInput.BorderColor
+                BorderThickness: =gblAppStyles.TextInput.BorderThickness
+                Color: =gblAppStyles.TextInput.Color
+                Default: =ThisItem.CategoryName
+                DisabledBorderColor: =gblAppStyles.TextInput.DisabledBorderColor
+                DisabledColor: =gblAppStyles.TextInput.DisabledColor
+                DisabledFill: =gblAppStyles.TextInput.DisabledFill
+                Fill: =gblAppStyles.TextInput.Fill
+                FocusedBorderColor: =gblAppStyles.TextInput.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.TextInput.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =32*1
+                HintText: |-
+                    =With(
+                        {
+                            varDefault: "Type name here...",
+                            varOOBTextId: "txtCategoryName__locHintText"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                HoverBorderColor: =gblAppStyles.TextInput.HoverBorderColor
+                HoverColor: =gblAppStyles.TextInput.HoverColor
+                HoverFill: =gblAppStyles.TextInput.HoverFill
+                MaxLength: =750
+                OnChange: |-
+                    =UpdateContext({locMobileSettingsChanged: true})
+                OnSelect: |-
+                    =UpdateContext({locMobileCategoryColorPicker: false})
+                PaddingLeft: =15
+                PressedBorderColor: =gblAppStyles.TextInput.PressedBorderColor
+                PressedColor: =gblAppStyles.TextInput.PressedColor
+                PressedFill: =gblAppStyles.TextInput.PressedFill
+                RadiusBottomLeft: =gblAppStyles.TextInput.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.TextInput.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.TextInput.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.TextInput.RadiusTopRight
+                Size: =gblAppStyles.TextInput.Size
+                TabIndex: |-
+                    =If(
+                        locMobileDeleteSettings,
+                        -1,
+                        If(
+                            Self.Visible,
+                            0,
+                            -1
+                        )
+                    )
+                Tooltip: =Self.HintText
+                Width: =Parent.TemplateWidth - Self.X - 20
+                X: =btnMobileCategoryColorPreview.X + btnMobileCategoryColorPreview.Width + 10
+                Y: =lblMobileCategoryTitle.Y + lblMobileCategoryTitle.Height + 5
+                ZIndex: =5
+
+            lblMobileCategoryTitle As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =21
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: |-
+                    =With(
+                        {
+                            varDefault: "Category " & ThisItem.Order,
+                            varOOBTextId: "lblCategoryTitle__locText",
+                            varParam0: ThisItem.Order
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            If(
+                                IsBlankOrError(varParam0),
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                ),
+                                Coalesce(
+                                    Substitute(
+                                        varLocalizedText,
+                                        "{0}",
+                                        Text(varParam0)
+                                    ),
+                                    varDefault
+                                )
+                            )
+                        )
+                    )
+                Tooltip: =Self.Text
+                Width: =242
+                X: =0*1
+                Y: =0*1
+                ZIndex: =6
+
+            btnMobileCategoryColorPreview As button:
+                BorderColor: |-
+                    =If(
+                        gblThemeDark,
+                        ColorValue("#616161"),
+                        White
+                    )
+                BorderThickness: =0
+                Color: =Transparent
+                Fill: |-
+                    =Coalesce(
+                        ColorValue(galMobileCategoryColorPicker.Selected.Color),
+                        If(
+                            gblThemeDark,
+                            ColorValue(ThisItem.DarkColor),
+                            ColorValue(ThisItem.CategoryColor)
+                        ),
+                        ColorValue("#E0E0E0")
+                    )
+                FocusedBorderThickness: =2
+                Font: =Font.'Segoe UI'
+                Height: =32*1
+                HoverBorderColor: =Self.BorderColor
+                HoverColor: =Self.Color
+                HoverFill: =Self.Fill
+                PressedBorderColor: =Self.BorderColor
+                PressedColor: =Self.Color
+                PressedFill: =Self.Fill
+                RadiusBottomLeft: =5
+                RadiusBottomRight: =5
+                RadiusTopLeft: =5
+                RadiusTopRight: =5
+                TabIndex: |-
+                    =If(
+                        true,
+                        -1,
+                        0
+                    )
+                Text: |-
+                    =With(
+                        {
+                            varDefault: "Category color",
+                            varOOBTextId: "btnCategoryColorPreview__locText"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                Tooltip: =Self.Text
+                Visible: =!(ThisItem.IsSelected && locMobileCategoryColorPicker)
+                Width: =32*1
+                X: =10
+                Y: =txtMobileCategoryName.Y + (txtMobileCategoryName.Height - Self.Height) / 2
+                ZIndex: =7
+
+            imgMobileDeleteCategory As image:
+                AccessibleLabel: |-
+                    =With(
+                        {
+                            varDefault: "Click to delete category",
+                            varOOBTextId: "imgDeleteCategory__locAccessibleText"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                DisabledFill: |-
+                    =With(
+                        {
+                            varImageIsCategory: LookUp(
+                                staticIcons,
+                                staticIconName = "Delete"
+                            ).staticIconIsCategory
+                        },
+                        If(
+                            varImageIsCategory,
+                            gblAppStyles.Icons.DisabledFill_Category,
+                            Transparent
+                        )
+                    )
+                Fill: |-
+                    =With(
+                        {
+                            varImageIsCategory: LookUp(
+                                staticIcons,
+                                staticIconName = "Delete"
+                            ).staticIconIsCategory
+                        },
+                        If(
+                            varImageIsCategory,
+                            gblAppStyles.Icons.Fill_Category,
+                            Transparent
+                        )
+                    )
+                Height: =22*1
+                Image: |
+                    =With(
+                        {
+                            varImageRecord: LookUp(
+                                staticIcons,
+                                staticIconName = "Delete"
+                            ),
+                            varColor: If(
+                                Self.DisplayMode = DisplayMode.Disabled,
+                                gblAppStyles.Icons.DisabledColor,
+                                gblAppStyles.Icons.Color
+                            )
+                        },
+                        With(
+                            {
+                                varImageData: Concatenate(
+                                    "data:image/svg+xml;utf8, ",
+                                    EncodeUrl(
+                                        Concatenate(
+                                            "<svg viewBox='",
+                                            varImageRecord.staticIconViewbox,
+                                            "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                            varImageRecord.staticIconPath,
+                                            "' fill='#",
+                                            varColor,
+                                            "'/></svg>"
+                                        )
+                                    )
+                                )
+                            },
+                            varImageData
+                        )
+                    )
+                OnSelect: |-
+                    =Reset(chkConfirmDelete_Settings);
+                    If(
+                        !IsBlank(ThisItem.ID),
+                        Collect(
+                            colMobileRemovedCategories,
+                            ThisItem
+                        )
+                    );
+                    UpdateContext(
+                        {
+                            locMobileDeleteSettings: true
+                        }
+                    );
+                    //screen reader start
+                    UpdateContext(
+                        {
+                            locScreenReaderAnnouncedText: With(
+                                {
+                                    varAnnouncedText: With(
+                                        {
+                                            varDefault: "Opening a dialog to confirm deletion of the category",
+                                            varOOBTextId: "imgDeleteCategory_Announcement"
+                                        },
+                                        With(
+                                            {
+                                                varLocalizedText: LookUp(
+                                                    colLocalization,
+                                                    OOBTextID = varOOBTextId,
+                                                    LocalizedText
+                                                )
+                                            },
+                                            Coalesce(
+                                                varLocalizedText,
+                                                varDefault
+                                            )
+                                        )
+                                    )
+                                },
+                                If(
+                                    locScreenReaderAnnouncedText = varAnnouncedText,
+                                    Concatenate(
+                                        varAnnouncedText,
+                                        " "
+                                    ),
+                                    varAnnouncedText
+                                )
+                            )
+                        }
+                    );
+                    //screen reader end
+                    //set focus start
+                    UpdateContext({locSetFocusTimerStart: false});
+                    UpdateContext({locSetFocusControlTarget: "btnMobileCancelDelete_Category"});
+                    UpdateContext({locSetFocusTimerStart: true});
+                    //set focus end
+                PaddingRight: =0.00
+                PaddingTop: =0.00
+                RadiusBottomLeft: =5
+                RadiusBottomRight: =5
+                RadiusTopLeft: =5
+                RadiusTopRight: =5
+                TabIndex: |-
+                    =If(
+                        locMobileDeleteSettings,
+                        -1,
+                        If(
+                            Self.Visible,
+                            0,
+                            -1
+                        )
+                    )
+                Tooltip: =Self.AccessibleLabel
+                Visible: =ThisItem.IsSelected
+                Width: =22*1
+                X: =txtMobileCategoryName.X + txtMobileCategoryName.Width - Self.Width - 10
+                Y: =txtMobileCategoryName.Y + (txtMobileCategoryName.Height - Self.Height) / 2
+                ZIndex: =8
+
+            imgMobileCategoryCloseColorPicker As image:
+                AccessibleLabel: |-
+                    =With(
+                        {
+                            varDefault: "Click to close color picker",
+                            varOOBTextId: "_translateCommon__CloseColorPicker"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                DisabledFill: |-
+                    =With(
+                        {
+                            varImageIsCategory: LookUp(
+                                staticIcons,
+                                staticIconName = "Dismiss"
+                            ).staticIconIsCategory
+                        },
+                        If(
+                            varImageIsCategory,
+                            gblAppStyles.Icons.DisabledFill_Category,
+                            Transparent
+                        )
+                    )
+                Fill: |-
+                    =With(
+                        {
+                            varImageIsCategory: LookUp(
+                                staticIcons,
+                                staticIconName = "Dismiss"
+                            ).staticIconIsCategory
+                        },
+                        If(
+                            varImageIsCategory,
+                            gblAppStyles.Icons.Fill_Category,
+                            Transparent
+                        )
+                    )
+                Height: =22*1
+                Image: |
+                    =With(
+                        {
+                            varImageRecord: LookUp(
+                                staticIcons,
+                                staticIconName = "Dismiss"
+                            ),
+                            varColor: If(
+                                Self.DisplayMode = DisplayMode.Disabled,
+                                gblAppStyles.Icons.DisabledColor,
+                                gblAppStyles.Icons.Color
+                            )
+                        },
+                        With(
+                            {
+                                varImageData: Concatenate(
+                                    "data:image/svg+xml;utf8, ",
+                                    EncodeUrl(
+                                        Concatenate(
+                                            "<svg viewBox='",
+                                            varImageRecord.staticIconViewbox,
+                                            "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                            varImageRecord.staticIconPath,
+                                            "' fill='#",
+                                            varColor,
+                                            "'/></svg>"
+                                        )
+                                    )
+                                )
+                            },
+                            varImageData
+                        )
+                    )
+                PaddingRight: =0.00
+                PaddingTop: =0.00
+                RadiusBottomLeft: =5
+                RadiusBottomRight: =5
+                RadiusTopLeft: =5
+                RadiusTopRight: =5
+                TabIndex: |-
+                    =If(
+                        true,
+                        -1,
+                        0
+                    )
+                Tooltip: =Self.AccessibleLabel
+                Visible: =ThisItem.IsSelected && locMobileCategoryColorPicker
+                Width: =22*1
+                X: =btnMobileCategoryColorPreview.X
+                Y: =btnMobileCategoryColorPreview.Y
+                ZIndex: =9
+
+        lblMobileCategory As label:
+            BorderColor: =gblAppStyles.Label.BorderColor
+            BorderThickness: =gblAppStyles.Label.BorderThickness
+            Color: =gblAppStyles.Label.Color
+            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+            DisabledColor: =gblAppStyles.Label.DisabledColor
+            DisabledFill: =gblAppStyles.Label.DisabledFill
+            Fill: =gblAppStyles.Label.Fill
+            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            FontWeight: =FontWeight.Bold
+            Height: =40*1
+            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+            HoverColor: =gblAppStyles.Label.HoverColor
+            HoverFill: =gblAppStyles.Label.HoverFill
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingTop: =0
+            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+            PressedColor: =gblAppStyles.Label.PressedColor
+            PressedFill: =gblAppStyles.Label.PressedFill
+            Role: =TextRole.Heading1
+            Size: =gblAppStyles.Label.Size.Large
+            Text: |
+                =With(
+                    {
+                        varDefault: "Category",
+                        varOOBTextId: "lblGlobalSettingsCategoryHeader__locText"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            Tooltip: =Self.Text
+            Width: =Parent.Width - Self.X
+            X: =1*20
+            Y: =2*1
+            ZIndex: =3
+
+        btnMobileSaveCategory As button:
+            Align: =Align.Right
+            BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+            BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+            Color: =gblAppStyles.ButtonTransparent.Color
+            DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+            DisabledColor: =gblAppStyles.ButtonTransparent.DisabledColor
+            DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+            DisplayMode: |-
+                =If(
+                    locMobileSettingsChanged && CountRows(
+                        Filter(
+                            galMobileCategories.AllItems,
+                            IsBlank(txtMobileCategoryName)
+                        )
+                    ) = 0,
+                    DisplayMode.Edit,
+                    DisplayMode.Disabled
+                )
+            Fill: =gblAppStyles.ButtonTransparent.Fill
+            FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            Height: =32*1
+            HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+            HoverColor: =gblAppStyles.ButtonTransparent.HoverColor
+            HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+            OnSelect: |-
+                =ForAll(
+                    Filter(
+                        galMobileCategories.AllItems,
+                        !IsBlank(ID)
+                    ),
+                    If(IsError(Patch(
+                        'Project Work Item Categories',
+                        LookUp(
+                            'Project Work Item Categories',
+                            'Project Work Item Category' = ID
+                        ),
+                        {
+                            Name: txtMobileCategoryName.Text,
+                            Color: Coalesce(
+                                If(
+                                    gblThemeDark,
+                                    LookUp(
+                                        colMobileProjectCoverColors,
+                                        Base = galMobileCategoryColorPicker.Selected.Base && Theme = "default"
+                                    ).Color,
+                                    galMobileCategoryColorPicker.Selected.Color
+                                ),
+                                ThisRecord.CategoryColor
+                            ),
+                            'Color Dark': Coalesce(
+                                If(
+                                    gblThemeDark,
+                                    galMobileCategoryColorPicker.Selected.Color,
+                                    LookUp(
+                                        colMobileProjectCoverColors,
+                                        Base = galMobileCategoryColorPicker.Selected.Base && Theme = "dark"
+                                    ).Color
+                                ),
+                                ThisRecord.DarkColor
+                            )
+                        }
+                    )
+                ),Notify("There was a problem saving your data. Please try again.")));
+                ForAll(
+                    Filter(
+                        galMobileCategories.AllItems,
+                        IsBlank(ID)
+                    ),
+                    If(IsError(Patch(
+                        'Project Work Item Categories',
+                        Defaults('Project Work Item Categories'),
+                        {
+                            Name: txtMobileCategoryName.Text,
+                            Color: Coalesce(
+                                If(
+                                    gblThemeDark,
+                                    LookUp(
+                                        colMobileProjectCoverColors,
+                                        Base = galMobileCategoryColorPicker.Selected.Base && Theme = "default"
+                                    ).Color,
+                                    galMobileCategoryColorPicker.Selected.Color
+                                ),
+                                ThisRecord.CategoryColor
+                            ),
+                            'Color Dark': Coalesce(
+                                If(
+                                    gblThemeDark,
+                                    galMobileCategoryColorPicker.Selected.Color,
+                                    LookUp(
+                                        colMobileProjectCoverColors,
+                                        Base = galMobileCategoryColorPicker.Selected.Base && Theme = "dark"
+                                    ).Color
+                                ),
+                                ThisRecord.DarkColor
+                            )
+                        }
+                    )
+                ),Notify("There was a problem saving your data. Please try again.")));
+                ClearCollect(
+                    colMobileWorkItems,
+                    Filter(
+                        'Project Work Items',
+                        Project.Project = gblMobileProject.Project
+                    )
+                );
+                Clear(colMobileCategories);
+                ForAll(
+                    Sort(
+                        Filter(
+                            'Project Work Item Categories',
+                            'Project Work Item Categories (Views)'.'Active Project Work Item Categories'
+                        ),
+                        'Created On',
+                        Ascending
+                    ),
+                    Collect(
+                        colMobileCategories,
+                        {
+                            CategoryName: Name,
+                            CategoryColor: Color,
+                            DarkColor: 'Color Dark',
+                            ID: 'Project Work Item Category',
+                            Order: CountRows(colMobileCategories) + 1
+                        }
+                    )
+                );
+                ClearCollect(
+                    colMobileRemovedCategories,
+                    First(colMobileCategories)
+                );
+                Clear(colMobileRemovedCategories);
+                //screen reader start
+                UpdateContext(
+                    {
+                        locScreenReaderAnnouncedText: With(
+                            {
+                                varAnnouncedText: With(
+                                    {
+                                        varDefault: "Categories have been updated",
+                                        varOOBTextId: "btnMobileSaveCategory_Announcement"
+                                    },
+                                    With(
+                                        {
+                                            varLocalizedText: LookUp(
+                                                colLocalization,
+                                                OOBTextID = varOOBTextId,
+                                                LocalizedText
+                                            )
+                                        },
+                                        Coalesce(
+                                            varLocalizedText,
+                                            varDefault
+                                        )
+                                    )
+                                )
+                            },
+                            If(
+                                locScreenReaderAnnouncedText = varAnnouncedText,
+                                Concatenate(
+                                    varAnnouncedText,
+                                    " "
+                                ),
+                                varAnnouncedText
+                            )
+                        )
+                    }
+                );
+                //screen reader end
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+            PressedColor: =gblAppStyles.ButtonTransparent.PressedColor
+            PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+            RadiusBottomLeft: =gblAppStyles.ButtonTransparent.RadiusBottomLeft
+            RadiusBottomRight: =gblAppStyles.ButtonTransparent.RadiusBottomRight
+            RadiusTopLeft: =gblAppStyles.ButtonTransparent.RadiusTopLeft
+            RadiusTopRight: =gblAppStyles.ButtonTransparent.RadiusTopRight
+            Size: =gblAppStyles.ButtonPrimary.Size
+            TabIndex: |-
+                =If(
+                    locMobileDeleteSettings,
+                    -1,
+                    If(
+                        Self.Visible,
+                        0,
+                        -1
+                    )
+                )
+            Text: |-
+                =With(
+                    {
+                        varDefault: "Done",
+                        varOOBTextId: "btnDoneCoverSelection__locText"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            Tooltip: =Self.Text
+            Width: =100*1
+            X: =Parent.Width - Self.Width - 28
+            Y: =Parent.Height - Self.Height - 28
+            ZIndex: =4
+
+        btnMobileCancelCategory As button:
+            Align: =Align.Left
+            BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+            BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+            Color: =gblAppStyles.ButtonTransparent.Color
+            DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+            DisabledColor: =gblAppStyles.ButtonTransparent.DisabledColor
+            DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+            Fill: =gblAppStyles.ButtonTransparent.Fill
+            FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            Height: =32*1
+            HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+            HoverColor: =gblAppStyles.ButtonTransparent.HoverColor
+            HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+            OnSelect: |
+                =//screen reader start
+                UpdateContext(
+                    {
+                        locScreenReaderAnnouncedText: With(
+                            {
+                                varAnnouncedText: With(
+                                    {
+                                        varDefault: "Navigating back to global settings",
+                                        varOOBTextId: "btnBackToGlobalSettings_Announcement"
+                                    },
+                                    With(
+                                        {
+                                            varLocalizedText: LookUp(
+                                                colLocalization,
+                                                OOBTextID = varOOBTextId,
+                                                LocalizedText
+                                            )
+                                        },
+                                        Coalesce(
+                                            varLocalizedText,
+                                            varDefault
+                                        )
+                                    )
+                                )
+                            },
+                            If(
+                                locScreenReaderAnnouncedText = varAnnouncedText,
+                                Concatenate(
+                                    varAnnouncedText,
+                                    " "
+                                ),
+                                varAnnouncedText
+                            )
+                        )
+                    }
+                );
+                //screen reader end
+                Navigate(
+                    'Mobile Global Settings Screen',
+                    ScreenTransition.Fade
+                );
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+            PressedColor: =gblAppStyles.ButtonTransparent.PressedColor
+            PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+            RadiusBottomLeft: =gblAppStyles.ButtonTransparent.RadiusBottomLeft
+            RadiusBottomRight: =gblAppStyles.ButtonTransparent.RadiusBottomRight
+            RadiusTopLeft: =gblAppStyles.ButtonTransparent.RadiusTopLeft
+            RadiusTopRight: =gblAppStyles.ButtonTransparent.RadiusTopRight
+            Size: =gblAppStyles.ButtonPrimary.Size
+            TabIndex: |-
+                =If(
+                    locMobileDeleteSettings,
+                    -1,
+                    If(
+                        Self.Visible,
+                        0,
+                        -1
+                    )
+                )
+            Text: |-
+                =With(
+                    {
+                        varDefault: "Cancel",
+                        varOOBTextId: "btnCancelWarning__locText"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            Tooltip: =Self.Text
+            Width: =100*1
+            X: =28*1
+            Y: =Parent.Height - Self.Height - 28
+            ZIndex: =5
+
+        grpMobileAddCategory As group:
+            Height: =5
+            Width: =5
+            X: =40
+            Y: =40
+            ZIndex: =8
+
+            imgMobileAddCategory As image:
+                AccessibleLabel: |-
+                    =With(
+                        {
+                            varDefault: "Click to add a category",
+                            varOOBTextId: "btnAddCategory__locTooltip"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                DisabledFill: |-
+                    =With(
+                        {
+                            varImageIsCategory: LookUp(
+                                staticIcons,
+                                staticIconName = "Add"
+                            ).staticIconIsCategory
+                        },
+                        If(
+                            varImageIsCategory,
+                            gblAppStyles.Icons.DisabledFill_Category,
+                            Transparent
+                        )
+                    )
+                Fill: |-
+                    =With(
+                        {
+                            varImageIsCategory: LookUp(
+                                staticIcons,
+                                staticIconName = "Add"
+                            ).staticIconIsCategory
+                        },
+                        If(
+                            varImageIsCategory,
+                            gblAppStyles.Icons.Fill_Category,
+                            Transparent
+                        )
+                    )
+                Height: =22*1
+                Image: |
+                    =With(
+                        {
+                            varImageRecord: LookUp(
+                                staticIcons,
+                                staticIconName = "Add"
+                            ),
+                            varColor: If(
+                                Self.DisplayMode = DisplayMode.Disabled,
+                                gblAppStyles.Icons.DisabledColor,
+                                gblAppStyles.Icons.Color
+                            )
+                        },
+                        With(
+                            {
+                                varImageData: Concatenate(
+                                    "data:image/svg+xml;utf8, ",
+                                    EncodeUrl(
+                                        Concatenate(
+                                            "<svg viewBox='",
+                                            varImageRecord.staticIconViewbox,
+                                            "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                            varImageRecord.staticIconPath,
+                                            "' fill='#",
+                                            varColor,
+                                            "'/></svg>"
+                                        )
+                                    )
+                                )
+                            },
+                            varImageData
+                        )
+                    )
+                OnSelect: |-
+                    =Collect(
+                        colCategories,
+                        {
+                            CategoryName: Blank(),
+                            CategoryColor: Blank(),
+                            DarkColor: Blank(),
+                            ID: Blank(),
+                            Order: CountRows(colCategories) + 1
+                        }
+                    );
+                    UpdateContext(
+                        {
+                            locMobileSettingsChanged: true,
+                            locMobileGalleryDefaultCategory: Last(colCategories)
+                        }
+                    );
+                    Reset(galMobileCategories);
+                    //screen reader start
+                    UpdateContext(
+                        {
+                            locScreenReaderAnnouncedText: With(
+                                {
+                                    varAnnouncedText: With(
+                                        {
+                                            varDefault: "New category added",
+                                            varOOBTextId: "btnAddCategory_Announcement"
+                                        },
+                                        With(
+                                            {
+                                                varLocalizedText: LookUp(
+                                                    colLocalization,
+                                                    OOBTextID = varOOBTextId,
+                                                    LocalizedText
+                                                )
+                                            },
+                                            Coalesce(
+                                                varLocalizedText,
+                                                varDefault
+                                            )
+                                        )
+                                    )
+                                },
+                                If(
+                                    locScreenReaderAnnouncedText = varAnnouncedText,
+                                    Concatenate(
+                                        varAnnouncedText,
+                                        " "
+                                    ),
+                                    varAnnouncedText
+                                )
+                            )
+                        }
+                    );
+                    //screen reader end
+                PaddingRight: =0.00
+                PaddingTop: =0.00
+                RadiusBottomLeft: =5
+                RadiusBottomRight: =5
+                RadiusTopLeft: =5
+                RadiusTopRight: =5
+                TabIndex: |-
+                    =If(
+                        true,
+                        -1,
+                        0
+                    )
+                Tooltip: =Self.AccessibleLabel
+                Width: =22*1
+                X: =lblMobileCategory.X
+                Y: =btnMobileAddCategory.Y + (btnMobileAddCategory.Height - Self.Height) / 2
+                ZIndex: =6
+
+            btnMobileAddCategory As button:
+                Align: =Align.Left
+                BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+                Color: =gblAppStyles.ButtonTransparent.Color
+                DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+                DisabledColor: =gblAppStyles.ButtonTransparent.DisabledColor
+                DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                Fill: =gblAppStyles.ButtonTransparent.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Normal
+                Height: =26*1
+                HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                HoverColor: =gblAppStyles.ButtonTransparent.HoverColor
+                HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+                OnSelect: |-
+                    =Collect(
+                        colMobileCategories,
+                        {
+                            CategoryName: Blank(),
+                            CategoryColor: Blank(),
+                            DarkColor: Blank(),
+                            ID: Blank(),
+                            Order: CountRows(colMobileCategories) + 1
+                        }
+                    );
+                    UpdateContext(
+                        {
+                            locMobileSettingsChanged: true,
+                            locMobileGalleryDefaultCategory: Last(colMobileCategories)
+                        }
+                    );
+                    Reset(galMobileCategories);
+                    //screen reader start
+                    UpdateContext(
+                        {
+                            locScreenReaderAnnouncedText: With(
+                                {
+                                    varAnnouncedText: With(
+                                        {
+                                            varDefault: "New category added",
+                                            varOOBTextId: "btnAddCategory_Announcement"
+                                        },
+                                        With(
+                                            {
+                                                varLocalizedText: LookUp(
+                                                    colLocalization,
+                                                    OOBTextID = varOOBTextId,
+                                                    LocalizedText
+                                                )
+                                            },
+                                            Coalesce(
+                                                varLocalizedText,
+                                                varDefault
+                                            )
+                                        )
+                                    )
+                                },
+                                If(
+                                    locScreenReaderAnnouncedText = varAnnouncedText,
+                                    Concatenate(
+                                        varAnnouncedText,
+                                        " "
+                                    ),
+                                    varAnnouncedText
+                                )
+                            )
+                        }
+                    );
+                    //screen reader end
+                PaddingBottom: =0
+                PaddingLeft: =32
+                PaddingRight: =0.00
+                PaddingTop: =0.00
+                PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                PressedColor: =gblAppStyles.ButtonTransparent.PressedColor
+                PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+                RadiusBottomLeft: =gblAppStyles.ButtonTransparent.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.ButtonTransparent.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.ButtonTransparent.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.ButtonTransparent.RadiusTopRight
+                Size: =gblAppStyles.ButtonTransparent.Size
+                TabIndex: |-
+                    =If(
+                        locMobileDeleteSettings,
+                        -1,
+                        If(
+                            Self.Visible,
+                            0,
+                            -1
+                        )
+                    )
+                Text: |-
+                    =With(
+                        {
+                            varDefault: "Add",
+                            varOOBTextId: "btnAddCategory__locText"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                Tooltip: |-
+                    =With(
+                        {
+                            varDefault: "Click to add a category",
+                            varOOBTextId: "btnAddCategory__locTooltip"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                Width: =150
+                X: =20
+                Y: =galMobileCategories.Y+ galMobileCategories.Height + 20
+                ZIndex: =7
+
+    conMobileCategoryNav As groupContainer:
+        Height: =48
+        Width: =Parent.Width
+        Y: =0*1
+        ZIndex: =4
+
+        btnMobileCategoryBackToSettings As button:
+            Align: =Align.Left
+            BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+            BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+            Color: =gblAppStyles.ButtonTransparent.Color
+            DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+            DisabledColor: =gblAppStyles.ButtonTransparent.DisabledColor
+            DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+            Fill: =gblAppStyles.ButtonTransparent.Fill
+            FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            Height: =32*1
+            HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+            HoverColor: =gblAppStyles.ButtonTransparent.HoverColor
+            HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+            OnSelect: |-
+                =//screen reader start
+                UpdateContext(
+                    {
+                        locScreenReaderAnnouncedText: With(
+                            {
+                                varAnnouncedText: With(
+                                    {
+                                        varDefault: "Navigating back to global settings",
+                                        varOOBTextId: "btnBackToGlobalSettings_Announcement"
+                                    },
+                                    With(
+                                        {
+                                            varLocalizedText: LookUp(
+                                                colLocalization,
+                                                OOBTextID = varOOBTextId,
+                                                LocalizedText
+                                            )
+                                        },
+                                        Coalesce(
+                                            varLocalizedText,
+                                            varDefault
+                                        )
+                                    )
+                                )
+                            },
+                            If(
+                                locScreenReaderAnnouncedText = varAnnouncedText,
+                                Concatenate(
+                                    varAnnouncedText,
+                                    " "
+                                ),
+                                varAnnouncedText
+                            )
+                        )
+                    }
+                );
+                //screen reader end
+                Navigate(
+                    'Mobile Global Settings Screen',
+                    ScreenTransition.Fade
+                )
+            PaddingLeft: =0
+            PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+            PressedColor: =gblAppStyles.ButtonTransparent.PressedColor
+            PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+            RadiusBottomLeft: =gblAppStyles.ButtonTransparent.RadiusBottomLeft
+            RadiusBottomRight: =gblAppStyles.ButtonTransparent.RadiusBottomRight
+            RadiusTopLeft: =gblAppStyles.ButtonTransparent.RadiusTopLeft
+            RadiusTopRight: =gblAppStyles.ButtonTransparent.RadiusTopRight
+            Size: =gblAppStyles.ButtonTransparent.Size
+            Text: |-
+                =With(
+                    {
+                        varDefault: "Back to global settings",
+                        varOOBTextId: "_translateCommon__BackToGlobalSettings"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            Tooltip: =Self.Text
+            Width: =Parent.Width - Self.X * 2
+            X: =20
+            Y: =9
+            ZIndex: =1
+
+    conMobileWarning_Category As groupContainer:
+        Height: =Parent.Height-Self.Y
+        Visible: =locMobileDeleteSettings
+        Width: =Parent.Width
+        Y: =48
+        ZIndex: =5
+
+        lblMobileWarningBackground_Category As label:
+            BorderColor: =Transparent
+            Color: =Transparent
+            DisabledColor: =Transparent
+            Fill: |-
+                =If(
+                    gblThemeDark Or gblThemeHiCo,
+                    gblAppColors.OverlayLight,
+                    gblAppColors.OverlayDark
+                )
+            FocusedBorderThickness: =1
+            Font: =Font.'Segoe UI'
+            Height: =Parent.Height
+            OnSelect: |-
+                =UpdateContext({locMobileDeleteSettings: false});
+                Reset(chkMobileConfirmDelete_Category);
+                //screen reader start
+                UpdateContext(
+                    {
+                        locScreenReaderAnnouncedText: With(
+                            {
+                                varAnnouncedText: With(
+                                    {
+                                        varDefault: "Cancelling the deletion and closing the dialog",
+                                        varOOBTextId: "imgCloseWarning_Announcement"
+                                    },
+                                    With(
+                                        {
+                                            varLocalizedText: LookUp(
+                                                colLocalization,
+                                                OOBTextID = varOOBTextId,
+                                                LocalizedText
+                                            )
+                                        },
+                                        Coalesce(
+                                            varLocalizedText,
+                                            varDefault
+                                        )
+                                    )
+                                )
+                            },
+                            If(
+                                locScreenReaderAnnouncedText = varAnnouncedText,
+                                Concatenate(
+                                    varAnnouncedText,
+                                    " "
+                                ),
+                                varAnnouncedText
+                            )
+                        )
+                    }
+                );
+                //screen reader end
+            Size: =gblAppStyles.Label.Size.Medium
+            TabIndex: |-
+                =If(
+                    true,
+                    -1,
+                    0
+                )
+            Text: |-
+                =With(
+                    {
+                        varDefault: "Overlay for warning dialog",
+                        varOOBTextId: "lblWarningBackground_Settings__locText"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            Tooltip: =Self.Text
+            Width: =Parent.Width
+            ZIndex: =1
+
+        lblMobileWarningContainer_Category As label:
+            BorderColor: =gblAppStyles.TextInput.Color
+            BorderThickness: =If(gblThemeHiCo, 1, 0)
+            Color: =Transparent
+            DisabledColor: =Transparent
+            Fill: =gblAppStyles.TextInput.Fill
+            Font: =Font.'Segoe UI'
+            Height: =250
+            Size: =gblAppStyles.Label.Size.Medium
+            Text: |-
+                =With(
+                    {
+                        varDefault: "Container for warning dialog",
+                        varOOBTextId: "lblWarningContainer_Settings__locText"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            Width: =Parent.Width
+            X: =(Parent.Width - Self.Width) / 2
+            Y: =Parent.Height - Self.Height
+            ZIndex: =2
+
+        lblMobileWarningHeader_Category As label:
+            BorderColor: =gblAppStyles.Label.BorderColor
+            BorderThickness: =gblAppStyles.Label.BorderThickness
+            Color: =gblAppStyles.Label.Color
+            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+            DisabledColor: =gblAppStyles.Label.DisabledColor
+            DisabledFill: =gblAppStyles.Label.DisabledFill
+            Fill: =gblAppStyles.Label.Fill
+            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            FontWeight: =FontWeight.Bold
+            Height: =56
+            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+            HoverColor: =gblAppStyles.Label.HoverColor
+            HoverFill: =gblAppStyles.Label.HoverFill
+            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+            PressedColor: =gblAppStyles.Label.PressedColor
+            PressedFill: =gblAppStyles.Label.PressedFill
+            Size: =gblAppStyles.Label.Size.Large
+            Text: |-
+                =With(
+                    {
+                        varDefault: "Are you sure you want to delete this category?",
+                        varOOBTextId: "_translateCommon__DeleteCategoryWarningHeaderText",
+                        varParam0: Blank()
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        If(
+                            IsBlankOrError(varParam0),
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            ),
+                            Coalesce(
+                                Substitute(
+                                    varLocalizedText,
+                                    "{0}",
+                                    Text(varParam0)
+                                ),
+                                varDefault
+                            )
+                        )
+                    )
+                )
+            Tooltip: =Self.Text
+            Width: =lblMobileWarningContainer_Category.Width - 40
+            X: =(Parent.Width - Self.Width) / 2
+            Y: =lblMobileWarningContainer_Category.Y + 20
+            ZIndex: =3
+
+        lblMobileWarningMessage_Category As label:
+            BorderColor: =gblAppStyles.Label.BorderColor
+            BorderThickness: =gblAppStyles.Label.BorderThickness
+            Color: =gblAppStyles.Label.Color
+            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+            DisabledColor: =gblAppStyles.Label.DisabledColor
+            DisabledFill: =gblAppStyles.Label.DisabledFill
+            Fill: =gblAppStyles.Label.Fill
+            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            Height: =44
+            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+            HoverColor: =gblAppStyles.Label.HoverColor
+            HoverFill: =gblAppStyles.Label.HoverFill
+            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+            PressedColor: =gblAppStyles.Label.PressedColor
+            PressedFill: =gblAppStyles.Label.PressedFill
+            Size: =gblAppStyles.Label.Size.Medium
+            Text: |-
+                =With(
+                    {
+                        varDefault: "All existing work items using this category will be reassigned the category “None.”",
+                        varOOBTextId: "_translateCommon__DeleteCategoryWarningMessage",
+                        varParam0: Blank()
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        If(
+                            IsBlankOrError(varParam0),
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            ),
+                            Coalesce(
+                                Substitute(
+                                    varLocalizedText,
+                                    "{0}",
+                                    Text(varParam0)
+                                ),
+                                varDefault
+                            )
+                        )
+                    )
+                )
+            Tooltip: =Self.Text
+            VerticalAlign: =VerticalAlign.Top
+            Width: =lblMobileWarningContainer_Category.Width - 40
+            X: =lblMobileWarningHeader_Category.X
+            Y: =lblMobileWarningHeader_Category.Y + lblMobileWarningHeader_Category.Height
+            ZIndex: =4
+
+        btnMobileCancelDelete_Category As button:
+            Align: =Align.Left
+            BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+            BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+            Color: =gblAppStyles.ButtonTransparent.Color
+            DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+            DisabledColor: =gblAppStyles.ButtonTransparent.DisabledColor
+            DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+            Fill: =gblAppStyles.ButtonTransparent.Fill
+            FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            Height: =32
+            HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+            HoverColor: =gblAppStyles.ButtonTransparent.HoverColor
+            HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+            OnSelect: |-
+                =UpdateContext({locMobileDeleteSettings: false});
+                Reset(chkMobileConfirmDelete_Category);
+                //screen reader start
+                UpdateContext(
+                    {
+                        locScreenReaderAnnouncedText: With(
+                            {
+                                varAnnouncedText: With(
+                                    {
+                                        varDefault: "Cancelling the deletion and closing the dialog",
+                                        varOOBTextId: "imgCloseWarning_Announcement"
+                                    },
+                                    With(
+                                        {
+                                            varLocalizedText: LookUp(
+                                                colLocalization,
+                                                OOBTextID = varOOBTextId,
+                                                LocalizedText
+                                            )
+                                        },
+                                        Coalesce(
+                                            varLocalizedText,
+                                            varDefault
+                                        )
+                                    )
+                                )
+                            },
+                            If(
+                                locScreenReaderAnnouncedText = varAnnouncedText,
+                                Concatenate(
+                                    varAnnouncedText,
+                                    " "
+                                ),
+                                varAnnouncedText
+                            )
+                        )
+                    }
+                );
+                //screen reader end
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0.00
+            PaddingTop: =0
+            PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+            PressedColor: =gblAppStyles.ButtonTransparent.PressedColor
+            PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+            RadiusBottomLeft: =gblAppStyles.ButtonTransparent.RadiusBottomLeft
+            RadiusBottomRight: =gblAppStyles.ButtonTransparent.RadiusBottomRight
+            RadiusTopLeft: =gblAppStyles.ButtonTransparent.RadiusTopLeft
+            RadiusTopRight: =gblAppStyles.ButtonTransparent.RadiusTopRight
+            Size: =gblAppStyles.ButtonSecondary.Size
+            TabIndex: |-
+                =If(
+                    Self.Visible,
+                    0,
+                    -1
+                )
+            Text: |-
+                =With(
+                    {
+                        varDefault: "Cancel",
+                        varOOBTextId: "btnCancelDelete_Settings__locText"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            Tooltip: |-
+                =With(
+                    {
+                        varDefault: "Click to cancel deletion",
+                        varOOBTextId: "btnCancelDelete_Settings__locTooltip"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            Width: =97.90
+            X: =28
+            Y: =Parent.Height - Self.Height - 28
+            ZIndex: =6
+
+        chkMobileConfirmDelete_Category As checkbox:
+            BorderColor: =gblAppStyles.Checkbox.BorderColor
+            BorderThickness: =gblAppStyles.Checkbox.BorderThickness
+            CheckboxBackgroundFill: =gblAppStyles.Checkbox.CheckboxBackgroundFill
+            CheckboxBorderColor: =gblAppStyles.Checkbox.CheckboxBorderColor
+            CheckboxSize: =25
+            CheckmarkFill: =gblAppStyles.Checkbox.CheckmarkFill
+            Color: =gblAppStyles.Checkbox.Color
+            FocusedBorderColor: =gblAppStyles.Checkbox.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Checkbox.BorderThickness
+            Font: =Font.'Segoe UI'
+            HoverBorderColor: =gblAppStyles.Checkbox.HoverBorderColor
+            HoverColor: =gblAppStyles.Checkbox.HoverColor
+            HoverFill: =gblAppStyles.Checkbox.HoverFill
+            PaddingRight: =0.00
+            PaddingTop: =0.00
+            PressedBorderColor: =gblAppStyles.Checkbox.PressedBorderColor
+            PressedColor: =gblAppStyles.Checkbox.PressedColor
+            PressedFill: =gblAppStyles.Checkbox.PressedFill
+            Size: =gblAppStyles.Checkbox.Size
+            TabIndex: |-
+                =If(
+                    Self.Visible,
+                    0,
+                    -1
+                )
+            Text: |-
+                =With(
+                    {
+                        varDefault: "I understand.",
+                        varOOBTextId: "chkConfirmDelete_Settings__locText"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            Tooltip: |-
+                =With(
+                    {
+                        varDefault: "Check to indicate you understand the warning message",
+                        varOOBTextId: "chkConfirmDelete_Settings__locTooltip"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            Width: =174.83
+            X: =lblMobileWarningMessage_Category.X 
+            Y: =lblMobileWarningMessage_Category.Y + lblMobileWarningMessage_Category.Height
+            ZIndex: =7
+
+        btnMobileConfirmDelete_Category As button:
+            Align: =Align.Right
+            BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+            BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+            Color: =gblAppStyles.ButtonTransparent.Color
+            DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+            DisabledColor: =gblAppStyles.ButtonTransparent.DisabledColor
+            DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+            DisplayMode: |-
+                =If(
+                    chkMobileConfirmDelete_Category.Value,
+                    DisplayMode.Edit,
+                    DisplayMode.Disabled
+                )
+            Fill: =gblAppStyles.ButtonTransparent.Fill
+            FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            Height: =32
+            HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+            HoverColor: =gblAppStyles.ButtonTransparent.HoverColor
+            HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+            OnSelect: |-
+                =Remove(
+                    colMobileCategories,
+                    LookUp(
+                        colMobileCategories,
+                        Order = galMobileCategories.Selected.Order
+                    )
+                );
+                If(
+                    !IsBlank(galMobileCategories.Selected.ID),
+                    Remove(
+                        'Project Work Item Categories',
+                        LookUp(
+                            'Project Work Item Categories',
+                            'Project Work Item Category' = galMobileCategories.Selected.ID
+                        )
+                    );
+                    Clear(colMobileCategories);
+                    ForAll(
+                        Filter(
+                            'Project Work Item Categories',
+                            'Project Work Item Categories (Views)'.'Active Project Work Item Categories'
+                        ),
+                        Collect(
+                            colMobileCategories,
+                            {
+                                CategoryName: Name,
+                                CategoryColor: Color,
+                                DarkColor: 'Color Dark',
+                                ID: 'Project Work Item Category',
+                                Order: CountRows(colMobileCategories) + 1
+                            }
+                        )
+                    )
+                );
+                UpdateContext({locMobileDeleteSettings: false});
+                Reset(chkMobileConfirmDelete_Category);
+                //screen reader start
+                UpdateContext(
+                    {
+                        locScreenReaderAnnouncedText: With(
+                            {
+                                varAnnouncedText: With(
+                                    {
+                                        varDefault: "The category has been deleted",
+                                        varOOBTextId: "btnConfirmCategoryDelete_Announcement"
+                                    },
+                                    With(
+                                        {
+                                            varLocalizedText: LookUp(
+                                                colLocalization,
+                                                OOBTextID = varOOBTextId,
+                                                LocalizedText
+                                            )
+                                        },
+                                        Coalesce(
+                                            varLocalizedText,
+                                            varDefault
+                                        )
+                                    )
+                                )
+                            },
+                            If(
+                                locScreenReaderAnnouncedText = varAnnouncedText,
+                                Concatenate(
+                                    varAnnouncedText,
+                                    " "
+                                ),
+                                varAnnouncedText
+                            )
+                        )
+                    }
+                );
+                //screen reader end
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+            PressedColor: =gblAppStyles.ButtonTransparent.PressedColor
+            PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+            RadiusBottomLeft: =gblAppStyles.ButtonTransparent.RadiusBottomLeft
+            RadiusBottomRight: =gblAppStyles.ButtonTransparent.RadiusBottomRight
+            RadiusTopLeft: =gblAppStyles.ButtonTransparent.RadiusTopLeft
+            RadiusTopRight: =gblAppStyles.ButtonTransparent.RadiusTopRight
+            Size: =gblAppStyles.ButtonSecondary.Size
+            TabIndex: |-
+                =If(
+                    Self.Visible,
+                    0,
+                    -1
+                )
+            Text: |-
+                =With(
+                    {
+                        varDefault: "Delete",
+                        varOOBTextId: "btnConfirmDelete_Settings__locText"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            Tooltip: |-
+                =With(
+                    {
+                        varDefault: "Click to delete category",
+                        varOOBTextId: "_translateCommon__DeleteCategoryTooltip",
+                        varParam0: Blank()
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        If(
+                            IsBlankOrError(varParam0),
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            ),
+                            Coalesce(
+                                Substitute(
+                                    varLocalizedText,
+                                    "{0}",
+                                    Text(varParam0)
+                                ),
+                                varDefault
+                            )
+                        )
+                    )
+                )
+            Width: =97.90
+            X: =Parent.Width - Self.Width - 28 
+            Y: =Parent.Height - Self.Height - 28
+            ZIndex: =8
+

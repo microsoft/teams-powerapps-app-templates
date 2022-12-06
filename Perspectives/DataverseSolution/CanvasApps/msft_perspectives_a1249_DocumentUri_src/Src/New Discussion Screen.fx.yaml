@@ -1,0 +1,1453 @@
+"'New Discussion Screen' As screen":
+    Fill: =gblAppStyles.Background.Fill
+    OnVisible: |-
+        =Reset(txtNewDiscussionTitle);
+        Reset(txtNewDiscussionDesc);
+        SetFocus(If(txtNewDiscussionLink.Visible,txtNewDiscussionLink,txtNewDiscussionTitle))
+
+    conNewDiscussion As groupContainer:
+        DisplayMode: =DisplayMode.Edit
+        Height: =Parent.Height
+        LayoutAlignItems: =LayoutAlignItems.Start
+        LayoutDirection: =LayoutDirection.Horizontal
+        LayoutJustifyContent: =LayoutJustifyContent.Start
+        LayoutMode: =LayoutMode.Manual
+        LayoutOverflowX: =LayoutOverflow.Hide
+        LayoutOverflowY: =LayoutOverflow.Hide
+        Width: =Parent.Width
+        X: =0*1
+        Y: =0*1
+        ZIndex: =1
+
+        cnvNewDiscussion As fluidGrid.fluidGridWithBlankCard:
+            BorderThickness: =0
+            Height: =Parent.Height - Self.Y
+            Width: =Parent.Width
+            X: =0*1
+            Y: =0*1
+            ZIndex: =1
+
+            dtcNewDiscussion As dataCard:
+                BorderColor: =RGBA(0, 0, 0, 1)
+                BorderStyle: =BorderStyle.Solid
+                BorderThickness: =0
+                DisplayMode: =DisplayMode.Edit
+                Fill: =RGBA(0, 0, 0, 0)
+                Height: =btnSave_Discussion.Y + btnSave_Discussion.Height + 20
+                Width: =Parent.Width
+                X: =0*1
+                Y: =0*1
+                ZIndex: =1
+
+                btnSave_Discussion As button:
+                    BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+                    BorderThickness: =gblAppStyles.ButtonPrimary.BorderThickness
+                    Color: =gblAppStyles.ButtonPrimary.Color
+                    DisabledBorderColor: =gblAppStyles.ButtonPrimary.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.ButtonPrimary.DisabledColor
+                    DisabledFill: =gblAppStyles.ButtonPrimary.DisabledFill
+                    DisplayMode: |-
+                        =If(
+                            IsBlank(txtNewDiscussionTitle.Text) || IsBlank(txtNewDiscussionDesc.Text),
+                            DisplayMode.Disabled,
+                            If(
+                                locEditDiscussion,
+                                If(
+                                    locSelectedDiscussion.Name = txtNewDiscussionTitle.Text && locSelectedDiscussion.Description = txtNewDiscussionDesc.Text,
+                                    DisplayMode.Disabled,
+                                    DisplayMode.Edit
+                                )
+                            )
+                        )
+                    Fill: =gblAppStyles.ButtonPrimary.Fill
+                    FocusedBorderColor: =gblAppStyles.ButtonPrimary.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.ButtonPrimary.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Bold
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.ButtonPrimary.HoverBorderColor
+                    HoverColor: =gblAppStyles.ButtonPrimary.HoverColor
+                    HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+                    OnSelect: |-
+                        =If(
+                            locEditDiscussion,
+                            If(
+                                IsError(
+                                    Patch(
+                                        Discussions,
+                                        locSelectedDiscussion,
+                                        {
+                                            Name: txtNewDiscussionTitle.Text,
+                                            Description: txtNewDiscussionDesc.Text
+                                        }
+                                    )
+                                ),
+                                Notify("There was a problem saving your data. Please try again")
+                            ),
+                            If(
+                                IsError(
+                                    Patch(
+                                        Discussions,
+                                        Defaults(Discussions),
+                                        {
+                                            Name: txtNewDiscussionTitle.Text,
+                                            Description: txtNewDiscussionDesc.Text,
+                                            'Discussion Topic': locSelectedTopic
+                                        }
+                                    )
+                                ),
+                                Notify("There was a problem saving your data. Please try again")
+                            )
+                        );
+                        Navigate(
+                            'Discussions Screen',
+                            ScreenTransition.Fade
+                        )
+                    PressedBorderColor: =gblAppStyles.ButtonPrimary.PressedBorderColor
+                    PressedColor: =gblAppStyles.ButtonPrimary.PressedColor
+                    PressedFill: =gblAppStyles.ButtonPrimary.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.ButtonPrimary.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+                    Size: =gblAppStyles.ButtonPrimary.Size
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Save",
+                                varOOBTextId: "btnSave_Discussion__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Tooltip: =Self.Text
+                    Width: =100*1
+                    X: =lblNewDiscussionTitle.X + lblNewDiscussionTitle.Width - Self.Width
+                    Y: =txtNewDiscussionDesc.Y + txtNewDiscussionDesc.Height + 20
+                    ZIndex: =1
+
+                btnCancel_Discussion As button:
+                    BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+                    BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+                    Color: =gblAppStyles.ButtonSecondary.Color
+                    DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+                    DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+                    Fill: =gblAppStyles.ButtonSecondary.Fill
+                    FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+                    HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+                    HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+                    OnSelect: |-
+                        =If(
+                            locEditDiscussion,
+                            Navigate(
+                                'Responses Screen',
+                                ScreenTransition.Fade
+                            ),
+                            Navigate(
+                                'Discussions Screen',
+                                ScreenTransition.Fade
+                            )
+                        )
+                    PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+                    PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+                    PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.ButtonSecondary.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.ButtonSecondary.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.ButtonSecondary.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.ButtonSecondary.RadiusTopRight
+                    Size: =gblAppStyles.ButtonSecondary.Size
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Cancel",
+                                varOOBTextId: "btnCancel_Discussion__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Tooltip: =Self.Text
+                    Width: =100*1
+                    X: =btnSave_Discussion.X - Self.Width - 20
+                    Y: =btnSave_Discussion.Y
+                    ZIndex: =2
+
+                imgDeleteDiscussion As image:
+                    AccessibleLabel: |-
+                        =With({varDefault: "Delete Discussion",varOOBTextId: "imgDeleteDiscussion__locAccessibleText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Height: =22*1
+                    Image: |-
+                        =With(
+                            {
+                                varImageRecord: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Delete"
+                                ),
+                                varColor: If(
+                                    Self.DisplayMode = DisplayMode.Disabled,
+                                    gblAppStyles.Icons.DisabledColor,
+                                    gblAppStyles.Icons.Color_Red
+                                )
+                            },
+                            With(
+                                {
+                                    varImageData: Concatenate(
+                                        "data:image/svg+xml;utf8, ",
+                                        EncodeUrl(
+                                            Concatenate(
+                                                "<svg viewBox='",
+                                                varImageRecord.staticIconViewbox,
+                                                "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                varImageRecord.staticIconPath,
+                                                "' fill='#",
+                                                varColor,
+                                                "'/></svg>"
+                                            )
+                                        )
+                                    )
+                                },
+                                varImageData
+                            )
+                        )
+                    OnSelect: |-
+                        =UpdateContext({locDeleteDiscussionWarning: true})
+                    TabIndex: |-
+                        =If(
+                            true,
+                            -1,
+                            0
+                        )
+                    Tooltip: =Self.AccessibleLabel & "Icon"
+                    Visible: |-
+                        =(LookUp(
+                            Discussions,
+                            Discussion = locSelectedDiscussion.Discussion,
+                            'Created By'
+                        ).'Primary Email' = User().Email || (gblTeamsTabContext && gblIsAdmin)) && locEditDiscussion
+                    Width: =22*1
+                    X: |-
+                        =If(
+                            'New Discussion Screen'.Size = ScreenSize.ExtraLarge || 'New Discussion Screen'.Size = ScreenSize.Large,
+                            btnDeleteDiscussion.X + 5,
+                            Parent.Width - Self.Width - 20
+                        )
+                    Y: |-
+                        =If(
+                            'New Discussion Screen'.Size = ScreenSize.ExtraLarge || 'New Discussion Screen'.Size = ScreenSize.Large,
+                            btnDeleteDiscussion.Y + (btnDeleteDiscussion.Height - Self.Height) / 2,
+                            lblBack_NewDiscussion.Y + (lblBack_NewDiscussion.Height - Self.Height)/2
+                        )
+                    ZIndex: =3
+
+                btnDeleteDiscussion As button:
+                    BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                    BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+                    Color: =gblAppStyles.ButtonTransparent.Color
+                    DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.ButtonTransparent.DisabledColor
+                    DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                    Fill: =gblAppStyles.ButtonTransparent.Fill
+                    FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                    HoverColor: =gblAppStyles.ButtonTransparent.HoverColor
+                    HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+                    OnSelect: |-
+                        =Reset(chkConfirmDelete_Discussion);
+                        UpdateContext({locDeleteDiscussionWarning: true})
+                    PaddingLeft: =25
+                    PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                    PressedColor: =gblAppStyles.ButtonTransparent.PressedColor
+                    PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.ButtonTransparent.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.ButtonTransparent.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.ButtonTransparent.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.ButtonTransparent.RadiusTopRight
+                    Size: =gblAppStyles.ButtonTransparent.Size
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Delete",
+                                varOOBTextId: "btnDeleteDiscussion__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Tooltip: =Self.Text
+                    Visible: |-
+                        =('New Discussion Screen'.Size = ScreenSize.ExtraLarge || 'New Discussion Screen'.Size = ScreenSize.Large) && (LookUp(
+                            Discussions,
+                            Discussion = locSelectedDiscussion.Discussion,
+                            'Created By'
+                        ).'Primary Email' = User().Email || (gblTeamsTabContext && gblIsAdmin)) && locEditDiscussion
+                    Width: =100*1
+                    X: =btnCancel_Discussion.X - Self.Width - 20
+                    Y: =btnSave_Discussion.Y
+                    ZIndex: =4
+
+                txtNewDiscussionDesc As text:
+                    AccessibleLabel: =Self.HintText
+                    BorderColor: =gblAppStyles.TextInput.BorderColor
+                    BorderThickness: =gblAppStyles.TextInput.BorderThickness
+                    Color: =gblAppStyles.TextInput.Color
+                    Default: |-
+                        =If(
+                            locEditDiscussion,
+                            locSelectedDiscussion.Description,
+                            locFetchDiscussion,
+                            locFetchedDiscussion.body.content,
+                            locAddDiscussion,
+                            ""
+                        )
+                    DisabledBorderColor: =gblAppStyles.TextInput.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.TextInput.DisabledColor
+                    DisabledFill: =gblAppStyles.TextInput.DisabledFill
+                    Fill: =gblAppStyles.TextInput.Fill
+                    FocusedBorderColor: =gblAppStyles.TextInput.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.TextInput.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*6
+                    HintText: |-
+                        =With(
+                            {
+                                varDefault: "Type an initial post for others to respond to, giving context on what you’d like to discuss. Please avoid including any personal or sensitive information.",
+                                varOOBTextId: "txtNewDiscussionDesc__locHintText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    HoverBorderColor: =gblAppStyles.TextInput.HoverBorderColor
+                    HoverColor: =gblAppStyles.TextInput.HoverColor
+                    HoverFill: =gblAppStyles.TextInput.HoverFill
+                    Mode: =TextMode.MultiLine
+                    PressedBorderColor: =gblAppStyles.TextInput.PressedBorderColor
+                    PressedColor: =gblAppStyles.TextInput.PressedColor
+                    PressedFill: =gblAppStyles.TextInput.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.TextInput.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.TextInput.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.TextInput.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.TextInput.RadiusTopRight
+                    Size: =gblAppStyles.TextInput.Size
+                    Tooltip: =Self.HintText
+                    Width: =lblNewDiscussionTitle.Width
+                    X: =lblNewDiscussionTitle.X
+                    Y: =lblNewDiscussionDesc.Y + lblNewDiscussionDesc.Height
+                    ZIndex: =5
+
+                lblNewDiscussionDesc As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Context *",
+                                varOOBTextId: "lblNewDiscussionDesc__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Tooltip: =Self.Text
+                    Width: =lblNewDiscussionTitle.Width
+                    Wrap: =false
+                    X: =lblNewDiscussionTitle.X
+                    Y: =txtNewDiscussionTitle.Y + txtNewDiscussionTitle.Height + 20
+                    ZIndex: =6
+
+                txtNewDiscussionTitle As text:
+                    AccessibleLabel: =Self.HintText
+                    BorderColor: =gblAppStyles.TextInput.BorderColor
+                    BorderThickness: =gblAppStyles.TextInput.BorderThickness
+                    Color: =gblAppStyles.TextInput.Color
+                    Default: |-
+                        =If(
+                            locEditDiscussion,
+                            locSelectedDiscussion.Name,
+                            locFetchDiscussion,
+                            locFetchedDiscussion.subject,
+                            locAddDiscussion,
+                            ""
+                        )
+                    DisabledBorderColor: =gblAppStyles.TextInput.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.TextInput.DisabledColor
+                    DisabledFill: =gblAppStyles.TextInput.DisabledFill
+                    Fill: =gblAppStyles.TextInput.Fill
+                    FocusedBorderColor: =gblAppStyles.TextInput.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.TextInput.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HintText: |-
+                        =With(
+                            {
+                                varDefault: "Type a short phrase or question to frame the discussion",
+                                varOOBTextId: "txtNewDiscussionTitle__locHintText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    HoverBorderColor: =gblAppStyles.TextInput.HoverBorderColor
+                    HoverColor: =gblAppStyles.TextInput.HoverColor
+                    HoverFill: =gblAppStyles.TextInput.HoverFill
+                    PressedBorderColor: =gblAppStyles.TextInput.PressedBorderColor
+                    PressedColor: =gblAppStyles.TextInput.PressedColor
+                    PressedFill: =gblAppStyles.TextInput.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.TextInput.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.TextInput.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.TextInput.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.TextInput.RadiusTopRight
+                    Size: =gblAppStyles.TextInput.Size
+                    Tooltip: =Self.HintText
+                    Width: =lblNewDiscussionTitle.Width
+                    X: =lblNewDiscussionTitle.X
+                    Y: =lblNewDiscussionTitle.Y + lblNewDiscussionTitle.Height
+                    ZIndex: =7
+
+                lblNewDiscussionTitle As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Title *",
+                                varOOBTextId: "lblNewDiscussionTitle__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Tooltip: =Self.Text
+                    Width: |-
+                        =Min(
+                            500 * 1,
+                            Parent.Width - 20*2
+                        )
+                    Wrap: =false
+                    X: =lblNewDiscussion.X + (lblNewDiscussion.Width - Self.Width)/2
+                    Y: |-
+                        =If(
+                            locFetchDiscussion,
+                            txtNewDiscussionLink.Y + txtNewDiscussionLink.Height + 20,
+                            lblNewDiscussion.Y + lblNewDiscussion.Height + 20
+                        )
+                    ZIndex: =8
+
+                lblNewDiscussion As label:
+                    Align: =Align.Center
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Large
+                    Text: |-
+                        =If(
+                            locEditDiscussion,
+                            With(
+                            {
+                                varDefault: "Edit discussion",
+                                varOOBTextId: "lblNewDiscussion__locText1"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        ),
+                            With(
+                            {
+                                varDefault: "Begin a new dicussion",
+                                varOOBTextId: "lblNewDiscussion__locText2"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                        )
+                    Tooltip: =Self.Text
+                    Width: =Parent.Width
+                    Wrap: =false
+                    X: =0*1
+                    Y: =imgCollaboration.Y + imgCollaboration.Height + 20
+                    ZIndex: =9
+
+                txtNewDiscussionLink As text:
+                    AccessibleLabel: =Self.HintText
+                    BorderColor: =gblAppStyles.TextInput.BorderColor
+                    BorderThickness: =gblAppStyles.TextInput.BorderThickness
+                    Color: =gblAppStyles.TextInput.Color
+                    Default: |-
+                        =If(
+                            locEditDiscussion,
+                            locSelectedDiscussion.Name,
+                            locFetchDiscussion || locAddDiscussion,
+                            ""
+                        )
+                    DisabledBorderColor: =gblAppStyles.TextInput.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.TextInput.DisabledColor
+                    DisabledFill: =gblAppStyles.TextInput.DisabledFill
+                    Fill: =gblAppStyles.TextInput.Fill
+                    FocusedBorderColor: =gblAppStyles.TextInput.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.TextInput.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HintText: |-
+                        =With(
+                            {
+                                varDefault: "Type link here",
+                                varOOBTextId: "txtNewDiscussionLink__locHintText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    HoverBorderColor: =gblAppStyles.TextInput.HoverBorderColor
+                    HoverColor: =gblAppStyles.TextInput.HoverColor
+                    HoverFill: =gblAppStyles.TextInput.HoverFill
+                    OnChange: |-
+                        =UpdateContext(
+                            {
+                                locFetchedDiscussion: LookUp(
+                                //First(
+                                    //Filter(
+                                    MicrosoftTeams.GetMessagesFromChannel(
+                                        GUID(
+                                            Left(
+                                                Right(
+                                                    Self.Text,
+                                                    Len(Self.Text) - Find(
+                                                        "groupId",
+                                                        Self.Text
+                                                    ) - 7
+                                                ),
+                                                Find(
+                                                    "parent",
+                                                    Right(
+                                                        Self.Text,
+                                                        Len(Self.Text) - Find(
+                                                            "groupId",
+                                                            Self.Text
+                                                        ) - 7
+                                                    )
+                                                ) - 2
+                                            )
+                                        ),
+                                        Substitute(
+                                            Substitute(
+                                                Left(
+                                                    Right(
+                                                        Self.Text,
+                                                        Len(Self.Text) - Find(
+                                                            "message/",
+                                                            Self.Text
+                                                        ) - 7
+                                                    ),
+                                                    Find(
+                                                        "tacv2/",
+                                                        Right(
+                                                            Self.Text,
+                                                            Len(Self.Text) - Find(
+                                                                "message/",
+                                                                Self.Text
+                                                            ) - 7
+                                                        )
+                                                    ) - 2 + 6
+                                                ),
+                                                "%3A",
+                                                ":"
+                                            ),
+                                            "%40",
+                                            "@"
+                                        )
+                                    ).value,
+                                    etag = Left(
+                                        Right(
+                                            Self.Text,
+                                            Len(Self.Text) - Find(
+                                                "tacv2/",
+                                                Self.Text
+                                            ) - 5
+                                        ),
+                                        Find(
+                                            "?tenant",
+                                            Right(
+                                                Self.Text,
+                                                Len(Self.Text) - Find(
+                                                    "tacv2/",
+                                                    Self.Text
+                                                ) - 7
+                                            )
+                                        ) + 1
+                                    )
+                                )
+                                //)
+                            }
+                        )
+                    PressedBorderColor: =gblAppStyles.TextInput.PressedBorderColor
+                    PressedColor: =gblAppStyles.TextInput.PressedColor
+                    PressedFill: =gblAppStyles.TextInput.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.TextInput.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.TextInput.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.TextInput.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.TextInput.RadiusTopRight
+                    Size: =gblAppStyles.TextInput.Size
+                    Tooltip: =Self.HintText
+                    Visible: =locFetchDiscussion
+                    Width: =lblNewDiscussionLink.Width
+                    X: =lblNewDiscussionLink.X
+                    Y: =lblNewDiscussionLink.Y + lblNewDiscussionLink.Height
+                    ZIndex: =10
+
+                lblNewDiscussionLink As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Teams conversation link *",
+                                varOOBTextId: "lblNewDiscussionLink__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Tooltip: =Self.Text
+                    Visible: =locFetchDiscussion
+                    Width: |-
+                        =Min(
+                            500 * 1,
+                            Parent.Width - 20*2
+                        )
+                    Wrap: =false
+                    X: =lblNewDiscussion.X + (lblNewDiscussion.Width - Self.Width)/2
+                    Y: =lblNewDiscussion.Y + lblNewDiscussion.Height + 20
+                    ZIndex: =11
+
+                imgCollaboration As image:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "Collaboration image",
+                                varOOBTextId: "imgCollaboration__locAccessibleText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Height: =175*1
+                    Image: =Collaboration
+                    Width: =275*1
+                    X: =(Parent.Width - Self.Width)/2
+                    Y: =40
+                    ZIndex: =12
+
+                imgBack_NewDiscussion As image:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "Click to go back",
+                                varOOBTextId: "imgBack_About__locAccessibleText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    BorderColor: =gblAppStyles.ButtonPrimary.Fill
+                    DisabledFill: |-
+                        =With(
+                            {
+                                varImageIsCategory: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Back"
+                                ).staticIconIsCategory
+                            },
+                            If(
+                                varImageIsCategory,
+                                gblAppStyles.Icons.DisabledFill_Category,
+                                Transparent
+                            )
+                        )
+                    Fill: |-
+                        =With(
+                            {
+                                varImageIsCategory: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Back"
+                                ).staticIconIsCategory
+                            },
+                            If(
+                                varImageIsCategory,
+                                gblAppStyles.Icons.Fill_Category,
+                                Transparent
+                            )
+                        )
+                    Height: =22*1
+                    Image: |
+                        =With(
+                            {
+                                varImageRecord: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Back"
+                                ),
+                                varColor: If(
+                                    Self.DisplayMode = DisplayMode.Disabled,
+                                    gblAppStyles.Icons.DisabledColor,
+                                    gblAppStyles.Icons.Color
+                                )
+                            },
+                            With(
+                                {
+                                    varImageData: Concatenate(
+                                        "data:image/svg+xml;utf8, ",
+                                        EncodeUrl(
+                                            Concatenate(
+                                                "<svg viewBox='",
+                                                varImageRecord.staticIconViewbox,
+                                                "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                varImageRecord.staticIconPath,
+                                                "' fill='#",
+                                                varColor,
+                                                "'/></svg>"
+                                            )
+                                        )
+                                    )
+                                },
+                                varImageData
+                            )
+                        )
+                    OnSelect: |-
+                        =If(
+                            locEditDiscussion,
+                            Navigate(
+                                'Responses Screen',
+                                ScreenTransition.Fade
+                            ),
+                            Navigate(
+                                'Discussions Screen',
+                                ScreenTransition.Fade
+                            )
+                        )
+                    RadiusBottomLeft: =5
+                    RadiusBottomRight: =5
+                    RadiusTopLeft: =5
+                    RadiusTopRight: =5
+                    TabIndex: =0
+                    Tooltip: =Self.AccessibleLabel
+                    Width: =22*1
+                    X: |-
+                        =If(
+                            'New Discussion Screen'.Size = ScreenSize.ExtraLarge || 'New Discussion Screen'.Size = ScreenSize.Large,
+                            20 * 1,
+                            ('New Discussion Screen'.Width - If(
+                                'New Discussion Screen'.Size = ScreenSize.ExtraLarge || 'New Discussion Screen'.Size = ScreenSize.Large,
+                                400,
+                                'New Discussion Screen'.Width - 20
+                            )) / 2
+                        )
+                    Y: =lblBack_NewDiscussion.Y + (lblBack_NewDiscussion.Height - Self.Height) / 2 + 1
+                    ZIndex: =13
+
+                lblBack_NewDiscussion As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =40*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: |-
+                        =If(
+                            locEditDiscussion,
+                            Navigate(
+                                'Responses Screen',
+                                ScreenTransition.Fade
+                            ),
+                            Navigate(
+                                'Discussions Screen',
+                                ScreenTransition.Fade
+                            )
+                        )
+                    PaddingBottom: =0
+                    PaddingTop: =0
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Role: =TextRole.Heading1
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Back",
+                                varOOBTextId: "lblBack_About__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Tooltip: =Self.Text
+                    Width: =150*1
+                    X: =imgBack_NewDiscussion.X + imgBack_NewDiscussion.Width
+                    Y: =20*1
+                    ZIndex: =14
+
+    conWarning_EditDiscussion As groupContainer:
+        DisplayMode: =DisplayMode.Edit
+        Height: =Parent.Height-Self.Y
+        Visible: =locDeleteDiscussionWarning
+        Width: =Parent.Width 
+        Y: =0 //conAreasHeader.Y+conAreasHeader.Height+1
+        ZIndex: =2
+
+        lblWarningBackground_Discussion As label:
+            Color: =RGBA(0, 0, 0, 0)
+            DisabledColor: =RGBA(0, 0, 0, 0)
+            Fill: |-
+                =If(
+                    gblThemeDark Or gblThemeHiCo,
+                    gblAppColors.OverlayLight,
+                    gblAppColors.OverlayDark
+                )
+            FocusedBorderThickness: =1
+            Height: =Parent.Height
+            OnSelect: |-
+                =UpdateContext({locDeleteDiscussionWarning: false})
+            Size: =15.15
+            TabIndex: |-
+                =If(
+                    true,
+                    -1,
+                    0
+                )
+            Text: |-
+                =With(
+                    {
+                        varDefault: "App background when the warning message pop ups",
+                        varOOBTextId: "lblWarningBackground_Discussion__locText"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            Tooltip: =Self.Text
+            Width: =Parent.Width
+            ZIndex: =1
+
+        lblWarningContainer_Discussion As label:
+            BorderColor: =gblAppStyles.TextInput.Color
+            BorderThickness: |-
+                =If(
+                    gblThemeHiCo,
+                    1,
+                    0
+                )
+            Color: =RGBA(0, 0, 0, 0)
+            Fill: =gblAppStyles.TextInput.Fill
+            Height: |-
+                =If(
+                    'New Discussion Screen'.Size = ScreenSize.ExtraLarge || 'New Discussion Screen'.Size = ScreenSize.Large,
+                    250,
+                    250
+                )
+            Size: =15.15
+            Text: |-
+                =With({varDefault: "Background for Warning message",varOOBTextId: "lblWarningContainer_Discussion__locText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+            Tooltip: =Self.Text
+            Width: |-
+                =If(
+                    'New Discussion Screen'.Size = ScreenSize.ExtraLarge || 'New Discussion Screen'.Size = ScreenSize.Large,
+                    450,
+                    Parent.Width
+                )
+            X: =(Parent.Width - Self.Width)/2  
+            Y: |-
+                =If(
+                    'New Discussion Screen'.Size = ScreenSize.ExtraLarge || 'New Discussion Screen'.Size = ScreenSize.Large,
+                    (Parent.Height - Self.Height) / 2,
+                    Parent.Height - Self.Height
+                )
+            ZIndex: =2
+
+        lblWarningHeader_Discussion As label:
+            BorderColor: =gblAppStyles.Label.BorderColor
+            BorderThickness: =gblAppStyles.Label.BorderThickness
+            Color: =gblAppStyles.Label.Color
+            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+            DisabledColor: =gblAppStyles.Label.DisabledColor
+            DisabledFill: =gblAppStyles.Label.DisabledFill
+            Fill: =gblAppStyles.Label.Fill
+            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            FontWeight: =FontWeight.Bold
+            Height: =56
+            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+            HoverColor: =gblAppStyles.Label.HoverColor
+            HoverFill: =gblAppStyles.Label.HoverFill
+            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+            PressedColor: =gblAppStyles.Label.PressedColor
+            PressedFill: =gblAppStyles.Label.PressedFill
+            Size: =gblAppStyles.Label.Size.Large
+            Text: |-
+                =With(
+                    {
+                        varDefault: "Delete """ & locSelectedDiscussion.Name & """ discussion",
+                        varOOBTextId: "lblWarningHeader_Discussion__locText"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            Tooltip: |-
+                =With(
+                    {
+                        varDefault: "Delete """ & locSelectedTopic.Name & """ board",
+                        varOOBTextId: "lblWarningHeader_Board__locTooltipText"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            Width: =lblWarningContainer_Discussion.X + lblWarningContainer_Discussion.Width - Self.X - 60
+            X: =lblWarningContainer_Discussion.X +20
+            Y: =lblWarningContainer_Discussion.Y+20 
+            ZIndex: =3
+
+        lblWarningMessage_Discussion As label:
+            BorderColor: =gblAppStyles.Label.BorderColor
+            BorderThickness: =gblAppStyles.Label.BorderThickness
+            Color: =gblAppStyles.Label.Color
+            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+            DisabledColor: =gblAppStyles.Label.DisabledColor
+            DisabledFill: =gblAppStyles.Label.DisabledFill
+            Fill: =gblAppStyles.Label.Fill
+            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            Height: =63
+            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+            HoverColor: =gblAppStyles.Label.HoverColor
+            HoverFill: =gblAppStyles.Label.HoverFill
+            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+            PressedColor: =gblAppStyles.Label.PressedColor
+            PressedFill: =gblAppStyles.Label.PressedFill
+            Size: =gblAppStyles.Label.Size.Medium
+            Text: |-
+                =With(
+                    {
+                        varDefault: "Are you sure you want to delete this discussion? All related responses will be deleted",
+                        varOOBTextId: "lblWarningMessage_Discussion__locText"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            Tooltip: =Self.Text
+            VerticalAlign: =VerticalAlign.Top
+            Width: =lblWarningHeader_Discussion.Width + 40
+            X: =lblWarningHeader_Discussion.X
+            Y: =lblWarningHeader_Discussion.Y+lblWarningHeader_Discussion.Height 
+            ZIndex: =4
+
+        btnOkWarning_Discussion As button:
+            BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+            BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+            Color: =gblAppStyles.ButtonSecondary.Color
+            DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+            DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+            DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+            Fill: =gblAppStyles.ButtonSecondary.Fill
+            FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            Height: =32
+            HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+            HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+            HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+            OnSelect: |+
+                =Set(
+                    gblDisplayWarning,
+                    false
+                );
+                
+            PaddingBottom: =6
+            PaddingLeft: =0
+            PaddingRight: =0.00
+            PaddingTop: =6.99
+            PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+            PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+            PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+            RadiusBottomLeft: =gblAppStyles.ButtonSecondary.RadiusBottomLeft
+            RadiusBottomRight: =gblAppStyles.ButtonSecondary.RadiusBottomRight
+            RadiusTopLeft: =gblAppStyles.ButtonSecondary.RadiusTopLeft
+            RadiusTopRight: =gblAppStyles.ButtonSecondary.RadiusTopRight
+            Size: =gblAppStyles.ButtonSecondary.Size
+            Text: |-
+                =With({varDefault: "OK",varOOBTextId: "btnOkWarning_Response__locText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+            Tooltip: |-
+                =With({varDefault: "OK",varOOBTextId: "btnOkWarning_Board__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+            Visible: =gblDisplayWarning
+            Width: =97.90
+            X: =lblWarningContainer_Discussion.X+lblWarningContainer_Discussion.Width - Self.Width - 40 
+            Y: =lblWarningContainer_Discussion.Y+lblWarningContainer_Discussion.Height - Self.Height - 30 
+            ZIndex: =5
+
+        btnCancelWarning_Discussion As button:
+            BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+            BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+            Color: =gblAppStyles.ButtonSecondary.Color
+            DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+            DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+            DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+            Fill: =gblAppStyles.ButtonSecondary.Fill
+            FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            Height: =32
+            HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+            HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+            HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+            OnSelect: |-
+                =UpdateContext({locDeleteDiscussionWarning: false})
+            PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+            PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+            PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+            RadiusBottomLeft: =gblAppStyles.ButtonSecondary.RadiusBottomLeft
+            RadiusBottomRight: =gblAppStyles.ButtonSecondary.RadiusBottomRight
+            RadiusTopLeft: =gblAppStyles.ButtonSecondary.RadiusTopLeft
+            RadiusTopRight: =gblAppStyles.ButtonSecondary.RadiusTopRight
+            Size: =gblAppStyles.ButtonSecondary.Size
+            Text: |-
+                =With({varDefault: "Cancel",varOOBTextId: "btnCancelWarning_Response__locText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+            Tooltip: |-
+                =With({varDefault: "Cancel",varOOBTextId: "btnCancelWarning_Board__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+            Width: =98
+            X: =lblWarningContainer_Discussion.X+lblWarningContainer_Discussion.Width - Self.Width - Self.Width - 30 
+            Y: =lblWarningContainer_Discussion.Y+lblWarningContainer_Discussion.Height - Self.Height - 30 
+            ZIndex: =6
+
+        chkConfirmDelete_Discussion As checkbox:
+            BorderColor: =gblAppStyles.Checkbox.BorderColor
+            BorderThickness: =gblAppStyles.Checkbox.BorderThickness
+            CheckboxBackgroundFill: =gblAppStyles.Checkbox.CheckboxBackgroundFill
+            CheckboxBorderColor: =gblAppStyles.Checkbox.CheckboxBorderColor
+            CheckboxSize: =25
+            CheckmarkFill: =gblAppStyles.Checkbox.CheckmarkFill
+            Color: =gblAppStyles.Checkbox.Color
+            FocusedBorderColor: =gblAppStyles.Checkbox.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Checkbox.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            HoverBorderColor: =gblAppStyles.Checkbox.HoverBorderColor
+            HoverColor: =gblAppStyles.Checkbox.HoverColor
+            HoverFill: =gblAppStyles.Checkbox.HoverFill
+            PaddingRight: =0.00
+            PaddingTop: =0.00
+            PressedBorderColor: =gblAppStyles.Checkbox.PressedBorderColor
+            PressedColor: =gblAppStyles.Checkbox.PressedColor
+            PressedFill: =gblAppStyles.Checkbox.PressedFill
+            Size: =gblAppStyles.Checkbox.Size
+            TabIndex: =If(gblDisplayWarning,0,-1)
+            Text: |-
+                =With({varDefault: "I understand.",varOOBTextId: "chkConfirmDelete_Response__locText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+            Tooltip: |-
+                =With({varDefault: "I understand.",varOOBTextId: "chkConfirmDelete_Board__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+            Width: =174.83
+            X: =lblWarningMessage_Discussion.X 
+            Y: =lblWarningMessage_Discussion.Y+lblWarningMessage_Discussion.Height
+            ZIndex: =7
+
+        btnDeleteWarning_Discussion As button:
+            BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+            BorderThickness: =gblAppStyles.ButtonPrimary.BorderThickness
+            Color: =gblAppStyles.ButtonPrimary.Color
+            DisabledBorderColor: =gblAppStyles.ButtonPrimary.DisabledBorderColor
+            DisabledColor: =gblAppStyles.ButtonPrimary.DisabledColor
+            DisabledFill: =gblAppStyles.ButtonPrimary.DisabledFill
+            DisplayMode: |-
+                =If(
+                    chkConfirmDelete_Discussion.Value,
+                    DisplayMode.Edit,
+                    DisplayMode.Disabled
+                )
+            Fill: =gblAppStyles.ButtonPrimary.Fill
+            FocusedBorderColor: =gblAppStyles.ButtonPrimary.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.ButtonPrimary.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            Height: =32
+            HoverBorderColor: =gblAppStyles.ButtonPrimary.HoverBorderColor
+            HoverColor: =gblAppStyles.ButtonPrimary.HoverColor
+            HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+            OnSelect: |-
+                =UpdateContext({locDeleteDiscussionWarning: false});
+                Remove(
+                    Discussions,
+                    locSelectedDiscussion
+                );
+                Navigate(
+                    'Discussions Screen',
+                    ScreenTransition.Fade
+                )
+            PressedBorderColor: =gblAppStyles.ButtonPrimary.PressedBorderColor
+            PressedColor: =gblAppStyles.ButtonPrimary.PressedColor
+            PressedFill: =gblAppStyles.ButtonPrimary.PressedFill
+            RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+            RadiusBottomRight: =gblAppStyles.ButtonPrimary.RadiusBottomRight
+            RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+            RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+            Size: =gblAppStyles.ButtonSecondary.Size
+            Text: |-
+                =//If(gblWarningType="areatypechange",With({varDefault:"Update",varOOBTextId:"btnDeleteWarning__locText"},With({varLocalizedText:LookUp(colLocalization,OOBTextID=varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault))),With({varDefault:"Delete",varOOBTextId:"_translateCommon_Delete"},With({varLocalizedText:LookUp(colLocalization,OOBTextID=varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault))))
+                
+                With({varDefault: "Delete",varOOBTextId: "btnDeleteWarning_Response__locText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+            Tooltip: |-
+                =With({varDefault: "Delete",varOOBTextId: "btnDeleteWarning_Board__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+            Width: =98
+            X: =lblWarningContainer_Discussion.X+lblWarningContainer_Discussion.Width - Self.Width - 20 
+            Y: =lblWarningContainer_Discussion.Y+lblWarningContainer_Discussion.Height - Self.Height - 30 
+            ZIndex: =8
+
+        imgCancelWarning_Discussion As image:
+            AccessibleLabel: |-
+                =With({varDefault: "Click to cancel warning",varOOBTextId: "imgCancelWarning_Response__locAccessibleText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+            AutoDisableOnSelect: =false
+            BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+            BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+            DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+            DisabledFill: |-
+                =With(
+                    {
+                        varImageIsCategory: LookUp(
+                            staticIcons,
+                            staticIconName = "Sort"
+                        ).staticIconIsCategory
+                    },
+                    If(
+                        varImageIsCategory,
+                        gblAppStyles.Icons.DisabledFill_Category,
+                        Transparent
+                    )
+                )
+            Fill: |-
+                =With(
+                    {
+                        varImageIsCategory: LookUp(
+                            staticIcons,
+                            staticIconName = "Sort"
+                        ).staticIconIsCategory
+                    },
+                    If(
+                        varImageIsCategory,
+                        gblAppStyles.Icons.Fill_Category,
+                        Transparent
+                    )
+                )
+            FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+            Height: =28*1
+            HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+            HoverFill: =gblAppColors.OverlayLight
+            Image: |-
+                =With(
+                    {
+                        varImageRecord: LookUp(
+                            staticIcons,
+                            staticIconName = "Dismiss"
+                        ),
+                        varColor: If(
+                            Self.DisplayMode = DisplayMode.Disabled,
+                            gblAppStyles.Icons.DisabledColor,
+                            gblAppStyles.Icons.Color
+                        )
+                    },
+                    With(
+                        {
+                            varImageData: Concatenate(
+                                "data:image/svg+xml;utf8, ",
+                                EncodeUrl(
+                                    Concatenate(
+                                        "<svg viewBox='",
+                                        varImageRecord.staticIconViewbox,
+                                        "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                        varImageRecord.staticIconPath,
+                                        "' fill='#",
+                                        varColor,
+                                        "'/></svg>"
+                                    )
+                                )
+                            )
+                        },
+                        varImageData
+                    )
+                )
+            OnSelect: |-
+                =UpdateContext({locDeleteDiscussionWarning: false})
+            PaddingBottom: =(Self.Width - 20) / 2
+            PaddingLeft: =(Self.Width - 20) / 2
+            PaddingRight: =(Self.Width - 20) / 2
+            PaddingTop: =(Self.Width - 20) / 2
+            PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+            TabIndex: =0
+            Tooltip: |-
+                =With({varDefault: "Click to cancel warning",varOOBTextId: "imgCancelWarning_Board__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+            Transparency: =If(Self.DisplayMode = DisplayMode.Disabled,0.75,0)
+            Width: =Self.Height
+            X: =lblWarningContainer_Discussion.X + lblWarningContainer_Discussion.Width - Self.Width - 20
+            Y: =lblWarningContainer_Discussion.Y+ 20
+            ZIndex: =9
+

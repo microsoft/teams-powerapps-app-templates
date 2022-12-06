@@ -1,0 +1,172 @@
+"'Missing Settings Screen 2' As screen":
+    Fill: =gblAppStyles.Background.Fill
+    LoadingSpinnerColor: |-
+        =If(
+            gblThemeHiCo,
+            gblAppColors.HighContrastHyperlinks,
+            gblThemeDark,
+            gblAppColors.TeamsDarkPrimary,
+            gblAppColors.TeamsDefaultPrimary
+        )
+
+    "'lblSettingsMissing 2' As label":
+        Align: =Align.Center
+        AutoHeight: =true
+        BorderColor: =gblAppStyles.Label.BorderColor
+        BorderThickness: =gblAppStyles.Label.BorderThickness
+        Color: =gblAppStyles.Label.Color
+        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+        DisabledColor: =gblAppStyles.Label.DisabledColor
+        DisabledFill: =gblAppStyles.Label.DisabledFill
+        DisplayMode: =DisplayMode.View
+        Fill: =gblAppStyles.Label.Fill
+        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+        Font: =Font.'Segoe UI'
+        FontWeight: =FontWeight.Semibold
+        Height: =160
+        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+        HoverColor: =gblAppStyles.Label.HoverColor
+        HoverFill: =gblAppStyles.Label.HoverFill
+        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+        PressedColor: =gblAppStyles.Label.PressedColor
+        PressedFill: =gblAppStyles.Label.PressedFill
+        Size: =gblAppStyles.Label.Size.Large
+        Text: |-
+            =If(
+                locNoPlannerAccess,
+                With(
+                    {
+                        varDefault: "Oops! You do not have access to the Tasks instance where inspection tasks are stored. Please contact your manager.",
+                        varOOBTextId: "_translateCommon__NoPlannerAccess"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                ),
+                With(
+                    {
+                        varDefault: "Oops! This application needs to be configured for use with Tasks. Please contact your manager.",
+                        varOOBTextId: "_translateCommon_SettingsMissing"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            )
+        VerticalAlign: =VerticalAlign.Top
+        Width: =Parent.Width - Self.X - Self.X
+        X: =100
+        Y: ='imgSettingsMissing 2'.Y + 'imgSettingsMissing 2'.Height + 20
+        ZIndex: =1
+
+    "'imgSettingsMissing 2' As image":
+        Height: =200*1
+        Image: =SomethingWentWrong
+        Tooltip: =Self.AccessibleLabel
+        Width: =320*1
+        X: =(Parent.Width -Self.Width) / 2
+        Y: =((Parent.Height -Self.Height) / 2) -100
+        ZIndex: =2
+
+    "'btnCloseMissingSetting 2' As button":
+        BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+        BorderThickness: =gblAppStyles.ButtonPrimary.BorderThickness
+        Color: =gblAppStyles.ButtonPrimary.Color
+        DisabledBorderColor: =gblAppStyles.ButtonPrimary.DisabledBorderColor
+        DisabledColor: =gblAppStyles.ButtonPrimary.DisabledColor
+        DisabledFill: =gblAppStyles.ButtonPrimary.DisabledFill
+        Fill: =gblAppStyles.ButtonPrimary.Fill
+        FocusedBorderColor: =gblAppStyles.ButtonPrimary.FocusedBorderColor
+        FocusedBorderThickness: =gblAppStyles.ButtonPrimary.FocusedBorderThickness
+        Font: =Font.'Segoe UI'
+        Height: =70
+        HoverBorderColor: =gblAppStyles.ButtonPrimary.HoverBorderColor
+        HoverColor: =gblAppStyles.ButtonPrimary.HoverColor
+        HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+        OnSelect: |+
+            =Navigate('Welcome Screen', ScreenTransition.Fade)
+            
+            
+            
+        PressedBorderColor: =gblAppStyles.ButtonPrimary.PressedBorderColor
+        PressedColor: =gblAppStyles.ButtonPrimary.PressedColor
+        PressedFill: =gblAppStyles.ButtonPrimary.PressedFill
+        RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+        RadiusBottomRight: =gblAppStyles.ButtonPrimary.RadiusBottomRight
+        RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+        RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+        Size: =gblAppStyles.ButtonPrimary.Size
+        Text: |-
+            =With({varDefault: "Close",varOOBTextId: "_translateCommon_CloseImage"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+        Tooltip: =Self.Text
+        Width: |-
+            =Switch(
+                'Missing Settings Screen 2'.Size,
+                ScreenSize.ExtraLarge,
+                Max(
+                    Parent.Width * .2,
+                    400
+                ),
+                ScreenSize.Large,
+                Max(
+                    Parent.Width * .2,
+                    350
+                ),
+                ScreenSize.Medium,
+                Max(
+                    Parent.Width * .2,
+                    300
+                ),
+                ScreenSize.Small,
+                Parent.Width - (2*28),
+                Parent.Width - (2*28)
+            )
+        X: |-
+            =Switch(
+                'Missing Settings Screen 2'.Size,
+                ScreenSize.ExtraLarge,
+                Parent.Width - Self.Width - 28,
+                ScreenSize.Large,
+                Parent.Width - Self.Width - 28,
+                ScreenSize.Medium,
+                Parent.Width - Self.Width - 28,
+                ScreenSize.Small,
+                28,
+                28
+            )
+        Y: |-
+            =Switch(
+                'Missing Settings Screen 2'.Size,
+                ScreenSize.ExtraLarge,
+                35,
+                ScreenSize.Large,
+                35,
+                ScreenSize.Medium,
+                35,
+                ScreenSize.Small,
+                Parent.Height - Self.Height-28,
+                Parent.Height - Self.Height-28
+            )
+        ZIndex: =3
+

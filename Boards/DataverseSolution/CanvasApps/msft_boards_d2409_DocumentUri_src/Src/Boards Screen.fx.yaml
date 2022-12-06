@@ -1,0 +1,3178 @@
+"'Boards Screen' As screen":
+    Fill: =gblAppStyles.Background.Fill
+    LoadingSpinner: =LoadingSpinner.Data
+    LoadingSpinnerColor: =gblAppStyles.ButtonPrimary.Fill
+    OnVisible: |
+        =ClearCollect(
+            colBoards,
+            AddColumns(
+                Sort(Filter(
+                    Boards,
+                    'Boards (Views)'.'Active Boards'
+                ), Name , Ascending),
+                "appCategoryGUID",
+                Category.'Board Category'
+            )
+        );
+        ClearCollect(
+            colBoardCategories,
+            SortByColumns(
+                Filter(
+                    'Board Categories',
+                    'Board Categories (Views)'.'Active Board Categories'
+                ),
+                "msft_name"
+            )
+        );
+        ClearCollect(
+            colBoardCategoryPreferences,
+            AddColumns(
+                Filter(
+                    'Board Category Preferences',
+                    'Board Category Preferences (Views)'.'My Board Category Preferences'
+                ),
+                "appCategoryGUID",
+                'Board Category'.'Board Category'
+            )
+        );
+        ClearCollect(
+            colBoardCategoryPreferenceUpdates,
+            AddColumns(
+                Filter(
+                    'Board Category Preferences',
+                    'Board Category Preferences (Views)'.'My Board Category Preferences'
+                ),
+                "appCategoryGUID",
+                'Board Category'.'Board Category'
+            )
+        );
+        Clear(colAppNewUserCategories);
+        ForAll(
+            colBoardCategories,
+            If(
+                IsBlankOrError(
+                    LookUp(
+                        colBoardCategoryPreferences,
+                        colBoardCategoryPreferences[@appCategoryGUID] = colBoardCategories[@msft_boardcategoryid]
+                    )
+                ),
+                Collect(
+                    colBoardCategoryPreferences,
+                    Patch(
+                        [@'Board Category Preferences'],
+                        Defaults([@'Board Category Preferences']),
+                        {
+                            Name: "Test",
+                            'Board Category': ThisRecord,
+                            Order: Max(
+                                colBoardCategoryPreferences,
+                                Order
+                            ) + 1
+                        }
+                    )
+                );
+                Collect(
+                    //app only collection, indicating a new user category was added
+                    colAppNewUserCategories,
+                    [1]
+                );
+            )
+        );
+        If(
+            !IsEmpty(colAppNewUserCategories),
+            ClearCollect(
+                colBoardCategoryPreferences,
+                AddColumns(
+                    Filter(
+                        'Board Category Preferences',
+                        'Board Category Preferences (Views)'.'My Board Category Preferences'
+                    ),
+                    "appCategoryGUID",
+                    'Board Category'.'Board Category'
+                )
+            )
+        );
+        If(gblbackAddboard=true,SetFocus(btnAddBoard) & Set(gblbackAddboard,false))
+
+    lblAnnounce_Boards As label:
+        Height: =0
+        Live: =Live.Assertive
+        Text: =locScreenReaderAnnouncedText
+        Width: =0
+        X: =Parent.Width - Self.Width
+        Y: =Parent.Height - Self.Height
+        ZIndex: =1
+
+    tmrSetFocus_Boards As timer:
+        AutoStart: =locSetFocusTimerStart
+        Duration: =100
+        Height: =0
+        OnTimerEnd: |-
+            =Switch(
+                locSetFocusControlTarget,
+                "imgCancelSortPreferences",
+               SetFocus(imgCancelSortPreferences),"imgSortPreferences",SetFocus(imgSortBoards),"btnAddBoard",SetFocus(btnAddBoard)
+                
+            );
+        OnTimerStart: =
+        TabIndex: =-1
+        Width: =0
+        X: =Parent.Width - Self.Width
+        Y: =Parent.Height - Self.Height
+        ZIndex: =2
+
+    conBoards As groupContainer:
+        DisplayMode: =DisplayMode.Edit
+        Height: =Parent.Height
+        LayoutAlignItems: =LayoutAlignItems.Start
+        LayoutDirection: =LayoutDirection.Horizontal
+        LayoutJustifyContent: =LayoutJustifyContent.Start
+        LayoutMode: =LayoutMode.Manual
+        LayoutOverflowX: =LayoutOverflow.Hide
+        LayoutOverflowY: =LayoutOverflow.Hide
+        Width: =Parent.Width
+        X: =0*1
+        Y: =0*1
+        ZIndex: =3
+
+        cnvBoards As fluidGrid.fluidGridWithBlankCard:
+            BorderThickness: =0
+            Height: =Parent.Height
+            Width: =Parent.Width
+            X: =0*1
+            Y: =0*1
+            ZIndex: =1
+
+            dtcBoards As dataCard:
+                BorderColor: =RGBA(0, 0, 0, 1)
+                BorderStyle: =BorderStyle.Solid
+                BorderThickness: =0
+                DisplayMode: =DisplayMode.Edit
+                Fill: =RGBA(0, 0, 0, 0)
+                Height: =galBoardCategories.Y + galBoardCategories.Height + 20//Parent.Height
+                Width: =Parent.Width
+                X: =0
+                Y: =0
+                ZIndex: =1
+
+                imgUserPicDefault As image:
+                    AccessibleLabel: |-
+                        =With({varDefault: "Default user pic",varOOBTextId: "imgUserPicDefault"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Fill: |-
+                        =If(
+                            gblThemeDark,
+                            gblAppColors.NeutralWebBlack,
+                            gblThemeHiCo,
+                            gblAppColors.NeutralWebBlack,
+                            gblAppColors.NeutralWebWhite
+                        )
+                    Height: =imgUserPic.Height
+                    Image: |-
+                        =With(
+                            {
+                                varImageRecord: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Person"
+                                ),
+                                varColor: If(
+                                    Self.DisplayMode = DisplayMode.Disabled,
+                                    gblAppStyles.Icons.DisabledColor,
+                                    gblAppStyles.Icons.Color
+                                )
+                            },
+                            With(
+                                {
+                                    varImageData: Concatenate(
+                                        "data:image/svg+xml;utf8, ",
+                                        EncodeUrl(
+                                            Concatenate(
+                                                "<svg viewBox='",
+                                                varImageRecord.staticIconViewbox,
+                                                "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                varImageRecord.staticIconPath,
+                                                "' fill='#",
+                                                varColor,
+                                                "'/></svg>"
+                                            )
+                                        )
+                                    )
+                                },
+                                varImageData
+                            )
+                        )
+                    PaddingBottom: =10
+                    PaddingLeft: =10
+                    PaddingRight: =10
+                    PaddingTop: =10
+                    RadiusBottomLeft: =80*1
+                    RadiusBottomRight: =80*1
+                    RadiusTopLeft: =80*1
+                    RadiusTopRight: =80*1
+                    TabIndex: |-
+                        =If(
+                            true,
+                            -1,
+                            0
+                        )
+                    Tooltip: =Self.AccessibleLabel
+                    Width: =imgUserPic.Width
+                    X: =imgUserPic.X
+                    Y: =imgUserPic.Y
+                    ZIndex: =2
+
+                imgUserPic As image:
+                    AccessibleLabel: |-
+                        =With({varDefault: "User's profile pic",varOOBTextId: "imgUserPic__locAcccessibleText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Height: =Self.Width
+                    Image: |-
+                        =If(
+                            !IsBlank(gblCurrUserEmail),
+                            Office365Users.UserPhotoV2(gblCurrUserEmail)
+                        )
+                    RadiusBottomLeft: =80*1
+                    RadiusBottomRight: =80*1
+                    RadiusTopLeft: =80*1
+                    RadiusTopRight: =80*1
+                    TabIndex: |-
+                        =If(
+                            true,
+                            -1,
+                            0
+                        )
+                    Tooltip: =Self.AccessibleLabel
+                    Width: =48*1
+                    X: =(Parent.Width - Self.Width) / 2
+                    Y: =20*1
+                    ZIndex: =3
+
+                lblWelcomeGreeting As label:
+                    Align: =Align.Center
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Bold
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Role: =TextRole.Heading1
+                    Size: =gblAppStyles.Label.Size.Large
+                    Text: |-
+                        ="Good " & With(
+                            {
+                                varTimeValueNow: Hour(Now()),
+                                varTimeValueMorning: 5,
+                                varTimeValueAfternoon: 12,
+                                varTimeValueEvening: 20
+                            },
+                            With(
+                                {
+                                    varGreeting: If(
+                                        varTimeValueNow >= varTimeValueMorning And varTimeValueNow < varTimeValueAfternoon,
+                                        "morning",
+                                        varTimeValueNow >= varTimeValueAfternoon And varTimeValueNow < varTimeValueEvening,
+                                        "afternoon",
+                                        "evening"
+                                    )
+                                },
+                                varGreeting & ", " & gblCurrUser.'First Name' & "."
+                            )
+                        )
+                    Tooltip: =Self.Text
+                    Width: =Parent.Width - 20*2
+                    Wrap: =false
+                    X: =(Parent.Width - Self.Width) / 2
+                    Y: =imgUserPic.Y + imgUserPic.Height + 10
+                    ZIndex: =4
+
+                lblWelcomeMessage As label:
+                    Align: =Align.Center
+                    AutoHeight: =true
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1+20
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Glad to have you here. As part of a team board, you will get to pin, connect, and share with people who have - you guessed it - similar interests!",
+                                varOOBTextId: "lblWelcomeMessage__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Tooltip: |-
+                        =With({varDefault: "Glad to have you here. As part of a team board, you will get to pin, connect, and share with people who have - you guessed it - similar interests!",varOOBTextId: "lblWelcomeMessage__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Width: |-
+                        =If(
+                            'Boards Screen'.Size = ScreenSize.ExtraLarge || 'Boards Screen'.Size = ScreenSize.Large,
+                            Parent.Width / 2.5,
+                            Parent.Width - 20*2
+                        )
+                    X: =(Parent.Width - Self.Width) / 2
+                    Y: =lblWelcomeGreeting.Y + lblWelcomeGreeting.Height
+                    ZIndex: =5
+
+                txtFindBoards As text:
+                    AccessibleLabel: |-
+                        =If('Boards Screen'.Size = ScreenSize.ExtraLarge || 'Boards Screen'.Size = ScreenSize.Large,With({varDefault: "Find a board",varOOBTextId: "txtFindBoards__locAccessibleText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                        ,"")
+                    BorderColor: =gblAppStyles.TextInput.BorderColor
+                    BorderThickness: =gblAppStyles.TextInput.BorderThickness
+                    Color: =gblAppStyles.TextInput.Color
+                    Default: =""
+                    DisabledBorderColor: =gblAppStyles.TextInput.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.TextInput.DisabledColor
+                    DisabledFill: =gblAppStyles.TextInput.DisabledFill
+                    Fill: =gblAppStyles.TextInput.Fill
+                    FocusedBorderColor: =gblAppStyles.TextInput.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.TextInput.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HintText: |-
+                        =With(
+                            {
+                                varDefault: "Find a board",
+                                varOOBTextId: "txtFindBoards__locHintText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    HoverBorderColor: =gblAppStyles.TextInput.HoverBorderColor
+                    HoverColor: =gblAppStyles.TextInput.HoverColor
+                    HoverFill: =gblAppStyles.TextInput.HoverFill
+                    PaddingBottom: =5*1
+                    PaddingLeft: =32*1
+                    PaddingRight: =5*1
+                    PaddingTop: =5*1
+                    PressedBorderColor: =gblAppStyles.TextInput.PressedBorderColor
+                    PressedColor: =gblAppStyles.TextInput.PressedColor
+                    PressedFill: =gblAppStyles.TextInput.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.TextInput.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.TextInput.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.TextInput.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.TextInput.RadiusTopRight
+                    Size: =gblAppStyles.TextInput.Size
+                    TabIndex: |-
+                        =If(
+                            locShowFirstRun || locShowPowerAppsPrompt||locVisibleDialogUserPreferences,
+                            -1,
+                            If(
+                                Self.Visible,
+                                0,
+                                -1
+                            )
+                        )
+                    Tooltip: |-
+                        =If('Boards Screen'.Size = ScreenSize.ExtraLarge || 'Boards Screen'.Size = ScreenSize.Large,With({varDefault: "Find a board",varOOBTextId: "txtFindBoards__locAccessibleText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                        ,"")
+                    Width: |-
+                        =If(
+                            'Boards Screen'.Size = ScreenSize.ExtraLarge || 'Boards Screen'.Size = ScreenSize.Large,
+                            320*1,
+                            Parent.Width - 20*2
+                        )
+                    X: =(Parent.Width - Self.Width) / 2
+                    Y: =lblWelcomeMessage.Y + lblWelcomeMessage.Height + 20
+                    ZIndex: =6
+
+                imgFindBoards As image:
+                    AccessibleLabel: |-
+                        =If('Boards Screen'.Size = ScreenSize.ExtraLarge || 'Boards Screen'.Size = ScreenSize.Large,With({varDefault: "Find the Boards",varOOBTextId: "imgFindBoards__locAccessibleText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault))),"")
+                    DisabledFill: |-
+                        =With(
+                            {
+                                varImageIsCategory: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Search"
+                                ).staticIconIsCategory
+                            },
+                            If(
+                                varImageIsCategory,
+                                gblAppStyles.Icons.DisabledFill_Category,
+                                Transparent
+                            )
+                        )
+                    Fill: |-
+                        =With(
+                            {
+                                varImageIsCategory: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Search"
+                                ).staticIconIsCategory
+                            },
+                            If(
+                                varImageIsCategory,
+                                gblAppStyles.Icons.Fill_Category,
+                                Transparent
+                            )
+                        )
+                    Height: =22*1
+                    Image: |-
+                        =With(
+                            {
+                                varImageRecord: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Search"
+                                ),
+                                varColor: If(
+                                    Self.DisplayMode = DisplayMode.Disabled,
+                                    gblAppStyles.Icons.DisabledColor,
+                                    gblAppStyles.Icons.Color 
+                                )
+                            },
+                            With(
+                                {
+                                    varImageData: Concatenate(
+                                        "data:image/svg+xml;utf8, ",
+                                        EncodeUrl(
+                                            Concatenate(
+                                                "<svg viewBox='",
+                                                varImageRecord.staticIconViewbox,
+                                                "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                varImageRecord.staticIconPath,
+                                                "' fill='#",
+                                                varColor,
+                                                "'/></svg>"
+                                            )
+                                        )
+                                    )
+                                },
+                                varImageData
+                            )
+                        )
+                    PaddingBottom: =2
+                    PaddingLeft: =2
+                    PaddingRight: =2
+                    PaddingTop: =2
+                    RadiusBottomLeft: =5
+                    RadiusBottomRight: =5
+                    RadiusTopLeft: =5
+                    RadiusTopRight: =5
+                    TabIndex: |-
+                        =If(
+                            true,
+                            -1,
+                            0
+                        )
+                    Tooltip: |-
+                        =With({varDefault: "Find the Boards",varOOBTextId: "imgFindBoards__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Visible: =IsBlank(txtFindBoards.Text)
+                    Width: =22*1
+                    X: =txtFindBoards.X + 5
+                    Y: =txtFindBoards.Y + (txtFindBoards.Height - Self.Height) / 2
+                    ZIndex: =7
+
+                imgClearFindBoards As image:
+                    AccessibleLabel: |-
+                        =With({varDefault: "Clear the Search data",varOOBTextId: "imgClearFindBoards__locAccessibleText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    DisabledFill: |-
+                        =With(
+                            {
+                                varImageIsCategory: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Search"
+                                ).staticIconIsCategory
+                            },
+                            If(
+                                varImageIsCategory,
+                                gblAppStyles.Icons.DisabledFill_Category,
+                                Transparent
+                            )
+                        )
+                    Fill: |-
+                        =With(
+                            {
+                                varImageIsCategory: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Search"
+                                ).staticIconIsCategory
+                            },
+                            If(
+                                varImageIsCategory,
+                                gblAppStyles.Icons.Fill_Category,
+                                Transparent
+                            )
+                        )
+                    Height: =22*1
+                    Image: |-
+                        =With(
+                            {
+                                varImageRecord: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Dismiss"
+                                ),
+                                varColor: If(
+                                    Self.DisplayMode = DisplayMode.Disabled,
+                                    gblAppStyles.Icons.DisabledColor,
+                                    gblAppStyles.Icons.Color 
+                                )
+                            },
+                            With(
+                                {
+                                    varImageData: Concatenate(
+                                        "data:image/svg+xml;utf8, ",
+                                        EncodeUrl(
+                                            Concatenate(
+                                                "<svg viewBox='",
+                                                varImageRecord.staticIconViewbox,
+                                                "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                varImageRecord.staticIconPath,
+                                                "' fill='#",
+                                                varColor,
+                                                "'/></svg>"
+                                            )
+                                        )
+                                    )
+                                },
+                                varImageData
+                            )
+                        )
+                    OnSelect: =Reset(txtFindBoards)
+                    PaddingBottom: =2
+                    PaddingLeft: =2
+                    PaddingRight: =2
+                    PaddingTop: =2
+                    RadiusBottomLeft: =5
+                    RadiusBottomRight: =5
+                    RadiusTopLeft: =5
+                    RadiusTopRight: =5
+                    TabIndex: |-
+                        =If(
+                            true,
+                            -1,
+                            0
+                        )
+                    Tooltip: |-
+                        =With({varDefault: "Clear the Search data",varOOBTextId: "imgClearFindBoards__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Visible: =!IsBlank(txtFindBoards.Text)
+                    Width: =22*1
+                    X: =txtFindBoards.X + 5
+                    Y: =txtFindBoards.Y + (txtFindBoards.Height - Self.Height) / 2
+                    ZIndex: =8
+
+                imgSettings As image:
+                    AccessibleLabel: |-
+                        =With({varDefault: "Click to navigate to settings",varOOBTextId: "imgSettings__locAccessibleText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    DisabledFill: |-
+                        =With(
+                            {
+                                varImageIsCategory: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Settings"
+                                ).staticIconIsCategory
+                            },
+                            If(
+                                varImageIsCategory,
+                                gblAppStyles.Icons.DisabledFill_Category,
+                                Transparent
+                            )
+                        )
+                    Fill: |-
+                        =With(
+                            {
+                                varImageIsCategory: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Settings"
+                                ).staticIconIsCategory
+                            },
+                            If(
+                                varImageIsCategory,
+                                gblAppStyles.Icons.Fill_Category,
+                                Transparent
+                            )
+                        )
+                    Height: =22*1
+                    Image: |-
+                        =If(
+                            gblThemeDark || gblThemeHiCo,
+                            Settings_Dark,
+                            Settings_Default
+                        )
+                    OnSelect: |-
+                        =//screen reader start
+                        UpdateContext(
+                            {
+                                locScreenReaderAnnouncedText: With(
+                                    {
+                                        varAnnouncedText: With(
+                                            {
+                                                varDefault: "Navigating to the settings screen",
+                                                varOOBTextId: "imgSettings__locAnnouncement"
+                                            },
+                                            With(
+                                                {
+                                                    varLocalizedText: LookUp(
+                                                        colLocalization,
+                                                        OOBTextID = varOOBTextId,
+                                                        LocalizedText
+                                                    )
+                                                },
+                                                Coalesce(
+                                                    varLocalizedText,
+                                                    varDefault
+                                                )
+                                            )
+                                        )
+                                    },
+                                    If(
+                                        locScreenReaderAnnouncedText = varAnnouncedText,
+                                        Concatenate(
+                                            varAnnouncedText,
+                                            " "
+                                        ),
+                                        varAnnouncedText
+                                    )
+                                )
+                            }
+                        );
+                        //screen reader end
+                        Navigate(
+                            'Settings Screen',
+                            ScreenTransition.Fade
+                        )
+                    PaddingBottom: =2
+                    PaddingLeft: =2
+                    PaddingRight: =2
+                    PaddingTop: =2
+                    TabIndex: |-
+                        =If(
+                            locShowFirstRun || locShowPowerAppsPrompt||locVisibleDialogUserPreferences,
+                            -1,
+                            If(
+                                Self.Visible,
+                                0,
+                                -1
+                            )
+                        )
+                    Tooltip: |-
+                        =With({varDefault: "Click to navigate to settings",varOOBTextId: "imgSettings__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Width: =22*1
+                    X: =Parent.Width - Self.Width - 20
+                    Y: |-
+                        =If(
+                            'Boards Screen'.Size = ScreenSize.ExtraLarge || 'Boards Screen'.Size = ScreenSize.Large,
+                            btnAddBoard.Y + (btnAddBoard.Height - Self.Height) / 2,
+                            imgUserPic.Y
+                        )
+                    ZIndex: =9
+
+                imgSortBoards As image:
+                    AccessibleLabel: |-
+                        =With({varDefault: "Click to sort boards",varOOBTextId: "imgSortBoards__locAccessibleText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    DisabledFill: |-
+                        =With(
+                            {
+                                varImageIsCategory: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Sort"
+                                ).staticIconIsCategory
+                            },
+                            If(
+                                varImageIsCategory,
+                                gblAppStyles.Icons.DisabledFill_Category,
+                                Transparent
+                            )
+                        )
+                    Fill: |-
+                        =With(
+                            {
+                                varImageIsCategory: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Sort"
+                                ).staticIconIsCategory
+                            },
+                            If(
+                                varImageIsCategory,
+                                gblAppStyles.Icons.Fill_Category,
+                                Transparent
+                            )
+                        )
+                    Height: =22*1
+                    Image: |-
+                        =If(
+                            gblThemeDark || gblThemeHiCo,
+                            Sort_Dark,
+                            Sort_Default
+                        )
+                    OnSelect: |-
+                        =ClearCollect(
+                            colBoardCategoryPreferenceUpdates,
+                            colBoardCategoryPreferences
+                        );
+                        UpdateContext(
+                            {
+                                locVisibleDialogUserPreferences: true,
+                                locBlockUserInput: false
+                            }
+                        );
+                        
+                        //set focus start
+                        UpdateContext({locSetFocusTimerStart: false});
+                        UpdateContext({locSetFocusControlTarget: "imgCancelSortPreferences"});
+                        UpdateContext({locSetFocusTimerStart: true});
+                        //set focus end
+                        //screen reader start
+                        UpdateContext(
+                            {
+                                locScreenReaderAnnouncedText: With(
+                                    {
+                                        varAnnouncedText: With(
+                                            {
+                                                varDefault: "Opening a dialog to Sort Boards by Categories",
+                                                varOOBTextId: "imgSortBoards__locAnnouncement"
+                                            },
+                                            With(
+                                                {
+                                                    varLocalizedText: LookUp(
+                                                        colLocalization,
+                                                        OOBTextID = varOOBTextId,
+                                                        LocalizedText
+                                                    )
+                                                },
+                                                Coalesce(
+                                                    varLocalizedText,
+                                                    varDefault
+                                                )
+                                            )
+                                        )
+                                    },
+                                    If(
+                                        locScreenReaderAnnouncedText = varAnnouncedText,
+                                        Concatenate(
+                                            varAnnouncedText,
+                                            " "
+                                        ),
+                                        varAnnouncedText
+                                    )
+                                )
+                            }
+                        );
+                        //screen reader end
+                    PaddingBottom: =2
+                    PaddingLeft: =2
+                    PaddingRight: =2
+                    PaddingTop: =2
+                    TabIndex: |-
+                        =If(
+                            locShowFirstRun || locShowPowerAppsPrompt||locVisibleDialogUserPreferences,
+                            -1,
+                            If(
+                                Self.Visible,
+                                0,
+                                -1
+                            )
+                        )
+                    Tooltip: |-
+                        =With(
+                            {
+                                varDefault: "Click to sort boards",
+                                varOOBTextId: "imgSortBoards__locTooltipText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Width: =22*1
+                    X: =Parent.Width - imgSettings.Width - Self.Width - 20 - 10
+                    Y: |-
+                        =If(
+                            'Boards Screen'.Size = ScreenSize.ExtraLarge || 'Boards Screen'.Size = ScreenSize.Large,
+                            btnAddBoard.Y + (btnAddBoard.Height - Self.Height) / 2,
+                            imgUserPic.Y
+                        )
+                    ZIndex: =10
+
+                btnAddBoard As button:
+                    BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+                    BorderThickness: =gblAppStyles.ButtonPrimary.BorderThickness
+                    Color: =gblAppStyles.ButtonPrimary.Color
+                    DisabledBorderColor: =gblAppStyles.ButtonPrimary.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.ButtonPrimary.DisabledColor
+                    DisabledFill: =gblAppStyles.ButtonPrimary.DisabledFill
+                    Fill: =gblAppStyles.ButtonPrimary.Fill
+                    FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.ButtonPrimary.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.ButtonPrimary.HoverBorderColor
+                    HoverColor: =gblAppStyles.ButtonPrimary.HoverColor
+                    HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+                    OnSelect: |-
+                        =//screen reader start
+                        UpdateContext(
+                            {
+                                locScreenReaderAnnouncedText: With(
+                                    {
+                                        varAnnouncedText: With(
+                                            {
+                                                varDefault: "Navigating to the Add Boards screen",
+                                                varOOBTextId: "btnAddBoard__locAnnouncement"
+                                            },
+                                            With(
+                                                {
+                                                    varLocalizedText: LookUp(
+                                                        colLocalization,
+                                                        OOBTextID = varOOBTextId,
+                                                        LocalizedText
+                                                    )
+                                                },
+                                                Coalesce(
+                                                    varLocalizedText,
+                                                    varDefault
+                                                )
+                                            )
+                                        )
+                                    },
+                                    If(
+                                        locScreenReaderAnnouncedText = varAnnouncedText,
+                                        Concatenate(
+                                            varAnnouncedText,
+                                            " "
+                                        ),
+                                        varAnnouncedText
+                                    )
+                                )
+                            }
+                        );
+                        //screen reader end
+                        Navigate(
+                            'Add Board Screen',
+                            ScreenTransition.Fade
+                        )
+                    PaddingLeft: =24
+                    PressedBorderColor: =gblAppStyles.ButtonPrimary.PressedBorderColor
+                    PressedColor: =gblAppStyles.ButtonPrimary.PressedColor
+                    PressedFill: =gblAppStyles.ButtonPrimary.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.ButtonPrimary.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+                    Size: =gblAppStyles.ButtonPrimary.Size
+                    TabIndex: |-
+                        =If(
+                            locShowFirstRun || locShowPowerAppsPrompt||locVisibleDialogUserPreferences,
+                            -1,
+                            If(
+                                Self.Visible,
+                                0,
+                                -1
+                            )
+                        )
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Add a board",
+                                varOOBTextId: "btnAddBoard__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Tooltip: |-
+                        =With(
+                            {
+                                varDefault: "Click to add a board",
+                                varOOBTextId: "btnAddBoard__locTooltipText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Visible: ='Boards Screen'.Size = ScreenSize.ExtraLarge || 'Boards Screen'.Size = ScreenSize.Large
+                    Width: =160*1
+                    X: |-
+                        =If(
+                            'Boards Screen'.Size = ScreenSize.ExtraLarge || 'Boards Screen'.Size = ScreenSize.Large,
+                            Parent.Width - imgSettings.Width - imgSortBoards.Width - Self.Width - 20*2 - 10,
+                            20 * 1
+                        )
+                    Y: |-
+                        =If(
+                            'Boards Screen'.Size = ScreenSize.ExtraLarge || 'Boards Screen'.Size = ScreenSize.Large,
+                            imgUserPic.Y,
+                            txtFindBoards.Y + txtFindBoards.Height + 20
+                        )
+                    ZIndex: =11
+
+                imgAddBoard As image:
+                    AccessibleLabel: |-
+                        =With({varDefault: "Click to add a board",varOOBTextId: "imgAddBoard__locAccessibleText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault))) && "icon"
+                    Height: =22*1
+                    Image: |-
+                        =If(
+                            'Boards Screen'.Size = ScreenSize.ExtraLarge || 'Boards Screen'.Size = ScreenSize.Large,
+                            If(
+                                gblThemeDark || gblThemeHiCo,
+                                Add_Dark,
+                                Add_Dark
+                            ),
+                                If(
+                                gblThemeDark || gblThemeHiCo,
+                                Add_Dark,
+                                Add_Default
+                            )
+                        )
+                    OnSelect: |-
+                        =Navigate(
+                            'Add Board Screen',
+                            ScreenTransition.Fade
+                        )
+                    TabIndex: |-
+                        =If(
+                            'Boards Screen'.Size = ScreenSize.ExtraLarge || 'Boards Screen'.Size = ScreenSize.Large,
+                            -1,
+                            0
+                        )
+                    Tooltip: |-
+                        =With({varDefault: "Click to add a board",varOOBTextId: "imgAddBoard__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Width: =22*1
+                    X: |-
+                        =If(
+                            'Boards Screen'.Size = ScreenSize.ExtraLarge || 'Boards Screen'.Size = ScreenSize.Large,
+                            btnAddBoard.X + 20,
+                            Parent.Width - imgSettings.Width - imgSortBoards.Width - Self.Width - 20 - 10*2
+                        )
+                    Y: |-
+                        =If(
+                            'Boards Screen'.Size = ScreenSize.ExtraLarge || 'Boards Screen'.Size = ScreenSize.Large,
+                            btnAddBoard.Y + (btnAddBoard.Height - Self.Height) / 2,
+                            imgSortBoards.Y
+                        )
+                    ZIndex: =12
+
+                galBoardCategories As gallery.variableTemplateHeightGallery:
+                    AccessibleLabel: ="Gallery of board categories"
+                    BorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                    FocusedBorderThickness: =1
+                    Height: =Value(lblBoardHeight.Text)*CountRows(Self.AllItems) //Parent.Height - Self.Y
+                    Items: |-
+                        =SortByColumns(
+                            Filter(
+                                colBoardCategoryPreferences,
+                                colBoardCategoryPreferences[@appCategoryGUID] in Search(
+                                    colBoards,
+                                    txtFindBoards.Text,
+                                    "msft_name"
+                                ).appCategoryGUID,
+                                'Visible?' = 'Visible? (Board Category Preferences)'.Yes
+                            ),
+                            "msft_order"
+                        )
+                    Layout: =Layout.Vertical
+                    TabIndex: =0
+                    TemplatePadding: =0
+                    TemplateSize: =250
+                    Width: =Parent.Width - Self.X*2
+                    X: =0 //If('Boards Screen'.Size=ScreenSize.ExtraLarge||'Boards Screen'.Size=ScreenSize.Large,40*1,20*1)
+                    Y: =txtFindBoards.Y + txtFindBoards.Height + 10
+                    ZIndex: =14
+
+                    lblBoardCategoryName As label:
+                        BorderColor: =gblAppStyles.Label.BorderColor
+                        BorderThickness: =gblAppStyles.Label.BorderThickness
+                        Color: =gblAppStyles.Label.Color
+                        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.Label.DisabledColor
+                        DisabledFill: =gblAppStyles.Label.DisabledFill
+                        Fill: =gblAppStyles.Label.Fill
+                        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        FontWeight: =FontWeight.Semibold
+                        Height: =32*1+10
+                        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                        HoverColor: =gblAppStyles.Label.HoverColor
+                        HoverFill: =gblAppStyles.Label.HoverFill
+                        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                        PressedColor: =gblAppStyles.Label.PressedColor
+                        PressedFill: =gblAppStyles.Label.PressedFill
+                        Role: =TextRole.Heading2
+                        Size: =gblAppStyles.Label.Size.Large
+                        Text: =ThisItem.'Board Category'.Name
+                        Tooltip: =Self.Text
+                        Width: =1276
+                        Wrap: =false
+                        X: =20*1
+                        Y: =10*1
+                        ZIndex: =1
+
+                    galBoards As gallery.galleryHorizontal:
+                        AccessibleLabel: ="Gallery of boards of category" & ThisItem.'Board Category'.Name
+                        BorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                        FocusedBorderThickness: =1
+                        Height: |-
+                            =If(
+                                CountRows(Self.AllItems) = 0,
+                                0,
+                                Parent.TemplateHeight - 40
+                            )
+                        Items: |
+                            =Search(
+                                Filter(
+                                    colBoards,
+                                    ThisItem.appCategoryGUID = colBoards[@appCategoryGUID]
+                                ),
+                                txtFindBoards.Text,
+                                "msft_name"
+                            )
+                        OnSelect: |-
+                            =UpdateContext({locSelectedBoard: ThisItem});
+                            //screen reader start
+                            UpdateContext(
+                                {
+                                    locScreenReaderAnnouncedText: With(
+                                        {
+                                            varAnnouncedText: With(
+                                                {
+                                                    varDefault: "Navigating to the Boards item screen",
+                                                    varOOBTextId: "galboards__locAnnouncement"
+                                                },
+                                                With(
+                                                    {
+                                                        varLocalizedText: LookUp(
+                                                            colLocalization,
+                                                            OOBTextID = varOOBTextId,
+                                                            LocalizedText
+                                                        )
+                                                    },
+                                                    Coalesce(
+                                                        varLocalizedText,
+                                                        varDefault
+                                                    )
+                                                )
+                                            )
+                                        },
+                                        If(
+                                            locScreenReaderAnnouncedText = varAnnouncedText,
+                                            Concatenate(
+                                                varAnnouncedText,
+                                                " "
+                                            ),
+                                            varAnnouncedText
+                                        )
+                                    )
+                                }
+                            );
+                            //screen reader end
+                            Navigate(
+                                'Board Items Screen',
+                                ScreenTransition.Fade,
+                                {locSelectedBoard: locSelectedBoard}
+                            )
+                        ShowNavigation: =true
+                        ShowScrollbar: =false
+                        TabIndex: |-
+                            =If(
+                                locShowFirstRun || locShowPowerAppsPrompt||locVisibleDialogUserPreferences,
+                                -1,
+                                If(
+                                    Self.Visible,
+                                    0,
+                                    -1
+                                )
+                            )
+                        TemplatePadding: =0
+                        TemplateSize: =If(Self.Layout = Layout.Horizontal, Min(320, Self.Width - 60), Min(320, Self.Height - 60))
+                        Width: =Parent.Width - Self.X*2
+                        X: =20*1
+                        Y: =lblBoardCategoryName.Y + lblBoardCategoryName.Height
+                        ZIndex: =2
+
+                        btnBoardBackground As button:
+                            BorderThickness: =1
+                            Color: =Transparent
+                            DisabledBorderColor: =Self.BorderColor
+                            DisabledColor: =Self.Color
+                            DisabledFill: =Self.Fill
+                            Fill: |-
+                                =If(
+                                    gblThemeDark,
+                                    gblAppColors.NeutralWebGray220,
+                                    gblThemeHiCo,
+                                    Black,
+                                    White
+                                )
+                            FocusedBorderThickness: =1
+                            Font: =Font.'Segoe UI'
+                            Height: =200 - Self.Y*2 - 10
+                            HoverBorderColor: =Self.BorderColor
+                            HoverColor: =Self.Color
+                            HoverFill: =Self.Fill
+                            OnSelect: =Select(Parent)
+                            PressedBorderColor: =Self.BorderColor
+                            PressedColor: =Self.Color
+                            PressedFill: =Self.Fill
+                            RadiusBottomLeft: =4
+                            RadiusBottomRight: =4
+                            RadiusTopLeft: =4
+                            RadiusTopRight: =4
+                            Size: =gblAppStyles.ButtonTransparent.Size
+                            TabIndex: |-
+                                =If(
+                                    true,
+                                    -1,
+                                    0
+                                )
+                            Text: |-
+                                =With({varDefault: "Background button for boards",varOOBTextId: "btnBoardBackground__locText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                            Width: =Parent.TemplateWidth - Self.X*2 - 10
+                            X: =5*1
+                            Y: =5*1
+                            ZIndex: =1
+
+                        lblBoardName As label:
+                            BorderColor: =gblAppStyles.Label.BorderColor
+                            BorderThickness: =gblAppStyles.Label.BorderThickness
+                            Color: =gblAppStyles.Label.Color
+                            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                            DisabledColor: =gblAppStyles.Label.DisabledColor
+                            DisabledFill: =gblAppStyles.Label.DisabledFill
+                            Fill: =gblAppStyles.Label.Fill
+                            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                            Font: =Font.'Segoe UI'
+                            FontWeight: =FontWeight.Semibold
+                            Height: =32*1
+                            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                            HoverColor: =gblAppStyles.Label.HoverColor
+                            HoverFill: =gblAppStyles.Label.HoverFill
+                            OnSelect: =Select(Parent)
+                            PaddingBottom: =0
+                            PaddingLeft: =25
+                            PaddingTop: =0
+                            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                            PressedColor: =gblAppStyles.Label.PressedColor
+                            PressedFill: =gblAppStyles.Label.PressedFill
+                            Size: =gblAppStyles.Label.Size.Medium
+                            Text: =ThisItem.Name
+                            Width: =btnBoardBackground.Width - Self.X*2
+                            Wrap: =false
+                            X: =imgBoardCoverBackground.X
+                            Y: =imgBoardCoverBackground.Y + imgBoardCoverBackground.Height + 5
+                            ZIndex: =2
+
+                        imgBoardCoverBackground As rectangle:
+                            Fill: |-
+                                =If(
+                                    gblThemeDark || gblThemeHiCo,
+                                    ColorValue(ThisItem.'Cover Color Dark'),
+                                    ColorValue(ThisItem.'Cover Color')
+                                )
+                            Height: =btnBoardBackground.Height * 2 / 3
+                            OnSelect: =Select(Parent)
+                            Visible: =!IsBlank(ThisItem.'Cover Icon') && false
+                            Width: =btnBoardBackground.Width
+                            X: =btnBoardBackground.X
+                            Y: =btnBoardBackground.Y
+                            ZIndex: =3
+
+                        imgBoardCoverImage As image:
+                            Fill: |-
+                                =If(
+                                    !IsBlank(ThisItem.'Cover Icon'),
+                                    If(
+                                    gblThemeDark || gblThemeHiCo,
+                                    ColorValue(ThisItem.'Cover Color Dark'),
+                                    ColorValue(ThisItem.'Cover Color')
+                                ),
+                                    Transparent
+                                )
+                            Height: |-
+                                =If(
+                                    IsBlank(ThisItem.'Cover Icon'),
+                                    btnBoardBackground.Height * 2 / 3,
+                                    btnBoardBackground.Height * 2 / 3 //60 * 1
+                                )
+                            Image: |-
+                                =If(
+                                    !IsBlank(ThisItem.'Cover Icon'), 
+                                    ThisItem.'Cover Icon',
+                                    !IsBlank(ThisItem.'Cover Stock'),
+                                    ThisItem.'Cover Stock',
+                                    ThisItem.'Cover Image'.Full
+                                )
+                            ImagePosition: |-
+                                =If(
+                                    IsBlank(ThisItem.'Cover Icon'),
+                                    ImagePosition.Fill,
+                                    ImagePosition.Fit
+                                )
+                            OnSelect: =Select(Parent)
+                            PaddingBottom: |-
+                                =If(
+                                    !IsBlank(ThisItem.'Cover Icon'),
+                                    30,
+                                    0
+                                )
+                            PaddingTop: |-
+                                =If(
+                                    !IsBlank(ThisItem.'Cover Icon'),
+                                    30,
+                                    0
+                                )
+                            RadiusTopLeft: =4
+                            RadiusTopRight: =4
+                            Width: |-
+                                =If(
+                                    IsBlank(ThisItem.'Cover Icon'),
+                                    btnBoardBackground.Width + 2,
+                                    btnBoardBackground.Width + 2 //60 * 1
+                                )
+                            X: |-
+                                =If(
+                                    IsBlank(ThisItem.'Cover Icon'),
+                                    btnBoardBackground.X - 1,
+                                    imgBoardCoverBackground.X + (imgBoardCoverBackground.Width - Self.Width) / 2
+                                )
+                            Y: |-
+                                =If(
+                                    IsBlank(ThisItem.'Cover Icon'),
+                                    btnBoardBackground.Y,
+                                    imgBoardCoverBackground.Y + (imgBoardCoverBackground.Height - Self.Height) / 2
+                                )
+                            ZIndex: =4
+
+                        lblBoardItemCount As label:
+                            BorderColor: =gblAppStyles.Label.BorderColor
+                            BorderThickness: =gblAppStyles.Label.BorderThickness
+                            Color: =gblAppStyles.Label.Color
+                            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                            DisabledColor: =gblAppStyles.Label.DisabledColor
+                            DisabledFill: =gblAppStyles.Label.DisabledFill
+                            Fill: =gblAppStyles.Label.Fill
+                            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                            Font: =Font.'Segoe UI'
+                            Height: =32*1
+                            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                            HoverColor: =gblAppStyles.Label.HoverColor
+                            HoverFill: =gblAppStyles.Label.HoverFill
+                            OnSelect: =Select(Parent)
+                            PaddingBottom: =0
+                            PaddingLeft: =25
+                            PaddingTop: =0
+                            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                            PressedColor: =gblAppStyles.Label.PressedColor
+                            PressedFill: =gblAppStyles.Label.PressedFill
+                            Size: =gblAppStyles.Label.Size.Small
+                            Text: |-
+                                =With(
+                                    {varRows: ThisItem.'Board Items'},
+                                    CountRows(varRows
+                                        /*
+                                        // N+1 Call
+                                        Filter(
+                                            'Board Items',
+                                            Board.Board = ThisItem.Board
+                                        )
+                                        */
+                                )
+                                )
+                            Width: =lblBoardName.Width
+                            X: =lblBoardName.X
+                            Y: =lblBoardName.Y + lblBoardName.Height - 10
+                            ZIndex: =6
+
+                        imgBoardItemIcon As image:
+                            AccessibleLabel: ="Icon for Board Items"
+                            Height: =22*1
+                            Image: |-
+                                =If(
+                                    gblThemeDark || gblThemeHiCo,
+                                    Pin_Dark,
+                                    Pin_Default
+                                )
+                            OnSelect: =Select(Parent)
+                            PaddingBottom: =4
+                            PaddingLeft: =4
+                            PaddingRight: =4
+                            PaddingTop: =4
+                            Width: =22*1
+                            X: =lblBoardItemCount.X + 25 + 15
+                            Y: =lblBoardItemCount.Y + (lblBoardItemCount.Height - Self.Height)/2
+                            ZIndex: =7
+
+                        btnBoardForeground As button:
+                            BorderColor: =Transparent
+                            BorderThickness: =0
+                            Color: =Transparent
+                            DisabledBorderColor: =Transparent
+                            DisabledColor: =Transparent
+                            DisabledFill: =Transparent
+                            Fill: =Transparent
+                            FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                            FocusedBorderThickness: =1
+                            Font: =Font.'Segoe UI'
+                            Height: =btnBoardBackground.Height
+                            HoverBorderColor: =Transparent
+                            HoverColor: =Transparent
+                            HoverFill: =gblAppStyles.Gallery.HoverFill
+                            OnSelect: =Select(Parent)
+                            PressedBorderColor: =Transparent
+                            PressedColor: =Transparent
+                            PressedFill: =Transparent
+                            RadiusBottomLeft: =4
+                            RadiusBottomRight: =4
+                            RadiusTopLeft: =4
+                            RadiusTopRight: =4
+                            TabIndex: |-
+                                =If(
+                                    locShowFirstRun || locShowPowerAppsPrompt||locVisibleDialogUserPreferences,
+                                    -1,
+                                    If(
+                                        Self.Visible,
+                                        0,
+                                        -1
+                                    )
+                                )
+                            Text: |-
+                                =With({varDefault: "Click to select this board",varOOBTextId: "btnBoardForeground__locText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault))) & ThisItem.Name
+                            Tooltip: =
+                            Width: =btnBoardBackground.Width
+                            X: =btnBoardBackground.X
+                            Y: =btnBoardBackground.Y
+                            ZIndex: =8
+
+                    lblBoardHeight As label:
+                        BorderColor: =gblAppStyles.Label.BorderColor
+                        BorderThickness: =gblAppStyles.Label.BorderThickness
+                        Color: =gblAppStyles.Label.Color
+                        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.Label.DisabledColor
+                        DisabledFill: =gblAppStyles.Label.DisabledFill
+                        Fill: =gblAppStyles.Label.Fill
+                        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        FontWeight: =FontWeight.Semibold
+                        Height: =52*1
+                        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                        HoverColor: =gblAppStyles.Label.HoverColor
+                        HoverFill: =gblAppStyles.Label.HoverFill
+                        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                        PressedColor: =gblAppStyles.Label.PressedColor
+                        PressedFill: =gblAppStyles.Label.PressedFill
+                        Size: =gblAppStyles.Label.Size.Medium
+                        Text: =galBoards.Y + galBoards.Height
+                        Tooltip: =Self.Text
+                        Visible: =CountRows(galBoards.AllItems) = 0 || false
+                        Width: =Parent.Width - Self.X*2
+                        Wrap: =false
+                        X: =20*1
+                        Y: =lblBoardCategoryName.Y + lblBoardCategoryName.Height +10
+                        ZIndex: =3
+
+    conDialogWelcome As groupContainer:
+        DisplayMode: =DisplayMode.Edit
+        Fill: |-
+            =If(
+                gblThemeDark Or gblThemeHiCo,
+                gblAppColors.OverlayLight,
+                gblAppColors.OverlayDark
+            )
+        Height: =Parent.Height
+        LayoutAlignItems: =LayoutAlignItems.Start
+        LayoutDirection: =LayoutDirection.Horizontal
+        LayoutJustifyContent: =LayoutJustifyContent.Start
+        LayoutMode: =LayoutMode.Manual
+        LayoutOverflowX: =LayoutOverflow.Hide
+        LayoutOverflowY: =LayoutOverflow.Hide
+        Visible: =locShowFirstRun || locShowPowerAppsPrompt
+        Width: =Parent.Width
+        X: =0*0
+        Y: =0*0
+        ZIndex: =6
+
+        conDialogSplash_PowerApps As groupContainer:
+            DisplayMode: =DisplayMode.Edit
+            Fill: =gblAppStyles.Background.Fill
+            Height: =600*1
+            Visible: =locShowPowerAppsPrompt
+            Width: =640+50*1
+            X: =(Parent.Width - Self.Width) / 2
+            Y: =(Parent.Height - Self.Height) / 2
+            ZIndex: =1
+
+            imgSplashPowerApps_AppLogo As image:
+                AccessibleLabel: |-
+                    =With(
+                        {
+                            varDefault: "Boards logo",
+                            varOOBTextId: "imgCustomize_AppLogo__locAccessibleText"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                Height: =80
+                Image: =Icon_Logo_Boards
+                RadiusBottomLeft: =5
+                RadiusBottomRight: =5
+                RadiusTopLeft: =5
+                RadiusTopRight: =5
+                TabIndex: |-
+                    =If(
+                        true,
+                        -1,
+                        0
+                    )
+                Tooltip: =Self.AccessibleLabel
+                Width: =80
+                X: =(Parent.Width - Self.Width) / 2
+                Y: =40
+                ZIndex: =1
+
+            lblSplashPowerApps_Title As label:
+                Align: =Align.Center
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Semibold
+                Height: =48
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PaddingBottom: =0
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Role: =TextRole.Heading1
+                Size: =gblAppStyles.Label.Size.Large
+                TabIndex: |-
+                    =If(
+                        true,
+                        -1,
+                        0
+                    )
+                Text: |-
+                    =With({varDefault: "Built with Microsoft Power Platform. Ready to customize.",varOOBTextId: "lblSplashPowerApps_Title__locText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                Tooltip: |-
+                    =With({varDefault: "Built with Microsoft Power Platform. Ready to customize.",varOOBTextId: "lblSplashPowerApps_Title__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                Width: =560 + 120
+                Wrap: =false
+                X: =(Parent.Width - Self.Width) / 2
+                Y: =imgSplashPowerApps_AppLogo.Y + imgSplashPowerApps_AppLogo.Height + 16
+                ZIndex: =2
+
+            lblSplashPowerApps_Summary As label:
+                Align: =Align.Center
+                AutoHeight: =true
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =32*1
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PaddingBottom: =0
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: |-
+                    =With({varDefault: "You can edit this app right in Teams with Power Platform’s approachable, low-code tools. Add your logo, connect data sources, or adjust as needed to suit your org.",varOOBTextId: "lblSplashPowerApps_Summary__locText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                Tooltip: |-
+                    =With({varDefault: "You can edit this app right in Teams with Power Platform’s approachable, low-code tools. Add your logo, connect data sources, or adjust as needed to suit your org.",varOOBTextId: "lblSplashPowerApps_Summary__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                Width: =lblSplashPowerApps_Title.Width
+                X: =lblSplashPowerApps_Title.X
+                Y: =lblSplashPowerApps_Title.Y + lblSplashPowerApps_Title.Height
+                ZIndex: =4
+
+            imgSplashPowerApps_Editor As image:
+                AccessibleLabel: =lblSplashPowerApps_Summary.Text
+                Height: =256
+                Image: =Image_SplashPage_PowerPlatform
+                TabIndex: |-
+                    =If(
+                        true,
+                        -1,
+                        0
+                    )
+                Width: =Parent.Width - 40
+                X: =(Parent.Width - Self.Width) / 2
+                Y: =lblSplashPowerApps_Summary.Y +lblSplashPowerApps_Summary.Height + 24
+                ZIndex: =5
+
+            chkSplashPowerApps_DoNotShowAgain As checkbox:
+                BorderColor: =gblAppStyles.Checkbox.BorderColor
+                BorderThickness: =gblAppStyles.Checkbox.BorderThickness
+                CheckboxBackgroundFill: =gblAppStyles.Checkbox.CheckboxBackgroundFill
+                CheckboxBorderColor: =gblAppStyles.Checkbox.CheckboxBorderColor
+                CheckboxSize: =24
+                CheckmarkFill: =gblAppStyles.Checkbox.CheckmarkFill
+                Color: =gblAppStyles.Checkbox.Color
+                DisabledBorderColor: =gblAppStyles.Checkbox.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Checkbox.DisabledColor
+                DisabledFill: =gblAppStyles.Checkbox.DisabledFill
+                Fill: =gblAppStyles.Checkbox.Fill
+                FocusedBorderColor: =gblAppStyles.Checkbox.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Checkbox.BorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =btnSplashPowerApps_Proceed.Height
+                HoverBorderColor: =gblAppStyles.Checkbox.HoverBorderColor
+                HoverColor: =gblAppStyles.Checkbox.HoverColor
+                HoverFill: =gblAppStyles.Checkbox.HoverFill
+                OnCheck: |-
+                    =UpdateContext({locScreenReaderAnnouncedText:"Checked"})
+                OnUncheck: |-
+                    =UpdateContext({locScreenReaderAnnouncedText:"unchecked"})
+                PressedBorderColor: =gblAppStyles.Checkbox.PressedBorderColor
+                PressedColor: =gblAppStyles.Checkbox.PressedColor
+                PressedFill: =gblAppStyles.Checkbox.PressedFill
+                Size: =gblAppStyles.Checkbox.Size
+                TabIndex: |-
+                    =If(
+                        Self.Visible,
+                        0,
+                        -1
+                    )
+                Text: |-
+                    =With({varDefault: "Don’t show this again",varOOBTextId: "chkSplashPowerApps_DoNotShowAgain__locText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                Tooltip: |-
+                    =With({varDefault: "Don’t show this again",varOOBTextId: "chkSplashPowerApps_DoNotShowAgain__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                Width: =200 +30
+                X: =20*1
+                Y: =btnSplashPowerApps_Proceed.Y
+                ZIndex: =6
+
+            btnSplashPowerApps_Back As button:
+                BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+                BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+                Color: =gblAppStyles.ButtonSecondary.Color
+                DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+                DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+                DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+                Fill: =gblAppStyles.ButtonSecondary.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =32
+                HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+                HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+                HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+                OnSelect: |-
+                    =//go back to the first run experience
+                    UpdateContext({locShowFirstRun:true});
+                PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+                PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+                PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+                RadiusBottomLeft: =gblAppStyles.ButtonSecondary.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.ButtonSecondary.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.ButtonSecondary.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.ButtonSecondary.RadiusTopRight
+                Size: =gblAppStyles.ButtonSecondary.Size
+                TabIndex: |-
+                    =If(
+                        Self.Visible,
+                        0,
+                        -1
+                    )
+                Text: |-
+                    =With({varDefault: "Back",varOOBTextId: "btnSplashPowerApps_Back__locText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                Tooltip: |-
+                    =With({varDefault: "Back",varOOBTextId: "btnSplashPowerApps_Back__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                Visible: =locShowFirstRun
+                Width: =92
+                X: =btnSplashPowerApps_Proceed.X - Self.Width - 20*1
+                Y: =btnSplashPowerApps_Proceed.Y
+                ZIndex: =7
+
+            btnSplashPowerApps_Proceed As button:
+                BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+                BorderThickness: =gblAppStyles.ButtonPrimary.BorderThickness
+                Color: =gblAppStyles.ButtonPrimary.Color
+                DisabledBorderColor: =gblAppStyles.ButtonPrimary.DisabledBorderColor
+                DisabledColor: =gblAppStyles.ButtonPrimary.DisabledColor
+                DisabledFill: =gblAppStyles.ButtonPrimary.DisabledFill
+                Fill: =gblAppStyles.ButtonPrimary.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                FocusedBorderThickness: =2//gblAppStyles.ButtonPrimary.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =32
+                HoverBorderColor: =gblAppStyles.ButtonPrimary.HoverBorderColor
+                HoverColor: =gblAppStyles.ButtonPrimary.HoverColor
+                HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+                OnSelect: |
+                    =//if do not show again checkbox is checked, update user setting record to not show this message in subsequent app loads
+                    If(
+                        chkSplashPowerApps_DoNotShowAgain.Value,
+                        If(
+                            IsError(
+                                Patch(
+                                    'Board User Settings',
+                                    gblRecordUserSettings,
+                                    {'Display Splash (Power Apps)?': 'Display Splash (Power Apps)? (Board User Settings)'.No}
+                                )
+                            ),
+                            Notify(
+                                "Error saving record",
+                                NotificationType.Error
+                            )
+                        )
+                    );
+                    //hide Power Apps splash screen and close first run experience
+                    UpdateContext(
+                        {
+                            locShowPowerAppsPrompt: false,
+                            locShowFirstRun: false
+                        }
+                    );
+                    //set focus start
+                    UpdateContext({locSetFocusTimerStart: false});
+                    UpdateContext({locSetFocusControlTarget: "btnAddBoard"});
+                    UpdateContext({locSetFocusTimerStart: true});
+                    //set focus end
+                PressedBorderColor: =gblAppStyles.ButtonPrimary.PressedBorderColor
+                PressedColor: =gblAppStyles.ButtonPrimary.PressedColor
+                PressedFill: =gblAppStyles.ButtonPrimary.PressedFill
+                RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.ButtonPrimary.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+                Size: =gblAppStyles.ButtonPrimary.Size
+                TabIndex: |-
+                    =If(
+                        Self.Visible,
+                        0,
+                        -1
+                    )
+                Text: |-
+                    =With({varDefault: "Got it",varOOBTextId: "btnSplashPowerApps_Proceed__locText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                Tooltip: |-
+                    =With({varDefault: "Got it",varOOBTextId: "btnSplashPowerApps_Proceed__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                Width: =120
+                X: =Parent.Width - Self.Width - 20*1
+                Y: =Parent.Height - Self.Height - 24
+                ZIndex: =8
+
+            btnSplashPowerApps_LearnMore As button:
+                BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+                BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+                Color: =gblAppStyles.ButtonSecondary.Color
+                DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+                DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+                DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+                Fill: =gblAppStyles.ButtonSecondary.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                FocusedBorderThickness: =2//gblAppStyles.ButtonSecondary.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =32
+                HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+                HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+                HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+                OnSelect: |-
+                    =Launch(
+                        "https://go.microsoft.com/fwlink/?linkid=2147034&clcid=0x409",
+                        {},
+                        LaunchTarget.New
+                    )
+                PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+                PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+                PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+                RadiusBottomLeft: =gblAppStyles.ButtonSecondary.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.ButtonSecondary.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.ButtonSecondary.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.ButtonSecondary.RadiusTopRight
+                Size: =gblAppStyles.ButtonSecondary.Size
+                Text: |-
+                    =With({varDefault: "Learn more",varOOBTextId: "btnSplashPowerApps_LearnMore__locText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                Tooltip: |-
+                    =With({varDefault: "Learn more",varOOBTextId: "btnSplashPowerApps_LearnMore__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                Width: =120
+                X: =btnSplashPowerApps_Proceed.X - Self.Width - 20
+                Y: =btnSplashPowerApps_Proceed.Y
+                ZIndex: =9
+
+        conDialogFirstRun As groupContainer:
+            DisplayMode: =DisplayMode.Edit
+            Fill: =gblAppStyles.Background.Fill
+            Height: =600*1
+            Visible: =locShowFirstRun
+            Width: =640*1
+            X: =(Parent.Width - Self.Width) / 2
+            Y: =(Parent.Height - Self.Height) / 2
+            ZIndex: =2
+
+            btnCustomize_Continue As button:
+                BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+                BorderThickness: =gblAppStyles.ButtonPrimary.BorderThickness
+                Color: =gblAppStyles.ButtonPrimary.Color
+                DisabledBorderColor: =gblAppStyles.ButtonPrimary.DisabledBorderColor
+                DisabledColor: =gblAppStyles.ButtonPrimary.DisabledColor
+                DisabledFill: =gblAppStyles.ButtonPrimary.DisabledFill
+                Fill: =gblAppStyles.ButtonPrimary.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                FocusedBorderThickness: =2//gblAppStyles.ButtonPrimary.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =32*1
+                HoverBorderColor: =gblAppStyles.ButtonPrimary.HoverBorderColor
+                HoverColor: =gblAppStyles.ButtonPrimary.HoverColor
+                HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+                OnSelect: |-
+                    =//show Power Apps splash screen and close first run experience
+                    UpdateContext({locShowFirstRun: false})
+                PressedBorderColor: =gblAppStyles.ButtonPrimary.PressedBorderColor
+                PressedColor: =gblAppStyles.ButtonPrimary.PressedColor
+                PressedFill: =gblAppStyles.ButtonPrimary.PressedFill
+                RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.ButtonPrimary.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+                Size: =gblAppStyles.ButtonPrimary.Size
+                TabIndex: |-
+                    =If(
+                        Self.Visible,
+                        0,
+                        -1
+                    )
+                Text: |-
+                    =With({varDefault: "Continue",varOOBTextId: "btnCustomize_Continue__locText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                Tooltip: =Self.Text
+                Visible: =locShowFirstRun
+                Width: =120
+                X: =Parent.Width -Self.Width - 24
+                Y: =Parent.Height - Self.Height - 24
+                ZIndex: =1
+
+            lblCustomize_Line1 As label:
+                Align: =Align.Center
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Semibold
+                Height: =48
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PaddingTop: =0
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Large
+                Text: |-
+                    =With({varDefault: "Effectively organize things in Teams",varOOBTextId: "lblCustomize_Line1__locText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                Tooltip: =Self.Text
+                Width: =550
+                X: =(Parent.Width - Self.Width) / 2
+                Y: =imgCustomize_AppLogo.Y+imgCustomize_AppLogo.Height+16
+                ZIndex: =5
+
+            lblCustomize_Line2 As label:
+                Align: =Align.Center
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =48
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: |-
+                    =With({varDefault: "Boards app in Teams offer an easy-to-use experience to create boards where team members can pin items like a website, team, channel, tab, app, and conversations.",varOOBTextId: "lblCustomize_Line2__locText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                Tooltip: =Self.Text
+                Width: =lblCustomize_Line1.Width
+                X: =lblCustomize_Line1.X
+                Y: =lblCustomize_Line1.Y + lblCustomize_Line1.Height
+                ZIndex: =6
+
+            imgCustomize_AppLogo As image:
+                AccessibleLabel: |-
+                    =With(
+                        {
+                            varDefault: "Boards logo",
+                            varOOBTextId: "imgCustomize_AppLogo__locAccessibleText"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                CalculateOriginalDimensions: |
+                    =true
+                Height: =80
+                Image: =Icon_Logo_Boards
+                Tooltip: =Self.AccessibleLabel
+                Width: =80
+                X: =(Parent.Width - Self.Width) / 2
+                Y: =40
+                ZIndex: =10
+
+            lblCustomize_BetterOrg As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Bold
+                Height: =24
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PaddingLeft: =0
+                PaddingTop: =0
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: |-
+                    =With({varDefault: "Better organization",varOOBTextId: "lblCustomize_BetterOrg__locText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                Tooltip: =Self.Text
+                VerticalAlign: =VerticalAlign.Bottom
+                Width: =200
+                X: =imgCustomize_BetterOrg.X
+                Y: =425
+                ZIndex: =14
+
+            lblCustomize_EasierDiscovery As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Bold
+                Height: =24
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PaddingLeft: =0
+                PaddingTop: =0
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: |-
+                    =With(
+                        {
+                            varDefault: "Easier discovery",
+                            varOOBTextId: "lblCustomize_EasierDiscovery__locText"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                Tooltip: =Self.Text
+                VerticalAlign: =VerticalAlign.Bottom
+                Width: =180
+                X: =imgCustomize_EasierDiscovery.X
+                Y: =425
+                ZIndex: =16
+
+            lblCustomize_EffectiveEngagement As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Bold
+                Height: =24
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PaddingLeft: =0
+                PaddingTop: =0
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: |-
+                    =With({varDefault: "Effective engagement",varOOBTextId: "lblCustomize_EffectiveEngagement__locText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                Tooltip: =Self.Text
+                VerticalAlign: =VerticalAlign.Bottom
+                Width: =180
+                X: =imgCustomize_EffectiveEngagement.X
+                Y: =425
+                ZIndex: =18
+
+            imgCustomize_BetterOrg As image:
+                AccessibleLabel: |-
+                    =With({varDefault: "Icon for better organization",varOOBTextId: "imgCustomize_BetterOrg__locAccessibleText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                CalculateOriginalDimensions: |
+                    =true
+                Height: =162
+                Image: =Boards_Orgnization
+                RadiusBottomLeft: =10
+                RadiusBottomRight: =10
+                RadiusTopLeft: =10
+                RadiusTopRight: =10
+                Tooltip: =Self.AccessibleLabel
+                Width: =162
+                X: =36*1
+                Y: =256
+                ZIndex: =20
+
+            imgCustomize_EasierDiscovery As image:
+                AccessibleLabel: |-
+                    =With({varDefault: "Icon for org structure",varOOBTextId: "imgCustomize_EasierDiscovery__locAccessibleText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                CalculateOriginalDimensions: |
+                    =true
+                Height: =162
+                Image: =Boards_Discovery
+                RadiusBottomLeft: =10
+                RadiusBottomRight: =10
+                RadiusTopLeft: =10
+                RadiusTopRight: =10
+                Tooltip: =Self.AccessibleLabel
+                Width: =162
+                X: =(Parent.Width - Self.Width) / 2
+                Y: =256
+                ZIndex: =21
+
+            imgCustomize_EffectiveEngagement As image:
+                AccessibleLabel: |-
+                    =With({varDefault: "Icon for effective engagement",varOOBTextId: "imgCustomize_EffectiveEngagement__locAccessibleText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                CalculateOriginalDimensions: |
+                    =true
+                Height: =162
+                Image: =Boards_Engagement
+                RadiusBottomLeft: =10
+                RadiusBottomRight: =10
+                RadiusTopLeft: =10
+                RadiusTopRight: =10
+                Tooltip: =Self.AccessibleLabel
+                Width: =162
+                X: =Parent.Width - Self.Width - 36
+                Y: =256
+                ZIndex: =22
+
+    grpBoardsCustomize As group:
+        Height: =5
+        Width: =5
+        X: =40
+        Y: =40
+        ZIndex: =6
+
+        btnCustomize_Boards As button:
+            Align: =Align.Left
+            BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+            BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+            Color: =gblAppStyles.ButtonTransparent.Color
+            DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+            DisabledColor: =gblAppStyles.ButtonTransparent.DisabledColor
+            DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+            Fill: |-
+                =If(
+                    gblThemeDark || gblThemeHiCo,
+                    RGBA(
+                        0,
+                        0,
+                        0,
+                        0.7
+                    ),
+                    RGBA(
+                        255,
+                        255,
+                        255,
+                        0.7
+                    )
+                )
+            FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            Height: =32*1
+            HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+            HoverColor: =gblAppStyles.ButtonTransparent.HoverColor
+            HoverFill: =Self.Fill
+            OnSelect: |-
+                =//screen reader start
+                UpdateContext(
+                    {
+                        locScreenReaderAnnouncedText: With(
+                            {
+                                varAnnouncedText: With(
+                                    {
+                                        varDefault: "Navigating to the about screen",
+                                        varOOBTextId: "btnCustomize__locAnnouncement"
+                                    },
+                                    With(
+                                        {
+                                            varLocalizedText: LookUp(
+                                                colLocalization,
+                                                OOBTextID = varOOBTextId,
+                                                LocalizedText
+                                            )
+                                        },
+                                        Coalesce(
+                                            varLocalizedText,
+                                            varDefault
+                                        )
+                                    )
+                                )
+                            },
+                            If(
+                                locScreenReaderAnnouncedText = varAnnouncedText,
+                                Concatenate(
+                                    varAnnouncedText,
+                                    " "
+                                ),
+                                varAnnouncedText
+                            )
+                        )
+                    }
+                );
+                //screen reader end
+                Navigate(
+                    'About Screen',
+                    ScreenTransition.Fade
+                );
+            PaddingBottom: =0
+            PaddingLeft: =34
+            PaddingTop: =0
+            PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+            PressedColor: =gblAppStyles.ButtonTransparent.PressedColor
+            PressedFill: =Self.Fill
+            RadiusBottomLeft: =gblAppStyles.ButtonTransparent.RadiusBottomLeft
+            RadiusBottomRight: =gblAppStyles.ButtonTransparent.RadiusBottomRight
+            RadiusTopLeft: =gblAppStyles.ButtonTransparent.RadiusTopLeft
+            RadiusTopRight: =gblAppStyles.ButtonTransparent.RadiusTopRight
+            Size: =gblAppStyles.ButtonTransparent.Size
+            TabIndex: |-
+                =If(
+                    locShowFirstRun || locShowPowerAppsPrompt||locVisibleDialogUserPreferences,
+                    -1,
+                    If(
+                        Self.Visible,
+                        0,
+                        -1
+                    )
+                )
+            Text: |-
+                =With(
+                    {
+                        varDefault: "Built with Power Apps >",
+                        varOOBTextId: "btnCustomize_Boards1__locText"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            Tooltip: |-
+                =With({varDefault: "Click to navigate to the about screen",varOOBTextId: "btnCustomize_Boards__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+            Width: =200*1
+            X: =Parent.Width - Self.Width - 20
+            Y: =Parent.Height - Self.Height - 20
+            ZIndex: =4
+
+        imgCustomize_Boards As image:
+            AccessibleLabel: |-
+                =With(
+                    {
+                        varDefault: "Click to navigate to the About screen",
+                        varOOBTextId: "imgCustomize__Boards_locAccessibleText"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            DisabledFill: |-
+                =With(
+                    {
+                        varImageIsCategory: LookUp(
+                            staticIcons,
+                            staticIconName = "Filter"
+                        ).staticIconIsCategory
+                    },
+                    If(
+                        varImageIsCategory,
+                        gblAppStyles.Icons.DisabledFill_Category,
+                        Transparent
+                    )
+                )
+            Fill: |-
+                =With(
+                    {
+                        varImageIsCategory: LookUp(
+                            staticIcons,
+                            staticIconName = "Filter"
+                        ).staticIconIsCategory
+                    },
+                    If(
+                        varImageIsCategory,
+                        gblAppStyles.Icons.Fill_Category,
+                        Transparent
+                    )
+                )
+            Height: =22*1
+            Image: |-
+                =If(
+                    gblThemeDark || gblThemeHiCo,
+                    BuiltWithDark,
+                    BuiltWith
+                )
+            OnSelect: |-
+                =//screen reader start
+                UpdateContext(
+                    {
+                        locScreenReaderAnnouncedText: With(
+                            {
+                                varAnnouncedText: With(
+                                    {
+                                        varDefault: "Navigating to the about screen",
+                                        varOOBTextId: "btnCustomize__locAnnouncement"
+                                    },
+                                    With(
+                                        {
+                                            varLocalizedText: LookUp(
+                                                colLocalization,
+                                                OOBTextID = varOOBTextId,
+                                                LocalizedText
+                                            )
+                                        },
+                                        Coalesce(
+                                            varLocalizedText,
+                                            varDefault
+                                        )
+                                    )
+                                )
+                            },
+                            If(
+                                locScreenReaderAnnouncedText = varAnnouncedText,
+                                Concatenate(
+                                    varAnnouncedText,
+                                    " "
+                                ),
+                                varAnnouncedText
+                            )
+                        )
+                    }
+                );
+                //screen reader end
+                Navigate(
+                    'About Screen',
+                    ScreenTransition.Fade
+                );
+            PaddingBottom: =2
+            PaddingLeft: =2
+            PaddingRight: =2
+            PaddingTop: =2
+            RadiusBottomLeft: =5
+            RadiusBottomRight: =5
+            RadiusTopLeft: =5
+            RadiusTopRight: =5
+            TabIndex: |-
+                =If(
+                    true,
+                    -1,
+                    0
+                )
+            Tooltip: |-
+                =With({varDefault: "Click to navigate to the About Screen",varOOBTextId: "imgCustomize_Boards__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+            Width: =22*1
+            X: =btnCustomize_Boards.X + 10
+            Y: =btnCustomize_Boards.Y + (btnCustomize_Boards.Height - Self.Height) / 2
+            ZIndex: =5
+
+    conSortPreferences As groupContainer:
+        DisplayMode: =DisplayMode.Edit
+        Fill: =Transparent
+        Height: =Parent.Height
+        Visible: =locVisibleDialogUserPreferences 
+        Width: =Parent.Width
+        X: =0*1
+        Y: =0*1
+        ZIndex: =7
+
+        lblSortPreferencesBackground As label:
+            Fill: |-
+                =If(
+                    gblThemeDark Or gblThemeHiCo,
+                    gblAppColors.OverlayLight,
+                    gblAppColors.OverlayDark
+                )
+            FocusedBorderThickness: =1
+            Font: =Font.'Segoe UI'
+            Height: =Parent.Height
+            OnSelect: |
+                =UpdateContext(
+                    {
+                        locVisibleDialogUserPreferences: false,
+                        locBlockUserInput: false
+                    }
+                );
+                Clear(colBoardCategoryPreferenceUpdates);
+            TabIndex: |-
+                =If(
+                    true,
+                    -1,
+                    0
+                )
+            Text: =""
+            Width: =Parent.Width
+            X: =0*1
+            Y: =0*1
+            ZIndex: =1
+
+        lblSortPreferencesContainer As label:
+            Fill: =gblAppStyles.Background.Fill
+            Font: =Font.'Segoe UI'
+            Height: =400
+            Text: =""
+            Width: |-
+                =Switch(
+                    'Boards Screen'.Size,
+                    Small,
+                    300,
+                    Medium,
+                    360,
+                    500
+                )
+            X: =(Parent.Width - Self.Width)/2
+            Y: =(Parent.Height - Self.Height)/2
+            ZIndex: =2
+
+        galSortPreferences As gallery.galleryVertical:
+            AccessibleLabel: ="Gallery of sort preferences"
+            BorderColor: =RGBA(0, 0, 0, 0)
+            DisplayMode: |-
+                =If(
+                    locBlockUserInput,
+                    DisplayMode.Edit,
+                    DisplayMode.Edit
+                )
+            Height: =lblSortPreferencesContainer.Y + lblSortPreferencesContainer.Height - btnApplySortPreferences.Height - Self.Y - 20*2
+            ItemAccessibleLabel: |-
+                =With(
+                    {
+                        varDefault: If(
+                            ThisItem.IsSelected,
+                            "Selected",
+                            "Not selected"
+                        ),
+                        varOOBTextId: If(
+                            ThisItem.IsSelected,
+                            "galPreferences_Items__AccessibleLabel_selected",
+                            "galPreferences_Items__AccessibleLabel_notselected"
+                        )
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            Items: |-
+                =SortByColumns(
+                    colBoardCategoryPreferenceUpdates,
+                    "msft_order",
+                    Ascending
+                )
+            Layout: =Layout.Vertical
+            TabIndex: =0
+            TemplateSize: =40
+            Visible: =locVisibleDialogUserPreferences || true
+            Width: =lblSortPreferencesContainer.Width
+            X: =lblSortPreferencesContainer.X
+            Y: =lblSortPreferencesHeader.Y + lblSortPreferencesHeader.Height
+            ZIndex: =3
+
+            imgCategoryVisible As image:
+                AccessibleLabel: |-
+                    =If(
+                        ThisItem.'Visible?' = 'Visible? (Board Category Preferences)'.Yes,
+                        ThisItem.'Board Category'.Name & " " & "Click to hide this category",
+                        ThisItem.'Board Category'.Name & " " & "Click to show this category"
+                    )
+                BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+                DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+                DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                DisplayMode: |-
+                    =If(
+                        locBlockUserInput,
+                        DisplayMode.Disabled,
+                        DisplayMode.Edit
+                    )
+                Fill: =gblAppStyles.ButtonTransparent.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                Height: =24
+                HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+                Image: |-
+                    =With(
+                        {
+                            varImageRecord: LookUp(
+                                staticIcons,
+                                staticIconName = If(
+                                    ThisItem.'Visible?' = 'Visible? (Board Category Preferences)'.Yes,
+                                    "Hide",
+                                    "Unhide"
+                                )
+                            ),
+                            varColor: If(
+                                Self.DisplayMode = DisplayMode.Disabled,
+                                gblAppStyles.Icons.DisabledColor,
+                                gblAppStyles.Icons.Color_Gray
+                            )
+                        },
+                        With(
+                            {
+                                varImageData: Concatenate(
+                                    "data:image/svg+xml;utf8, ",
+                                    EncodeUrl(
+                                        Concatenate(
+                                            "<svg viewBox='",
+                                            varImageRecord.staticIconViewbox,
+                                            "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                            varImageRecord.staticIconPath,
+                                            "' fill='#",
+                                            varColor,
+                                            "'/></svg>"
+                                        )
+                                    )
+                                )
+                            },
+                            varImageData
+                        )
+                    )
+                OnSelect: |-
+                    =UpdateIf(
+                        colBoardCategoryPreferenceUpdates,
+                        colBoardCategoryPreferenceUpdates[@appCategoryGUID] = ThisItem.'Board Category'.'Board Category',
+                        {
+                            'Visible?': If(
+                                ThisItem.'Visible?' = 'Visible? (Board Category Preferences)'.Yes,
+                                'Visible? (Board Category Preferences)'.No,
+                                'Visible? (Board Category Preferences)'.Yes
+                            )
+                        }
+                    );
+                    SetFocus(imgCancelSortPreferences)
+                PaddingBottom: =2
+                PaddingLeft: =2
+                PaddingRight: =2
+                PaddingTop: =2
+                PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+                TabIndex: =If(locVisibleDialogUserPreferences ,0,-1)
+                Tooltip: =Self.AccessibleLabel
+                Width: =24
+                X: =Parent.TemplateWidth - Self.Width - 20
+                Y: =(Parent.TemplateHeight - Self.Height) / 2
+                ZIndex: =1
+
+            imgCategorySortDown As image:
+                AccessibleLabel: |-
+                    =If(
+                        ThisItem.msft_order = Max(
+                            colBoardCategoryPreferences,
+                            msft_order
+                        ),
+                        "Disabled sorrting down arrow icon for " & ThisItem.'Board Category'.Name ,
+                        If(
+                            locBlockUserInput,
+                            "Disabled sorting down arrow icon for " & ThisItem.'Board Category'.Name ,
+                           ThisItem.'Board Category'.Name & " " & With(
+                        {
+                            varDefault: "Click to move this category down in the sort list",
+                            varOOBTextId: "imgGalPreferences_CategorySort_Down__AccessibleLabel"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                        )
+                    )
+                BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+                DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+                DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                DisplayMode: |
+                    =If(
+                        ThisItem.msft_order = Max(
+                            colBoardCategoryPreferences,
+                            msft_order
+                        ),
+                        DisplayMode.Disabled,
+                        If(
+                            locBlockUserInput,
+                            DisplayMode.Disabled,
+                            DisplayMode.Edit
+                        )
+                    )
+                Fill: =gblAppStyles.ButtonTransparent.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                Height: =24
+                HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+                Image: |-
+                    =With(
+                        {
+                            varImageRecord: LookUp(
+                                staticIcons,
+                                staticIconName = "Down"
+                            ),
+                            varColor: If(
+                                Self.DisplayMode = DisplayMode.Disabled,
+                                gblAppStyles.Icons.DisabledColor,
+                                gblAppStyles.Icons.Color_Purple
+                            )
+                        },
+                        With(
+                            {
+                                varImageData: Concatenate(
+                                    "data:image/svg+xml;utf8, ",
+                                    EncodeUrl(
+                                        Concatenate(
+                                            "<svg viewBox='",
+                                            varImageRecord.staticIconViewbox,
+                                            "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                            varImageRecord.staticIconPath,
+                                            "' fill='#",
+                                            varColor,
+                                            "'/></svg>"
+                                        )
+                                    )
+                                )
+                            },
+                            varImageData
+                        )
+                    )
+                OnSelect: |-
+                    =// Set variables for update
+                    UpdateContext({locSequenceCurrent: ThisItem.Order});
+                    UpdateContext(
+                        {
+                            locSequenceNew: First(
+                                SortByColumns(
+                                    Filter(
+                                        colBoardCategoryPreferenceUpdates,
+                                        Order > locSequenceCurrent
+                                    ),
+                                    "msft_order",
+                                    Ascending
+                                )
+                            ).Order// Revise to lookup next # in Collection
+                        }
+                    );
+                    // Find existing with 'New', swap with 'Current'
+                    UpdateIf(
+                        colBoardCategoryPreferenceUpdates,
+                        colBoardCategoryPreferenceUpdates[@msft_order] = locSequenceNew,
+                        {msft_order: locSequenceCurrent}
+                    );
+                    // Update this with 'New', value
+                    UpdateIf(
+                        colBoardCategoryPreferenceUpdates,
+                        ThisItem.'Board Category'.'Board Category'    = colBoardCategoryPreferenceUpdates[@appCategoryGUID],
+                        {msft_order: locSequenceNew}
+                    );
+                    SetFocus(imgCancelSortPreferences)
+                PaddingBottom: =2
+                PaddingLeft: =2
+                PaddingRight: =2
+                PaddingTop: =2
+                PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+                TabIndex: |-
+                    =If(
+                        locVisibleDialogUserPreferences,
+                        If(
+                            Self.DisplayMode = DisplayMode.Edit,
+                            0,
+                            -1
+                        ),
+                        -1
+                    )
+                Tooltip: =Self.AccessibleLabel
+                Width: =24
+                X: =imgCategoryVisible.X - Self.Width - 20
+                Y: =(Parent.TemplateHeight - Self.Height) / 2
+                ZIndex: =2
+
+            imgCategorySortUp As image:
+                AccessibleLabel: |-
+                    =If(
+                        ThisItem.msft_order = Min(
+                            colBoardCategoryPreferences,
+                            msft_order
+                        ),
+                        "Disabled sorting Up arrow icon for" & ThisItem.'Board Category'.Name,
+                        If(
+                            locBlockUserInput,
+                            "Disabled sorting Up arrow icon for " & ThisItem.'Board Category'.Name,
+                            ThisItem.'Board Category'.Name & " " & With(
+                        {
+                            varDefault: "Click to move this category up in the sort list",
+                            varOOBTextId: "imgGalPreferences_CategorySort_Up__AccessibleLabel"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                        )
+                    )
+                BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+                DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+                DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                DisplayMode: |-
+                    =If(
+                        ThisItem.msft_order = Min(
+                            colBoardCategoryPreferences,
+                            msft_order
+                        ),
+                        DisplayMode.Disabled,
+                        If(
+                            locBlockUserInput,
+                            DisplayMode.Disabled,
+                            DisplayMode.Edit
+                        )
+                    )
+                Fill: =gblAppStyles.ButtonTransparent.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                Height: =24
+                HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+                Image: |-
+                    =With(
+                        {
+                            varImageRecord: LookUp(
+                                staticIcons,
+                                staticIconName = "Up"
+                            ),
+                            varColor: If(
+                                Self.DisplayMode = DisplayMode.Disabled,
+                                gblAppStyles.Icons.DisabledColor,
+                                gblAppStyles.Icons.Color_Purple
+                            )
+                        },
+                        With(
+                            {
+                                varImageData: Concatenate(
+                                    "data:image/svg+xml;utf8, ",
+                                    EncodeUrl(
+                                        Concatenate(
+                                            "<svg viewBox='",
+                                            varImageRecord.staticIconViewbox,
+                                            "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                            varImageRecord.staticIconPath,
+                                            "' fill='#",
+                                            varColor,
+                                            "'/></svg>"
+                                        )
+                                    )
+                                )
+                            },
+                            varImageData
+                        )
+                    )
+                OnSelect: |-
+                    =// Set variables for update
+                    UpdateContext({locSequenceCurrent: ThisItem.Order});
+                    UpdateContext(
+                        {
+                            locSequenceNew: Last(
+                                SortByColumns(
+                                    Filter(
+                                        colBoardCategoryPreferenceUpdates,
+                                        Order < locSequenceCurrent
+                                    ),
+                                    "msft_order",
+                                    Ascending
+                                )
+                            ).Order// Revise to lookup next # in Collection
+                        }
+                    );
+                    // Find existing with 'New', swap with 'Current'
+                    UpdateIf(
+                        colBoardCategoryPreferenceUpdates,
+                        colBoardCategoryPreferenceUpdates[@msft_order] = locSequenceNew,
+                        {msft_order: locSequenceCurrent}
+                    );
+                    // Update this with 'New', value
+                    UpdateIf(
+                        colBoardCategoryPreferenceUpdates,
+                        ThisItem.'Board Category'.'Board Category' = colBoardCategoryPreferenceUpdates[@appCategoryGUID],
+                        {msft_order: locSequenceNew}
+                    );
+                    SetFocus(imgCancelSortPreferences)
+                PaddingBottom: =2
+                PaddingLeft: =2
+                PaddingRight: =2
+                PaddingTop: =2
+                PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+                TabIndex: |-
+                    =If(
+                        locVisibleDialogUserPreferences,
+                        If(
+                            Self.DisplayMode = DisplayMode.Edit,
+                            0,
+                            -1
+                        ),
+                        -1
+                    )
+                Tooltip: =Self.AccessibleLabel
+                Width: =24
+                X: =imgCategorySortDown.X - Self.Width - 20
+                Y: =(Parent.TemplateHeight - Self.Height) / 2
+                ZIndex: =3
+
+            lblCategoryName As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                DisplayMode: =DisplayMode.View
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =If(ThisItem.IsSelected,Bold,FontWeight.Normal)
+                Height: =Parent.TemplateHeight
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PaddingLeft: =20
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: =ThisItem.'Board Category'.Name
+                Width: =imgCategorySortUp.X - Self.X
+                X: =0*0
+                Y: =0*0
+                ZIndex: =4
+
+        btnApplySortPreferences As button:
+            BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+            BorderThickness: =gblAppStyles.ButtonPrimary.BorderThickness
+            Color: =gblAppStyles.ButtonPrimary.Color
+            DisabledBorderColor: =gblAppStyles.ButtonPrimary.DisabledBorderColor
+            DisabledColor: =gblAppStyles.ButtonPrimary.DisabledColor
+            DisabledFill: =gblAppStyles.ButtonPrimary.DisabledFill
+            Fill: =gblAppStyles.ButtonPrimary.Fill
+            FocusedBorderColor: =gblAppStyles.ButtonPrimary.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.ButtonPrimary.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            Height: =32
+            HoverBorderColor: =gblAppStyles.ButtonPrimary.HoverBorderColor
+            HoverColor: =gblAppStyles.ButtonPrimary.HoverColor
+            HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+            OnSelect: |
+                =UpdateContext({locBlockUserInput: true});
+                If(
+                    IsError(
+                        Patch(
+                            'Board Category Preferences',
+                            ShowColumns(
+                                colBoardCategoryPreferenceUpdates,
+                                "msft_isvisible",
+                                "msft_name",
+                                "msft_boardcategorypreferenceid",
+                                "msft_order"
+                            )
+                        )
+                    ),
+                    Notify(
+                        "Error saving record",
+                        NotificationType.Error
+                    )
+                );
+                ForAll(
+                    colBoardCategoryPreferenceUpdates,
+                    Update(
+                        colBoardCategoryPreferences,
+                        LookUp(
+                            colBoardCategoryPreferences,
+                            appCategoryGUID = colBoardCategoryPreferenceUpdates[@appCategoryGUID]
+                        ),
+                        ThisRecord
+                    )
+                );
+                UpdateContext({locVisibleDialogUserPreferences: false});
+                //screen reader start
+                UpdateContext(
+                    {
+                        locScreenReaderAnnouncedText: With(
+                            {
+                                varAnnouncedText: With(
+                                    {
+                                        varDefault: "Applying the sorting preferences and closing the sort dialog",
+                                        varOOBTextId: "btnApplySortPreferences__locAnnouncement"
+                                    },
+                                    With(
+                                        {
+                                            varLocalizedText: LookUp(
+                                                colLocalization,
+                                                OOBTextID = varOOBTextId,
+                                                LocalizedText
+                                            )
+                                        },
+                                        Coalesce(
+                                            varLocalizedText,
+                                            varDefault
+                                        )
+                                    )
+                                )
+                            },
+                            If(
+                                locScreenReaderAnnouncedText = varAnnouncedText,
+                                Concatenate(
+                                    varAnnouncedText,
+                                    " "
+                                ),
+                                varAnnouncedText
+                            )
+                        )
+                    }
+                );
+                //screen reader end
+                //set focus start
+                UpdateContext({locSetFocusTimerStart: false});
+                UpdateContext({locSetFocusControlTarget: "imgSortPreferences"});
+                UpdateContext({locSetFocusTimerStart: true});
+                //set focus end
+            PressedBorderColor: =gblAppStyles.ButtonPrimary.PressedBorderColor
+            PressedColor: =gblAppStyles.ButtonPrimary.PressedColor
+            PressedFill: =gblAppStyles.ButtonPrimary.PressedFill
+            RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+            RadiusBottomRight: =gblAppStyles.ButtonPrimary.RadiusBottomRight
+            RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+            RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+            Size: =gblAppStyles.ButtonPrimary.Size
+            TabIndex: =If(locVisibleDialogUserPreferences,0,-1)
+            Text: |-
+                =With({varDefault: "Apply",varOOBTextId: "btnApplySortPreferences__locText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+            Tooltip: |-
+                =With({varDefault: "Click to apply category preferences",varOOBTextId: "btnApplySortPreferences__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+            Width: =100
+            X: =lblSortPreferencesContainer.X + lblSortPreferencesContainer.Width -Self.Width - 20
+            Y: =lblSortPreferencesContainer.Y + lblSortPreferencesContainer.Height -Self.Height - 20
+            ZIndex: =4
+
+        imgCancelSortPreferences As image:
+            AccessibleLabel: |-
+                =With({varDefault: "Dismiss",varOOBTextId: "imgCancelSortPreferences__locAccessibleText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+            BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+            BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+            DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+            DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+            Fill: =gblAppStyles.ButtonTransparent.Fill
+            FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+            Height: =32
+            HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+            HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+            Image: |-
+                =With(
+                    {
+                        varImageRecord: LookUp(
+                            staticIcons,
+                            staticIconName = "Dismiss"
+                        ),
+                        varColor: If(
+                            Self.DisplayMode = DisplayMode.Disabled,
+                            gblAppStyles.Icons.DisabledColor,
+                            gblAppStyles.Icons.Color_Gray
+                        )
+                    },
+                    With(
+                        {
+                            varImageData: Concatenate(
+                                "data:image/svg+xml;utf8, ",
+                                EncodeUrl(
+                                    Concatenate(
+                                        "<svg viewBox='",
+                                        varImageRecord.staticIconViewbox,
+                                        "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                        varImageRecord.staticIconPath,
+                                        "' fill='#",
+                                        varColor,
+                                        "'/></svg>"
+                                    )
+                                )
+                            )
+                        },
+                        varImageData
+                    )
+                )
+            OnSelect: |
+                =UpdateContext(
+                    {
+                        locVisibleDialogUserPreferences: false,
+                        locBlockUserInput: false
+                    }
+                );
+                Clear(colBoardCategoryPreferenceUpdates);
+                
+                //screen reader start
+                UpdateContext(
+                    {
+                        locScreenReaderAnnouncedText: With(
+                            {
+                                varAnnouncedText: With(
+                                    {
+                                        varDefault: "Cancelling the Sort Preferences and closing the Sort dialog",
+                                        varOOBTextId: "btnCancelSortPreferences__locAnnouncement"
+                                    },
+                                    With(
+                                        {
+                                            varLocalizedText: LookUp(
+                                                colLocalization,
+                                                OOBTextID = varOOBTextId,
+                                                LocalizedText
+                                            )
+                                        },
+                                        Coalesce(
+                                            varLocalizedText,
+                                            varDefault
+                                        )
+                                    )
+                                )
+                            },
+                            If(
+                                locScreenReaderAnnouncedText = varAnnouncedText,
+                                Concatenate(
+                                    varAnnouncedText,
+                                    " "
+                                ),
+                                varAnnouncedText
+                            )
+                        )
+                    }
+                );
+                //screen reader end
+                //set focus start
+                UpdateContext({locSetFocusTimerStart: false});
+                UpdateContext({locSetFocusControlTarget: "imgSortPreferences"});
+                UpdateContext({locSetFocusTimerStart: true});
+                //set focus end
+            PaddingBottom: =6
+            PaddingLeft: =6
+            PaddingRight: =6
+            PaddingTop: =6
+            PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+            PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+            TabIndex: =If(locVisibleDialogUserPreferences,0,-1)
+            Tooltip: |-
+                =With({varDefault: "Dismiss",varOOBTextId: "imgCancelSortPreferences__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+            Width: =32
+            X: =lblSortPreferencesContainer.X + lblSortPreferencesContainer.Width - Self.Width - 20
+            Y: =lblSortPreferencesContainer.Y + (lblSortPreferencesHeader.Height - Self.Height) / 2
+            ZIndex: =5
+
+        lblSortPreferencesHeader As label:
+            BorderColor: =gblAppStyles.Label.BorderColor
+            BorderThickness: =gblAppStyles.Label.BorderThickness
+            Color: =gblAppStyles.Label.Color
+            DisabledColor: =gblAppStyles.Label.DisabledColor
+            DisabledFill: =gblAppStyles.Label.DisabledFill
+            DisplayMode: =DisplayMode.View
+            Fill: =gblAppStyles.Label.Fill
+            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            FontWeight: =FontWeight.Semibold
+            Height: =48
+            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+            HoverColor: =gblAppStyles.Label.HoverColor
+            HoverFill: =gblAppStyles.Label.HoverFill
+            PaddingLeft: =20
+            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+            PressedColor: =gblAppStyles.Label.PressedColor
+            PressedFill: =gblAppStyles.Label.PressedFill
+            Role: =TextRole.Heading3
+            Size: =gblAppStyles.Label.Size.Medium
+            Text: |-
+                =With({varDefault: "Manage categories",varOOBTextId: "lblSortPreferencesHeader__locText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+            Tooltip: |-
+                =With({varDefault: "Manage categories",varOOBTextId: "lblSortPreferencesHeader__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+            Width: =imgCancelSortPreferences.X - Self.X
+            X: =lblSortPreferencesContainer.X
+            Y: =lblSortPreferencesContainer.Y
+            ZIndex: =6
+
+        btnCancelSortPreferences As button:
+            BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+            BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+            Color: =gblAppStyles.ButtonSecondary.Color
+            DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+            DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+            DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+            Fill: =gblAppStyles.ButtonSecondary.Fill
+            FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            Height: =32*1
+            HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+            HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+            HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+            OnSelect: |-
+                =UpdateContext(
+                    {
+                        locVisibleDialogUserPreferences: false,
+                        locBlockUserInput: false
+                    }
+                );
+                Clear(colBoardCategoryPreferenceUpdates);
+                
+                //screen reader start
+                UpdateContext(
+                    {
+                        locScreenReaderAnnouncedText: With(
+                            {
+                                varAnnouncedText: With(
+                                    {
+                                        varDefault: "Cancelling the Sort Preferences and closing the Sort dialog",
+                                        varOOBTextId: "btnCancelSortPreferences__locAnnouncement"
+                                    },
+                                    With(
+                                        {
+                                            varLocalizedText: LookUp(
+                                                colLocalization,
+                                                OOBTextID = varOOBTextId,
+                                                LocalizedText
+                                            )
+                                        },
+                                        Coalesce(
+                                            varLocalizedText,
+                                            varDefault
+                                        )
+                                    )
+                                )
+                            },
+                            If(
+                                locScreenReaderAnnouncedText = varAnnouncedText,
+                                Concatenate(
+                                    varAnnouncedText,
+                                    " "
+                                ),
+                                varAnnouncedText
+                            )
+                        )
+                    }
+                );
+                //screen reader end
+                //set focus start
+                UpdateContext({locSetFocusTimerStart: false});
+                UpdateContext({locSetFocusControlTarget: "imgSortPreferences"});
+                UpdateContext({locSetFocusTimerStart: true});
+                //set focus end
+            PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+            PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+            PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+            RadiusBottomLeft: =gblAppStyles.ButtonSecondary.RadiusBottomLeft
+            RadiusBottomRight: =gblAppStyles.ButtonSecondary.RadiusBottomRight
+            RadiusTopLeft: =gblAppStyles.ButtonSecondary.RadiusTopLeft
+            RadiusTopRight: =gblAppStyles.ButtonSecondary.RadiusTopRight
+            Size: =gblAppStyles.ButtonSecondary.Size
+            TabIndex: =If(locVisibleDialogUserPreferences ,0,-1)
+            Text: |-
+                =With({varDefault: "Cancel",varOOBTextId: "btnCancelSortPreferences__locText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+            Tooltip: |-
+                =With({varDefault: "Cancel",varOOBTextId: "btnCancelSortPreferences__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+            Width: =100*1
+            X: =lblSortPreferencesContainer.X + lblSortPreferencesContainer.Width - btnApplySortPreferences.Width - Self.Width - 20*2
+            Y: =btnApplySortPreferences.Y
+            ZIndex: =7
+

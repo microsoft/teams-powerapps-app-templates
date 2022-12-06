@@ -1,0 +1,202 @@
+"'Incorrect Context Screen' As screen":
+    Fill: |-
+        =Switch(
+            Param("theme"),
+            "contrast",
+            Black,
+            "dark",
+            ColorValue("#201F1E"), // NeutralWebGray180
+            ColorValue("#F3F2F1") // NeutralWebGray20
+        )
+    OnVisible: =
+
+    conIncorrectContext As groupContainer:
+        Fill: =Transparent
+        Height: =App.Height
+        Width: =App.Width
+        X: =(Parent.Width - Self.Width) / 2
+        Y: =(Parent.Height - Self.Height) / 2
+        ZIndex: =1
+
+        btnIncorrectContext_Exit As button:
+            BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+            BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+            Color: =gblAppStyles.ButtonSecondary.Color
+            DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+            DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+            DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+            Fill: =gblAppStyles.ButtonSecondary.Fill
+            FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+            HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+            HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+            OnSelect: =Exit()
+            PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+            PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+            PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+            RadiusBottomLeft: =gblAppStyles.ButtonSecondary.RadiusBottomLeft
+            RadiusBottomRight: =gblAppStyles.ButtonSecondary.RadiusBottomRight
+            RadiusTopLeft: =gblAppStyles.ButtonSecondary.RadiusTopLeft
+            RadiusTopRight: =gblAppStyles.ButtonSecondary.RadiusTopRight
+            Size: =gblAppStyles.ButtonSecondary.Size
+            Text: |-
+                =With(
+                    {
+                        varDefault: "Close app",
+                        varOOBTextId: "_translateCommon__IncorrectContext_CloseApp"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            X: =(Parent.Width - Self.Width) / 2
+            Y: =lblIncorrectContext_Explanation.Y + lblIncorrectContext_Explanation.Height + 24
+            ZIndex: =1
+
+        imgIncorrectContext As image:
+            AccessibleLabel: =lblIncorrectContext_Explanation.Text
+            Height: =200
+            Image: =Image_AppNotSupported_Mobile
+            Tooltip: ="Something went wrong"
+            Width: =200
+            X: =(Parent.Width - Self.Width) / 2
+            Y: =(Parent.Height - Self.Height) / 5
+            ZIndex: =4
+
+        lblIncorrectContext_Explanation As label:
+            Align: =Align.Center
+            BorderColor: =gblAppStyles.Label.BorderColor
+            BorderThickness: =gblAppStyles.Label.BorderThickness
+            Color: |
+                =// Non-variable colors, while variable is established
+                Switch(
+                    Param("theme"),
+                    "contrast",
+                    White,
+                    "dark",
+                    White,
+                    ColorValue("#252423") // NeutralWebGray190
+                )
+            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+            DisabledColor: =gblAppStyles.Label.DisabledColor
+            DisabledFill: =gblAppStyles.Label.DisabledFill
+            Fill: =Transparent
+            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            Height: =48
+            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+            HoverColor: =gblAppStyles.Label.HoverColor
+            HoverFill: =gblAppStyles.Label.HoverFill
+            PaddingLeft: =60
+            PaddingRight: =60
+            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+            PressedColor: =gblAppStyles.Label.PressedColor
+            PressedFill: =gblAppStyles.Label.PressedFill
+            Size: =gblAppStyles.Label.Size.Medium
+            Text: |-
+                =With(
+                    {
+                        varDefault: "However, you can use it on a desktop computer.",
+                        varOOBTextId: "_translateCommon__IncorrectContext_PhoneNotSupported"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            Width: =Parent.Width
+            X: =0*0
+            Y: =lblIncorrectContext_Notification.Y + lblIncorrectContext_Notification.Height
+            ZIndex: =5
+
+        lblIncorrectContext_Notification As label:
+            Align: =Align.Center
+            BorderColor: =gblAppStyles.Label.BorderColor
+            BorderThickness: =gblAppStyles.Label.BorderThickness
+            Color: |
+                =// Non-variable colors, while variable is established
+                Switch(
+                    Param("theme"),
+                    "contrast",
+                    White,
+                    "dark",
+                    White,
+                    ColorValue("#252423") // NeutralWebGray190
+                )
+            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+            DisabledColor: =gblAppStyles.Label.DisabledColor
+            DisabledFill: =gblAppStyles.Label.DisabledFill
+            Fill: =Transparent
+            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            FontWeight: =FontWeight.Semibold
+            Height: =32
+            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+            HoverColor: =gblAppStyles.Label.HoverColor
+            HoverFill: =gblAppStyles.Label.HoverFill
+            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+            PressedColor: =gblAppStyles.Label.PressedColor
+            PressedFill: =gblAppStyles.Label.PressedFill
+            Size: =gblAppStyles.Label.Size.Large
+            Text: |-
+                =With(
+                    {
+                        varDefault: "This app isn't supported on mobile devices.",
+                        varOOBTextId: "_translateCommon__IncorrectContext_Title"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            Width: =Parent.Width
+            X: =0*0
+            Y: =imgIncorrectContext.Y + imgIncorrectContext.Height + 16
+            ZIndex: =6
+
+        btnIncorrectContext_Hidden_StyleErrorFallback As button:
+            Fill: =RGBA(166, 166, 166, 1)
+            Font: =Font.'Segoe UI'
+            Height: =btnIncorrectContext_Exit.Height
+            HoverFill: =ColorFade(Self.Fill, -20%)
+            OnSelect: =Select(btnIncorrectContext_Exit)
+            Size: =btnIncorrectContext_Exit.Size
+            Text: =btnIncorrectContext_Exit.Text
+            Visible: =IsBlankOrError(gblAppStyles)
+            Width: =btnIncorrectContext_Exit.Width
+            X: =btnIncorrectContext_Exit.X
+            Y: =btnIncorrectContext_Exit.Y
+            ZIndex: =7
+

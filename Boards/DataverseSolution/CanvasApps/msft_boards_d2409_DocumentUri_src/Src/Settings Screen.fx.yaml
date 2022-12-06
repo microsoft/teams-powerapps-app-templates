@@ -1,0 +1,1004 @@
+"'Settings Screen' As screen":
+    Fill: =gblAppStyles.Background.Fill
+    OnVisible: |-
+        =Clear(colBoardCategories);
+        ForAll(
+            'Board Categories',
+            Collect(
+                colBoardCategories,
+                {
+                    CategoryName: ThisRecord.Name,
+                    ID: ThisRecord.'Board Category',
+                    Order: CountRows(colBoardCategories) + 1,
+                    RecordRef: ThisRecord
+                }
+            )
+        );
+        Clear(colDeletedBoardCategories);
+        SetFocus(btnAddCategory)
+
+    lblAnnounce_Settings As label:
+        Height: =0
+        Live: =Live.Assertive
+        Text: =locScreenReaderAnnouncedText 
+        Width: =0
+        X: =Parent.Width - Self.Width
+        Y: =Parent.Height - Self.Height
+        ZIndex: =1
+
+    conSettings As groupContainer:
+        DisplayMode: =DisplayMode.Edit
+        Height: =Parent.Height
+        LayoutAlignItems: =LayoutAlignItems.Start
+        LayoutDirection: =LayoutDirection.Horizontal
+        LayoutJustifyContent: =LayoutJustifyContent.Start
+        LayoutMode: =LayoutMode.Manual
+        LayoutOverflowX: =LayoutOverflow.Hide
+        LayoutOverflowY: =LayoutOverflow.Hide
+        Width: =Parent.Width
+        ZIndex: =2
+
+        cnvSettings As fluidGrid.fluidGridWithBlankCard:
+            BorderThickness: =0
+            Height: =Parent.Height - Self.Y
+            Width: =Parent.Width
+            X: =0*1
+            Y: =0*1
+            ZIndex: =1
+
+            dtcSettings As dataCard:
+                BorderColor: =RGBA(0, 0, 0, 1)
+                BorderStyle: =BorderStyle.Solid
+                BorderThickness: =0
+                DisplayMode: =DisplayMode.Edit
+                Fill: =RGBA(0, 0, 0, 0)
+                Height: |-
+                    =If(
+                        'Settings Screen'.Size = ScreenSize.ExtraLarge || 'Settings Screen'.Size = ScreenSize. Large,
+                        btnAddCategory.Y + btnAddCategory.Height + 20,
+                        btnSave_Settings.Y + btnSave_Settings.Height + 20
+                    )
+                Width: =Parent.Width
+                X: =0
+                Y: =0
+                ZIndex: =1
+
+                lblHeader_Settings As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Bold
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Role: =TextRole.Heading1
+                    Size: =gblAppStyles.Label.Size.Large
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Settings",
+                                varOOBTextId: "lblHeader_Settings__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Tooltip: |-
+                        =With({varDefault: "Settings",varOOBTextId: "lblHeader_Settings__locAccessibleText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Width: |-
+                        =If(
+                            'Settings Screen'.Size = ScreenSize.ExtraLarge || 'Settings Screen'.Size = ScreenSize.Large,
+                            Parent.Width/2,
+                            Parent.Width - Self.X*2
+                        )
+                    Wrap: =false
+                    X: =20*1
+                    Y: =lblBack_Settings.Y + lblBack_Settings.Height + 20
+                    ZIndex: =1
+
+                btnSave_Settings As button:
+                    BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+                    BorderThickness: =gblAppStyles.ButtonPrimary.BorderThickness
+                    Color: =gblAppStyles.ButtonPrimary.Color
+                    DisabledBorderColor: =gblAppStyles.ButtonPrimary.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.ButtonPrimary.DisabledColor
+                    DisabledFill: =gblAppStyles.ButtonPrimary.DisabledFill
+                    DisplayMode: |-
+                        =If(
+                            CountRows(colDeletedBoardCategories) > 0 || (CountRows(
+                                Filter(
+                                    galCategories.AllItems,
+                                    !IsBlank(ID),
+                                    txtCategoryTitle.Text = CategoryName
+                                )
+                            ) <> CountRows(galCategories.AllItems) && CountRows(
+                                Filter(
+                                    galCategories.AllItems,
+                                    IsBlank(txtCategoryTitle.Text)
+                                )
+                            ) = 0),
+                            DisplayMode.Edit,
+                            DisplayMode.Disabled
+                        )
+                    Fill: =gblAppStyles.ButtonPrimary.Fill
+                    FocusedBorderColor: =gblAppStyles.ButtonPrimary.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.ButtonPrimary.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.ButtonPrimary.HoverBorderColor
+                    HoverColor: =gblAppStyles.ButtonPrimary.HoverColor
+                    HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+                    OnSelect: |
+                        =// Will delete records, if they exist in Dataverse and create/update others
+                        ForAll(
+                            Filter(
+                                colDeletedBoardCategories,
+                                !IsBlank(ID)
+                            ),
+                            Remove(
+                                'Board Categories',
+                                RecordRef
+                                /*
+                                // N+1
+                                LookUp(
+                                    'Board Categories',
+                                    'Board Category' = ID
+                                )
+                                */
+                            )
+                        );
+                        ForAll(
+                            Filter(
+                                galCategories.AllItems,
+                                !IsBlank(ID)
+                            ),
+                            If(
+                                IsError(
+                                    Patch(
+                                        'Board Categories',
+                                        RecordRef,
+                                /*
+                                // N+1
+                                LookUp(
+                                    'Board Categories',
+                                    'Board Category' = ID
+                                )
+                                */
+                                        {Name: txtCategoryTitle.Text}
+                                    )
+                                ),
+                                Notify(
+                                    "Error saving records",
+                                    NotificationType.Error
+                                )
+                            )
+                        );
+                        ForAll(
+                            Filter(
+                                galCategories.AllItems,
+                                IsBlank(ID)
+                            ),
+                            If(
+                                IsError(
+                                    Patch(
+                                        'Board Categories',
+                                        Defaults('Board Categories'),
+                                        {Name: txtCategoryTitle.Text}
+                                    )
+                                ),
+                                Notify(
+                                    "Error creating records",
+                                    NotificationType.Error
+                                )
+                            )
+                        );
+                        Clear(colBoardCategories);
+                        ForAll(
+                            'Board Categories',
+                            Collect(
+                                colBoardCategories,
+                                {
+                                    CategoryName: ThisRecord.Name,
+                                    ID: ThisRecord.'Board Category',
+                                    Order: CountRows(colBoardCategories) + 1,
+                                    RecordRef: ThisRecord
+                                }
+                            )
+                        );
+                        Clear(colDeletedBoardCategories);
+                        //screen reader start
+                        UpdateContext(
+                            {
+                                locScreenReaderAnnouncedText: With(
+                                    {
+                                        varAnnouncedText: With(
+                                            {
+                                                varDefault: "Saved successfully",
+                                                varOOBTextId: "btnSave_Settings__locAnnouncement"
+                                            },
+                                            With(
+                                                {
+                                                    varLocalizedText: LookUp(
+                                                        colLocalization,
+                                                        OOBTextID = varOOBTextId,
+                                                        LocalizedText
+                                                    )
+                                                },
+                                                Coalesce(
+                                                    varLocalizedText,
+                                                    varDefault
+                                                )
+                                            )
+                                        )
+                                    },
+                                    If(
+                                        locScreenReaderAnnouncedText = varAnnouncedText,
+                                        Concatenate(
+                                            varAnnouncedText,
+                                            " "
+                                        ),
+                                        varAnnouncedText
+                                    )
+                                )
+                            }
+                        );
+                        //screen reader end
+                    PressedBorderColor: =gblAppStyles.ButtonPrimary.PressedBorderColor
+                    PressedColor: =gblAppStyles.ButtonPrimary.PressedColor
+                    PressedFill: =gblAppStyles.ButtonPrimary.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.ButtonPrimary.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+                    Size: =gblAppStyles.ButtonPrimary.Size
+                    Text: |-
+                        =With({varDefault: "Save",varOOBTextId: "btnSave_Settings__locText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Tooltip: |-
+                        =With({varDefault: "Save",varOOBTextId: "btnSave_Settings__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Width: =100*1
+                    X: |-
+                        =If(
+                            'Settings Screen'.Size = ScreenSize.ExtraLarge || 'Settings Screen'.Size = ScreenSize.Large,
+                            Parent.Width - Self.Width - 20,
+                            Parent.Width - Self.Width - 20
+                        )
+                    Y: |
+                        =If(
+                            'Settings Screen'.Size = ScreenSize.ExtraLarge || 'Settings Screen'.Size = ScreenSize.Large,
+                            lblBack_Settings.Y,
+                            Max(
+                                btnAddCategory.Height + btnAddCategory.Height + 20,
+                                btnAddCategory.Y + btnAddCategory.Height + 20 
+                            )
+                        )
+                    ZIndex: =2
+
+                btnCancel_Settings As button:
+                    BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+                    BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+                    Color: =gblAppStyles.ButtonSecondary.Color
+                    DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+                    DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+                    Fill: =gblAppStyles.ButtonSecondary.Fill
+                    FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+                    HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+                    HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+                    OnSelect: |-
+                        =//screen reader start
+                            UpdateContext(
+                                {
+                                    locScreenReaderAnnouncedText: With(
+                                        {
+                                            varAnnouncedText: With(
+                                                {
+                                                    varDefault: "Cancelled and navigating to the Boards screen",
+                                                    varOOBTextId: "btnCancel_Settings__locAnnouncement"
+                                                },
+                                                With(
+                                                    {
+                                                        varLocalizedText: LookUp(
+                                                            colLocalization,
+                                                            OOBTextID = varOOBTextId,
+                                                            LocalizedText
+                                                        )
+                                                    },
+                                                    Coalesce(
+                                                        varLocalizedText,
+                                                        varDefault
+                                                    )
+                                                )
+                                            )
+                                        },
+                                        If(
+                                            locScreenReaderAnnouncedText = varAnnouncedText,
+                                            Concatenate(
+                                                varAnnouncedText,
+                                                " "
+                                            ),
+                                            varAnnouncedText
+                                        )
+                                    )
+                                }
+                            );
+                            
+                        //screen reader end
+                        Navigate(
+                            'Boards Screen',
+                            ScreenTransition.Fade
+                        )
+                    PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+                    PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+                    PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.ButtonSecondary.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.ButtonSecondary.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.ButtonSecondary.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.ButtonSecondary.RadiusTopRight
+                    Size: =gblAppStyles.ButtonSecondary.Size
+                    Text: |-
+                        =With({varDefault: "Cancel",varOOBTextId: "btnCancel_Settings__locText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Tooltip: |-
+                        =With({varDefault: "Cancel",varOOBTextId: "btnCancel_Settings__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Width: =100*1
+                    X: =Parent.Width - btnSave_Settings.Width - Self.Width - 20*2
+                    Y: =btnSave_Settings.Y
+                    ZIndex: =3
+
+                lblCategoriesHeader As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Role: =TextRole.Heading2
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With({varDefault: "Board categories",varOOBTextId: "lblCategoriesHeader__locText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Tooltip: |-
+                        =With({varDefault: "Board categories",varOOBTextId: "lblCategoriesHeader__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Width: =lblHeader_Settings.Width
+                    Wrap: =false
+                    X: =20*1
+                    Y: =lblHeader_Settings.Y + lblHeader_Settings.Height + 20
+                    ZIndex: =4
+
+                galCategories As gallery.galleryVertical:
+                    AccessibleLabel: ="Gallery of categories"
+                    BorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                    FocusedBorderThickness: =1
+                    Height: |-
+                        =If(
+                            'Settings Screen'.Size = ScreenSize.ExtraLarge || 'Settings Screen'.Size = ScreenSize.Large,
+                            CountRows(Self.AllItems) * Self.TemplateHeight,
+                            CountRows(Self.AllItems) * Self.TemplateHeight
+                        )
+                    Items: |-
+                        =Sort(
+                            colBoardCategories,
+                            CategoryName,
+                            Ascending
+                        )
+                    Layout: =Layout.Vertical
+                    TabIndex: =2
+                    TemplatePadding: =0
+                    TemplateSize: =50*1
+                    Width: =lblCategoriesHeader.Width
+                    X: =lblCategoriesHeader.X
+                    Y: =lblTitle_Category.Y + lblTitle_Category.Height
+                    ZIndex: =5
+
+                    txtCategoryTitle As text:
+                        AccessibleLabel: |-
+                            =If(
+                                'Settings Screen'.Size = ScreenSize.ExtraLarge || 'Settings Screen'.Size = ScreenSize.Large,
+                                With(
+                                    {
+                                        varDefault: "Add a title",
+                                        varOOBTextId: "txtCategoryTitle__locAccessibleText"
+                                    },
+                                    With(
+                                        {
+                                            varLocalizedText: LookUp(
+                                                colLocalization,
+                                                OOBTextID = varOOBTextId,
+                                                LocalizedText
+                                            )
+                                        },
+                                        Coalesce(
+                                            varLocalizedText,
+                                            varDefault
+                                        )
+                                    )
+                                ),
+                                ""
+                            )
+                        BorderColor: |-
+                            =If(
+                                ThisItem in colDeletedBoardCategories,
+                                ColorValue("#"&gblAppStyles.Icons.Color_Red),
+                                gblAppStyles.TextInput.BorderColor
+                            )
+                        BorderThickness: |-
+                            =If(
+                                ThisItem in colDeletedBoardCategories,
+                                1,
+                                gblAppStyles.TextInput.BorderThickness
+                            )
+                        Color: =gblAppStyles.TextInput.Color
+                        Default: =ThisItem.CategoryName
+                        DisabledBorderColor: =gblAppStyles.TextInput.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.TextInput.DisabledColor
+                        DisabledFill: =gblAppStyles.TextInput.DisabledFill
+                        Fill: =gblAppStyles.TextInput.Fill
+                        FocusedBorderColor: =gblAppStyles.TextInput.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.TextInput.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        Height: =32*1
+                        HintText: |-
+                            =With({varDefault: "Add a title",varOOBTextId: "txtCategoryTitle__locHintText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                        HoverBorderColor: =gblAppStyles.TextInput.HoverBorderColor
+                        HoverColor: =gblAppStyles.TextInput.HoverColor
+                        HoverFill: =gblAppStyles.TextInput.HoverFill
+                        OnChange: =
+                        PressedBorderColor: =gblAppStyles.TextInput.PressedBorderColor
+                        PressedColor: =gblAppStyles.TextInput.PressedColor
+                        PressedFill: =gblAppStyles.TextInput.PressedFill
+                        RadiusBottomLeft: =gblAppStyles.TextInput.RadiusBottomLeft
+                        RadiusBottomRight: =gblAppStyles.TextInput.RadiusBottomRight
+                        RadiusTopLeft: =gblAppStyles.TextInput.RadiusTopLeft
+                        RadiusTopRight: =gblAppStyles.TextInput.RadiusTopRight
+                        Size: =gblAppStyles.TextInput.Size
+                        Strikethrough: |-
+                            =If(
+                                ThisItem in colDeletedBoardCategories,
+                                true,
+                                false
+                            )
+                        TabIndex: =2
+                        Tooltip: |-
+                            =If(
+                                'Settings Screen'.Size = ScreenSize.ExtraLarge || 'Settings Screen'.Size = ScreenSize.Large,
+                                With(
+                                    {
+                                        varDefault: "Add a title",
+                                        varOOBTextId: "txtCategoryTitle__locTooltipText"
+                                    },
+                                    With(
+                                        {
+                                            varLocalizedText: LookUp(
+                                                colLocalization,
+                                                OOBTextID = varOOBTextId,
+                                                LocalizedText
+                                            )
+                                        },
+                                        Coalesce(
+                                            varLocalizedText,
+                                            varDefault
+                                        )
+                                    )
+                                ),
+                                ""
+                            )
+                        Width: |-
+                            =If(
+                                imgDeleteCategory.Visible,
+                                Parent.Width - imgDeleteCategory.Width - 40,
+                                Parent.Width - Self.X 
+                            )
+                        X: =2*1
+                        Y: =2*1
+                        ZIndex: =1
+
+                    imgDeleteCategory As image:
+                        AccessibleLabel: |-
+                            =With({varDefault: "Delete",varOOBTextId: "imgDeleteCategory__locAccessibleText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                        Height: =22*1
+                        Image: |-
+                            =With(
+                                {
+                                    varImageRecord: LookUp(
+                                        staticIcons,
+                                        staticIconName = "Delete"
+                                    ),
+                                    varColor: If(
+                                        Self.DisplayMode = DisplayMode.Disabled,
+                                        gblAppStyles.Icons.DisabledColor,
+                                        gblAppStyles.Icons.Color_Red
+                                    )
+                                },
+                                With(
+                                    {
+                                        varImageData: Concatenate(
+                                            "data:image/svg+xml;utf8, ",
+                                            EncodeUrl(
+                                                Concatenate(
+                                                    "<svg viewBox='",
+                                                    varImageRecord.staticIconViewbox,
+                                                    "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                    varImageRecord.staticIconPath,
+                                                    "' fill='#",
+                                                    varColor,
+                                                    "'/></svg>"
+                                                )
+                                            )
+                                        )
+                                    },
+                                    varImageData
+                                )
+                            )
+                        OnSelect: |
+                            =If(
+                                ThisItem in colDeletedBoardCategories && ThisItem.Order in colDeletedBoardCategories.Order,
+                                Remove(
+                                    colDeletedBoardCategories,
+                                    ThisItem
+                                );
+                                ,
+                                Collect(
+                                    colDeletedBoardCategories,
+                                    ThisItem
+                                );
+                                
+                            );
+                        TabIndex: =If(Self.Visible,2,-1)
+                        Tooltip: |-
+                            =With({varDefault: "Delete",varOOBTextId: "imgDeleteCategory__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                        Visible: =true //gblTeamsTabContext && gblIsAdmin
+                        Width: =22*1
+                        X: =Parent.Width - Self.Width - 20
+                        Y: =txtCategoryTitle.Y + (txtCategoryTitle.Height - Self.Height)/2
+                        ZIndex: =2
+
+                imgAddCategory As image:
+                    AccessibleLabel: |-
+                        =With({varDefault: "Click to add a category",varOOBTextId: "imgAddCategory__locAccessibleText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    DisabledFill: |-
+                        =With(
+                            {
+                                varImageIsCategory: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Add"
+                                ).staticIconIsCategory
+                            },
+                            If(
+                                varImageIsCategory,
+                                gblAppStyles.Icons.DisabledFill_Category,
+                                Transparent
+                            )
+                        )
+                    Fill: |-
+                        =With(
+                            {
+                                varImageIsCategory: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Add"
+                                ).staticIconIsCategory
+                            },
+                            If(
+                                varImageIsCategory,
+                                gblAppStyles.Icons.Fill_Category,
+                                Transparent
+                            )
+                        )
+                    Height: =22*1
+                    Image: |
+                        =With(
+                            {
+                                varImageRecord: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Add"
+                                ),
+                                varColor: If(
+                                    Self.DisplayMode = DisplayMode.Disabled,
+                                    gblAppStyles.Icons.DisabledColor,
+                                    gblAppStyles.Icons.Color
+                                )
+                            },
+                            With(
+                                {
+                                    varImageData: Concatenate(
+                                        "data:image/svg+xml;utf8, ",
+                                        EncodeUrl(
+                                            Concatenate(
+                                                "<svg viewBox='",
+                                                varImageRecord.staticIconViewbox,
+                                                "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                varImageRecord.staticIconPath,
+                                                "' fill='#",
+                                                varColor,
+                                                "'/></svg>"
+                                            )
+                                        )
+                                    )
+                                },
+                                varImageData
+                            )
+                        )
+                    OnSelect: |
+                        =Collect(
+                            colBoardCategories,
+                            {
+                                CategoryName: Blank(),
+                                CategoryColor: Blank(),
+                                ID: Blank(),
+                                Order: CountRows(colBoardCategories) + 1
+                            }
+                        );
+                        Reset(galCategories);
+                    PaddingBottom: =2
+                    PaddingLeft: =2
+                    PaddingRight: =2
+                    PaddingTop: =2
+                    RadiusBottomLeft: =5
+                    RadiusBottomRight: =5
+                    RadiusTopLeft: =5
+                    RadiusTopRight: =5
+                    TabIndex: |-
+                        =If(
+                            true,
+                            -1,
+                            0
+                        )
+                    Tooltip: |-
+                        =With({varDefault: "Click to add a category",varOOBTextId: "imgAddCategory__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Width: =22*1
+                    X: =20*1
+                    Y: =btnAddCategory.Y + (btnAddCategory.Height - Self.Height) / 2
+                    ZIndex: =6
+
+                btnAddCategory As button:
+                    Align: =Align.Left
+                    BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                    BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+                    Color: =gblAppStyles.ButtonTransparent.Color
+                    DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.ButtonTransparent.DisabledColor
+                    DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                    Fill: =gblAppStyles.ButtonTransparent.Fill
+                    FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Normal
+                    Height: =26*1
+                    HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                    HoverColor: =gblAppStyles.ButtonTransparent.HoverColor
+                    HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+                    OnSelect: |
+                        =Collect(
+                            colBoardCategories,
+                            {
+                                CategoryName: Blank(),
+                                CategoryColor: Blank(),
+                                ID: Blank(),
+                                Order: CountRows(colBoardCategories) + 1
+                            }
+                        );
+                        Reset(galCategories);
+                    PaddingBottom: =0
+                    PaddingLeft: =25
+                    PaddingRight: =0.00
+                    PaddingTop: =0.00
+                    PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                    PressedColor: =gblAppStyles.ButtonTransparent.PressedColor
+                    PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.ButtonTransparent.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.ButtonTransparent.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.ButtonTransparent.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.ButtonTransparent.RadiusTopRight
+                    Size: =gblAppStyles.ButtonTransparent.Size
+                    TabIndex: |-
+                        =If(
+                            Self.Visible,
+                            1,
+                            -1
+                        )
+                    Text: |-
+                        =With({varDefault: "Add category",varOOBTextId: "btnAddCategory__locText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Tooltip: |-
+                        =With({varDefault: "Add category",varOOBTextId: "btnAddCategory__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Width: =150
+                    X: =20*1
+                    Y: |-
+                        =If(
+                            'Settings Screen'.Size = ScreenSize.ExtraLarge || 'Settings Screen'.Size = ScreenSize.Large,
+                            galCategories.Y + galCategories.Height + 20,
+                            galCategories.Y + galCategories.Height + 20
+                        )
+                    ZIndex: =7
+
+                lblTitle_Category As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With({varDefault: "Title",varOOBTextId: "lblTitle_Category__locText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Tooltip: |-
+                        =With({varDefault: "Title",varOOBTextId: "lblTitle_Category__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Width: =lblHeader_Settings.Width
+                    Wrap: =false
+                    X: =20*1
+                    Y: =lblCategoriesHeader.Y + lblCategoriesHeader.Height + 20
+                    ZIndex: =8
+
+                imgBack_Settings As image:
+                    AccessibleLabel: |-
+                        =With({varDefault: "Click to go back",varOOBTextId: "imgBack_Settings__locAccessibleText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    BorderColor: =gblAppStyles.ButtonPrimary.Fill
+                    DisabledFill: |-
+                        =With(
+                            {
+                                varImageIsCategory: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Back"
+                                ).staticIconIsCategory
+                            },
+                            If(
+                                varImageIsCategory,
+                                gblAppStyles.Icons.DisabledFill_Category,
+                                Transparent
+                            )
+                        )
+                    Fill: |-
+                        =With(
+                            {
+                                varImageIsCategory: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Back"
+                                ).staticIconIsCategory
+                            },
+                            If(
+                                varImageIsCategory,
+                                gblAppStyles.Icons.Fill_Category,
+                                Transparent
+                            )
+                        )
+                    Height: =22*1
+                    Image: |
+                        =With(
+                            {
+                                varImageRecord: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Back"
+                                ),
+                                varColor: If(
+                                    Self.DisplayMode = DisplayMode.Disabled,
+                                    gblAppStyles.Icons.DisabledColor,
+                                    gblAppStyles.Icons.Color
+                                )
+                            },
+                            With(
+                                {
+                                    varImageData: Concatenate(
+                                        "data:image/svg+xml;utf8, ",
+                                        EncodeUrl(
+                                            Concatenate(
+                                                "<svg viewBox='",
+                                                varImageRecord.staticIconViewbox,
+                                                "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                varImageRecord.staticIconPath,
+                                                "' fill='#",
+                                                varColor,
+                                                "'/></svg>"
+                                            )
+                                        )
+                                    )
+                                },
+                                varImageData
+                            )
+                        )
+                    OnSelect: |-
+                        =//screen reader start
+                            UpdateContext(
+                                {
+                                    locScreenReaderAnnouncedText: With(
+                                        {
+                                            varAnnouncedText: With(
+                                                {
+                                                    varDefault: "Navigating back to the Boards screen",
+                                                    varOOBTextId: "lblBack_Settings_Announcement"
+                                                },
+                                                With(
+                                                    {
+                                                        varLocalizedText: LookUp(
+                                                            colLocalization,
+                                                            OOBTextID = varOOBTextId,
+                                                            LocalizedText
+                                                        )
+                                                    },
+                                                    Coalesce(
+                                                        varLocalizedText,
+                                                        varDefault
+                                                    )
+                                                )
+                                            )
+                                        },
+                                        If(
+                                            locScreenReaderAnnouncedText = varAnnouncedText,
+                                            Concatenate(
+                                                varAnnouncedText,
+                                                " "
+                                            ),
+                                            varAnnouncedText
+                                        )
+                                    )
+                                }
+                            );
+                            
+                        //screen reader end
+                        Navigate(
+                            'Boards Screen',
+                            ScreenTransition.Fade
+                        )
+                    RadiusBottomLeft: =5
+                    RadiusBottomRight: =5
+                    RadiusTopLeft: =5
+                    RadiusTopRight: =5
+                    TabIndex: =0
+                    Tooltip: |-
+                        =With({varDefault: "Click to go back",varOOBTextId: "imgBack_Settings__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Width: =22*1
+                    X: |-
+                        =If(
+                            'Settings Screen'.Size = ScreenSize.ExtraLarge || 'Settings Screen'.Size = ScreenSize.Large,
+                            20 * 1,
+                            ('Settings Screen'.Width - If(
+                                'Settings Screen'.Size = ScreenSize.ExtraLarge || 'Settings Screen'.Size = ScreenSize.Large,
+                                400,
+                                'Settings Screen'.Width - 20
+                            )) / 2
+                        )
+                    Y: =lblBack_Settings.Y + (lblBack_Settings.Height - Self.Height) / 2 + 1
+                    ZIndex: =9
+
+                lblBack_Settings As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =40*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: |-
+                        =//screen reader start
+                            UpdateContext(
+                                {
+                                    locScreenReaderAnnouncedText: With(
+                                        {
+                                            varAnnouncedText: With(
+                                                {
+                                                    varDefault: "Navigating back to the Boards screen",
+                                                    varOOBTextId: "lblBack_Settings_Announcement"
+                                                },
+                                                With(
+                                                    {
+                                                        varLocalizedText: LookUp(
+                                                            colLocalization,
+                                                            OOBTextID = varOOBTextId,
+                                                            LocalizedText
+                                                        )
+                                                    },
+                                                    Coalesce(
+                                                        varLocalizedText,
+                                                        varDefault
+                                                    )
+                                                )
+                                            )
+                                        },
+                                        If(
+                                            locScreenReaderAnnouncedText = varAnnouncedText,
+                                            Concatenate(
+                                                varAnnouncedText,
+                                                " "
+                                            ),
+                                            varAnnouncedText
+                                        )
+                                    )
+                                }
+                            );
+                            
+                        //screen reader end
+                        Navigate(
+                            'Boards Screen',
+                            ScreenTransition.Fade
+                        )
+                    PaddingBottom: =0
+                    PaddingTop: =0
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Role: =
+                    Size: =gblAppStyles.Label.Size.Medium
+                    TabIndex: |-
+                        =If(
+                            true,
+                            -1,
+                            0
+                        )
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Back",
+                                varOOBTextId: "lblBack_Settings__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Tooltip: |-
+                        =With({varDefault: "Back",varOOBTextId: "lblBack_Settings__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Width: =150*1
+                    X: =imgBack_Settings.X + imgBack_Settings.Width
+                    Y: =20*1
+                    ZIndex: =10
+

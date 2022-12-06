@@ -1,0 +1,1619 @@
+"'Task Creation Screen' As screen.'phoneLayout_FluidGridWithHeaderPageLayout_ver3.0'":
+    Fill: =gblAppStyles.Background.Fill
+    LoadingSpinnerColor: |-
+        =If(
+            gblThemeHiCo,
+            gblAppColors.HighContrastHyperlinks,
+            gblThemeDark,
+            gblAppColors.TeamsDarkPrimary,
+            gblAppColors.TeamsDefaultPrimary
+        )
+    OnVisible: |-
+        =Set(
+            gblTempLocID,
+            First(colSelectedLocation).Value
+        );
+        Set(
+            gblSelectedLocationType,
+            LookUp(
+                'Area Inspection Locations',
+                'Area Inspection Location' = gblTempLocID
+            ).'Location Type'
+        );
+        Set(
+            gblTaskcreated,
+            false
+        )
+
+    cnvTaskCreation As fluidGrid.fluidGridWithBlankCard:
+        BorderThickness: =0
+        Fill: =Transparent
+        Height: =Parent.Height - Self.Y //- 100
+        Width: =Parent.Width
+        Y: =73
+        ZIndex: =4
+
+        dtcTaskDetails As dataCard:
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            BorderThickness: =0
+            DisplayMode: =DisplayMode.Edit
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =shpTaskDetailsSeparator.Y+shpTaskDetailsSeparator.Height
+            Width: =Parent.Width
+            X: =0
+            Y: =0
+            ZIndex: =1
+
+            grpTaskDetails As group:
+                Height: =5
+                Width: =5
+                X: =40
+                Y: =-50
+                ZIndex: =4
+
+                imgTask As image:
+                    Height: =72
+                    Image: |
+                        =With(
+                            {
+                                varImageRecord: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Folder"
+                                ),
+                                varColor: If(
+                                    Self.DisplayMode = DisplayMode.Disabled,
+                                    gblAppStyles.Icons.DisabledColor,
+                                    gblAppStyles.Icons.Color
+                                )
+                            },
+                            With(
+                                {
+                                    varImageData: Concatenate(
+                                        "data:image/svg+xml;utf8, ",
+                                        EncodeUrl(
+                                            Concatenate(
+                                                "<svg viewBox='",
+                                                varImageRecord.staticIconViewbox,
+                                                "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                varImageRecord.staticIconPath,
+                                                "' fill='#",
+                                                varColor,
+                                                "'/></svg>"
+                                            )
+                                        )
+                                    )
+                                },
+                                varImageData
+                            )
+                        )
+                    PaddingBottom: =20
+                    PaddingLeft: =20
+                    PaddingRight: =20
+                    PaddingTop: =20
+                    Tooltip: =Self.AccessibleLabel
+                    Width: =72
+                    ZIndex: =1
+
+                lblTaskInspectionStepName As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =42
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PaddingLeft: =16
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: =gblSelectedStep.Name 
+                    Width: =Parent.Width-Self.X
+                    X: =72
+                    ZIndex: =2
+
+                lblTaskLocationName As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =30
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PaddingLeft: =16
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Small
+                    Text: =LookUp('Area Inspection Locations', 'Area Inspection Location' = gblTempLocID).'Location Type'.Name
+                    Width: =Parent.Width-Self.X
+                    X: =72
+                    Y: =40
+                    ZIndex: =3
+
+                shpTaskDetailsSeparator As rectangle:
+                    Fill: =gblAppStyles.Dividers.Background
+                    Height: =1
+                    Width: =lblTaskInspectionStepName.Width
+                    X: =lblTaskInspectionStepName.X
+                    Y: =72
+                    ZIndex: =5
+
+        dtcAssign As dataCard.blankCard:
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            DisplayMode: =DisplayMode.Edit
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =shpAssignmentsSeparator.Y+shpAssignmentsSeparator.Height
+            Width: =Parent.Width
+            X: =0
+            Y: =1
+            ZIndex: =2
+
+            galAssignmentsFinal As gallery.galleryVertical:
+                AccessibleLabel: ="List of Assignes"
+                Fill: =gblAppStyles.Gallery.Fill
+                Height: =CountRows(colTaskAssignments)* Self.TemplateHeight
+                Items: =colTaskAssignments
+                Layout: =Layout.Vertical
+                OnSelect: |-
+                    =UpdateContext({locDisplayAssignmentSelect: !locDisplayAssignmentSelect})
+                TabIndex: =If(Self.Visible, 0, -1)
+                TemplatePadding: =0
+                TemplateSize: =64
+                Width: =Parent.Width-Self.X
+                X: =btnAssignmentsBackground.X
+                Y: =btnAssignmentsBackground.Y + btnAssignmentsBackground.Height+1
+                ZIndex: =4
+
+                btnAssignmentsFinal_Background As button:
+                    BorderThickness: =gblAppStyles.ButtonBackground.BorderThickness
+                    Color: =RGBA(0, 0, 0, 0)
+                    DisabledBorderColor: =gblAppStyles.ButtonBackground.DisabledBorderColor
+                    DisabledColor: =RGBA(0, 0, 0, 0)
+                    DisabledFill: =gblAppStyles.ButtonBackground.DisabledFill
+                    DisplayMode: =DisplayMode.Disabled
+                    Fill: =gblAppStyles.ButtonBackground.Fill
+                    FocusedBorderColor: =gblAppStyles.ButtonBackground.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.ButtonBackground.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =64
+                    HoverBorderColor: =gblAppStyles.ButtonBackground.HoverBorderColor
+                    HoverColor: =RGBA(0, 0, 0, 0)
+                    HoverFill: =gblAppStyles.ButtonBackground.HoverFill
+                    OnSelect: =Select(Parent)
+                    PressedBorderColor: =gblAppStyles.ButtonBackground.PressedBorderColor
+                    PressedColor: =gblAppStyles.ButtonBackground.PressedColor
+                    PressedFill: =gblAppStyles.ButtonBackground.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.ButtonBackground.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.ButtonBackground.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.ButtonBackground.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.ButtonBackground.RadiusTopRight
+                    Text: ="Background for assignes"
+                    Width: =Parent.Width-Self.X
+                    ZIndex: =1
+
+                lblAssignmentsFinal_FullName As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =48
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =LookUp(
+                            colUserProfiles,
+                            ThisItem.appEmailAddress = appEmail,
+                            appDisplayName
+                        )
+                    Width: =Parent.Width-Self.X-icnAssignmentsFinal_Remove.Width
+                    Wrap: =false
+                    X: =74
+                    Y: =8
+                    ZIndex: =2
+
+                icnAssignmentsFinal_Remove As icon.Cancel:
+                    AccessibleLabel: ="Click to remove"
+                    Color: |-
+                        =If(
+                            gblThemeHiCo,
+                            gblAppColors.HighContrastHyperlinks,
+                            gblThemeDark,
+                            gblAppColors.TeamsDarkPrimary,
+                            gblAppColors.TeamsDefaultPrimary
+                        )
+                    Height: =btnAssignmentsFinal_Background.Height
+                    Icon: =Icon.Cancel
+                    OnSelect: |
+                        =Remove(
+                            colTaskAssignments,
+                            ThisItem
+                        );
+                    PaddingBottom: =12
+                    PaddingLeft: =12
+                    PaddingRight: =12
+                    PaddingTop: =12
+                    TabIndex: =If(Self.Visible, 0, -1)
+                    Width: =62
+                    X: =Parent.Width-Self.Width-20
+                    Y: =btnAssignmentsFinal_Background.Y
+                    ZIndex: =3
+
+                imgAssignmentsFinal_Stock As image:
+                    AccessibleLabel: ="Assigne image"
+                    DisplayMode: =DisplayMode.View
+                    Fill: =btnAssignmentsFinal_Background.DisabledFill
+                    Height: =btnAssignmentsFinal_Background.Height
+                    Image: =
+                    OnSelect: =
+                    RadiusBottomLeft: =Self.Height
+                    RadiusBottomRight: =Self.Height
+                    RadiusTopLeft: =Self.Height
+                    RadiusTopRight: =Self.Height
+                    Width: =Self.Height
+                    X: =10 * 1
+                    Y: =btnAssignmentsFinal_Background.Y
+                    ZIndex: =4
+
+                imgAssignmentsFinal_User As image:
+                    AccessibleLabel: |-
+                        =LookUp(
+                            colUserProfiles,
+                            ThisItem.appEmailAddress = appEmail,
+                            appDisplayName
+                        )
+                    DisplayMode: =DisplayMode.View
+                    Height: =56
+                    Image: |-
+                        =LookUp(
+                            colUserProfiles,
+                            ThisItem.appEmailAddress = appEmail,
+                            appImg
+                        )
+                    OnSelect: =
+                    RadiusBottomLeft: =Self.Height
+                    RadiusBottomRight: =Self.Height
+                    RadiusTopLeft: =Self.Height
+                    RadiusTopRight: =Self.Height
+                    Width: =48
+                    X: =10
+                    Y: =8
+                    ZIndex: =5
+
+                shpAssignmentsFinal_Divider As rectangle:
+                    Fill: =gblAppStyles.Dividers.Background
+                    Height: =1
+                    OnSelect: =Select(Parent)
+                    Width: =Parent.TemplateWidth
+                    Y: =Parent.TemplateHeight - Self.Height
+                    ZIndex: =6
+
+            grpAssignments As group:
+                Height: =5
+                Width: =5
+                X: =40
+                Y: =-136
+                ZIndex: =4
+
+                imgAssignments As image:
+                    AccessibleLabel: ="Assignments logo"
+                    Height: =72
+                    Image: |
+                        =With(
+                            {
+                                varImageRecord: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Add person"
+                                ),
+                                varColor: If(
+                                    Self.DisplayMode = DisplayMode.Disabled,
+                                    gblAppStyles.Icons.DisabledColor,
+                                    gblAppStyles.Icons.Color
+                                )
+                            },
+                            With(
+                                {
+                                    varImageData: Concatenate(
+                                        "data:image/svg+xml;utf8, ",
+                                        EncodeUrl(
+                                            Concatenate(
+                                                "<svg viewBox='",
+                                                varImageRecord.staticIconViewbox,
+                                                "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                varImageRecord.staticIconPath,
+                                                "' fill='#",
+                                                varColor,
+                                                "'/></svg>"
+                                            )
+                                        )
+                                    )
+                                },
+                                varImageData
+                            )
+                        )
+                    OnSelect: =Navigate('Assignment Selection Screen', ScreenTransition.Fade)
+                    PaddingBottom: =20
+                    PaddingLeft: =20
+                    PaddingRight: =20
+                    PaddingTop: =20
+                    TabIndex: |-
+                        =If(
+                            true,
+                            -1,
+                            0
+                        )
+                    Tooltip: =Self.AccessibleLabel
+                    Width: =72
+                    ZIndex: =1
+
+                shpAssignmentsSeparator As rectangle:
+                    Fill: =gblAppStyles.Dividers.Background
+                    Height: =1
+                    Width: =btnAssignmentsBackground.Width
+                    X: =btnAssignmentsBackground.X
+                    Y: =btnAssignmentsBackground.Y+btnAssignmentsBackground.Height
+                    ZIndex: =2
+
+                btnAssignmentsBackground As button:
+                    Align: =Align.Left
+                    BorderThickness: =0
+                    Color: =gblAppStyles.ButtonTransparent.Color
+                    DisabledColor: =Self.Color
+                    DisabledFill: =Self.Fill
+                    Fill: =RGBA(0, 0, 0, 0)
+                    FocusedBorderThickness: =1
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Normal
+                    Height: =70
+                    HoverColor: =gblAppStyles.ButtonTransparent.HoverColor
+                    HoverFill: =Self.Fill
+                    OnSelect: =Navigate('Assignment Selection Screen', ScreenTransition.Fade)
+                    PaddingLeft: =16
+                    PressedColor: =Self.Color
+                    PressedFill: =Self.Fill
+                    Size: =gblAppStyles.ButtonTransparent.Size
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Assign",
+                                varOOBTextId: "btnAssignmentsBackground__loc_Text"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Width: =Parent.Width-Self.X
+                    X: =72
+                    ZIndex: =3
+
+        dtcTaskDate As dataCard.blankCard:
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            DisplayMode: =DisplayMode.Edit
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =shpTaskDateSeparator.Y+shpTaskDateSeparator.Height
+            Visible: =false
+            Width: =Parent.Width
+            X: =0
+            Y: =2
+            ZIndex: =6
+
+            btnTaskDateBackground As button:
+                Align: =Align.Left
+                BorderThickness: =0
+                Color: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(0, 0, 0, 0)
+                Fill: =RGBA(0, 0, 0, 0)
+                FocusedBorderThickness: =1
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Normal
+                Height: =70
+                HoverColor: =RGBA(0, 0, 0, 0)
+                HoverFill: =Self.Fill
+                PaddingLeft: =16
+                PressedColor: =Self.Color
+                PressedFill: =Self.Fill
+                Size: =18
+                Text: ="Click to select a date from the calender"
+                Width: =Parent.Width
+                ZIndex: =1
+
+            shpTaskDateSeparator As rectangle:
+                Fill: =gblAppStyles.Dividers.Background
+                Height: =1
+                Width: =btnAssignmentsBackground.Width
+                X: =btnAssignmentsBackground.X
+                Y: =btnTaskDateBackground.Y+btnTaskDateBackground.Height
+                ZIndex: =2
+
+            "datTaskDate As 'Date picker'":
+                AccessibleLabel: |-
+                    =With(
+                        {
+                            varDefault: "Click to select a date from the calendar",
+                            varOOBTextId: "btnTaskDateBackground__loc_Text"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                DisplayMode: =DisplayMode.Edit
+                FirstDayOfWeek: =1
+                FontSize: =gblAppStyles.TextInput.Size
+                FontWeight: ="normal"
+                Height: =72
+                IconSize: =16
+                OnSelect: =false
+                PaddingBottom: =0
+                PaddingEnd: =0
+                PaddingStart: =0
+                PaddingTop: =0
+                ShowGoToToday: =false
+                Tooltip: =
+                Value: =
+                Visible: =true
+                Width: =Parent.Width - Self.X- 200
+                X: =72
+                Y: =0
+                ZIndex: =13
+
+            imgTaskDescription As image:
+                AccessibleLabel: ="Description logo"
+                Height: =72
+                Image: |
+                    =With(
+                        {
+                            varImageRecord: LookUp(
+                                staticIcons,
+                                staticIconName = "Calendar"
+                            ),
+                            varColor: If(
+                                Self.DisplayMode = DisplayMode.Disabled,
+                                gblAppStyles.Icons.DisabledColor,
+                                gblAppStyles.Icons.Color
+                            )
+                        },
+                        With(
+                            {
+                                varImageData: Concatenate(
+                                    "data:image/svg+xml;utf8, ",
+                                    EncodeUrl(
+                                        Concatenate(
+                                            "<svg viewBox='",
+                                            varImageRecord.staticIconViewbox,
+                                            "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                            varImageRecord.staticIconPath,
+                                            "' fill='#",
+                                            varColor,
+                                            "'/></svg>"
+                                        )
+                                    )
+                                )
+                            },
+                            varImageData
+                        )
+                    )
+                OnSelect: =Navigate('Assignment Selection Screen', ScreenTransition.Fade)
+                PaddingBottom: =20
+                PaddingLeft: =20
+                PaddingRight: =20
+                PaddingTop: =20
+                TabIndex: |-
+                    =If(
+                        true,
+                        -1,
+                        0
+                    )
+                Tooltip: =Self.AccessibleLabel
+                Width: =72
+                ZIndex: =14
+
+        dtcDescription As dataCard.blankCard:
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            DisplayMode: =DisplayMode.Edit
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =shpDescriptionSeparator.Y+shpDescriptionSeparator.Height
+            Width: =Parent.Width
+            X: =0
+            Y: =3
+            ZIndex: =7
+
+            grpDescription As group:
+                Height: =5
+                Width: =5
+                X: =40
+                Y: =-281
+                ZIndex: =5
+
+                imgDescription As image:
+                    AccessibleLabel: |-
+                        =With({varDefault: "Image For Description",varOOBTextId: "imgDescription__loc_Text"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Height: =72
+                    Image: |
+                        =With(
+                            {
+                                varImageRecord: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Notepad"
+                                ),
+                                varColor: If(
+                                    Self.DisplayMode = DisplayMode.Disabled,
+                                    gblAppStyles.Icons.DisabledColor,
+                                    gblAppStyles.Icons.Color
+                                )
+                            },
+                            With(
+                                {
+                                    varImageData: Concatenate(
+                                        "data:image/svg+xml;utf8, ",
+                                        EncodeUrl(
+                                            Concatenate(
+                                                "<svg viewBox='",
+                                                varImageRecord.staticIconViewbox,
+                                                "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                varImageRecord.staticIconPath,
+                                                "' fill='#",
+                                                varColor,
+                                                "'/></svg>"
+                                            )
+                                        )
+                                    )
+                                },
+                                varImageData
+                            )
+                        )
+                    PaddingBottom: =20
+                    PaddingLeft: =20
+                    PaddingRight: =20
+                    PaddingTop: =20
+                    Width: =72
+                    ZIndex: =1
+
+                shpDescriptionSeparator As rectangle:
+                    Fill: =gblAppStyles.Dividers.Background
+                    Height: =1
+                    Width: =btnDescriptionHidden.Width
+                    X: =btnDescriptionHidden.X
+                    Y: =txtDescription.Y+txtDescription.Height
+                    ZIndex: =2
+
+                btnDescriptionHidden As button:
+                    Align: =Align.Left
+                    BorderThickness: =0
+                    Color: =gblAppStyles.ButtonTransparent.Color
+                    Fill: =White
+                    FocusedBorderThickness: =1
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Normal
+                    Height: =70
+                    HoverColor: =gblAppStyles.ButtonTransparent.HoverColor
+                    HoverFill: =Self.Fill
+                    PaddingLeft: =16
+                    PressedColor: =Self.Color
+                    PressedFill: =Self.Fill
+                    Size: =18
+                    Text: ="Assign"
+                    Visible: =false
+                    Width: =Parent.Width - Self.X 
+                    X: =72
+                    ZIndex: =3
+
+                txtDescription As text:
+                    AccessibleLabel: ="Text input for user to key in description of task"
+                    BorderColor: =gblAppStyles.TextInput.BorderColor
+                    BorderThickness: =gblAppStyles.TextInput.BorderThickness
+                    Color: =gblAppStyles.TextInput.Color
+                    Default: |-
+                        =LookUp(
+                            colStepOutcomes,
+                            Value = gblSelectedChecklistStep.'Checklist Step'.'Area Inspection Checklist Step'
+                        ).NoteText
+                    DisabledBorderColor: =gblAppStyles.TextInput.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.TextInput.DisabledColor
+                    DisabledFill: =gblAppStyles.TextInput.DisabledFill
+                    Fill: =gblAppStyles.TextInput.Fill
+                    FocusedBorderColor: =gblAppStyles.TextInput.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.TextInput.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =Max(68, lblDescriptionHeight.Height+30)
+                    HintText: |-
+                        =With({varDefault: "Description",varOOBTextId: "txtDescription__loc_HintText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    HoverBorderColor: =gblAppStyles.TextInput.HoverBorderColor
+                    HoverColor: =gblAppStyles.TextInput.HoverColor
+                    HoverFill: =gblAppStyles.TextInput.HoverFill
+                    Mode: =TextMode.MultiLine
+                    PaddingBottom: =0
+                    PaddingLeft: =16
+                    PaddingRight: =8
+                    PaddingTop: |-
+                        =If(
+                            IsBlank(Self.Text),
+                            20,
+                            8
+                        )
+                    PressedBorderColor: =gblAppStyles.TextInput.PressedBorderColor
+                    PressedColor: =gblAppStyles.TextInput.PressedColor
+                    PressedFill: =gblAppStyles.TextInput.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.TextInput.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.TextInput.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.TextInput.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.TextInput.RadiusTopRight
+                    Size: =gblAppStyles.TextInput.Size
+                    Width: =Parent.Width - Self.X 
+                    X: =72
+                    Y: =1
+                    ZIndex: =4
+
+        dtcAddPhotos As dataCard.blankCard:
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            DisplayMode: =DisplayMode.Edit
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: |-
+                =If(
+                    CountRows(
+                        Filter(
+                            colTaskImages,
+                            GUID(StepID) = gblSelectedChecklistStep.'Checklist Step'.'Area Inspection Checklist Step'
+                        )
+                    ) > 0 && gblViewTaskPhoto,
+                    590,
+                    If(
+                        CountRows(
+                            Filter(
+                                colTaskImages,
+                                GUID(StepID) = gblSelectedChecklistStep.'Checklist Step'.'Area Inspection Checklist Step'
+                            )
+                        ) > 0 && !gblViewTaskPhoto,
+                        galTaskImages.Y + galTaskImages.Height + 20,
+                        shpAddPhotosSeparator.Y + shpAddPhotosSeparator.Height
+                    )
+                )
+            Visible: =false
+            Width: =640
+            X: =0
+            Y: =4
+            ZIndex: =8
+
+            btnAddPhotos As button:
+                Align: =Align.Left
+                BorderThickness: =0
+                Color: =gblAppStyles.ButtonTransparent.Color
+                DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                DisabledFill: =RGBA(0, 0, 0, 0)
+                DisplayMode: |-
+                    =If(
+                        IsBlankOrError(gblSettingSharePointLocation),
+                        DisplayMode.Disabled,
+                        DisplayMode.View
+                    )
+                Fill: =RGBA(0, 0, 0, 0)
+                FocusedBorderThickness: =1
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Normal
+                Height: =70
+                HoverColor: =gblAppStyles.ButtonTransparent.HoverColor
+                HoverFill: =Self.Fill
+                OnSelect: =Select(btnAddTaskImage)
+                PaddingLeft: =16
+                PressedColor: =Self.Color
+                PressedFill: =Self.Fill
+                Size: =18
+                Text: |-
+                    =If(
+                        IsBlankOrError(gblSettingSharePointLocation),
+                        "SharePoint URL not setup in manager app",
+                        "Add photos"
+                    )
+                Width: =568
+                X: =72
+                ZIndex: =1
+
+            galTaskImagesBackground As button:
+                Align: =Align.Left
+                Color: =RGBA(0, 0, 0, 0)
+                DisabledBorderColor: =gblAppStyles.TextInput.DisabledBorderColor
+                DisabledColor: =RGBA(0, 0, 0, 0)
+                DisabledFill: =gblAppStyles.Background.Fill
+                DisplayMode: =DisplayMode.Disabled
+                Height: =70
+                HoverColor: =RGBA(0, 0, 0, 0)
+                PaddingLeft: =60
+                Text: ="Backgroud for Images gallery"
+                Visible: =galTaskImages.Visible
+                Width: |-
+                    =Switch(
+                        'Task Creation Screen'.Size,
+                        ScreenSize.ExtraLarge,
+                        Parent.Width / 3,
+                        ScreenSize.Large,
+                        Parent.Width / 3,
+                        ScreenSize.Medium,
+                        Parent.Width - Self.X*2,
+                        ScreenSize.Small,
+                        Parent.Width - Self.X*2,
+                        Parent.Width - Self.X*2
+                    ) - 36
+                X: =49
+                Y: =btnAddTaskImage.Y+btnAddTaskImage.Height+20
+                ZIndex: =4
+
+            "galTaskImages As gallery.'BrowseLayout_Horizontal_TwoTextOneImageVariant_ver4.0'":
+                AccessibleLabel: ="List to store added images"
+                Fill: =RGBA(0,0,0,0)
+                Height: =galTaskImages.TemplateWidth
+                Items: |-
+                    =/*If(
+                        gblselectedareainspection,
+                        Filter(
+                            colTaskImages,
+                            GUID(StepID) = galInspectionSteps.Selected.'Checklist Step'.'Area Inspection Checklist Step'
+                        ),
+                        Filter(
+                            colTaskImages,
+                            StepID = galGroupInspectionSteps.Selected.UID
+                        )
+                    )*/
+                    colTaskImages
+                OnSelect: |-
+                    =Set(
+                        gblViewTaskPhoto,
+                        true
+                    );
+                    Set(
+                        currentTaskPhoto,
+                        ThisItem.TaskImage
+                    )
+                TabIndex: =If(Self.Visible, 0, -1)
+                TemplatePadding: =0
+                TemplateSize: =70
+                Visible: =!IsEmpty(colTaskImages) And !IsBlankOrError(gblSettingSharePointLocation)
+                Width: |-
+                    =Switch(
+                        'Task Creation Screen'.Size,
+                        ScreenSize.ExtraLarge,
+                        Parent.Width / 3,
+                        ScreenSize.Large,
+                        Parent.Width / 3,
+                        ScreenSize.Medium,
+                        Parent.Width - Self.X*2,
+                        ScreenSize.Small,
+                        Parent.Width - Self.X*2,
+                        Parent.Width - Self.X*2
+                    ) - 36
+                X: =49
+                Y: =btnAddTaskImage.Y+btnAddTaskImage.Height+20
+                ZIndex: =5
+
+                imgTaskImagePreview As image:
+                    AccessibleLabel: ="Preview for uploaded image"
+                    Height: =50
+                    Image: =ThisItem.TaskImage
+                    OnSelect: =Select(Parent)
+                    Width: =50
+                    X: =10
+                    Y: =10
+                    ZIndex: =1
+
+            imgPhoto As image:
+                AccessibleLabel: ="Image for photo icon"
+                DisabledFill: =Transparent
+                DisplayMode: =DisplayMode.View
+                Height: =72
+                Image: |
+                    =With(
+                        {
+                            varImageRecord: LookUp(
+                                staticIcons,
+                                staticIconName = "Camera"
+                            ),
+                            varColor: If(
+                                Self.DisplayMode = DisplayMode.Disabled,
+                                gblAppStyles.Icons.DisabledColor,
+                                gblAppStyles.Icons.Color
+                            )
+                        },
+                        With(
+                            {
+                                varImageData: Concatenate(
+                                    "data:image/svg+xml;utf8, ",
+                                    EncodeUrl(
+                                        Concatenate(
+                                            "<svg viewBox='",
+                                            varImageRecord.staticIconViewbox,
+                                            "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                            varImageRecord.staticIconPath,
+                                            "' fill='#",
+                                            varColor,
+                                            "'/></svg>"
+                                        )
+                                    )
+                                )
+                            },
+                            varImageData
+                        )
+                    )
+                PaddingBottom: =20
+                PaddingLeft: =20
+                PaddingRight: =20
+                PaddingTop: =20
+                Width: =72
+                ZIndex: =6
+
+            shpAddPhotosSeparator As rectangle:
+                Fill: =gblAppStyles.Dividers.Background
+                Height: =1
+                Width: =btnAddPhotos.Width
+                X: =btnAddPhotos.X
+                Y: =btnAddPhotos.Y+btnAddPhotos.Height
+                ZIndex: =7
+
+            grpAddTaskImage As group:
+                Height: =5
+                Width: =5
+                X: =40
+                Y: =-461
+                ZIndex: =7
+
+                imgAddTaskImage As image:
+                    AccessibleLabel: ="Image to add media"
+                    DisplayMode: =DisplayMode.View
+                    Fill: =Transparent
+                    Height: =70
+                    Image: |-
+                        =If(
+                            IsBlank(btnAddTaskImage.Media),
+                            Blank(),
+                            btnAddTaskImage.Media
+                        )
+                    ImagePosition: =ImagePosition.Fill
+                    Width: =568
+                    X: =72
+                    ZIndex: =2
+
+                btnAddTaskImage As addMedia:
+                    AccessibleLabel: ="Click to add image"
+                    Align: =Align.Left
+                    ChangePictureText: ="Add photos"
+                    Color: =gblAppStyles.ButtonTransparent.Color
+                    DisabledFill: =RGBA(0, 0, 0, 0)
+                    Fill: =RGBA(0, 0, 0, 0)
+                    FocusedBorderThickness: =1
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Normal
+                    Height: =70
+                    HoverColor: =gblAppStyles.ButtonTransparent.HoverColor
+                    OnChange: |-
+                        =/*If(gblselectedareainspection,If(!IsBlank(imgAddTaskImage.Image), Collect(colTaskImages, {StepID: galInspectionSteps.Selected.'Checklist Step'.'Area Inspection Checklist Step' , TaskImage: imgAddTaskImage.Image,Name:Self.FileName}));,If(!IsBlank(imgAddTaskImage.Image), Collect(colTaskImages, {StepID: galGroupInspectionSteps.Selected.UID , TaskImage: imgAddTaskImage.Image,Name: Self.FileName})));*/
+                        If(
+                            !IsBlank(Self.Media),
+                            Collect(
+                                colTaskImages,
+                                {
+                                    TaskImage: Self.Media,
+                                    Name: Self.FileName
+                                }
+                            );
+                            Reset(Self);
+                            
+                        );
+                        Reset(btnAddTaskImage)
+                    Padding: =16
+                    Size: =18
+                    Text: =""
+                    Width: =568
+                    X: =72
+                    ZIndex: =3
+
+        dtcAddTask As dataCard.blankCard:
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            DisplayMode: =DisplayMode.Edit
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =100
+            Visible: =!gblAppMobileOnDesktop
+            Width: =Parent.Width
+            X: =0
+            Y: =5
+            ZIndex: =9
+
+            btnAddTask As button:
+                BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+                BorderThickness: =gblAppStyles.ButtonPrimary.BorderThickness
+                Color: =gblAppStyles.ButtonPrimary.Color
+                DisabledBorderColor: =gblAppStyles.ButtonPrimary.DisabledBorderColor
+                DisabledColor: =gblAppStyles.ButtonPrimary.DisabledColor
+                DisabledFill: =gblAppStyles.ButtonPrimary.DisabledFill
+                Fill: =gblAppStyles.ButtonPrimary.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonPrimary.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonPrimary.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =70
+                HoverBorderColor: =gblAppStyles.ButtonPrimary.HoverBorderColor
+                HoverColor: =gblAppStyles.ButtonPrimary.HoverColor
+                HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+                OnSelect: |-
+                    =Set(
+                        gblTaskcreated,
+                        true
+                    );
+                    // Check if Bucket Still Exists
+                    ClearCollect(
+                        colPlannerBuckets,
+                        Planner.ListBucketsV3(
+                            gblPlannerPlanId,
+                            gblPlannerGroupId
+                        ).value
+                    );
+                    UpdateContext({locPlannerBucketExists: lblBucketId_Hidden.Text in colPlannerBuckets.id});
+                    // Create Bucket if Needed, and Update CDS
+                    UpdateContext(
+                        {
+                            locPlannerBucketForTask: If(
+                                !locPlannerBucketExists,
+                                Planner.CreateBucketV2(
+                                    LookUp(
+                                        'Area Inspection Locations',
+                                        'Area Inspection Location' = gblTempLocID
+                                    ).'Location Type'.Name,//gblLocationType.Name,
+                                    gblPlannerGroupId,
+                                    gblPlannerPlanId
+                                ).id,
+                                lblBucketId_Hidden.Text
+                            )
+                        }
+                    );
+                    If(
+                        !locPlannerBucketExists,
+                        UpdateIf(
+                            'Area Inspection Location Types',
+                            'Area Inspection Location Types'[@msft_areainspection_locationtypeid] = gblSelectedLocationType.'Area Inspection Location Type',//gblLocationType.'Area //Inspection Location Type',
+                            {'Planner Bucket Id': locPlannerBucketForTask}
+                        )
+                    );
+                    Clear(colPhotos);
+                    ForAll(
+                        galTaskImages.AllItems,
+                        Collect(
+                            colPhotos,
+                            {
+                                Pic: imgTaskImagePreview.Image,
+                                Name: Text(Rand()) & ".jpg"
+                            }
+                        )
+                    );
+                    Set(
+                        Taskid,
+                        Planner.CreateTaskV3(
+                            gblPlannerGroupId,
+                            gblPlannerPlanId,
+                            LookUp(
+                                'Area Inspection Locations',
+                                'Area Inspection Location' = gblTempLocID
+                            ).Name,//gblSelectedLocation.Name,
+                            {
+                                bucketId: locPlannerBucketForTask,
+                                dueDateTime: Today(),
+                                //datTaskDate.Value,
+                    assignments: If(
+                                    CountRows(colTaskAssignments) > 0,
+                                    Concat(
+                                        colTaskAssignments,
+                                        appEmailAddress,
+                                        ";"
+                                    )
+                                )
+                            }
+                        )
+                    );
+                    If(
+                        !IsBlank(txtDescription.Text),
+                        Planner.UpdateTaskDetails(
+                            Taskid.id,
+                            {description: txtDescription.Text}
+                        )
+                    )
+                           /* references: ShowColumns(
+                                AddColumns(
+                                    ( RenameColumns(
+                                        colphotos,
+                                        "Name",
+                                        "alias"
+                                    )),
+                                    "resourceLink",
+                                    Concatenate(
+                                        gblSettingSharePointLocation,
+                                        "/Shared Documents/",
+                                        alias
+                                    )
+                                ),
+                                "alias",
+                                "resourceLink"
+                            )
+                        }
+                    )*/;
+                    If(
+                        !IsEmpty(galTaskImages.AllItems) And !IsBlankOrError(gblSettingSharePointLocation),
+                        ForAll(
+                            galTaskImages.AllItems,
+                           IfError( Patch(
+                                'Area Inspection Images',
+                                Defaults('Area Inspection Images'),
+                                {
+                                    Name: ThisRecord.Name,
+                                    'Planner Task ID': Taskid.id,
+                                    'SharePoint Site Address': gblSettingSharePointLocation,
+                                    'SharePoint Folder Path': "/Shared Documents",
+                                    Image: {
+                                        Name: ThisRecord.Name,
+                                        Full: imgTaskImagePreview.Image,
+                                        Value: imgTaskImagePreview.Image
+                                    }
+                                }
+                            ),Blank())
+                        )
+                    );
+                    Set(
+                        stepid,
+                        Right(
+                            lblInspectionStepGUID_Hidden.Text,
+                            Len(lblInspectionStepGUID_Hidden.Text) - 4
+                        )
+                    );
+                    Set(
+                        gblInspectionId,
+                        Right(
+                            lblInspectionGUID_Hidden.Text,
+                            Len(lblInspectionGUID_Hidden.Text) - 4
+                        )
+                    );
+                    Collect(
+                        colAreaPlannerTasks,
+                        {
+                            TaskID: Taskid.id,
+                            StepID: stepid,
+                            InspectionID: gblInspectionId
+                        }
+                    );
+                    Set(
+                        gblBackNav,
+                        true
+                    );
+                    Set(
+                        gblFocusStep,
+                        First(galInspectionSteps.AllItems).'Checklist Step'.'Area Inspection Checklist Step'
+                    );
+                    Set(
+                        gblFocusStep,
+                        galInspectionSteps.Selected.'Checklist Step'.'Area Inspection Checklist Step'
+                    );
+                    Reset(galInspectionSteps);
+                    Navigate(
+                        'Checklist Steps Screen',
+                        ScreenTransition.Fade
+                    );
+                    Reset(txtDescription);
+                        //Reset(datTaskDate);
+                    Set(
+                        gblTaskcreated,
+                        true
+                    )
+                PressedBorderColor: =gblAppStyles.ButtonPrimary.PressedBorderColor
+                PressedColor: =gblAppStyles.ButtonPrimary.PressedColor
+                PressedFill: =gblAppStyles.ButtonPrimary.PressedFill
+                RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.ButtonPrimary.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+                Size: =gblAppStyles.ButtonPrimary.Size
+                Text: |-
+                    =With({varDefault: "Add task",varOOBTextId: "btnAddTask__loc_Text"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                Tooltip: =Self.Text
+                Width: =Parent.Width-28*2
+                X: =28
+                Y: =20
+                ZIndex: =1
+
+    btnTasksBackToChecklistSteps As button:
+        Align: =Align.Left
+        BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+        BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+        Color: =gblAppStyles.ButtonTransparent.Color
+        DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+        DisabledColor: =gblAppStyles.ButtonTransparent.DisabledColor
+        DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+        Fill: =gblAppStyles.ButtonTransparent.Fill
+        FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+        FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+        Font: =Font.'Segoe UI'
+        Height: =73
+        HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+        HoverColor: =gblAppStyles.ButtonTransparent.HoverColor
+        HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+        OnSelect: |
+            =Set(
+                gblBackNav,
+                true
+            );
+            Reset(txtDescription);
+            Reset(datTaskDate);
+            Set(
+                gblFocusStep,
+                First(galInspectionSteps.AllItems).'Checklist Step'.'Area Inspection Checklist Step'
+            );
+            Set(
+                gblFocusStep,
+                galInspectionSteps.Selected.'Checklist Step'.'Area Inspection Checklist Step'
+            );
+            Reset(galInspectionSteps);
+            Navigate(
+                'Checklist Steps Screen',
+                ScreenTransition.Fade
+            );
+        PaddingLeft: =28
+        PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+        PressedColor: =gblAppStyles.ButtonTransparent.PressedColor
+        PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+        RadiusBottomLeft: =gblAppStyles.ButtonTransparent.RadiusBottomLeft
+        RadiusBottomRight: =gblAppStyles.ButtonTransparent.RadiusBottomRight
+        RadiusTopLeft: =gblAppStyles.ButtonTransparent.RadiusTopLeft
+        RadiusTopRight: =gblAppStyles.ButtonTransparent.RadiusTopRight
+        Size: =gblAppStyles.ButtonTransparent.Size
+        Text: |-
+            =With({varDefault: "Back to checklist steps",varOOBTextId: "btnTasksBackToChecklistSteps__loc_Text"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+        Tooltip: =Self.Text
+        Width: =640
+        ZIndex: =5
+
+    lblTaskImageBackground As label:
+        Color: =RGBA(0, 0, 0, 0)
+        DisabledColor: =RGBA(0, 0, 0, 0)
+        Fill: =RGBA(0, 0, 0, 0.95)
+        Height: =1136
+        Size: =21
+        Text: ="Background for Task image"
+        Visible: =gblViewTaskPhoto
+        Width: =640
+        ZIndex: =7
+
+    btnCloseTaskImage As button:
+        BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+        BorderThickness: =1
+        Color: =gblAppStyles.ButtonPrimary.Color
+        Fill: =White
+        FocusedBorderThickness: =1
+        Font: =Font.'Segoe UI'
+        Height: =70
+        HoverColor: =Self.Color
+        HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+        OnSelect: =Set(gblViewTaskPhoto, false)
+        PressedColor: =Self.Color
+        PressedFill: =Self.Fill
+        Size: =18
+        Text: ="Close"
+        Visible: =gblViewTaskPhoto
+        Width: |-
+            =Switch(
+                'Task Creation Screen'.Size,
+                ScreenSize.ExtraLarge,
+                Parent.Width / 3,
+                ScreenSize.Large,
+                Parent.Width / 3,
+                ScreenSize.Medium,
+                Parent.Width - Self.X*2,
+                ScreenSize.Small,
+                Parent.Width - Self.X*2,
+                Parent.Width - Self.X*2
+            ) - 36
+        X: =35
+        Y: =Parent.Height - Self.Height - 28
+        ZIndex: =10
+
+    imgTaskImage As image:
+        AccessibleLabel: ="Image for Task logo"
+        Fill: =
+        Height: =839
+        Image: =currentTaskPhoto
+        Visible: =gblViewTaskPhoto
+        Width: =640
+        Y: =155
+        ZIndex: =11
+
+    grpTaskImage As group:
+        Height: =5
+        Width: =5
+        X: =40
+        Y: =40
+        ZIndex: =12
+
+        icnDeleteTaskImage As circle:
+            AccessibleLabel: ="Click to delete"
+            Fill: =RGBA(255, 255, 255, 1)
+            Height: =80
+            OnSelect: |
+                =//delete the photo from colTaskImages
+                RemoveIf(
+                    colTaskImages,
+                    TaskImage = currentPhoto || GUID(StepID) = galInspectionSteps.Selected.'Checklist Step'.'Area Inspection Checklist Step'
+                );
+                Set(
+                    gblViewTaskPhoto,
+                    false
+                );
+            TabIndex: =0
+            Visible: =gblViewTaskPhoto
+            Width: =80
+            X: =526
+            Y: =35
+            ZIndex: =8
+
+        imgDeleteTaskImage As image:
+            AccessibleLabel: ="Image for deleting task"
+            Height: =36
+            Image: |
+                =With(
+                    {
+                        varImageRecord: LookUp(
+                            staticIcons,
+                            staticIconName = "Delete"
+                        ),
+                        varColor: If(
+                            Self.DisplayMode = DisplayMode.Disabled,
+                            gblAppStyles.Icons.DisabledColor,
+                            gblAppStyles.Icons.Color_Red
+                        )
+                    },
+                    With(
+                        {
+                            varImageData: Concatenate(
+                                "data:image/svg+xml;utf8, ",
+                                EncodeUrl(
+                                    Concatenate(
+                                        "<svg viewBox='",
+                                        varImageRecord.staticIconViewbox,
+                                        "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                        varImageRecord.staticIconPath,
+                                        "' fill='#",
+                                        varColor,
+                                        "'/></svg>"
+                                    )
+                                )
+                            )
+                        },
+                        varImageData
+                    )
+                )
+            OnSelect: |
+                =//delete the photo from colTaskImages
+                RemoveIf(
+                    colTaskImages,
+                    TaskImage = currentPhoto || GUID(StepID) = galInspectionSteps.Selected.'Checklist Step'.'Area Inspection Checklist Step'
+                );
+                Set(
+                    gblViewTaskPhoto,
+                    false
+                );
+            TabIndex: =0
+            Visible: =gblViewTaskPhoto
+            Width: =32
+            X: =550
+            Y: =57
+            ZIndex: =9
+
+    grpHelpers As group:
+        Height: =5
+        Width: =5
+        X: =60
+        Y: =60
+        ZIndex: =12
+
+        lblInspectionStepGUID_Hidden As label:
+            Height: =70
+            Size: =21
+            Text: ="Text" & Text(gblSelectedChecklistStep.'Checklist Step'.'Area Inspection Checklist Step')
+            Visible: =false
+            Width: =560
+            X: =52
+            Y: =820
+            ZIndex: =1
+
+        lblInspectionGUID_Hidden As label:
+            Height: =70
+            Size: =21
+            Text: ="Text" & Text(lastInspection)
+            Visible: =false
+            Width: =560
+            X: =40
+            Y: =690
+            ZIndex: =2
+
+        lblDescriptionHeight As label:
+            AutoHeight: =true
+            Color: =RGBA(0, 0, 0, 0)
+            Font: =Font.'Segoe UI'
+            Height: =70
+            PaddingBottom: =0
+            PaddingLeft: =16
+            PaddingRight: =8
+            PaddingTop: =If(IsBlank(Self.Text),20,8)
+            Size: =15
+            Text: =txtDescription.Text
+            Visible: =false
+            Width: =568
+            X: =21
+            Y: =615
+            ZIndex: =3
+
+    lblBucketId_Hidden As label:
+        Height: =70
+        Size: =21
+        Text: =LookUp('Area Inspection Location Types','Area Inspection Location Type'=gblLocationType.'Area Inspection Location Type','Planner Bucket Id')
+        Visible: =false
+        Width: =560
+        X: =80
+        Y: =690
+        ZIndex: =14
+
+    btnAddTaskDesktop As button:
+        BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+        BorderThickness: =gblAppStyles.ButtonPrimary.BorderThickness
+        Color: =gblAppStyles.ButtonPrimary.Color
+        DisabledBorderColor: =gblAppStyles.ButtonPrimary.DisabledBorderColor
+        DisabledColor: =gblAppStyles.ButtonPrimary.DisabledColor
+        DisabledFill: =gblAppStyles.ButtonPrimary.DisabledFill
+        Fill: =gblAppStyles.ButtonPrimary.Fill
+        FocusedBorderColor: =gblAppStyles.ButtonPrimary.FocusedBorderColor
+        FocusedBorderThickness: =gblAppStyles.ButtonPrimary.FocusedBorderThickness
+        Font: =Font.'Segoe UI'
+        Height: =70
+        HoverBorderColor: =gblAppStyles.ButtonPrimary.HoverBorderColor
+        HoverColor: =gblAppStyles.ButtonPrimary.HoverColor
+        HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+        OnSelect: |
+            =Set(
+                gblTaskcreated,
+                true
+            );
+            // Check if Bucket Still Exists
+            ClearCollect(
+                colPlannerBuckets,
+                Planner.ListBucketsV3(
+                    gblPlannerPlanId,
+                    gblPlannerGroupId
+                ).value
+            );
+            UpdateContext({locPlannerBucketExists: lblBucketId_Hidden.Text in colPlannerBuckets.id});
+            // Create Bucket if Needed, and Update CDS
+            UpdateContext(
+                {
+                    locPlannerBucketForTask: If(
+                        !locPlannerBucketExists,
+                        Planner.CreateBucketV2(
+                            LookUp(
+                                'Area Inspection Locations',
+                                'Area Inspection Location' = gblTempLocID
+                            ).'Location Type'.Name,//gblLocationType.Name,
+                            gblPlannerGroupId,
+                            gblPlannerPlanId
+                        ).id,
+                        lblBucketId_Hidden.Text
+                    )
+                }
+            );
+            If(
+                !locPlannerBucketExists,
+                UpdateIf(
+                    'Area Inspection Location Types',
+                    'Area Inspection Location Types'[@msft_areainspection_locationtypeid] = gblSelectedLocationType.'Area Inspection Location Type',//gblLocationType.'Area //Inspection Location Type',
+                    {'Planner Bucket Id': locPlannerBucketForTask}
+                )
+            );
+            Clear(colPhotos);
+            ForAll(
+                galTaskImages.AllItems,
+                Collect(
+                    colPhotos,
+                    {
+                        Pic: imgTaskImagePreview.Image,
+                        Name: Text(Rand()) & ".jpg"
+                    }
+                )
+            );
+            Set(
+                Taskid,
+                Planner.CreateTaskV3(
+                    gblPlannerGroupId,
+                    gblPlannerPlanId,
+                    LookUp(
+                        'Area Inspection Locations',
+                        'Area Inspection Location' = gblTempLocID
+                    ).Name,//gblSelectedLocation.Name,
+                    {
+                        bucketId: locPlannerBucketForTask,
+                        dueDateTime: Today(),
+                        //datTaskDate.Value,
+            assignments: If(
+                            CountRows(colTaskAssignments) > 0,
+                            Concat(
+                                colTaskAssignments,
+                                appEmailAddress,
+                                ";"
+                            )
+                        )
+                    }
+                )
+            );
+            If(
+                !IsBlank(txtDescription.Text),
+                Planner.UpdateTaskDetails(
+                    Taskid.id,
+                    {description: txtDescription.Text}
+                )
+            )
+                   /* references: ShowColumns(
+                        AddColumns(
+                            ( RenameColumns(
+                                colphotos,
+                                "Name",
+                                "alias"
+                            )),
+                            "resourceLink",
+                            Concatenate(
+                                gblSettingSharePointLocation,
+                                "/Shared Documents/",
+                                alias
+                            )
+                        ),
+                        "alias",
+                        "resourceLink"
+                    )
+                }
+            )*/;
+            If(
+                !IsEmpty(galTaskImages.AllItems) And !IsBlankOrError(gblSettingSharePointLocation),
+                ForAll(
+                    galTaskImages.AllItems,
+                    IfError(Patch(
+                        'Area Inspection Images',
+                        Defaults('Area Inspection Images'),
+                        {
+                            Name: ThisRecord.Name,
+                            'Planner Task ID': Taskid.id,
+                            'SharePoint Site Address': gblSettingSharePointLocation,
+                            'SharePoint Folder Path': "/Shared Documents",
+                            Image: {
+                                Name: ThisRecord.Name,
+                                Full: imgTaskImagePreview.Image,
+                                Value: imgTaskImagePreview.Image
+                            }
+                        }
+                    ),Blank())
+                )
+            );
+            Set(
+                stepid,
+                Right(
+                    lblInspectionStepGUID_Hidden.Text,
+                    Len(lblInspectionStepGUID_Hidden.Text) - 4
+                )
+            );
+            Set(
+                gblInspectionId,
+                Right(
+                    lblInspectionGUID_Hidden.Text,
+                    Len(lblInspectionGUID_Hidden.Text) - 4
+                )
+            );
+            Collect(
+                colAreaPlannerTasks,
+                {
+                    TaskID: Taskid.id,
+                    StepID: stepid,
+                    InspectionID: gblInspectionId
+                }
+            );
+            Set(
+                gblBackNav,
+                true
+            );
+            Set(
+                gblFocusStep,
+                First(galInspectionSteps.AllItems).'Checklist Step'.'Area Inspection Checklist Step'
+            );
+            Set(
+                gblFocusStep,
+                galInspectionSteps.Selected.'Checklist Step'.'Area Inspection Checklist Step'
+            );
+            Reset(galInspectionSteps);
+            Navigate(
+                'Checklist Steps Screen',
+                ScreenTransition.Fade
+            );
+            Reset(txtDescription);
+                //Reset(datTaskDate);
+        PressedBorderColor: =gblAppStyles.ButtonPrimary.PressedBorderColor
+        PressedColor: =gblAppStyles.ButtonPrimary.PressedColor
+        PressedFill: =gblAppStyles.ButtonPrimary.PressedFill
+        RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+        RadiusBottomRight: =gblAppStyles.ButtonPrimary.RadiusBottomRight
+        RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+        RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+        Size: =gblAppStyles.ButtonPrimary.Size
+        Text: |-
+            =With({varDefault: "Add task",varOOBTextId: "btnAddTask__loc_Text"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+        Visible: =gblAppMobileOnDesktop
+        Width: |-
+            =Switch(
+                'Task Creation Screen'.Size,
+                ScreenSize.ExtraLarge,
+                Max(
+                    Parent.Width * .2,
+                    400
+                ),
+                ScreenSize.Large,
+                Max(
+                    Parent.Width * .2,
+                    350
+                ),
+                ScreenSize.Medium,
+                Max(
+                    Parent.Width * .2,
+                    300
+                ),
+                ScreenSize.Small,
+                Parent.Width - (2*28),
+                Parent.Width - (2*28)
+            )
+        X: =Parent.Width-Self.Width-28
+        Y: =20
+        ZIndex: =15
+

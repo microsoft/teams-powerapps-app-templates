@@ -1,0 +1,737 @@
+"'Mobile Contacts Screen' As screen.'phoneLayout_FluidGridWithHeaderPageLayout_ver3.0'":
+    Fill: =gblAppStyles.Background.Fill
+    OnVisible: |-
+        =// Default Local Variables
+        If(
+            IsBlankOrError(locDisplayDrafts),
+            UpdateContext({locDisplayDrafts: true})
+        )
+
+    conMobileContacts_Footer As groupContainer:
+        Height: =btnMobileContacts_NewContact.Height + (2*gblPadding.Page)
+        Width: =Parent.Width
+        X: =0*0
+        Y: =Parent.Height - Self.Height
+        ZIndex: =1
+
+        btnMobileContacts_NewContact As button:
+            BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+            BorderThickness: =gblAppStyles.ButtonPrimary.BorderThickness
+            Color: =gblAppStyles.ButtonPrimary.Color
+            DisabledBorderColor: =gblAppStyles.ButtonPrimary.DisabledBorderColor
+            DisabledColor: =gblAppStyles.ButtonPrimary.DisabledColor
+            DisabledFill: =gblAppStyles.ButtonPrimary.DisabledFill
+            Fill: =gblAppStyles.ButtonPrimary.Fill
+            FocusedBorderColor: =gblAppStyles.ButtonPrimary.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.ButtonPrimary.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            Height: =44
+            HoverBorderColor: =gblAppStyles.ButtonPrimary.HoverBorderColor
+            HoverColor: =gblAppStyles.ButtonPrimary.HoverColor
+            HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+            OnSelect: |
+                =UpdateContext({locBlockUserInput: true});
+                // Set Bulletin Variable to Blank(), for new record
+                Set(
+                    gblRecordBulletinContact,
+                    Blank()
+                );
+                // Navigate to the Detail Screen
+                Navigate(
+                    'Mobile Contact Detail Screen',
+                    ScreenTransition.None
+                );
+                UpdateContext({locBlockUserInput: false});
+            PressedBorderColor: =gblAppStyles.ButtonPrimary.PressedBorderColor
+            PressedColor: =gblAppStyles.ButtonPrimary.PressedColor
+            PressedFill: =gblAppStyles.ButtonPrimary.PressedFill
+            RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+            RadiusBottomRight: =gblAppStyles.ButtonPrimary.RadiusBottomRight
+            RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+            RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+            Size: =gblAppStyles.ButtonPrimary.Size
+            Text: |-
+                =With(
+                {
+                varDefault: "New Contact",
+                varOOBTextId: "btnMobileContacts_NewContact__Text"
+                },
+                With(
+                {
+                varLocalizedText: LookUp(
+                colLocalization,
+                OOBTextId = varOOBTextId,
+                LocalizedText
+                )
+                },
+                Coalesce(
+                varLocalizedText,
+                varDefault
+                )
+                )
+                )
+            Tooltip: |-
+                =With(
+                {
+                varDefault: "Click to create a new Contact",
+                varOOBTextId: "btnMobileContacts_NewContact__Tooltip"
+                },
+                With(
+                {
+                varLocalizedText: LookUp(
+                colLocalization,
+                OOBTextId = varOOBTextId,
+                LocalizedText
+                )
+                },
+                Coalesce(
+                varLocalizedText,
+                varDefault
+                )
+                )
+                )
+            Width: =Parent.Width - (2*Self.X)
+            X: =gblPadding.Page
+            Y: =Parent.Height - Self.Height -gblPadding.Page
+            ZIndex: =1
+
+    cnvMobileContacts As fluidGrid.fluidGridWithBlankCard:
+        BorderThickness: =0
+        Height: =conMobileContacts_Footer.Y - Self.Y //Parent.Height - Self.Y
+        Width: =Parent.Width
+        X: =0*0
+        Y: =conMobileContacts_Header.Y + conMobileContacts_Header.Height
+        ZIndex: =2
+
+        dtcMobileContacts As dataCard:
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            BorderThickness: =0
+            DisplayMode: =DisplayMode.Edit
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =Parent.Height
+            Width: =Parent.Width
+            X: =0
+            Y: =0
+            ZIndex: =1
+
+            galMobileContacts As gallery.galleryVertical:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                Height: =(CountRows(Self.AllItems) * (Self.TemplateHeight + Self.TemplatePadding)) + Self.TemplatePadding
+                Items: =Filter('Bulletin Contacts', 'Bulletin Contacts (Views)'.'Active Bulletin Contacts')
+                Layout: =Layout.Vertical
+                LoadingSpinner: =LoadingSpinner.Data
+                OnSelect: |-
+                    =Set(
+                        gblRecordBulletinContact,
+                        ThisItem
+                    );
+                    Navigate(
+                        'Mobile Contact Detail Screen',
+                        ScreenTransition.None,
+                        {
+                            locValue_Category: ThisItem.Category,
+                            locValue_User: If(
+                                ThisItem.'Internal?' = 'Internal? (Bulletin Contacts)'.Yes,
+                                Office365Users.UserProfileV2(ThisItem.Email),
+                                Blank()
+                            )
+                        }
+                    )
+                ShowScrollbar: =false
+                TemplatePadding: =0
+                TemplateSize: =56
+                Width: =Parent.Width
+                X: =0*0
+                Y: =0*0
+                ZIndex: =1
+
+                lblGalMobileContacts_Category As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: |
+                        =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Lighter
+                    Height: =Parent.TemplateHeight - Self.Y
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =Select(Parent)
+                    PaddingBottom: =4
+                    PaddingLeft: =gblPadding.Page
+                    PaddingRight: =gblPadding.Page
+                    PaddingTop: =4
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Small
+                    Text: =ThisItem.Category.Name
+                    Width: =Parent.TemplateWidth
+                    Wrap: =false
+                    X: =0*0
+                    Y: =Parent.TemplateHeight * .5
+                    ZIndex: =1
+
+                lblGalMobileContacts_Name As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: |
+                        =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =Parent.TemplateHeight * .6
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =Select(Parent)
+                    PaddingBottom: =4
+                    PaddingLeft: =gblPadding.Page
+                    PaddingRight: =gblPadding.Page
+                    PaddingTop: =4
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: =ThisItem.Name
+                    Width: =Parent.TemplateWidth
+                    Wrap: =false
+                    X: =0*0
+                    Y: =0*0
+                    ZIndex: =2
+
+                shpGalMobileContacts_Divider As rectangle:
+                    BorderColor: =RGBA(0, 0, 0, 0)
+                    DisabledFill: =gblAppStyles.Dividers.Elements
+                    DisplayMode: =DisplayMode.Disabled
+                    Fill: =RGBA(0, 0, 0, 0)
+                    Height: =1
+                    Width: =Parent.Width - Self.X
+                    X: =gblPadding.Page
+                    Y: =Parent.TemplateHeight - Self.Height
+                    ZIndex: =3
+
+                btnGalMobileContacts_Select As button:
+                    Align: =Align.Left
+                    AutoDisableOnSelect: =false
+                    BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                    BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+                    Color: =Transparent//gblAppStyles.ButtonTransparent.Color
+                    DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+                    DisabledColor: =Transparent//gblAppStyles.ButtonTransparent.DisabledColor
+                    DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                    Fill: =gblAppStyles.ButtonTransparent.Fill
+                    FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =Parent.TemplateHeight
+                    HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                    HoverColor: =Transparent//gblAppStyles.ButtonTransparent.HoverColor
+                    HoverFill: =gblAppStyles.Gallery.HoverFill
+                    OnSelect: =Select(Parent)
+                    PaddingLeft: =gblPadding.Page
+                    PaddingRight: =12
+                    PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                    PressedColor: =Transparent//gblAppStyles.ButtonTransparent.PressedColor
+                    PressedFill: =gblAppStyles.Gallery.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.ButtonTransparent.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.ButtonTransparent.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.ButtonTransparent.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.ButtonTransparent.RadiusTopRight
+                    Size: =gblAppStyles.ButtonTransparent.Size
+                    Text: =ThisItem.Name
+                    Tooltip: =ThisItem.Name
+                    Width: =Parent.TemplateWidth - (2* Self.X)
+                    X: =2*1
+                    ZIndex: =4
+
+    conMobileContacts_Header As groupContainer:
+        Height: =lblMobileContacts_NameCategoryColumn.Y + lblMobileContacts_NameCategoryColumn.Height
+        Width: =Parent.Width
+        ZIndex: =3
+
+        lblMobileContacts_NameCategoryColumn As label:
+            BorderColor: =gblAppStyles.Label.BorderColor
+            BorderThickness: =gblAppStyles.Label.BorderThickness
+            Color: =gblAppStyles.Label.Color
+            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+            DisabledColor: |
+                =gblAppStyles.Label.DisabledColor
+            DisabledFill: =gblAppStyles.Label.DisabledFill
+            DisplayMode: =DisplayMode.View
+            Fill: =gblAppStyles.Label.Fill
+            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            Height: =44
+            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+            HoverColor: =gblAppStyles.Label.HoverColor
+            HoverFill: =gblAppStyles.Label.HoverFill
+            OnSelect: =
+            PaddingBottom: =4
+            PaddingLeft: =20
+            PaddingRight: =4
+            PaddingTop: =4
+            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+            PressedColor: =gblAppStyles.Label.PressedColor
+            PressedFill: =gblAppStyles.Label.PressedFill
+            Size: =gblAppStyles.Label.Size.Small
+            Text: |-
+                =With(
+                {
+                varDefault: "Contact (Category)",
+                varOOBTextId: "lblMobileContacts_NameCategoryColumn__Text"
+                },
+                With(
+                {
+                varLocalizedText: LookUp(
+                colLocalization,
+                OOBTextId = varOOBTextId,
+                LocalizedText
+                )
+                },
+                Coalesce(
+                varLocalizedText,
+                varDefault
+                )
+                )
+                )
+            VerticalAlign: =VerticalAlign.Bottom
+            Width: =Parent.Width
+            Wrap: =false
+            X: =0*0
+            Y: =lblMobileContacts_Header.Y + lblMobileContacts_Header.Height
+            ZIndex: =1
+
+        lblMobileContacts_Header As label:
+            BorderColor: =gblAppStyles.Label.BorderColor
+            BorderThickness: =gblAppStyles.Label.BorderThickness
+            Color: =gblAppStyles.Label.Color
+            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+            DisabledColor: |
+                =gblAppStyles.Label.DisabledColor
+            DisabledFill: =gblAppStyles.Label.DisabledFill
+            DisplayMode: =DisplayMode.View
+            Fill: =gblAppStyles.Label.Fill
+            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            FontWeight: =FontWeight.Bold
+            Height: =44*1
+            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+            HoverColor: =gblAppStyles.Label.HoverColor
+            HoverFill: =gblAppStyles.Label.HoverFill
+            OnSelect: =
+            PaddingBottom: =4
+            PaddingLeft: =20
+            PaddingRight: =4
+            PaddingTop: =4
+            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+            PressedColor: =gblAppStyles.Label.PressedColor
+            PressedFill: =gblAppStyles.Label.PressedFill
+            Size: =gblAppStyles.Label.Size.Large
+            Text: |-
+                =With(
+                {
+                varDefault: "Contacts",
+                varOOBTextId: "lblMobileContacts_Header__Text"
+                },
+                With(
+                {
+                varLocalizedText: LookUp(
+                colLocalization,
+                OOBTextId = varOOBTextId,
+                LocalizedText
+                )
+                },
+                Coalesce(
+                varLocalizedText,
+                varDefault
+                )
+                )
+                )
+            Width: =Parent.Width
+            Wrap: =false
+            X: =0*0
+            Y: =48*1
+            ZIndex: =4
+
+    comMobileHeader_Contacts As comMobileHeader:
+        Fill: =gblAppStyles.Background.Fill
+        inputAboutIcon: |-
+            =With(
+                {
+                    varImageRecord: LookUp(
+                        staticIcons,
+                        staticIconName = If(
+                            App.ActiveScreen = 'About Screen',
+                            "Info filled",
+                            "Info"
+                        )
+                    ),
+                    varColor: gblAppStyles.Icons.Color
+                },
+                With(
+                    {
+                        varImageData: Concatenate(
+                            "data:image/svg+xml;utf8, ",
+                            EncodeUrl(
+                                Concatenate(
+                                    "<svg viewBox='",
+                                    varImageRecord.staticIconViewbox,
+                                    "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                    varImageRecord.staticIconPath,
+                                    "' fill='#",
+                                    varColor,
+                                    "'/></svg>"
+                                )
+                            )
+                        )
+                    },
+                    varImageData
+                )
+            )
+        inputAboutScreen: ='About Screen'
+        inputColors: =gblAppColors
+        inputDisableTabbing: =locVisibleMenu
+        inputSettingsIcon: |-
+            =With(
+                {
+                    varImageRecord: LookUp(
+                        staticIcons,
+                        staticIconName = If(
+                            App.ActiveScreen = 'Settings Screen',
+                            "Settings filled",
+                            "Settings"
+                        )
+                    ),
+                    varColor: gblAppStyles.Icons.Color
+                },
+                With(
+                    {
+                        varImageData: Concatenate(
+                            "data:image/svg+xml;utf8, ",
+                            EncodeUrl(
+                                Concatenate(
+                                    "<svg viewBox='",
+                                    varImageRecord.staticIconViewbox,
+                                    "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                    varImageRecord.staticIconPath,
+                                    "' fill='#",
+                                    varColor,
+                                    "'/></svg>"
+                                )
+                            )
+                        )
+                    },
+                    varImageData
+                )
+            )
+        inputSettingsScreen: ='Settings Screen'
+        inputStyles: =gblAppStyles
+        X: =0*0
+        Y: =0*0
+        ZIndex: =4
+
+    conModalDialog_MobileContacts As groupContainer:
+        Fill: =gblAppStyles.Dialogs.Fill
+        Height: =Parent.Height
+        Visible: =locVisibleMenu
+        Width: =Parent.Width
+        X: =0*0
+        Y: =0*0
+        ZIndex: =5
+
+        lblModalDialog_MobileContacts_Cancel As label:
+            BorderColor: =RGBA(0, 0, 0, 0)
+            Color: =RGBA(0, 0, 0, 0)
+            FocusedBorderThickness: =0.25
+            Height: =Parent.Height
+            OnSelect: |-
+                =// Close the dialog window
+                UpdateContext({locVisibleMenu: false})
+            Text: |-
+                =With(
+                {
+                varDefault: "Cancel",
+                varOOBTextId: "lblModalDialog_MobileContacts_Cancel__Text"
+                },
+                With(
+                {
+                varLocalizedText: LookUp(
+                colLocalization,
+                OOBTextId = varOOBTextId,
+                LocalizedText
+                )
+                },
+                Coalesce(
+                varLocalizedText,
+                varDefault
+                )
+                )
+                )
+            Tooltip: |
+                =With(
+                {
+                varDefault: "Click to close the dialog window",
+                varOOBTextId: "lblModalDialog_MobileContacts_Cancel__Tooltip"
+                },
+                With(
+                {
+                varLocalizedText: LookUp(
+                colLocalization,
+                OOBTextId = varOOBTextId,
+                LocalizedText
+                )
+                },
+                Coalesce(
+                varLocalizedText,
+                varDefault
+                )
+                )
+                )
+            Width: =Parent.Width
+            X: =0*0
+            Y: =0*0
+            ZIndex: =1
+
+        conModalDialog_MobileContacts_Menu As groupContainer:
+            Fill: =galMobileMenu_Contacts.Fill
+            Height: =Parent.Height
+            Width: =Parent.Width * .5
+            X: =0*0
+            Y: =0*0
+            ZIndex: =2
+
+            galMobileMenu_Contacts As gallery.galleryVertical:
+                AccessibleLabel: |
+                    =With(
+                        {
+                            varDefault: "Navigation menu items",
+                            varOOBTextId: "galMobileMenu_Contacts__AccessibleLabel"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                BorderColor: =RGBA(0, 0, 0, 0)
+                Fill: =gblAppStyles.Background.Fill
+                Height: =Parent.Height -Self.Y
+                ItemAccessibleLabel: |-
+                    =If(
+                    ThisItem.IsSelected = true,
+                    With(
+                        {
+                            varDefault: "Selected",
+                            varOOBTextId: "galMobileMenu_Contacts_SelectedItems__AccessibleLabel_selected"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    ),
+                    With(
+                        {
+                            varDefault: "Not selected",
+                            varOOBTextId: "galMobileMenu_Contacts_SelectedItems__AccessibleLabel_notselected"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                    
+                    )
+                Items: =colMobileMenu
+                Layout: =Layout.Vertical
+                OnSelect: =
+                TemplatePadding: =8
+                TemplateSize: =44
+                Width: =Parent.Width
+                X: =0*0
+                Y: =(2*imgMobileContacts_Menu.Y) + imgMobileContacts_Menu.Height
+                ZIndex: =1
+
+                btnGalMenuMobileMenu_Contacts As button:
+                    Align: =Align.Left
+                    AutoDisableOnSelect: =false
+                    BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                    BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+                    Color: =gblAppStyles.ButtonTransparent.Color
+                    DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.ButtonTransparent.DisabledColor
+                    DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                    Fill: =gblAppStyles.ButtonTransparent.Fill
+                    FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Normal
+                    Height: =Parent.TemplateHeight
+                    HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                    HoverColor: =gblAppStyles.ButtonTransparent.HoverColor
+                    HoverFill: =gblAppStyles.Gallery.HoverFill
+                    OnSelect: |-
+                        =Navigate(ThisItem.menuScreen);UpdateContext({locVisibleMenu:false})
+                    PaddingLeft: =12
+                    PaddingRight: =12
+                    PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                    PressedColor: =gblAppStyles.ButtonTransparent.PressedColor
+                    PressedFill: =gblAppStyles.Gallery.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.ButtonTransparent.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.ButtonTransparent.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.ButtonTransparent.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.ButtonTransparent.RadiusTopRight
+                    Size: =gblAppStyles.ButtonTransparent.Size
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Contacts",
+                                varOOBTextId: "btnGalMenuMobileMenu_Bulletins__Text_contacts"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Tooltip: =ThisItem.menuLabel
+                    Width: =Parent.TemplateWidth
+                    ZIndex: =2
+
+    imgMobileContacts_Menu As image:
+        AccessibleLabel: |-
+            =//With({varDefault:"Click to navigate back to home screen",varOOBTextId:"imgBulletinDetail_Actions_Back__AccessibleLabel__AccessibleLabel"},With({varLocalizedText:LookUp(colLocalization,OOBTextId=varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+            
+            With(
+                {
+                    varDefault: "Click to toggle navigation menu",
+                    varOOBTextId: "imgMobileContacts_Menu__AccessibleLabel"
+                },
+                With(
+                    {
+                        varLocalizedText: LookUp(
+                            colLocalization,
+                            OOBTextId = varOOBTextId,
+                            LocalizedText
+                        )
+                    },
+                    Coalesce(
+                        varLocalizedText,
+                        varDefault
+                    )
+                )
+            )
+        BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+        DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+        Fill: =gblAppStyles.ButtonTransparent.Fill
+        FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+        FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+        Height: =44*1
+        HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+        HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+        Image: |-
+            =With(
+                {
+                    varImageRecord: LookUp(
+                        staticIcons,
+                        staticIconName = "Menu"
+                    ),
+                    varColor: gblAppStyles.Icons.Color_Gray
+                },
+                With(
+                    {
+                        varImageData: Concatenate(
+                            "data:image/svg+xml;utf8, ",
+                            EncodeUrl(
+                                Concatenate(
+                                    "<svg viewBox='",
+                                    varImageRecord.staticIconViewbox,
+                                    "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                    varImageRecord.staticIconPath,
+                                    "' fill='#",
+                                    varColor,
+                                    "'/></svg>"
+                                )
+                            )
+                        )
+                    },
+                    varImageData
+                )
+            )
+        OnSelect: |-
+            =UpdateContext({locVisibleMenu:!locVisibleMenu})
+        PaddingBottom: =12
+        PaddingLeft: =8
+        PaddingRight: =8
+        PaddingTop: =12
+        PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+        PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+        TabIndex: =0   
+        Tooltip: =Self.AccessibleLabel
+        Width: =44*1
+        X: =2*1
+        Y: =2*1
+        ZIndex: =6
+
+    lblBlockUserInput_MobileContacts As label:
+        DisabledFill: =RGBA(0, 0, 0, 0.05)
+        DisplayMode: =DisplayMode.Disabled
+        Font: =Font.'Segoe UI'
+        Height: =Parent.Height
+        Text: =""
+        Visible: =locBlockUserInput
+        Width: =Parent.Width
+        X: =0*0
+        Y: =0*0
+        ZIndex: =7
+

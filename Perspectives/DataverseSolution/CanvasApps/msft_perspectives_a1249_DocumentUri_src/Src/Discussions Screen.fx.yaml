@@ -1,0 +1,2540 @@
+"'Discussions Screen' As screen":
+    Fill: =gblAppStyles.Background.Fill
+    OnVisible: |-
+        =ClearCollect(
+            colSelectedTopicDiscussions,
+            Filter(Discussions, 'Discussion Topic'.'Discussion Topic' = locSelectedTopic.'Discussion Topic')
+        );
+        SetFocus(btnNewDiscussion)
+
+    lblAnnounce_Topics_Discussions As label:
+        Height: =0
+        Live: =Live.Assertive
+        Text: =locScreenReaderAnnouncedText
+        Width: =0
+        X: =Parent.Width - Self.Width
+        Y: =Parent.Height - Self.Height
+        ZIndex: =1
+
+    conDiscussions As groupContainer:
+        DisplayMode: =DisplayMode.Edit
+        Height: =Parent.Height
+        LayoutAlignItems: =LayoutAlignItems.Start
+        LayoutDirection: =LayoutDirection.Horizontal
+        LayoutJustifyContent: =LayoutJustifyContent.Start
+        LayoutMode: =LayoutMode.Manual
+        LayoutOverflowX: =LayoutOverflow.Hide
+        LayoutOverflowY: =LayoutOverflow.Hide
+        Width: =Parent.Width
+        ZIndex: =2
+
+        cnvDiscussions As fluidGrid.fluidGridWithBlankCard:
+            BorderThickness: =0
+            Height: =Parent.Height - Self.Y
+            Width: =Parent.Width
+            ZIndex: =1
+
+            dtcDiscussions As dataCard:
+                BorderColor: =RGBA(0, 0, 0, 1)
+                BorderStyle: =BorderStyle.Solid
+                BorderThickness: =0
+                DisplayMode: =DisplayMode.Edit
+                Fill: =RGBA(0, 0, 0, 0)
+                Height: |-
+                    =If(
+                        CountRows(colSelectedTopicDiscussions) > 0,
+                        galSelectedTopicDiscussions.Y + galSelectedTopicDiscussions.Height + 20,
+                        imgDiscussions_ZeroState.Y + imgDiscussions_ZeroState.Height + 300
+                    )
+                Width: =Parent.Width
+                X: =0
+                Y: =0
+                ZIndex: =1
+
+                imgDiscussions_ZeroState As image:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "Zero state image",
+                                varOOBTextId: "imgDiscussions_ZeroState__locAccessibleText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Height: =300
+                    Image: =ZeroState_Discussions
+                    Tooltip: =Self.AccessibleLabel
+                    Visible: =!txtFindDiscussions.Visible
+                    Width: =300
+                    X: =(Parent.Width - Self.Width)/2
+                    Y: |-
+                        =If(
+                            'Discussions Screen'.Size = ScreenSize.ExtraLarge || 'Discussions Screen'.Size = ScreenSize.Large,
+                            imgTopicCover.Y + imgTopicCover.Height,
+                            btnNewDiscussion.Y + btnNewDiscussion.Height
+                        )
+                    ZIndex: =3
+
+                lblDiscussionsZeroState_Line1 As label:
+                    Align: =Align.Center
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Bold
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Be the first one to start a discussion",
+                                varOOBTextId: "lblDiscussionsZeroState_Line1__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Tooltip: =Self.Text
+                    Visible: =!txtFindDiscussions.Visible
+                    Width: =Parent.Width
+                    Wrap: =false
+                    X: =(Parent.Width - Self.Width)/2
+                    Y: =imgDiscussions_ZeroState.Y + imgDiscussions_ZeroState.Height - 40
+                    ZIndex: =4
+
+                lblDiscussionsZeroState_Line2 As label:
+                    Align: =Align.Center
+                    AutoHeight: =true
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Add items like a website, team, channel, conversations, and more to help you and your team members organize information for this board.",
+                                varOOBTextId: "lblDiscussionsZeroState_Line2__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Tooltip: =Self.Text
+                    Visible: =!txtFindDiscussions.Visible
+                    Width: =Parent.Width/3
+                    X: =(Parent.Width - Self.Width)/2
+                    Y: =lblDiscussionsZeroState_Line1.Y + lblDiscussionsZeroState_Line1.Height
+                    ZIndex: =5
+
+                galSelectedTopicDiscussions As gallery.galleryVertical:
+                    AccessibleLabel: ="Gallery of selected topic's discussions"
+                    FocusedBorderThickness: =1
+                    Height: =Self.TemplateHeight * CountRows(Self.AllItems)
+                    Items: |-
+                        =With(
+                            {
+                                varItems: Filter(
+                                    Discussions,
+                                    'Discussion Topic'.'Discussion Topic' = locSelectedTopic.'Discussion Topic'
+                                )
+                            },
+                            If(
+                                drpDiscussionSortOptions.Selected.Value = First(
+                                    [
+                                        "Sort by: Upvotes",
+                                        "Sort by: Responses"
+                                    ]
+                                ).Value,
+                                Search(
+                                    Sort(
+                                        varItems,
+                                        'Upvote Count',
+                                        Descending
+                                    ),
+                                    txtFindDiscussions.Text,
+                                    "msft_name",
+                                    "msft_description"
+                                ),
+                                Search(
+                                    Sort(
+                                        varItems,
+                                        'Response Count',
+                                        Descending
+                                    ),
+                                    txtFindDiscussions.Text,
+                                    "msft_name",
+                                    "msft_description"
+                                )
+                            )
+                        )
+                    Layout: =Layout.Vertical
+                    OnSelect: |-
+                        =UpdateContext({locSelectedDiscussion: ThisItem});
+                        UpdateContext(
+                            {
+                                locSelectedDiscussionCreatedByUserFullName: LookUp(
+                                    Users,
+                                    User = locSelectedDiscussion.'Created By'.User,
+                                    'Full Name'
+                                )
+                            }
+                        );
+                        Navigate(
+                            'Responses Screen',
+                            ScreenTransition.Fade,
+                            {
+                                locSelectedDiscussion: locSelectedDiscussion,
+                                locSelectedDiscussionCreatedByUserFullName: locSelectedDiscussionCreatedByUserFullName
+                            }
+                        )
+                    TabIndex: =0
+                    TemplatePadding: =0
+                    TemplateSize: |-
+                        =If(
+                            'Discussions Screen'.Size = ScreenSize.ExtraLarge || 'Discussions Screen'.Size = ScreenSize.Large,
+                            99 * 1,
+                            141 * 1
+                        )
+                    Width: =Parent.Width - Self.X*2
+                    X: =lblDiscussionsCount.X
+                    Y: =txtFindDiscussions.Y + txtFindDiscussions.Height + 20
+                    ZIndex: =6
+
+                    btnDiscussionBackground As button:
+                        BorderThickness: =0
+                        Color: =Transparent
+                        DisabledBorderColor: =Self.BorderColor
+                        DisabledColor: =Self.Color
+                        DisabledFill: =Self.Fill
+                        Fill: |-
+                            =If(
+                                gblThemeDark,
+                                gblAppColors.NeutralWebGray220,
+                                gblThemeHiCo,
+                                Black,
+                                White
+                            )
+                        FocusedBorderThickness: =1
+                        Font: =Font.'Segoe UI'
+                        Height: =Parent.TemplateHeight - 18
+                        HoverBorderColor: =Self.BorderColor
+                        HoverColor: =Self.Color
+                        HoverFill: =Self.Fill
+                        OnSelect: =Select(Parent)
+                        PressedBorderColor: =Self.BorderColor
+                        PressedColor: =Self.Color
+                        PressedFill: =Self.Fill
+                        RadiusBottomLeft: =4
+                        RadiusBottomRight: =4
+                        RadiusTopLeft: =4
+                        RadiusTopRight: =4
+                        Size: =gblAppStyles.ButtonTransparent.Size
+                        TabIndex: =-1
+                        Text: |-
+                            =/*With(
+                                {
+                                    varDefault: "Background button for the discussion",
+                                    varOOBTextId: "btnDiscussionBackground__locText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )*/
+                            "Discussion button"
+                        Tooltip: |-
+                            =If(
+                                'Discussions Screen'.Width  <= 680,
+                                "",
+                                Self.Text
+                            ) 
+                        Width: =Parent.Width - Self.X*2
+                        X: =5*1
+                        Y: =1*5
+                        ZIndex: =1
+
+                    lblDiscussionTitle As label:
+                        BorderColor: =gblAppStyles.Label.BorderColor
+                        BorderThickness: =gblAppStyles.Label.BorderThickness
+                        Color: =gblAppStyles.Label.Color
+                        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.Label.DisabledColor
+                        DisabledFill: =gblAppStyles.Label.DisabledFill
+                        Fill: =gblAppStyles.Label.Fill
+                        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        FontWeight: =FontWeight.Semibold
+                        Height: =32*1
+                        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                        HoverColor: =gblAppStyles.Label.HoverColor
+                        HoverFill: =gblAppStyles.Label.HoverFill
+                        PaddingBottom: =0
+                        PaddingLeft: =20
+                        PaddingTop: =10
+                        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                        PressedColor: =gblAppStyles.Label.PressedColor
+                        PressedFill: =gblAppStyles.Label.PressedFill
+                        Size: =gblAppStyles.Label.Size.Medium
+                        Text: =ThisItem.Name
+                        Tooltip: =Self.Text
+                        VerticalAlign: =VerticalAlign.Bottom
+                        Width: |-
+                            =If(
+                                'Discussions Screen'.Size = ScreenSize.ExtraLarge || 'Discussions Screen'.Size = ScreenSize.Large,
+                                Parent.Width - Self.X - imgDiscussionUpVotes.Width - lblDiscussionResponsesCount.Width - 60 - 20,
+                                Parent.Width - Self.X*2
+                            )
+                        Wrap: =false
+                        X: =btnDiscussionBackground.X
+                        Y: =12*1
+                        ZIndex: =2
+
+                    lblDiscussionCreatedBy As label:
+                        BorderColor: =gblAppStyles.Label.BorderColor
+                        BorderThickness: =gblAppStyles.Label.BorderThickness
+                        Color: =gblAppStyles.Label.Color
+                        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.Label.DisabledColor
+                        DisabledFill: =gblAppStyles.Label.DisabledFill
+                        Fill: =gblAppStyles.Label.Fill
+                        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        Height: =32*1
+                        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                        HoverColor: =gblAppStyles.Label.HoverColor
+                        HoverFill: =gblAppStyles.Label.HoverFill
+                        PaddingBottom: =0
+                        PaddingLeft: =20
+                        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                        PressedColor: =gblAppStyles.Label.PressedColor
+                        PressedFill: =gblAppStyles.Label.PressedFill
+                        Size: =gblAppStyles.Label.Size.Small
+                        Text: |-
+                            =ThisItem.'Created By'.'Full Name' & " " & Text(
+                                ThisItem.'Created On',
+                                "[$-en-US]mm/dd"
+                            )
+                        Tooltip: =Self.Text
+                        VerticalAlign: =VerticalAlign.Top
+                        Width: |-
+                            =If(
+                                'Discussions Screen'.Size = ScreenSize.ExtraLarge || 'Discussions Screen'.Size = ScreenSize.Large,
+                                Parent.Width - Self.X - imgDiscussionUpVotes.Width - lblDiscussionResponsesCount.Width - 60 - 20,
+                                Parent.Width - Self.X*2
+                            )
+                        Wrap: =false
+                        X: =btnDiscussionBackground.X
+                        Y: =lblDiscussionTitle.Y + lblDiscussionTitle.Height
+                        ZIndex: =3
+
+                    imgDiscussionResponsesCount As image:
+                        AccessibleLabel: |-
+                            =With(
+                                {
+                                    varDefault: "Response icon",
+                                    varOOBTextId: "imgDiscussionResponsesCount__locAccessibleText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        Height: =32
+                        Image: |-
+                            =If(
+                                gblThemeDark || gblThemeHiCo,
+                                Chat_Dark,
+                                Chat
+                            )
+                        PaddingBottom: =8
+                        PaddingLeft: =8
+                        PaddingRight: =8
+                        PaddingTop: =8
+                        Tooltip: =Self.AccessibleLabel
+                        Width: =32
+                        X: =Parent.Width - Self.Width - btnDiscussionUpVotes.Width - 40
+                        Y: |-
+                            =If(
+                                'Discussions Screen'.Size = ScreenSize.ExtraLarge || 'Discussions Screen'.Size = ScreenSize.Large,
+                                btnDiscussionBackground.Y + (btnDiscussionBackground.Height - Self.Height) / 2,
+                                lblDiscussionCreatedBy.Y + lblDiscussionCreatedBy.Height + 5
+                            )
+                        ZIndex: =4
+
+                    lblDiscussionResponsesCount As label:
+                        Align: =Align.Right
+                        BorderColor: =gblAppStyles.Label.BorderColor
+                        BorderThickness: =gblAppStyles.Label.BorderThickness
+                        Color: =gblAppStyles.Label.Color
+                        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.Label.DisabledColor
+                        DisabledFill: =gblAppStyles.Label.DisabledFill
+                        Fill: =gblAppStyles.Label.Fill
+                        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        FontWeight: =FontWeight.Semibold
+                        Height: =32*1
+                        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                        HoverColor: =gblAppStyles.Label.HoverColor
+                        HoverFill: =gblAppStyles.Label.HoverFill
+                        OnSelect: =Select(Parent)
+                        PaddingBottom: =0
+                        PaddingLeft: =20
+                        PaddingTop: =0
+                        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                        PressedColor: =gblAppStyles.Label.PressedColor
+                        PressedFill: =gblAppStyles.Label.PressedFill
+                        Size: =gblAppStyles.Label.Size.Medium
+                        Text: |-
+                            =CountA(ThisItem.'Discussion Responses'.'Discussion Response')
+                            // Above is not delegable, but is more performant, use code below if > 2000 records
+                            /*
+                            CountRows(
+                                Filter(
+                                    'Discussion Responses',
+                                    Discussion.Discussion = ThisItem.Discussion
+                                )
+                            )
+                            */
+                        Width: =50
+                        X: =imgDiscussionResponsesCount.X - Self.Width + 5
+                        Y: |-
+                            =If(
+                                'Discussions Screen'.Size = ScreenSize.ExtraLarge || 'Discussions Screen'.Size = ScreenSize.Large,
+                                btnDiscussionBackground.Y + (btnDiscussionBackground.Height - Self.Height) / 2,
+                                lblDiscussionCreatedBy.Y + lblDiscussionCreatedBy.Height + 5
+                            )
+                        ZIndex: =5
+
+                    btnDiscussionForeground As button:
+                        BorderColor: =Transparent
+                        BorderThickness: =0
+                        Color: =Transparent
+                        DisabledBorderColor: =Transparent
+                        DisabledColor: =Transparent
+                        DisabledFill: =Transparent
+                        Fill: =Transparent
+                        FocusedBorderColor: =gblAppStyles.TextInput.FocusedBorderColor
+                        FocusedBorderThickness: =1
+                        Font: =Font.'Segoe UI'
+                        Height: =btnDiscussionBackground.Height
+                        HoverBorderColor: =Transparent
+                        HoverColor: =Transparent
+                        HoverFill: =gblAppStyles.Gallery.HoverFill
+                        OnSelect: =Select(Parent)
+                        PressedBorderColor: =Transparent
+                        PressedColor: =Transparent
+                        PressedFill: =Transparent
+                        Text: |-
+                            =With(
+                                {
+                                    varDefault: "Click to view the discussion",
+                                    varOOBTextId: "btnDiscussionForeground__locText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        Tooltip: =ThisItem.Description
+                        Width: =btnDiscussionBackground.Width
+                        X: =btnDiscussionBackground.X
+                        Y: =btnDiscussionBackground.Y
+                        ZIndex: =6
+
+                    imgDiscussionUpVotes As image:
+                        AccessibleLabel: |-
+                            =With(
+                                {
+                                    varDefault: "Upvote icon",
+                                    varOOBTextId: "imgDiscussionUpVotes__locAccessibleText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        Height: =btnDiscussionUpVotes.Height
+                        Image: |-
+                            =If(
+                                IsBlank(
+                                    LookUp(
+                                        ThisItem.'Discussion Upvotes',
+                                        'Created By'.User = gblCurrUser.User
+                                    )
+                                )
+                                /*
+                                IsBlank(
+                                    LookUp(
+                                        'Discussion Upvotes',
+                                        Discussion.Discussion = ThisItem.Discussion && 'Created By'.User = gblCurrUser.User
+                                    )
+                                )
+                                */    
+                                ,
+                                With(
+                                    {
+                                        varImageRecord: LookUp(
+                                            staticIcons,
+                                            staticIconName = "Thumbs up unfilled"
+                                        ),
+                                        varColor: If(
+                                            Self.DisplayMode = DisplayMode.Disabled,
+                                            gblAppStyles.Icons.DisabledColor,
+                                            gblAppStyles.Icons.Color
+                                        )
+                                    },
+                                    With(
+                                        {
+                                            varImageData: Concatenate(
+                                                "data:image/svg+xml;utf8, ",
+                                                EncodeUrl(
+                                                    Concatenate(
+                                                        "<svg viewBox='",
+                                                        varImageRecord.staticIconViewbox,
+                                                        "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                        varImageRecord.staticIconPath,
+                                                        "' fill='#",
+                                                        varColor,
+                                                        "'/></svg>"
+                                                    )
+                                                )
+                                            )
+                                        },
+                                        varImageData
+                                    )
+                                ),
+                                With(
+                                    {
+                                        varImageRecord: LookUp(
+                                            staticIcons,
+                                            staticIconName = "Thumbs up filled"
+                                        ),
+                                        varColor: If(
+                                            Self.DisplayMode = DisplayMode.Disabled,
+                                            gblAppStyles.Icons.DisabledColor,
+                                            gblAppStyles.Icons.Color
+                                        )
+                                    },
+                                    With(
+                                        {
+                                            varImageData: Concatenate(
+                                                "data:image/svg+xml;utf8, ",
+                                                EncodeUrl(
+                                                    Concatenate(
+                                                        "<svg viewBox='",
+                                                        varImageRecord.staticIconViewbox,
+                                                        "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                        varImageRecord.staticIconPath,
+                                                        "' fill='#",
+                                                        varColor,
+                                                        "'/></svg>"
+                                                    )
+                                                )
+                                            )
+                                        },
+                                        varImageData
+                                    )
+                                )
+                            )
+                        OnSelect: |-
+                            =If(
+                                IsBlank(
+                                    LookUp(
+                                        'Discussion Upvotes',
+                                        Discussion.Discussion = ThisItem.Discussion && 'Created By'.User = gblCurrUser.User
+                                    )
+                                ),
+                                If(
+                                    IsError(
+                                        Patch(
+                                            'Discussion Upvotes',
+                                            Defaults('Discussion Upvotes'),
+                                            {
+                                                Name: "Discussion upvote",
+                                                Discussion: ThisItem
+                                            }
+                                        )
+                                    ),
+                                    Notify("There was a problem saving your data. Please try again")
+                                ),
+                                If(
+                                    IsError(
+                                        Remove(
+                                            'Discussion Upvotes',
+                                            LookUp(
+                                                'Discussion Upvotes',
+                                                Discussion.Discussion = ThisItem.Discussion && 'Created By'.User = gblCurrUser.User
+                                            )
+                                        )
+                                    ),
+                                    Notify("There was a problem saving your data. Please try again")
+                                )
+                            )
+                        PaddingBottom: =8
+                        PaddingLeft: =8
+                        PaddingRight: =8
+                        PaddingTop: =8
+                        TabIndex: |-
+                            =If(
+                                true,
+                                -1,
+                                0
+                            )
+                        Tooltip: =Self.AccessibleLabel
+                        Width: =60
+                        X: |-
+                            =If(
+                                Value(btnDiscussionUpVotes.Text) > 9,
+                                btnDiscussionUpVotes.X + 8,
+                                btnDiscussionUpVotes.X + 6
+                            )
+                        Y: |-
+                            =If(
+                                'Discussions Screen'.Size = ScreenSize.ExtraLarge || 'Discussions Screen'.Size = ScreenSize.Large,
+                                btnDiscussionBackground.Y + (btnDiscussionBackground.Height - Self.Height) / 2,
+                                lblDiscussionCreatedBy.Y + lblDiscussionCreatedBy.Height + 5
+                            )
+                        ZIndex: =7
+
+                    btnDiscussionUpVotes As button:
+                        BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+                        BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+                        Color: =gblAppStyles.ButtonSecondary.Color
+                        DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+                        DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+                        Fill: =Transparent
+                        FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        Height: =32*1
+                        HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+                        HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+                        HoverFill: =Transparent
+                        OnSelect: |-
+                            =If(
+                                IsBlank(
+                                    LookUp(
+                                        'Discussion Upvotes',
+                                        Discussion.Discussion = ThisItem.Discussion && 'Created By'.User = gblCurrUser.User
+                                    )
+                                ),
+                                If(
+                                    IsError(
+                                        Patch(
+                                            'Discussion Upvotes',
+                                            Defaults('Discussion Upvotes'),
+                                            {
+                                                Name: "Discussion upvote",
+                                                Discussion: ThisItem
+                                            }
+                                        )
+                                    ),
+                                    Notify("There was a problem saving your data. Please try again")
+                                ),
+                                If(
+                                    IsError(
+                                        Remove(
+                                            'Discussion Upvotes',
+                                            LookUp(
+                                                'Discussion Upvotes',
+                                                Discussion.Discussion = ThisItem.Discussion && 'Created By'.User = gblCurrUser.User
+                                            )
+                                        )
+                                    ),
+                                    Notify("There was a problem saving your data. Please try again")
+                                )
+                            ); UpdateContext({locScreenReaderAnnouncedText:If(
+                                IsBlank(
+                                    LookUp(
+                                        ThisItem.'Discussion Upvotes',
+                                        'Created By'.User = gblCurrUser.User
+                                    )
+                                )
+                                 
+                                ,
+                            "You have removed your vote",
+                               "you have voted"
+                            )})
+                        PaddingRight: |-
+                            =If(
+                                Value(Self.Text) > 9,
+                                22,
+                                20
+                            )
+                        PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+                        PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+                        PressedFill: =Transparent
+                        RadiusBottomLeft: =gblAppStyles.ButtonSecondary.RadiusBottomLeft
+                        RadiusBottomRight: =gblAppStyles.ButtonSecondary.RadiusBottomRight
+                        RadiusTopLeft: =gblAppStyles.ButtonSecondary.RadiusTopLeft
+                        RadiusTopRight: =gblAppStyles.ButtonSecondary.RadiusTopRight
+                        Size: =gblAppStyles.ButtonSecondary.Size
+                        Text: |-
+                            =With(
+                                {varRows: ThisItem.'Discussion Upvotes'},
+                                Coalesce(
+                                    CountRows(varRows),
+                                    0
+                                )
+                            )
+                            /* 
+                            // N+1 Data Call
+                            Coalesce(
+                                CountRows(
+                                    Filter(
+                                        'Discussion Upvotes',
+                                        Discussion.Discussion = ThisItem.Discussion
+                                    )
+                                ),
+                                0
+                            )
+                            */
+                        Tooltip: =Self.Text
+                        Width: =56
+                        X: =btnDiscussionBackground.Width - Self.Width - 10
+                        Y: |-
+                            =If(
+                                'Discussions Screen'.Size = ScreenSize.ExtraLarge || 'Discussions Screen'.Size = ScreenSize.Large,
+                                btnDiscussionBackground.Y + (btnDiscussionBackground.Height - Self.Height) / 2,
+                                lblDiscussionCreatedBy.Y + lblDiscussionCreatedBy.Height + 5
+                            )
+                        ZIndex: =8
+
+                lblZeroState_Discussions As label:
+                    Align: =Align.Center
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "No results found. Try a different search.",
+                                varOOBTextId: "lblZeroState_Discussions__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Tooltip: =Self.Text
+                    Visible: |-
+                        =CountRows(galSelectedTopicDiscussions.AllItems) = 0 && CountRows(
+                            Filter(
+                                Discussions,
+                                'Discussion Topic'.'Discussion Topic' = locSelectedTopic.'Discussion Topic'
+                            )
+                        ) > 0
+                    Width: =Parent.Width
+                    Wrap: =false
+                    X: =(Parent.Width - Self.Width) / 2
+                    Y: =imgZeroState_Discussions.Y + imgZeroState_Discussions.Height + 20
+                    ZIndex: =7
+
+                imgZeroState_Discussions As image:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "Image for No results found ",
+                                varOOBTextId: "imgZeroState_Discussions__locAccessibleText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Height: =150
+                    Image: =ZeroState_SearchResults
+                    Tooltip: =Self.AccessibleLabel
+                    Visible: |-
+                        =CountRows(galSelectedTopicDiscussions.AllItems) = 0 && CountRows(
+                            Filter(
+                                Discussions,
+                                'Discussion Topic'.'Discussion Topic' = locSelectedTopic.'Discussion Topic'
+                            )
+                        ) > 0
+                    Width: =150
+                    X: =(Parent.Width - Self.Width) / 2
+                    Y: =galSelectedTopicDiscussions.Y + 20
+                    ZIndex: =8
+
+                drpDiscussionSortOptions As dropdown:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "Dropdown for sorting discussions",
+                                varOOBTextId: "drpDiscussionSortOptions__locAccessibleText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    BorderColor: =gblAppStyles.Dropdown.BorderColor
+                    BorderThickness: =gblAppStyles.Dropdown.BorderThickness
+                    ChevronBackground: =gblAppStyles.Dropdown.ChevronBackground
+                    ChevronDisabledBackground: =gblAppStyles.Dropdown.ChevronDisabledBackground
+                    ChevronDisabledFill: =gblAppStyles.Dropdown.ChevronDisabledFill
+                    ChevronFill: =gblAppStyles.Dropdown.ChevronFill
+                    ChevronHoverBackground: =gblAppStyles.Dropdown.ChevronHoverBackground
+                    ChevronHoverFill: =gblAppStyles.Dropdown.ChevronHoverFill
+                    Color: =gblAppStyles.Dropdown.Color
+                    DisabledBorderColor: =gblAppStyles.Dropdown.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Dropdown.DisabledColor
+                    DisabledFill: =gblAppStyles.Dropdown.DisabledFill
+                    Fill: =gblAppStyles.Dropdown.Fill
+                    FocusedBorderColor: =gblAppStyles.Dropdown.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Dropdown.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Dropdown.HoverBorderColor
+                    HoverColor: =gblAppStyles.Dropdown.HoverColor
+                    HoverFill: =gblAppStyles.Dropdown.HoverFill
+                    Items: |-
+                        =["Sort by: Upvotes", "Sort by: Responses"]
+                    PressedBorderColor: =gblAppStyles.Dropdown.PressedBorderColor
+                    PressedColor: =gblAppStyles.Dropdown.PressedColor
+                    PressedFill: =gblAppStyles.Dropdown.PressedFill
+                    SelectionColor: =gblAppStyles.Dropdown.SelectionColor
+                    SelectionFill: =gblAppStyles.Dropdown.SelectionFill
+                    Size: =gblAppStyles.Dropdown.Size
+                    TabIndex: =1
+                    Tooltip: =Self.AccessibleLabel
+                    Visible: =!imgDiscussions_ZeroState.Visible
+                    Width: |-
+                        =//250*1
+                        If(
+                            'Discussions Screen'.Size = ScreenSize.ExtraLarge || 'Discussions Screen'.Size = ScreenSize.Large,
+                            250*1,
+                            180*1
+                        )
+                    X: =Parent.Width - Self.Width - 25
+                    Y: |-
+                        =If(
+                            'Discussions Screen'.Size = ScreenSize.ExtraLarge || 'Discussions Screen'.Size = ScreenSize.Large,
+                            imgTopicCover.Y + imgTopicCover.Height + 20,
+                            btnNewDiscussion.Y + btnNewDiscussion.Height + 20
+                        )
+                    ZIndex: =11
+
+                lblDiscussionsCount As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                            {
+                                varDiscussionCount: CountRows(
+                                    Filter(
+                                        Discussions,
+                                        'Discussion Topic'.'Discussion Topic' = locSelectedTopic.'Discussion Topic'
+                                    )
+                                )
+                            },
+                            If(
+                                varDiscussionCount = 1,
+                                varDiscussionCount & " " & With(
+                            {
+                                varDefault: "discussion",
+                                varOOBTextId: "lblDiscussionsCount__locText1"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        ),
+                                varDiscussionCount & " " & With(
+                            {
+                                varDefault: "discussions",
+                                varOOBTextId: "lblDiscussionsCount__locText2"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                            )
+                        )
+                    Tooltip: =Self.Text
+                    Width: |-
+                        =//If('Discussions Screen'.Size=ScreenSize.ExtraLarge||'Discussions Screen'.Size=ScreenSize.Large, Parent .Width-Self.X-txtFindDiscussions.Width-drpDiscussionSortOptions.Width-80, Parent .Width-Self.X*2)
+                        110
+                    Wrap: =false
+                    X: =imgTopicCover.X
+                    Y: |-
+                        =If(
+                            'Discussions Screen'.Size = ScreenSize.ExtraLarge || 'Discussions Screen'.Size = ScreenSize.Large,
+                            imgTopicCover.Y + imgTopicCover.Height + 20,
+                            btnNewDiscussion.Y + btnNewDiscussion.Height + 20
+                        )
+                    ZIndex: =14
+
+                grpNewDiscussion As group:
+                    Height: =5
+                    Width: =5
+                    X: =40
+                    Y: =40
+                    ZIndex: =15
+
+                    btnNewDiscussion As button:
+                        BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+                        BorderThickness: =gblAppStyles.ButtonPrimary.BorderThickness
+                        Color: =gblAppStyles.ButtonPrimary.Color
+                        DisabledBorderColor: =gblAppStyles.ButtonPrimary.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.ButtonPrimary.DisabledColor
+                        DisabledFill: =gblAppStyles.ButtonPrimary.DisabledFill
+                        Fill: =gblAppStyles.ButtonPrimary.Fill
+                        FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                        FocusedBorderThickness: =2//gblAppStyles.ButtonPrimary.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        Height: =32*1
+                        HoverBorderColor: =gblAppStyles.ButtonPrimary.HoverBorderColor
+                        HoverColor: =gblAppStyles.ButtonPrimary.HoverColor
+                        HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+                        OnSelect: |-
+                            =Reset(txtNewDiscussionTitle);
+                            Reset(txtNewDiscussionDesc);
+                            Navigate(
+                                'New Discussion Screen',
+                                ScreenTransition.Fade,
+                                {
+                                    locSelectedTopic: locSelectedTopic,
+                                    locEditDiscussion: false,
+                                    locAddDiscussion: true, 
+                                    locFetchDiscussion: false
+                                }
+                            )
+                        PaddingLeft: =24
+                        PressedBorderColor: =gblAppStyles.ButtonPrimary.PressedBorderColor
+                        PressedColor: =gblAppStyles.ButtonPrimary.PressedColor
+                        PressedFill: =gblAppStyles.ButtonPrimary.PressedFill
+                        RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+                        RadiusBottomRight: =gblAppStyles.ButtonPrimary.RadiusBottomRight
+                        RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+                        RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+                        Size: =gblAppStyles.ButtonPrimary.Size
+                        TabIndex: =1
+                        Text: |-
+                            =With(
+                                {
+                                    varDefault: "New discussion",
+                                    varOOBTextId: "btnNewDiscussion__locText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        Tooltip: =Self.Text
+                        Width: =180*1
+                        X: =lblDiscussionTopicHeader.X
+                        Y: |-
+                            =If(
+                                'Discussions Screen'.Size = ScreenSize.ExtraLarge || 'Discussions Screen'.Size = ScreenSize.Large,
+                                imgTopicCover.Y + imgTopicCover.Height - Self.Height,
+                                lblDiscussionDesc.Y + lblDiscussionDesc.Height + 20
+                            )
+                        ZIndex: =12
+
+                    imgNewDiscussion As image:
+                        AccessibleLabel: |-
+                            =With(
+                                {
+                                    varDefault: "New discussion icon",
+                                    varOOBTextId: "imgNewDiscussion__locAccessibleText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        Height: =22*1
+                        Image: |-
+                            =With(
+                                {
+                                    varImageRecord: LookUp(
+                                        staticIcons,
+                                        staticIconName = "Add"
+                                    ),
+                                    varColor: If(
+                                        Self.DisplayMode = DisplayMode.Disabled,
+                                        gblAppStyles.Icons.DisabledColor,
+                                        gblAppStyles.Icons.Color_White 
+                                    )
+                                },
+                                With(
+                                    {
+                                        varImageData: Concatenate(
+                                            "data:image/svg+xml;utf8, ",
+                                            EncodeUrl(
+                                                Concatenate(
+                                                    "<svg viewBox='",
+                                                    varImageRecord.staticIconViewbox,
+                                                    "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                    varImageRecord.staticIconPath,
+                                                    "' fill='#",
+                                                    varColor,
+                                                    "'/></svg>"
+                                                )
+                                            )
+                                        )
+                                    },
+                                    varImageData
+                                )
+                            )
+                        OnSelect: |-
+                            =Reset(txtNewDiscussionTitle);
+                            Reset(txtNewDiscussionDesc);
+                            Navigate(
+                                'New Discussion Screen',
+                                ScreenTransition.Fade,
+                                {
+                                    locSelectedTopic: locSelectedTopic,
+                                    locEditDiscussion: false,
+                                    locAddDiscussion: true, 
+                                    locFetchDiscussion: false
+                                }
+                            )
+                        TabIndex: |-
+                            =If(
+                                true,
+                                -1,
+                                1
+                            )
+                        Tooltip: =Self.AccessibleLabel
+                        Width: =22*1
+                        X: =btnNewDiscussion.X + 20
+                        Y: =btnNewDiscussion.Y + (btnNewDiscussion.Height - Self.Height)/2
+                        ZIndex: =19
+
+                grpFindDiscussions As group:
+                    Height: =5
+                    Width: =5
+                    X: =40
+                    Y: =40
+                    ZIndex: =16
+
+                    txtFindDiscussions As text:
+                        AccessibleLabel: =Self.HintText
+                        BorderColor: =gblAppStyles.TextInput.BorderColor
+                        BorderThickness: =gblAppStyles.TextInput.BorderThickness
+                        Color: =gblAppStyles.TextInput.Color
+                        Default: =""
+                        DisabledBorderColor: =gblAppStyles.TextInput.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.TextInput.DisabledColor
+                        DisabledFill: =gblAppStyles.TextInput.DisabledFill
+                        Fill: =gblAppStyles.TextInput.Fill
+                        FocusedBorderColor: =gblAppStyles.TextInput.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.TextInput.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        Height: =32*1
+                        HintText: |-
+                            =With(
+                                {
+                                    varDefault: "Find a discussion",
+                                    varOOBTextId: "txtFindDiscussions__locHintText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        HoverBorderColor: =gblAppStyles.TextInput.HoverBorderColor
+                        HoverColor: =gblAppStyles.TextInput.HoverColor
+                        HoverFill: =gblAppStyles.TextInput.HoverFill
+                        PaddingBottom: =5*1
+                        PaddingLeft: =32*1
+                        PaddingRight: =5*1
+                        PaddingTop: =5*1
+                        PressedBorderColor: =gblAppStyles.TextInput.PressedBorderColor
+                        PressedColor: =gblAppStyles.TextInput.PressedColor
+                        PressedFill: =gblAppStyles.TextInput.PressedFill
+                        RadiusBottomLeft: =gblAppStyles.TextInput.RadiusBottomLeft
+                        RadiusBottomRight: =gblAppStyles.TextInput.RadiusBottomRight
+                        RadiusTopLeft: =gblAppStyles.TextInput.RadiusTopLeft
+                        RadiusTopRight: =gblAppStyles.TextInput.RadiusTopRight
+                        Size: =gblAppStyles.TextInput.Size
+                        TabIndex: =1
+                        Tooltip: =Self.HintText
+                        Visible: =CountRows(colSelectedTopicDiscussions)>0
+                        Width: |-
+                            =If(
+                                'Discussions Screen'.Size = ScreenSize.ExtraLarge || 'Discussions Screen'.Size = ScreenSize.Large,
+                                imgTopicCover.Width,
+                                Parent.Width - 20 - 30
+                            )
+                        X: |-
+                            =If(
+                                'Discussions Screen'.Size = ScreenSize.ExtraLarge || 'Discussions Screen'.Size = ScreenSize.Large,
+                                Parent.Width - Self.Width - drpDiscussionSortOptions.Width - 60,
+                                20 * 1
+                            )
+                        Y: |-
+                            =If(
+                                'Discussions Screen'.Size = ScreenSize.ExtraLarge || 'Discussions Screen'.Size = ScreenSize.Large,
+                                imgTopicCover.Y + imgTopicCover.Height + 20,
+                                btnNewDiscussion.Y + btnNewDiscussion.Height + 20 + Self.Height + 20
+                            )
+                        ZIndex: =9
+
+                    imgFindDiscussions As image:
+                        AccessibleLabel: |-
+                            =With(
+                                {
+                                    varDefault: "Search discussions icon",
+                                    varOOBTextId: "imgFindDiscussions__locAccessibleText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        DisabledFill: |-
+                            =With(
+                                {
+                                    varImageIsCategory: LookUp(
+                                        staticIcons,
+                                        staticIconName = "Search"
+                                    ).staticIconIsCategory
+                                },
+                                If(
+                                    varImageIsCategory,
+                                    gblAppStyles.Icons.DisabledFill_Category,
+                                    Transparent
+                                )
+                            )
+                        Fill: |-
+                            =With(
+                                {
+                                    varImageIsCategory: LookUp(
+                                        staticIcons,
+                                        staticIconName = "Search"
+                                    ).staticIconIsCategory
+                                },
+                                If(
+                                    varImageIsCategory,
+                                    gblAppStyles.Icons.Fill_Category,
+                                    Transparent
+                                )
+                            )
+                        Height: =22*1
+                        Image: |-
+                            =With(
+                                {
+                                    varImageRecord: LookUp(
+                                        staticIcons,
+                                        staticIconName = "Search"
+                                    ),
+                                    varColor: If(
+                                        Self.DisplayMode = DisplayMode.Disabled,
+                                        gblAppStyles.Icons.DisabledColor,
+                                        gblAppStyles.Icons.Color 
+                                    )
+                                },
+                                With(
+                                    {
+                                        varImageData: Concatenate(
+                                            "data:image/svg+xml;utf8, ",
+                                            EncodeUrl(
+                                                Concatenate(
+                                                    "<svg viewBox='",
+                                                    varImageRecord.staticIconViewbox,
+                                                    "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                    varImageRecord.staticIconPath,
+                                                    "' fill='#",
+                                                    varColor,
+                                                    "'/></svg>"
+                                                )
+                                            )
+                                        )
+                                    },
+                                    varImageData
+                                )
+                            )
+                        PaddingBottom: =2
+                        PaddingLeft: =2
+                        PaddingRight: =2
+                        PaddingTop: =2
+                        RadiusBottomLeft: =5
+                        RadiusBottomRight: =5
+                        RadiusTopLeft: =5
+                        RadiusTopRight: =5
+                        TabIndex: |-
+                            =If(
+                                true,
+                                -1,
+                                1
+                            )
+                        Tooltip: =Self.AccessibleLabel
+                        Visible: =IsBlank(txtFindDiscussions.Text) && CountRows(colSelectedTopicDiscussions)>0
+                        Width: =22*1
+                        X: =txtFindDiscussions.X + 5
+                        Y: =txtFindDiscussions.Y + (txtFindDiscussions.Height - Self.Height) / 2
+                        ZIndex: =10
+
+                    imgClearFindDiscussions As image:
+                        AccessibleLabel: |-
+                            =With(
+                                {
+                                    varDefault: "Clear discussions search icon",
+                                    varOOBTextId: "imgClearFindDiscussions__locAccessibleText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        DisabledFill: |-
+                            =With(
+                                {
+                                    varImageIsCategory: LookUp(
+                                        staticIcons,
+                                        staticIconName = "Search"
+                                    ).staticIconIsCategory
+                                },
+                                If(
+                                    varImageIsCategory,
+                                    gblAppStyles.Icons.DisabledFill_Category,
+                                    Transparent
+                                )
+                            )
+                        Fill: |-
+                            =With(
+                                {
+                                    varImageIsCategory: LookUp(
+                                        staticIcons,
+                                        staticIconName = "Search"
+                                    ).staticIconIsCategory
+                                },
+                                If(
+                                    varImageIsCategory,
+                                    gblAppStyles.Icons.Fill_Category,
+                                    Transparent
+                                )
+                            )
+                        Height: =22*1
+                        Image: |-
+                            =With(
+                                {
+                                    varImageRecord: LookUp(
+                                        staticIcons,
+                                        staticIconName = "Dismiss"
+                                    ),
+                                    varColor: If(
+                                        Self.DisplayMode = DisplayMode.Disabled,
+                                        gblAppStyles.Icons.DisabledColor,
+                                        gblAppStyles.Icons.Color 
+                                    )
+                                },
+                                With(
+                                    {
+                                        varImageData: Concatenate(
+                                            "data:image/svg+xml;utf8, ",
+                                            EncodeUrl(
+                                                Concatenate(
+                                                    "<svg viewBox='",
+                                                    varImageRecord.staticIconViewbox,
+                                                    "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                    varImageRecord.staticIconPath,
+                                                    "' fill='#",
+                                                    varColor,
+                                                    "'/></svg>"
+                                                )
+                                            )
+                                        )
+                                    },
+                                    varImageData
+                                )
+                            )
+                        OnSelect: =Reset(txtFindDiscussions)
+                        PaddingBottom: =2
+                        PaddingLeft: =2
+                        PaddingRight: =2
+                        PaddingTop: =2
+                        RadiusBottomLeft: =5
+                        RadiusBottomRight: =5
+                        RadiusTopLeft: =5
+                        RadiusTopRight: =5
+                        TabIndex: |-
+                            =If(
+                                true,
+                                -1,
+                                1
+                            )
+                        Tooltip: =Self.AccessibleLabel
+                        Visible: =!IsBlank(txtFindDiscussions.Text) && CountRows(colSelectedTopicDiscussions)>0
+                        Width: =22*1
+                        X: =txtFindDiscussions.X + 5
+                        Y: =txtFindDiscussions.Y + (txtFindDiscussions.Height - Self.Height) / 2
+                        ZIndex: =13
+
+                grpNewDiscussion_ZeroState As group:
+                    Height: =5
+                    Width: =5
+                    X: =40
+                    Y: =40
+                    ZIndex: =18
+
+                    btnNewDiscussion_ZeroState As button:
+                        BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+                        BorderThickness: =gblAppStyles.ButtonPrimary.BorderThickness
+                        Color: =gblAppStyles.ButtonPrimary.Color
+                        DisabledBorderColor: =gblAppStyles.ButtonPrimary.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.ButtonPrimary.DisabledColor
+                        DisabledFill: =gblAppStyles.ButtonPrimary.DisabledFill
+                        Fill: =gblAppStyles.ButtonPrimary.Fill
+                        FocusedBorderColor: =gblAppStyles.ButtonPrimary.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.ButtonPrimary.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        Height: =32*1
+                        HoverBorderColor: =gblAppStyles.ButtonPrimary.HoverBorderColor
+                        HoverColor: =gblAppStyles.ButtonPrimary.HoverColor
+                        HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+                        OnSelect: |-
+                            =Reset(txtNewDiscussionTitle);
+                            Reset(txtNewDiscussionDesc);
+                            Navigate(
+                                'New Discussion Screen',
+                                ScreenTransition.Fade,
+                                {
+                                    locSelectedTopic: locSelectedTopic,
+                                    locEditDiscussion: false,
+                                    locAddDiscussion: true, 
+                                    locFetchDiscussion: false
+                                }
+                            )
+                        PaddingLeft: =24
+                        PressedBorderColor: =gblAppStyles.ButtonPrimary.PressedBorderColor
+                        PressedColor: =gblAppStyles.ButtonPrimary.PressedColor
+                        PressedFill: =gblAppStyles.ButtonPrimary.PressedFill
+                        RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+                        RadiusBottomRight: =gblAppStyles.ButtonPrimary.RadiusBottomRight
+                        RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+                        RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+                        Size: =gblAppStyles.ButtonPrimary.Size
+                        TabIndex: =1
+                        Text: |-
+                            =With(
+                                {
+                                    varDefault: "New discussion",
+                                    varOOBTextId: "btnNewDiscussion_ZeroState__locText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        Tooltip: =Self.Text
+                        Visible: =!txtFindDiscussions.Visible
+                        Width: =160*1
+                        X: =(Parent.Width - Self.Width)/2
+                        Y: =lblDiscussionsZeroState_Line2.Y + lblDiscussionsZeroState_Line2.Height + 20
+                        ZIndex: =1
+
+                    imgNewDiscussion_ZeroState As image:
+                        AccessibleLabel: |-
+                            =With(
+                                {
+                                    varDefault: "New discussion icon",
+                                    varOOBTextId: "imgNewDiscussion_ZeroState__locAccessibleText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        Height: =22*1
+                        Image: |-
+                            =With(
+                                {
+                                    varImageRecord: LookUp(
+                                        staticIcons,
+                                        staticIconName = "Add"
+                                    ),
+                                    varColor: If(
+                                        Self.DisplayMode = DisplayMode.Disabled,
+                                        gblAppStyles.Icons.DisabledColor,
+                                        gblAppStyles.Icons.Color_White 
+                                    )
+                                },
+                                With(
+                                    {
+                                        varImageData: Concatenate(
+                                            "data:image/svg+xml;utf8, ",
+                                            EncodeUrl(
+                                                Concatenate(
+                                                    "<svg viewBox='",
+                                                    varImageRecord.staticIconViewbox,
+                                                    "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                    varImageRecord.staticIconPath,
+                                                    "' fill='#",
+                                                    varColor,
+                                                    "'/></svg>"
+                                                )
+                                            )
+                                        )
+                                    },
+                                    varImageData
+                                )
+                            )
+                        OnSelect: |-
+                            =Reset(txtNewDiscussionTitle);
+                            Reset(txtNewDiscussionDesc);
+                            Navigate(
+                                'New Discussion Screen',
+                                ScreenTransition.Fade,
+                                {
+                                    locSelectedTopic: locSelectedTopic,
+                                    locEditDiscussion: false,
+                                    locAddDiscussion: true, 
+                                    locFetchDiscussion: false
+                                }
+                            )
+                        TabIndex: |-
+                            =If(
+                                true,
+                                -1,
+                                1
+                            )
+                        Tooltip: =Self.AccessibleLabel
+                        Visible: =!txtFindDiscussions.Visible
+                        Width: =22*1
+                        X: =btnNewDiscussion_ZeroState.X + 20
+                        Y: =btnNewDiscussion_ZeroState.Y + (btnNewDiscussion_ZeroState.Height - Self.Height)/2
+                        ZIndex: =2
+
+                imgTopicCover As image:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "Topic's Cover image",
+                                varOOBTextId: "imgTopicCover__locAccessibleText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Fill: |-
+                        =If(
+                            IsBlank(locSelectedTopic.'Cover Icon'),
+                            Transparent,
+                            If(
+                                gblThemeDark || gblThemeHiCo,
+                                ColorValue(locSelectedTopic.'Cover Color Dark'),
+                                ColorValue(locSelectedTopic.'Cover Color')
+                            )
+                        )
+                    Height: =200*1
+                    Image: |-
+                        =//If(!IsBlank(locSelectedTopic.'Cover Icon'),locSelectedTopic.'Cover Icon',!IsBlank(locSelectedTopic.'Cover Stock'),locSelectedTopic.'Cover Stock',locSelectedTopic.'Cover Image'.Full)
+                        Coalesce(LookUp('Discussion Topics','Discussion Topic'=locSelectedTopic.'Discussion Topic').'Cover Icon',LookUp('Discussion Topics','Discussion Topic'=locSelectedTopic.'Discussion Topic').'Cover Stock',LookUp('Discussion Topics','Discussion Topic'=locSelectedTopic.'Discussion Topic').'Cover Image'.Full)
+                    ImagePosition: |-
+                        =If(
+                            IsBlank(locSelectedTopic.'Cover Icon'),
+                            ImagePosition.Fill,
+                            ImagePosition.Fit
+                        )
+                    PaddingBottom: |-
+                        =If(
+                            IsBlank(locSelectedTopic.'Cover Icon'),
+                            0,
+                            60
+                        )
+                    PaddingTop: |-
+                        =If(
+                            IsBlank(locSelectedTopic.'Cover Icon'),
+                            0,
+                            60
+                        )
+                    RadiusBottomLeft: =5
+                    RadiusBottomRight: =5
+                    RadiusTopLeft: =5
+                    RadiusTopRight: =5
+                    Tooltip: =Self.AccessibleLabel
+                    Width: |-
+                        =If(
+                            'Discussions Screen'.Size = ScreenSize.ExtraLarge || 'Discussions Screen'.Size = ScreenSize.Large,
+                            Min(
+                                345,
+                                Parent.Width - Self.X*2
+                            ),
+                            Parent.Width - Self.X*2
+                        )
+                    X: =20*1
+                    Y: |
+                        =lblBack_Discussions.Y + lblBack_Discussions.Height + 20
+                    ZIndex: =21
+
+                lblDiscussionDesc As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =imgTopicCover.Y + imgTopicCover.Height - Self.Y - btnNewDiscussion.Height - 15
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: =locSelectedTopic.Description
+                    Tooltip: =Self.Text
+                    VerticalAlign: =VerticalAlign.Top
+                    Width: =Parent.Width - Self.X - 20
+                    X: =lblDiscussionTopicHeader.X
+                    Y: =lblDiscussionTopicHeader.Y + lblDiscussionTopicHeader.Height
+                    ZIndex: =22
+
+                lblDiscussionTopicHeader As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Role: =TextRole.Heading1
+                    Size: =gblAppStyles.Label.Size.Large
+                    Text: =locSelectedTopic.Name
+                    Tooltip: =Self.Text
+                    Width: =Parent.Width - Self.X - 20
+                    Wrap: =false
+                    X: |-
+                        =If(
+                            'Discussions Screen'.Size = ScreenSize.ExtraLarge || 'Discussions Screen'.Size = ScreenSize.Large,
+                            imgTopicCover.X + imgTopicCover.Width + 20,
+                            imgTopicCover.X
+                        )
+                    Y: |-
+                        =If(
+                            'Discussions Screen'.Size = ScreenSize.ExtraLarge || 'Discussions Screen'.Size = ScreenSize.Large,
+                            imgTopicCover.Y,
+                            imgTopicCover.Y + imgTopicCover.Height + 20
+                        )
+                    ZIndex: =23
+
+                imgBack_Discussions As image:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "Click to go back",
+                                varOOBTextId: "imgBack_About__locAccessibleText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    BorderColor: =gblAppStyles.ButtonPrimary.Fill
+                    DisabledFill: |-
+                        =With(
+                            {
+                                varImageIsCategory: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Back"
+                                ).staticIconIsCategory
+                            },
+                            If(
+                                varImageIsCategory,
+                                gblAppStyles.Icons.DisabledFill_Category,
+                                Transparent
+                            )
+                        )
+                    Fill: |-
+                        =With(
+                            {
+                                varImageIsCategory: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Back"
+                                ).staticIconIsCategory
+                            },
+                            If(
+                                varImageIsCategory,
+                                gblAppStyles.Icons.Fill_Category,
+                                Transparent
+                            )
+                        )
+                    Height: =22*1
+                    Image: |
+                        =With(
+                            {
+                                varImageRecord: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Back"
+                                ),
+                                varColor: If(
+                                    Self.DisplayMode = DisplayMode.Disabled,
+                                    gblAppStyles.Icons.DisabledColor,
+                                    gblAppStyles.Icons.Color
+                                )
+                            },
+                            With(
+                                {
+                                    varImageData: Concatenate(
+                                        "data:image/svg+xml;utf8, ",
+                                        EncodeUrl(
+                                            Concatenate(
+                                                "<svg viewBox='",
+                                                varImageRecord.staticIconViewbox,
+                                                "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                varImageRecord.staticIconPath,
+                                                "' fill='#",
+                                                varColor,
+                                                "'/></svg>"
+                                            )
+                                        )
+                                    )
+                                },
+                                varImageData
+                            )
+                        )
+                    OnSelect: |-
+                        =Navigate(
+                            'Topics Screen',
+                            ScreenTransition.Fade
+                        )
+                    RadiusBottomLeft: =5
+                    RadiusBottomRight: =5
+                    RadiusTopLeft: =5
+                    RadiusTopRight: =5
+                    TabIndex: =0
+                    Tooltip: =Self.AccessibleLabel
+                    Width: =22*1
+                    X: |-
+                        =If(
+                            'Discussions Screen'.Size = ScreenSize.ExtraLarge || 'Discussions Screen'.Size = ScreenSize.Large,
+                            20 * 1,
+                            ('Discussions Screen'.Width - If(
+                                'Discussions Screen'.Size = ScreenSize.ExtraLarge || 'Discussions Screen'.Size = ScreenSize.Large,
+                                400,
+                                'Discussions Screen'.Width - 20
+                            )) / 2
+                        )
+                    Y: =lblBack_Discussions.Y + (lblBack_Discussions.Height - Self.Height) / 2 + 1
+                    ZIndex: =24
+
+                lblBack_Discussions As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =40*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: |-
+                        =Navigate(
+                            'Topics Screen',
+                            ScreenTransition.Fade
+                        )
+                    PaddingBottom: =0
+                    PaddingTop: =0
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Role: =TextRole.Heading1
+                    Size: =gblAppStyles.Label.Size.Medium
+                    TabIndex: |-
+                        =If(
+                            true,
+                            -1,
+                            0
+                        )
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Back",
+                                varOOBTextId: "lblBack_About__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Tooltip: =Self.Text
+                    Width: =150*1
+                    X: =imgBack_Discussions.X + imgBack_Discussions.Width
+                    Y: =20*1
+                    ZIndex: =25
+
+                grpFetchDiscussion As group:
+                    Height: =5
+                    Width: =5
+                    X: =40
+                    Y: =40
+                    ZIndex: =26
+
+                    btnFetchDiscussion As button:
+                        BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+                        BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+                        Color: =gblAppStyles.ButtonSecondary.Color
+                        DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+                        DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+                        Fill: =gblAppStyles.ButtonSecondary.Fill
+                        FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        Height: =32*1
+                        HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+                        HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+                        HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+                        OnSelect: |-
+                            =Navigate(
+                                'New Discussion Screen',
+                                ScreenTransition.Fade,
+                                {
+                                    locFetchDiscussion: true,
+                                    locEditDiscussion: false,
+                                    locAddDiscussion: false
+                                }
+                            )
+                        PaddingLeft: =25
+                        PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+                        PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+                        PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+                        RadiusBottomLeft: =gblAppStyles.ButtonSecondary.RadiusBottomLeft
+                        RadiusBottomRight: =gblAppStyles.ButtonSecondary.RadiusBottomRight
+                        RadiusTopLeft: =gblAppStyles.ButtonSecondary.RadiusTopLeft
+                        RadiusTopRight: =gblAppStyles.ButtonSecondary.RadiusTopRight
+                        Size: =gblAppStyles.ButtonSecondary.Size
+                        TabIndex: =1
+                        Text: |-
+                            =If(
+                                'Discussions Screen'.Size = ScreenSize.ExtraLarge || 'Discussions Screen'.Size = ScreenSize.Large,
+                                With(
+                                {
+                                    varDefault: "Existing teams conversation",
+                                    varOOBTextId: "btnFetchDiscussion__locText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            ),
+                                ""
+                            )
+                        Tooltip: |-
+                            =With(
+                                {
+                                    varDefault: "Existing teams conversation",
+                                    varOOBTextId: "btnFetchDiscussion__locText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        Width: |-
+                            =If(
+                                'Discussions Screen'.Size = ScreenSize.ExtraLarge || 'Discussions Screen'.Size = ScreenSize.Large,
+                                250 * 1,
+                                32 * 1
+                            )
+                        X: =btnNewDiscussion.X + btnNewDiscussion.Width + 12
+                        Y: =btnNewDiscussion.Y
+                        ZIndex: =16
+
+                    imgFetchDiscussion As image:
+                        AccessibleLabel: |-
+                            =With(
+                                {
+                                    varDefault: "Existing teams conversation",
+                                    varOOBTextId: "btnFetchDiscussion__locText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        Height: =22*1
+                        Image: |-
+                            =If(
+                                gblThemeDark || gblThemeHiCo,
+                                'Arrow Download',
+                                'Arrow Download'
+                            )
+                        OnSelect: |-
+                            =Navigate(
+                                'New Discussion Screen',
+                                ScreenTransition.Fade,
+                                {
+                                    locFetchDiscussion: true,
+                                    locEditDiscussion: false,
+                                    locAddDiscussion: false
+                                }
+                            )
+                        PaddingBottom: =2
+                        PaddingLeft: =2
+                        PaddingRight: =2
+                        PaddingTop: =2
+                        TabIndex: |-
+                            =If(
+                                'Discussions Screen'.Size = ScreenSize.ExtraLarge || 'Discussions Screen'.Size = ScreenSize.Large,
+                             -1,1)
+                        Tooltip: =Self.AccessibleLabel
+                        Width: |-
+                            =If(
+                                'Discussions Screen'.Size = ScreenSize.ExtraLarge || 'Discussions Screen'.Size = ScreenSize.Large,
+                                22 * 1,
+                                32 * 1
+                            )
+                        X: |-
+                            =If(
+                                'Discussions Screen'.Size = ScreenSize.ExtraLarge || 'Discussions Screen'.Size = ScreenSize.Large,
+                                btnFetchDiscussion.X + 20,
+                                btnFetchDiscussion.X
+                            )
+                        Y: =btnNewDiscussion.Y + (btnNewDiscussion.Height - Self.Height)/2
+                        ZIndex: =18
+
+                grpEditTopic As group:
+                    Height: =5
+                    Width: =5
+                    X: =40
+                    Y: =40
+                    ZIndex: =26
+
+                    btnEditTopic As button:
+                        BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+                        BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+                        Color: =gblAppStyles.ButtonSecondary.Color
+                        DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+                        DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+                        Fill: =gblAppStyles.ButtonSecondary.Fill
+                        FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        Height: =32*1
+                        HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+                        HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+                        HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+                        OnSelect: |-
+                            =Navigate(
+                                'Edit Topic Screen',
+                                ScreenTransition.Fade,
+                                {locSelectedTopic: locSelectedTopic}
+                            )
+                        PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+                        PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+                        PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+                        RadiusBottomLeft: =gblAppStyles.ButtonSecondary.RadiusBottomLeft
+                        RadiusBottomRight: =gblAppStyles.ButtonSecondary.RadiusBottomRight
+                        RadiusTopLeft: =gblAppStyles.ButtonSecondary.RadiusTopLeft
+                        RadiusTopRight: =gblAppStyles.ButtonSecondary.RadiusTopRight
+                        Size: =gblAppStyles.ButtonSecondary.Size
+                        TabIndex: =1
+                        Text: |-
+                            =If(
+                                'Discussions Screen'.Size = ScreenSize.ExtraLarge || 'Discussions Screen'.Size = ScreenSize.Large,
+                                With(
+                                {
+                                    varDefault: "Edit",
+                                    varOOBTextId: "btnEditTopic__locText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            ),
+                                ""
+                            )
+                        Tooltip: |-
+                            =With(
+                                {
+                                    varDefault: "Edit",
+                                    varOOBTextId: "btnEditTopic__locText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        Width: |-
+                            =If(
+                                'Discussions Screen'.Size = ScreenSize.ExtraLarge || 'Discussions Screen'.Size = ScreenSize.Large,
+                                70 * 1,
+                                32 * 1
+                            )
+                        X: =btnFetchDiscussion.X + btnFetchDiscussion.Width + 12
+                        Y: =btnNewDiscussion.Y
+                        ZIndex: =15
+
+                    imgEditTopic As image:
+                        AccessibleLabel: |-
+                            =With(
+                                {
+                                    varDefault: "Edit topic icon",
+                                    varOOBTextId: "imgEditTopic__locAccessibleText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        Height: =22*1
+                        Image: |-
+                            =With(
+                                {
+                                    varImageRecord: LookUp(
+                                        staticIcons,
+                                        staticIconName = "Edit"
+                                    ),
+                                    varColor: If(
+                                        Self.DisplayMode = DisplayMode.Disabled,
+                                        gblAppStyles.Icons.DisabledColor,
+                                        gblAppStyles.Icons.Color 
+                                    )
+                                },
+                                With(
+                                    {
+                                        varImageData: Concatenate(
+                                            "data:image/svg+xml;utf8, ",
+                                            EncodeUrl(
+                                                Concatenate(
+                                                    "<svg viewBox='",
+                                                    varImageRecord.staticIconViewbox,
+                                                    "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                    varImageRecord.staticIconPath,
+                                                    "' fill='#",
+                                                    varColor,
+                                                    "'/></svg>"
+                                                )
+                                            )
+                                        )
+                                    },
+                                    varImageData
+                                )
+                            )
+                        OnSelect: |-
+                            =Navigate(
+                                'Edit Topic Screen',
+                                ScreenTransition.Fade,
+                                {locSelectedTopic: locSelectedTopic}
+                            )
+                        PaddingBottom: =2
+                        PaddingLeft: =2
+                        PaddingRight: =2
+                        PaddingTop: =2
+                        TabIndex: |-
+                            =If(
+                                Self.Visible,
+                                1,
+                                -1
+                            )
+                        Tooltip: =Self.AccessibleLabel
+                        Visible: ='Discussions Screen'.Size = ScreenSize.Medium || 'Discussions Screen'.Size = ScreenSize.Small
+                        Width: |-
+                            =If(
+                                'Discussions Screen'.Size = ScreenSize.ExtraLarge || 'Discussions Screen'.Size = ScreenSize.Large,
+                                22 * 1,
+                                32 * 1
+                            )
+                        X: |-
+                            =If(
+                                'Discussions Screen'.Size = ScreenSize.ExtraLarge || 'Discussions Screen'.Size = ScreenSize.Large,
+                                btnEditTopic.X + 20,
+                                btnEditTopic.X
+                            )
+                        Y: =btnNewDiscussion.Y + (btnNewDiscussion.Height - Self.Height)/2
+                        ZIndex: =17
+
+    grpDiscussionsCustomize As group:
+        Height: =5
+        Width: =5
+        X: =40
+        Y: =40
+        ZIndex: =4
+
+        btnCustomize_Discussions As button:
+            Align: =Align.Left
+            BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+            BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+            Color: =gblAppStyles.ButtonTransparent.Color
+            DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+            DisabledColor: =gblAppStyles.ButtonTransparent.DisabledColor
+            DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+            Fill: |-
+                =If(
+                    gblThemeDark || gblThemeHiCo,
+                    RGBA(
+                        0,
+                        0,
+                        0,
+                        0.7
+                    ),
+                    RGBA(
+                        255,
+                        255,
+                        255,
+                        0.7
+                    )
+                )
+            FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            Height: =32*1
+            HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+            HoverColor: =gblAppStyles.ButtonTransparent.HoverColor
+            HoverFill: =Self.Fill
+            OnSelect: |-
+                =//screen reader start
+                UpdateContext(
+                    {
+                        locScreenReaderAnnouncedText: With(
+                            {
+                                varAnnouncedText: With(
+                                    {
+                                        varDefault: "Navigating to the about screen",
+                                        varOOBTextId: "btnCustomize__locAnnouncement"
+                                    },
+                                    With(
+                                        {
+                                            varLocalizedText: LookUp(
+                                                colLocalization,
+                                                OOBTextID = varOOBTextId,
+                                                LocalizedText
+                                            )
+                                        },
+                                        Coalesce(
+                                            varLocalizedText,
+                                            varDefault
+                                        )
+                                    )
+                                )
+                            },
+                            If(
+                                locScreenReaderAnnouncedText = varAnnouncedText,
+                                Concatenate(
+                                    varAnnouncedText,
+                                    " "
+                                ),
+                                varAnnouncedText
+                            )
+                        )
+                    }
+                );
+                //screen reader end
+                Navigate(
+                    'About Screen',
+                    ScreenTransition.Fade
+                );
+            PaddingBottom: =0
+            PaddingLeft: =34
+            PaddingTop: =0
+            PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+            PressedColor: =gblAppStyles.ButtonTransparent.PressedColor
+            PressedFill: =Self.Fill
+            RadiusBottomLeft: =gblAppStyles.ButtonTransparent.RadiusBottomLeft
+            RadiusBottomRight: =gblAppStyles.ButtonTransparent.RadiusBottomRight
+            RadiusTopLeft: =gblAppStyles.ButtonTransparent.RadiusTopLeft
+            RadiusTopRight: =gblAppStyles.ButtonTransparent.RadiusTopRight
+            Size: =gblAppStyles.ButtonTransparent.Size
+            TabIndex: =1
+            Text: |-
+                =With(
+                    {
+                        varDefault: "Built with Power Apps >",
+                        varOOBTextId: "btnCustomize__locText"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            Tooltip: |-
+                =With(
+                    {
+                        varDefault: "Click to navigate to the about screen",
+                        varOOBTextId: "btnCustomize__locTooltip"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            Width: =200*1
+            X: =Parent.Width - Self.Width - 20
+            Y: =Parent.Height - Self.Height - 20
+            ZIndex: =3
+
+        imgCustomize_Discussions As image:
+            AccessibleLabel: |-
+                =With(
+                    {
+                        varDefault: "Click to navigate to the About screen",
+                        varOOBTextId: "btnCustomize__locTooltip"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            DisabledFill: |-
+                =With(
+                    {
+                        varImageIsCategory: LookUp(
+                            staticIcons,
+                            staticIconName = "Filter"
+                        ).staticIconIsCategory
+                    },
+                    If(
+                        varImageIsCategory,
+                        gblAppStyles.Icons.DisabledFill_Category,
+                        Transparent
+                    )
+                )
+            Fill: |-
+                =With(
+                    {
+                        varImageIsCategory: LookUp(
+                            staticIcons,
+                            staticIconName = "Filter"
+                        ).staticIconIsCategory
+                    },
+                    If(
+                        varImageIsCategory,
+                        gblAppStyles.Icons.Fill_Category,
+                        Transparent
+                    )
+                )
+            Height: =22*1
+            Image: |-
+                =If(
+                    gblThemeDark || gblThemeHiCo,
+                    BuiltWithDark,
+                    BuiltWith
+                )
+            OnSelect: |-
+                =//screen reader start
+                UpdateContext(
+                    {
+                        locScreenReaderAnnouncedText: With(
+                            {
+                                varAnnouncedText: With(
+                                    {
+                                        varDefault: "Navigating to the about screen",
+                                        varOOBTextId: "btnCustomize__locAnnouncement"
+                                    },
+                                    With(
+                                        {
+                                            varLocalizedText: LookUp(
+                                                colLocalization,
+                                                OOBTextID = varOOBTextId,
+                                                LocalizedText
+                                            )
+                                        },
+                                        Coalesce(
+                                            varLocalizedText,
+                                            varDefault
+                                        )
+                                    )
+                                )
+                            },
+                            If(
+                                locScreenReaderAnnouncedText = varAnnouncedText,
+                                Concatenate(
+                                    varAnnouncedText,
+                                    " "
+                                ),
+                                varAnnouncedText
+                            )
+                        )
+                    }
+                );
+                //screen reader end
+                Navigate(
+                    'About Screen',
+                    ScreenTransition.Fade
+                );
+            PaddingBottom: =2
+            PaddingLeft: =2
+            PaddingRight: =2
+            PaddingTop: =2
+            RadiusBottomLeft: =5
+            RadiusBottomRight: =5
+            RadiusTopLeft: =5
+            RadiusTopRight: =5
+            TabIndex: |-
+                =If(
+                    true,
+                    -1,
+                    1
+                )
+            Tooltip: =Self.AccessibleLabel
+            Width: =22*1
+            X: =btnCustomize_Discussions.X + 10
+            Y: =btnCustomize_Discussions.Y + (btnCustomize_Discussions.Height - Self.Height) / 2
+            ZIndex: =4
+

@@ -1,0 +1,1764 @@
+"'Random Match Screen' As screen":
+    Fill: =gblAppStyles.Background.Fill
+    OnVisible: |-
+        =UpdateContext({locAreRandomMatchSuggestionsEnough: CountRows(colRandomMatchPool) >= 3})
+
+    lblAnnounce_RandomMatch As label:
+        Height: =0
+        Live: =Live.Assertive
+        Text: =locScreenReaderAnnouncedText
+        Width: =0
+        X: =Parent.Width - Self.Width
+        Y: =Parent.Height - Self.Height
+        ZIndex: =1
+
+    conRandomMatch As groupContainer:
+        DisplayMode: =DisplayMode.Edit
+        Height: =Parent.Height - Self.Y
+        LayoutAlignItems: =LayoutAlignItems.Start
+        LayoutDirection: =LayoutDirection.Horizontal
+        LayoutJustifyContent: =LayoutJustifyContent.Start
+        LayoutMode: =LayoutMode.Manual
+        LayoutOverflowX: =LayoutOverflow.Hide
+        LayoutOverflowY: =LayoutOverflow.Hide
+        Width: =Parent.Width
+        X: =0*1
+        Y: =conHeader_RandomMatch.Y + conHeader_RandomMatch.Height
+        ZIndex: =2
+
+        cnvRandomMatch As fluidGrid.fluidGridWithBlankCard:
+            BorderThickness: =0
+            Height: =Parent.Height - Self.Y
+            Width: =Parent.Width
+            X: =0*1
+            Y: =0*1
+            ZIndex: =1
+
+            dtcRandomMatch As dataCard:
+                BorderColor: =RGBA(0, 0, 0, 1)
+                BorderStyle: =BorderStyle.Solid
+                BorderThickness: =0
+                DisplayMode: =DisplayMode.Edit
+                Fill: =RGBA(0, 0, 0, 0)
+                Height: |-
+                    =Max(
+                        btnInvitePeople_RandomMatch.Y + btnInvitePeople_RandomMatch.Height + 20,
+                        btnFindAnotherConnection_RandomMatch.Y + btnFindAnotherConnection_RandomMatch.Height + 20
+                    )
+                Width: =Parent.Width
+                X: =0
+                Y: =0
+                ZIndex: =1
+
+                lblRandomMatchHeader As label:
+                    Align: =Align.Center
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Bold
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Role: =TextRole.Heading1
+                    Size: =gblAppStyles.Label.Size.Large
+                    Text: |
+                        ="Lets connect you with someone!"
+                            
+                    Tooltip: =Self.Text
+                    Visible: =locAreRandomMatchSuggestionsEnough
+                    Width: =Parent.Width - Self.X - 20
+                    Wrap: =false
+                    X: =20*1
+                    Y: =20*1
+                    ZIndex: =14
+
+                btnScheduleMeeting_RandomMatch As button:
+                    BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+                    BorderThickness: =gblAppStyles.ButtonPrimary.BorderThickness
+                    Color: =gblAppStyles.ButtonPrimary.Color
+                    DisabledBorderColor: =gblAppStyles.ButtonPrimary.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.ButtonPrimary.DisabledColor
+                    DisabledFill: =gblAppStyles.ButtonPrimary.DisabledFill
+                    Fill: =gblAppStyles.ButtonPrimary.Fill
+                    FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                    FocusedBorderThickness: =2//gblAppStyles.ButtonPrimary.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.ButtonPrimary.HoverBorderColor
+                    HoverColor: =gblAppStyles.ButtonPrimary.HoverColor
+                    HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+                    OnSelect: |-
+                        =If(
+                            gblIsHostClientWeb,
+                            Launch(
+                                "https://teams.microsoft.com/l/meeting/new?subject=New%20Meeting&attendees=" & locRandomMatchSuggestion.mail,
+                                {},
+                                LaunchTarget.New
+                            ),
+                            Launch(
+                                "msteams://teams.microsoft.com/l/meeting/new?subject=New%20Meeting&attendees=" & locRandomMatchSuggestion.mail,
+                                {},
+                                LaunchTarget.New
+                            )
+                        );
+                        UpdateContext({locScreenReaderAnnouncedText:"launching meeting window"})
+                    PaddingLeft: =26
+                    PressedBorderColor: =gblAppStyles.ButtonPrimary.PressedBorderColor
+                    PressedColor: =gblAppStyles.ButtonPrimary.PressedColor
+                    PressedFill: =gblAppStyles.ButtonPrimary.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.ButtonPrimary.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+                    Size: =gblAppStyles.ButtonPrimary.Size
+                    TabIndex: |-
+                        =If(
+                            Self.Visible,
+                            0,
+                            -1
+                        )
+                    Text: |-
+                        =If(
+                            'Random Match Screen'.Size = ScreenSize.ExtraLarge || 'Random Match Screen'.Size = ScreenSize.Large,
+                            With(
+                            {
+                                varDefault: "Schedule a meeting",
+                                varOOBTextId: "btnScheduleMeeting__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        ),
+                            With(
+                            {
+                                varDefault: "Meeting",
+                                varOOBTextId: "btnScheduleMeetingMobile__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        ))
+                    Tooltip: |-
+                        =With(
+                            {
+                                varDefault: "Click to schedule a Microsoft Teams meeting",
+                                varOOBTextId: "imgSelectedPersonMeeting__locAccessibleText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Visible: =locAreRandomMatchSuggestionsEnough
+                    Width: |-
+                        =If(
+                            'Random Match Screen'.Size = ScreenSize.ExtraLarge || 'Random Match Screen'.Size = ScreenSize.Large,
+                            180 * 1,
+                            110 * 1
+                        )
+                    X: =Parent.Width / 2 + 10
+                    Y: =btnRandomMatchSuggestionBackground.Y + btnRandomMatchSuggestionBackground.Height + 20
+                    ZIndex: =26
+
+                grpRandomMatchSuggestion As group:
+                    Height: =5
+                    Width: =5
+                    X: =40
+                    Y: =40
+                    ZIndex: =26
+
+                    btnRandomMatchSuggestionBackground As button:
+                        BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                        BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+                        Color: =Transparent
+                        DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.ButtonTransparent.DisabledColor
+                        DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                        DisplayMode: =DisplayMode.View
+                        Fill: |-
+                            =If(
+                                gblThemeDark,
+                                gblAppColors.NeutralWebGray220,
+                                gblThemeHiCo,
+                                Black,
+                                White
+                            )
+                        FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        Height: =220*1
+                        HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                        HoverColor: =Transparent
+                        HoverFill: =Self.Fill
+                        PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                        PressedColor: =Transparent
+                        PressedFill: =Self.Fill
+                        RadiusBottomLeft: =gblAppStyles.ButtonTransparent.RadiusBottomLeft
+                        RadiusBottomRight: =gblAppStyles.ButtonTransparent.RadiusBottomRight
+                        RadiusTopLeft: =gblAppStyles.ButtonTransparent.RadiusTopLeft
+                        RadiusTopRight: =gblAppStyles.ButtonTransparent.RadiusTopRight
+                        Size: =gblAppStyles.ButtonTransparent.Size
+                        TabIndex: |-
+                            =If(
+                                true,
+                                -1,
+                                0
+                            )
+                        Text: |-
+                            =/*With(
+                                {
+                                    varDefault: "Background button for selected person's profile",
+                                    varOOBTextId: "btnSelectedPersonBackground__locText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                            
+                            & */locRandomMatchSuggestion.displayName & "Profile"
+                        Tooltip: =Self.Text
+                        Visible: =locAreRandomMatchSuggestionsEnough
+                        Width: =380*1
+                        X: =(Parent.Width - Self.Width) / 2
+                        Y: =lblRandomMatchHeader.Y + lblRandomMatchHeader.Height + 20
+                        ZIndex: =15
+
+                    lblRandomMatchSuggestionName As label:
+                        BorderColor: =gblAppStyles.Label.BorderColor
+                        BorderThickness: =gblAppStyles.Label.BorderThickness
+                        Color: |-
+                            =If(
+                                gblThemeDark,
+                                gblAppColors.TeamsDefaultTint30,
+                                gblAppStyles.ButtonPrimary.Fill
+                            )
+                        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.Label.DisabledColor
+                        DisabledFill: =gblAppStyles.Label.DisabledFill
+                        Fill: =gblAppStyles.Label.Fill
+                        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        FontWeight: =FontWeight.Bold
+                        Height: =32*1
+                        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                        HoverFill: =gblAppStyles.Label.HoverFill
+                        PaddingBottom: =0
+                        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                        PressedFill: =gblAppStyles.Label.PressedFill
+                        Size: =gblAppStyles.Label.Size.Medium
+                        TabIndex: |-
+                            =If(
+                                true,
+                                -1,
+                                0
+                            )
+                        Text: =locRandomMatchSuggestion.displayName
+                        Tooltip: =Self.Text
+                        VerticalAlign: =VerticalAlign.Bottom
+                        Visible: =locAreRandomMatchSuggestionsEnough
+                        Width: =lblRandomMatchSuggestionTitle.Width
+                        Wrap: =false
+                        X: =imgRandomMatchSuggestionPicDefault.X + imgRandomMatchSuggestionPicDefault.Width  + 10
+                        Y: =btnRandomMatchSuggestionBackground.Y
+                        ZIndex: =16
+
+                    lblRandomMatchSuggestionTitle As label:
+                        BorderColor: =gblAppStyles.Label.BorderColor
+                        BorderThickness: =gblAppStyles.Label.BorderThickness
+                        Color: =gblAppStyles.Label.Color
+                        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.Label.DisabledColor
+                        DisabledFill: =gblAppStyles.Label.DisabledFill
+                        Fill: =gblAppStyles.Label.Fill
+                        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        Height: =26*1
+                        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                        HoverColor: =gblAppStyles.Label.HoverColor
+                        HoverFill: =gblAppStyles.Label.HoverFill
+                        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                        PressedColor: =gblAppStyles.Label.PressedColor
+                        PressedFill: =gblAppStyles.Label.PressedFill
+                        Size: =gblAppStyles.Label.Size.Medium
+                        TabIndex: |-
+                            =If(
+                                true,
+                                -1,
+                                0
+                            )
+                        Text: =locRandomMatchSuggestion.jobTitle
+                        Tooltip: =Self.Text
+                        Visible: =locAreRandomMatchSuggestionsEnough
+                        Width: =btnRandomMatchSuggestionBackground.X + btnRandomMatchSuggestionBackground.Width - Self.X - 10
+                        Wrap: =false
+                        X: =lblRandomMatchSuggestionName.X
+                        Y: =lblRandomMatchSuggestionName.Y + lblRandomMatchSuggestionName.Height + 5
+                        ZIndex: =17
+
+                    lblRandomMatchSuggestionDept As label:
+                        BorderColor: =gblAppStyles.Label.BorderColor
+                        BorderThickness: =gblAppStyles.Label.BorderThickness
+                        Color: =gblAppStyles.Label.Color
+                        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.Label.DisabledColor
+                        DisabledFill: =gblAppStyles.Label.DisabledFill
+                        Fill: =gblAppStyles.Label.Fill
+                        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        Height: =26*1
+                        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                        HoverColor: =gblAppStyles.Label.HoverColor
+                        HoverFill: =gblAppStyles.Label.HoverFill
+                        PaddingTop: =0
+                        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                        PressedColor: =gblAppStyles.Label.PressedColor
+                        PressedFill: =gblAppStyles.Label.PressedFill
+                        Size: =gblAppStyles.Label.Size.Medium
+                        TabIndex: |-
+                            =If(
+                                true,
+                                -1,
+                                0
+                            )
+                        Text: =locRandomMatchSuggestion.department
+                        Tooltip: =Self.Text
+                        VerticalAlign: =VerticalAlign.Top
+                        Visible: =locAreRandomMatchSuggestionsEnough
+                        Width: =lblRandomMatchSuggestionTitle.Width
+                        Wrap: =false
+                        X: =lblRandomMatchSuggestionName.X
+                        Y: =lblRandomMatchSuggestionTitle.Y + lblRandomMatchSuggestionTitle.Height
+                        ZIndex: =18
+
+                    shpRandomMatchSuggestionPicDefault As circle:
+                        AccessibleLabel: |-
+                            =With(
+                                {
+                                    varDefault: "Background for default user photo",
+                                    varOOBTextId: "_translateCommon__DefaultUserPhotoBackground"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        Fill: |-
+                            =If(
+                                gblThemeDark,
+                                gblAppStyles.Background.Fill,
+                                gblThemeHiCo,
+                                Black,
+                                gblAppStyles.Background.Fill
+                            )
+                        Height: =72*1
+                        TabIndex: |-
+                            =If(
+                                true,
+                                -1,
+                                0
+                            )
+                        Visible: =locAreRandomMatchSuggestionsEnough
+                        Width: =72*1
+                        X: =imgRandomMatchSuggestionPicDefault.X
+                        Y: =imgRandomMatchSuggestionPicDefault.Y
+                        ZIndex: =19
+
+                    imgRandomMatchSuggestionPicDefault As image:
+                        AccessibleLabel: |-
+                            =With(
+                                {
+                                    varDefault: "Default user photo",
+                                    varOOBTextId: "_translateCommon__DefaultUserPhoto"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        Height: =72*1
+                        Image: |-
+                            =With(
+                                {
+                                    varImageRecord: LookUp(
+                                        staticIcons,
+                                        staticIconName = "Person"
+                                    ),
+                                    varColor: If(
+                                        Self.DisplayMode = DisplayMode.Disabled,
+                                        gblAppStyles.Icons.DisabledColor,
+                                        gblAppStyles.Icons.Color
+                                    )
+                                },
+                                With(
+                                    {
+                                        varImageData: Concatenate(
+                                            "data:image/svg+xml;utf8, ",
+                                            EncodeUrl(
+                                                Concatenate(
+                                                    "<svg viewBox='",
+                                                    varImageRecord.staticIconViewbox,
+                                                    "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                    varImageRecord.staticIconPath,
+                                                    "' fill='#",
+                                                    varColor,
+                                                    "'/></svg>"
+                                                )
+                                            )
+                                        )
+                                    },
+                                    varImageData
+                                )
+                            )
+                        PaddingBottom: =20
+                        PaddingLeft: =20
+                        PaddingRight: =20
+                        PaddingTop: =20
+                        RadiusBottomLeft: =80*1
+                        RadiusBottomRight: =80*1
+                        RadiusTopLeft: =80*1
+                        RadiusTopRight: =80*1
+                        TabIndex: |-
+                            =If(
+                                true,
+                                -1,
+                                0
+                            )
+                        Visible: =locAreRandomMatchSuggestionsEnough
+                        Width: =72*1
+                        X: =btnRandomMatchSuggestionBackground.X + 10
+                        Y: =btnRandomMatchSuggestionBackground.Y + 14
+                        ZIndex: =20
+
+                    imgRandomMatchSuggestionPic As image:
+                        AccessibleLabel: |-
+                            =With(
+                                {
+                                    varDefault: "Selected person's profile photo",
+                                    varOOBTextId: "imgSelectedPersonPic__locAccessibleText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        Height: =72*1
+                        Image: |-
+                            =If(
+                                !IsBlank(locRandomMatchSuggestion.id),
+                                Office365Users.UserPhoto(locRandomMatchSuggestion.id)
+                            )
+                        RadiusBottomLeft: =80*1
+                        RadiusBottomRight: =80*1
+                        RadiusTopLeft: =80*1
+                        RadiusTopRight: =80*1
+                        TabIndex: |-
+                            =If(
+                                true,
+                                -1,
+                                0
+                            )
+                        Visible: =locAreRandomMatchSuggestionsEnough
+                        Width: =72*1
+                        X: =btnRandomMatchSuggestionBackground.X + 10
+                        Y: =btnRandomMatchSuggestionBackground.Y + 14
+                        ZIndex: =21
+
+                    lblRandomMatchSuggestionEmail As label:
+                        BorderColor: =gblAppStyles.Label.BorderColor
+                        BorderThickness: =gblAppStyles.Label.BorderThickness
+                        Color: =gblAppStyles.Label.Color
+                        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.Label.DisabledColor
+                        DisabledFill: =gblAppStyles.Label.DisabledFill
+                        Fill: =gblAppStyles.Label.Fill
+                        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        Height: =24*1
+                        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                        HoverColor: =gblAppStyles.Label.HoverColor
+                        HoverFill: =gblAppStyles.Label.HoverFill
+                        PaddingTop: =0
+                        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                        PressedColor: =gblAppStyles.Label.PressedColor
+                        PressedFill: =gblAppStyles.Label.PressedFill
+                        Size: =gblAppStyles.Label.Size.Medium
+                        TabIndex: |-
+                            =If(
+                                true,
+                                -1,
+                                0
+                            )
+                        Text: =locRandomMatchSuggestion.mail
+                        Tooltip: =Self.Text
+                        Visible: =locAreRandomMatchSuggestionsEnough
+                        Width: =btnRandomMatchSuggestionBackground.X + btnRandomMatchSuggestionBackground.Width - Self.X - 10
+                        Wrap: =false
+                        X: =lblRandomMatchSuggestionDept.X
+                        Y: =lblRandomMatchSuggestionDept.Y + lblRandomMatchSuggestionDept.Height + 10
+                        ZIndex: =22
+
+                    lblRandomMatchSuggestionPhone As label:
+                        BorderColor: =gblAppStyles.Label.BorderColor
+                        BorderThickness: =gblAppStyles.Label.BorderThickness
+                        Color: =gblAppStyles.Label.Color
+                        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.Label.DisabledColor
+                        DisabledFill: =gblAppStyles.Label.DisabledFill
+                        Fill: =gblAppStyles.Label.Fill
+                        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        Height: =24*1
+                        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                        HoverColor: =gblAppStyles.Label.HoverColor
+                        HoverFill: =gblAppStyles.Label.HoverFill
+                        PaddingTop: =0
+                        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                        PressedColor: =gblAppStyles.Label.PressedColor
+                        PressedFill: =gblAppStyles.Label.PressedFill
+                        Size: =gblAppStyles.Label.Size.Medium
+                        TabIndex: |-
+                            =If(
+                                true,
+                                -1,
+                                0
+                            )
+                        Text: =locRandomMatchSuggestion.mobilePhone
+                        Tooltip: =Self.Text
+                        Visible: =locAreRandomMatchSuggestionsEnough
+                        Width: =btnRandomMatchSuggestionBackground.X + btnRandomMatchSuggestionBackground.Width - Self.X - 10
+                        Wrap: =false
+                        X: =lblRandomMatchSuggestionDept.X
+                        Y: =lblRandomMatchSuggestionEmail.Y + lblRandomMatchSuggestionEmail.Height
+                        ZIndex: =23
+
+                    htmRandomMatchSuggestionWorkPlace As htmlViewer:
+                        BorderColor: =gblAppStyles.HTML.BorderColor
+                        BorderThickness: =gblAppStyles.HTML.BorderThickness
+                        Color: =gblAppStyles.HTML.Color
+                        DisabledBorderColor: =gblAppStyles.HTML.DisabledBorderColor
+                        DisabledFill: =gblAppStyles.HTML.DisabledFill
+                        Fill: =gblAppStyles.HTML.Fill
+                        Font: =Font.'Segoe UI'
+                        Height: =30*1
+                        HoverBorderColor: =gblAppStyles.HTML.HoverBorderColor
+                        HtmlText: |-
+                            =If(
+                                IsBlank(locRandomMatchSuggestion.displayName),
+                                " ",
+                                With(
+                                    {
+                                        varDefault: "Works from",
+                                        varOOBTextId: "htmSelectedPersonWorkPlace__HTMLText"
+                                    },
+                                    With(
+                                        {
+                                            varLocalizedText: LookUp(
+                                                colLocalization,
+                                                OOBTextID = varOOBTextId,
+                                                LocalizedText
+                                            )
+                                        },
+                                        Coalesce(
+                                            varLocalizedText,
+                                            varDefault
+                                        )
+                                    )
+                                ) & " <b>" & locRandomMatchSuggestion.officeLocation & "</b>"
+                            )
+                        PaddingTop: =0
+                        Size: =gblAppStyles.HTML.Size.Medium
+                        Tooltip: =Self.HtmlText
+                        Visible: =locAreRandomMatchSuggestionsEnough
+                        Width: =btnRandomMatchSuggestionBackground.X + btnRandomMatchSuggestionBackground.Width - Self.X - 10
+                        X: =lblRandomMatchSuggestionDept.X
+                        Y: =lblRandomMatchSuggestionPhone.Y + lblRandomMatchSuggestionPhone.Height
+                        ZIndex: =24
+
+                    htmRandomMatchSuggestionResidence As htmlViewer:
+                        BorderColor: =gblAppStyles.HTML.BorderColor
+                        BorderThickness: =gblAppStyles.HTML.BorderThickness
+                        Color: =gblAppStyles.HTML.Color
+                        DisabledBorderColor: =gblAppStyles.HTML.DisabledBorderColor
+                        DisabledFill: =gblAppStyles.HTML.DisabledFill
+                        Fill: =gblAppStyles.HTML.Fill
+                        Font: =Font.'Segoe UI'
+                        Height: =30*1
+                        HoverBorderColor: =gblAppStyles.HTML.HoverBorderColor
+                        HtmlText: |-
+                            =If(
+                                IsBlank(locRandomMatchSuggestion.displayName),
+                                " ",
+                                With(
+                                    {
+                                        varDefault: "Lives in",
+                                        varOOBTextId: "htmSelectedPersonResidence__HTMLText"
+                                    },
+                                    With(
+                                        {
+                                            varLocalizedText: LookUp(
+                                                colLocalization,
+                                                OOBTextID = varOOBTextId,
+                                                LocalizedText
+                                            )
+                                        },
+                                        Coalesce(
+                                            varLocalizedText,
+                                            varDefault
+                                        )
+                                    )
+                                ) & " <b>" & locRandomMatchSuggestion.city & If(
+                                    !IsBlank(locRandomMatchSuggestion.state),
+                                    ", " & locRandomMatchSuggestion.state & "</b>",
+                                    "</b>"
+                                )
+                            )
+                        PaddingTop: =0
+                        Size: =gblAppStyles.HTML.Size.Medium
+                        Tooltip: =Self.HtmlText
+                        Visible: =locAreRandomMatchSuggestionsEnough
+                        Width: =btnRandomMatchSuggestionBackground.X + btnRandomMatchSuggestionBackground.Width - Self.X - 10
+                        X: =lblRandomMatchSuggestionDept.X
+                        Y: =htmRandomMatchSuggestionWorkPlace.Y + htmRandomMatchSuggestionWorkPlace.Height - 5
+                        ZIndex: =25
+
+                imgScheduleMeeting_RandomMatch As image:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "Meeting icon",
+                                varOOBTextId: "_translateCommon__ScheduleMeeting"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    DisabledFill: =Self.Fill
+                    Height: =btnScheduleMeeting_RandomMatch.Height
+                    Image: =MeetingPurple
+                    OnSelect: |-
+                        =If(
+                            gblIsHostClientWeb,
+                            Launch(
+                                "https://teams.microsoft.com/l/meeting/new?subject=New%20Meeting&attendees=" & locRandomMatchSuggestion.mail,
+                                {},
+                                LaunchTarget.New
+                            ),
+                            Launch(
+                                "msteams://teams.microsoft.com/l/meeting/new?subject=New%20Meeting&attendees=" & locRandomMatchSuggestion.mail,
+                                {},
+                                LaunchTarget.New
+                            )
+                        )
+                    PaddingBottom: =4
+                    PaddingLeft: =4
+                    PaddingRight: =4
+                    PaddingTop: =4
+                    TabIndex: |-
+                        =If(
+                            true,
+                            -1,
+                            0
+                        )
+                    Visible: =locAreRandomMatchSuggestionsEnough
+                    Width: =Self.Height
+                    X: =btnScheduleMeeting_RandomMatch.X + 6
+                    Y: =btnRandomMatchSuggestionBackground.Y + btnRandomMatchSuggestionBackground.Height + 20
+                    ZIndex: =27
+
+                btnStartChat_RandomMatch As button:
+                    BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+                    BorderThickness: =gblAppStyles.ButtonPrimary.BorderThickness
+                    Color: =gblAppStyles.ButtonPrimary.Color
+                    DisabledBorderColor: =gblAppStyles.ButtonPrimary.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.ButtonPrimary.DisabledColor
+                    DisabledFill: =gblAppStyles.ButtonPrimary.DisabledFill
+                    Fill: =gblAppStyles.ButtonPrimary.Fill
+                    FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                    FocusedBorderThickness: =2//gblAppStyles.ButtonPrimary.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.ButtonPrimary.HoverBorderColor
+                    HoverColor: =gblAppStyles.ButtonPrimary.HoverColor
+                    HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+                    OnSelect: |-
+                        =If(
+                            gblIsHostClientWeb,
+                            Launch(
+                                "https://teams.microsoft.com/l/chat/0/0?users=" & locRandomMatchSuggestion.mail & "&topicName=&message=Hi!",
+                                {},
+                                LaunchTarget.New
+                            ),
+                            Launch(
+                                "msteams://teams.microsoft.com/l/chat/0/0?users=" & locRandomMatchSuggestion.mail & "&topicName=&message=Hi!",
+                                {},
+                                LaunchTarget.New
+                            )
+                        );
+                        
+                        UpdateContext({locScreenReaderAnnouncedText:"launching chat window"})
+                    PaddingLeft: |-
+                        =If(
+                            'Random Match Screen'.Size = ScreenSize.ExtraLarge || 'Random Match Screen'.Size = ScreenSize.Large,
+                            26,
+                            22
+                        )
+                    PressedBorderColor: =gblAppStyles.ButtonPrimary.PressedBorderColor
+                    PressedColor: =gblAppStyles.ButtonPrimary.PressedColor
+                    PressedFill: =gblAppStyles.ButtonPrimary.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.ButtonPrimary.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+                    Size: =gblAppStyles.ButtonPrimary.Size
+                    TabIndex: |-
+                        =If(
+                            Self.Visible,
+                            0,
+                            -1
+                        )
+                    Text: |-
+                        =If(
+                            'Random Match Screen'.Size = ScreenSize.ExtraLarge || 'Random Match Screen'.Size = ScreenSize.Large,
+                            With(
+                                {
+                                    varDefault: "Start a chat",
+                                    varOOBTextId: "btnStartChat__locText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            ),
+                            With(
+                                {
+                                    varDefault: "Chat",
+                                    varOOBTextId: "btnStartChatMobile__locText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        )
+                    Tooltip: |-
+                        =With(
+                            {
+                                varDefault: "Click to start a Microsoft Teams chat",
+                                varOOBTextId: "imgSelectedPersonChat__locAccessibleText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Visible: =locAreRandomMatchSuggestionsEnough
+                    Width: |-
+                        =If(
+                            'Random Match Screen'.Size = ScreenSize.ExtraLarge || 'Random Match Screen'.Size = ScreenSize.Large,
+                            180 * 1,
+                            110 * 1
+                        )
+                    X: =Parent.Width / 2 - Self.Width - 10
+                    Y: =btnRandomMatchSuggestionBackground.Y + btnRandomMatchSuggestionBackground.Height + 20
+                    ZIndex: =28
+
+                imgStartChat_RandomMatch As image:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "Chat icon",
+                                varOOBTextId: "_translateCommon__ChatIcon"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    DisabledFill: =Self.Fill
+                    Height: =btnStartChat_RandomMatch.Height
+                    Image: =ChatPurple
+                    OnSelect: |-
+                        =If(
+                            gblIsHostClientWeb,
+                            Launch(
+                                "https://teams.microsoft.com/l/chat/0/0?users=" & locRandomMatchSuggestion.mail & "&topicName=&message=Hi!",
+                                {},
+                                LaunchTarget.New
+                            ),
+                            Launch(
+                                "msteams://teams.microsoft.com/l/chat/0/0?users=" & locRandomMatchSuggestion.mail & "&topicName=&message=Hi!",
+                                {},
+                                LaunchTarget.New
+                            )
+                        )
+                    PaddingBottom: =6
+                    PaddingLeft: =6
+                    PaddingRight: =6
+                    PaddingTop: =6
+                    TabIndex: |-
+                        =If(
+                            true,
+                            -1,
+                            0
+                        )
+                    Visible: =locAreRandomMatchSuggestionsEnough
+                    Width: =Self.Height
+                    X: |-
+                        =If(
+                            'Random Match Screen'.Size = ScreenSize.ExtraLarge || 'Random Match Screen'.Size = ScreenSize.Large,
+                            btnStartChat_RandomMatch.X + 30,
+                            btnStartChat_RandomMatch.X + 18
+                        )
+                    Y: =btnRandomMatchSuggestionBackground.Y + btnRandomMatchSuggestionBackground.Height + 20
+                    ZIndex: =29
+
+                btnFindAnotherConnection_RandomMatch As button:
+                    BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                    BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+                    Color: =gblAppStyles.ButtonTransparent.Color
+                    DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.ButtonTransparent.DisabledColor
+                    DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                    Fill: =gblAppStyles.ButtonTransparent.Fill
+                    FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                    HoverColor: =gblAppStyles.ButtonTransparent.HoverColor
+                    HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+                    OnSelect: |-
+                        =ClearCollect(
+                            colRandomMatchPool,
+                            Shuffle(
+                                Filter(
+                                    'Connection User Settings',
+                                    'Open To Random Match?' = 'Open To Random Match? (Connection User Settings)'.Yes,
+                                    Email <> gblCurrUserEmail,
+                                    Email <> locRandomMatchSuggestionEmail
+                                )
+                            )
+                        );
+                        UpdateContext(
+                            {
+                                locRandomMatchSuggestion: If(
+                                    !IsBlank(First(colRandomMatchPool).Email),
+                                    Office365Users.UserProfileV2(First(colRandomMatchPool).Email)
+                                ),
+                                locRandomMatchSuggestionEmail: First(colRandomMatchPool).Email
+                            }
+                        );
+                        UpdateContext({locScreenReaderAnnouncedText:If(locScreenReaderAnnouncedText="Found another connection " & lblRandomMatchSuggestionName.Text,"Found new connection" & lblRandomMatchSuggestionName.Text,"Found another connection" & lblRandomMatchSuggestionName.Text)});SetFocus(btnStartChat_RandomMatch)
+                    PaddingLeft: =30
+                    PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                    PressedColor: =gblAppStyles.ButtonTransparent.PressedColor
+                    PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.ButtonTransparent.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.ButtonTransparent.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.ButtonTransparent.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.ButtonTransparent.RadiusTopRight
+                    Size: =gblAppStyles.ButtonTransparent.Size
+                    Text: ="Find another connection"
+                    Tooltip: =Self.Text
+                    Visible: =locAreRandomMatchSuggestionsEnough
+                    Width: =225*1
+                    X: |-
+                        =If(
+                            'Random Match Screen'.Size = ScreenSize.ExtraLarge || 'Random Match Screen'.Size = ScreenSize.Large,
+                            (Parent.Width - Self.Width) / 2,
+                            (Parent.Width - Self.Width) / 2 + 8
+                        )
+                    Y: =btnStartChat_RandomMatch.Y + btnStartChat_RandomMatch.Height + 20
+                    ZIndex: =30
+
+                imgFindAnotherConnection_RandomMatch As image:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "Chat icon",
+                                varOOBTextId: "_translateCommon__ChatIcon"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    DisabledFill: =Self.Fill
+                    Height: =btnStartChat_RandomMatch.Height
+                    Image: |-
+                        =If(
+                            gblThemeHiCo || gblThemeDark,
+                            TargetArrow_Default,
+                            TargetArrow_Dark
+                        )
+                    OnSelect: |-
+                        =ClearCollect(
+                            colRandomMatchPool,
+                            Shuffle(
+                                Filter(
+                                    'Connection User Settings',
+                                    'Open To Random Match?' = 'Open To Random Match? (Connection User Settings)'.Yes,
+                                    Email <> gblCurrUserEmail,
+                                    Email <> locRandomMatchSuggestionEmail
+                                )
+                            )
+                        );
+                        UpdateContext(
+                            {
+                                locRandomMatchSuggestion: If(
+                                    !IsBlank(First(colRandomMatchPool).Email),
+                                    Office365Users.UserProfileV2(First(colRandomMatchPool).Email)
+                                ),
+                                locRandomMatchSuggestionEmail: First(colRandomMatchPool).Email
+                            }
+                        )
+                    PaddingBottom: =6
+                    PaddingLeft: =6
+                    PaddingRight: =6
+                    PaddingTop: =6
+                    TabIndex: |-
+                        =If(
+                            true,
+                            -1,
+                            0
+                        )
+                    Visible: =locAreRandomMatchSuggestionsEnough
+                    Width: =Self.Height
+                    X: =btnFindAnotherConnection_RandomMatch.X + 10
+                    Y: =btnFindAnotherConnection_RandomMatch.Y 
+                    ZIndex: =31
+
+                imgZeroStateRandomMatch As image:
+                    Height: =200
+                    Image: =ZeroState_RandomMatch
+                    Visible: =!locAreRandomMatchSuggestionsEnough
+                    Width: =260
+                    X: =(Parent.Width - Self.Width) / 2
+                    Y: =60*1
+                    ZIndex: =32
+
+                lblInvitePeople_Line1_RandomMatch As label:
+                    Align: =Align.Center
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Large
+                    Text: ="Invite people to Get Connected"
+                    Tooltip: =Self.Text
+                    Visible: =!locAreRandomMatchSuggestionsEnough
+                    Width: =Parent.Width
+                    Wrap: =false
+                    X: =0*1
+                    Y: =imgZeroStateRandomMatch.Y + imgZeroStateRandomMatch.Height + 20
+                    ZIndex: =33
+
+                lblInvitePeople_Line2_RandomMatch As label:
+                    Align: =Align.Center
+                    AutoHeight: =true
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: ="Seems there aren’t enough people to connect with. Ask your teammates to use Get Connected."
+                    Tooltip: =Self.Text
+                    Visible: =!locAreRandomMatchSuggestionsEnough
+                    Width: =Parent.Width
+                    X: =0*1
+                    Y: =lblInvitePeople_Line1_RandomMatch.Y + lblInvitePeople_Line1_RandomMatch.Height + 10
+                    ZIndex: =34
+
+                btnInvitePeople_RandomMatch As button:
+                    BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+                    BorderThickness: =gblAppStyles.ButtonPrimary.BorderThickness
+                    Color: =gblAppStyles.ButtonPrimary.Color
+                    DisabledBorderColor: =gblAppStyles.ButtonPrimary.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.ButtonPrimary.DisabledColor
+                    DisabledFill: =gblAppStyles.ButtonPrimary.DisabledFill
+                    Fill: =gblAppStyles.ButtonPrimary.Fill
+                    FocusedBorderColor: =gblAppStyles.ButtonPrimary.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.ButtonPrimary.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.ButtonPrimary.HoverBorderColor
+                    HoverColor: =gblAppStyles.ButtonPrimary.HoverColor
+                    HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+                    OnSelect: |-
+                        =UpdateContext({locShowInvitePeopleDialog: true})
+                    PaddingLeft: =28
+                    PressedBorderColor: =gblAppStyles.ButtonPrimary.PressedBorderColor
+                    PressedColor: =gblAppStyles.ButtonPrimary.PressedColor
+                    PressedFill: =gblAppStyles.ButtonPrimary.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.ButtonPrimary.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+                    Size: =gblAppStyles.ButtonPrimary.Size
+                    TabIndex: |-
+                        =If(
+                            Self.Visible,
+                            0,
+                            -1
+                        )
+                    Text: ="Invite people in a channel"
+                    Tooltip: |-
+                        =With(
+                            {
+                                varDefault: "Click to schedule a Microsoft Teams meeting",
+                                varOOBTextId: "imgSelectedPersonMeeting__locAccessibleText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Visible: =!locAreRandomMatchSuggestionsEnough
+                    Width: =225*1
+                    X: =(Parent.Width - Self.Width) / 2
+                    Y: =lblInvitePeople_Line2_RandomMatch.Y + lblInvitePeople_Line2_RandomMatch.Height + 30
+                    ZIndex: =35
+
+                imgInvitePeople_RandomMatch As image:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "Meeting icon",
+                                varOOBTextId: "_translateCommon__ScheduleMeeting"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    DisabledFill: =Self.Fill
+                    Height: =btnInvitePeople_RandomMatch.Height
+                    Image: =MicrosoftTeamsPurple
+                    OnSelect: |-
+                        =UpdateContext({locShowInvitePeopleDialog: true})
+                    PaddingBottom: =4
+                    PaddingLeft: =4
+                    PaddingRight: =4
+                    PaddingTop: =4
+                    TabIndex: |-
+                        =If(
+                            true,
+                            -1,
+                            0
+                        )
+                    Visible: =!locAreRandomMatchSuggestionsEnough
+                    Width: =Self.Height
+                    X: =btnInvitePeople_RandomMatch.X + 10
+                    Y: =btnInvitePeople_RandomMatch.Y
+                    ZIndex: =36
+
+    conHeader_RandomMatch As groupContainer:
+        DisplayMode: =DisplayMode.Edit
+        Height: =60*1
+        LayoutAlignItems: =LayoutAlignItems.Start
+        LayoutDirection: =LayoutDirection.Horizontal
+        LayoutJustifyContent: =LayoutJustifyContent.Start
+        LayoutMode: =LayoutMode.Manual
+        LayoutOverflowX: =LayoutOverflow.Hide
+        LayoutOverflowY: =LayoutOverflow.Hide
+        Width: =Parent.Width
+        X: =0*1
+        Y: =0*1
+        ZIndex: =3
+
+        shpHeaderDivider_RandomMatch As rectangle:
+            Fill: =gblAppStyles.Dividers.TopMenu
+            Height: =1
+            Visible: =false
+            Width: =Parent.Width
+            X: =0*1
+            Y: =Parent.Height - Self.Height
+            ZIndex: =1
+
+        imgHeaderDivider_RandomMatch As image:
+            Height: =10
+            Image: |-
+                =If(
+                    gblThemeDark || gblThemeHiCo,
+                    Shadow_Dark,
+                    Shadow_Default
+                )
+            ImagePosition: =ImagePosition.Stretch
+            Width: =Parent.Width + 600
+            X: =0*1- 200
+            Y: =Parent.Height - Self.Height
+            ZIndex: =5
+
+        conHeaderButtons_RandomMatch As groupContainer.horizontalAutoLayoutContainer:
+            DisplayMode: =DisplayMode.Edit
+            Height: =Parent.Height
+            LayoutAlignItems: =LayoutAlignItems.Center
+            LayoutOverflowX: =LayoutOverflow.Scroll
+            PaddingBottom: =5
+            PaddingLeft: =20
+            Width: =Parent.Width
+            X: =0*1
+            Y: =0*1
+            ZIndex: =7
+
+            btnHome_RandomMatch As button:
+                Align: =Align.Left
+                BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+                Color: =gblAppStyles.ButtonTransparent.Color
+                DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+                DisabledColor: =gblAppStyles.ButtonTransparent.DisabledColor
+                DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                Fill: =gblAppStyles.ButtonTransparent.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Normal
+                Height: =32*1
+                HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                HoverColor: =gblAppStyles.ButtonTransparent.HoverColor
+                HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+                OnSelect: |-
+                    =Navigate(
+                        'Home Screen',
+                        ScreenTransition.Fade
+                    )
+                PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                PressedColor: =gblAppStyles.ButtonTransparent.PressedColor
+                PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+                RadiusBottomLeft: =gblAppStyles.ButtonTransparent.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.ButtonTransparent.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.ButtonTransparent.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.ButtonTransparent.RadiusTopRight
+                Size: =gblAppStyles.ButtonTransparent.Size
+                Text: ="Home"
+                Tooltip: =Self.Text
+                Width: =50*1
+                X: =20*1
+                Y: =(Parent.Height - Self.Height) / 2
+                ZIndex: =1
+
+            lblSeparator1_RandomMatch As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =32*1
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Small
+                Text: =">"
+                Tooltip: =Self.Text
+                Visible: =false
+                Width: =18*1
+                Wrap: =false
+                X: =btnHome_RandomMatch.X + btnHome_RandomMatch.Width 
+                Y: =btnHome_RandomMatch.Y
+                ZIndex: =2
+
+            imgSeparator1_RandomMatch As image:
+                Height: =18*1
+                Image: |-
+                    =If(
+                        gblThemeDark || gblThemeHiCo,
+                        HeaderArrow_Dark,
+                        HeaderArrow_Default
+                    )
+                ImagePosition: =ImagePosition.Stretch
+                PaddingBottom: =4
+                PaddingLeft: =4
+                PaddingRight: =4
+                PaddingTop: =4
+                Width: =18*1
+                X: =btnHome_RandomMatch.X + btnHome_RandomMatch.Width 
+                Y: =btnHome_RandomMatch.Y + (btnHome_RandomMatch.Height - Self.Height) / 2
+                ZIndex: =3
+
+            btnRandomConnect_RandomMatch As button:
+                Align: =Align.Left
+                BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+                Color: =gblAppStyles.ButtonTransparent.Color
+                DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+                DisabledColor: =Self.Color
+                DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                DisplayMode: =DisplayMode.Disabled
+                Fill: =gblAppStyles.ButtonTransparent.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Bold
+                Height: =32*1
+                HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                HoverColor: =gblAppStyles.ButtonTransparent.HoverColor
+                HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+                PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                PressedColor: =gblAppStyles.ButtonTransparent.PressedColor
+                PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+                RadiusBottomLeft: =gblAppStyles.ButtonTransparent.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.ButtonTransparent.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.ButtonTransparent.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.ButtonTransparent.RadiusTopRight
+                Size: =gblAppStyles.ButtonTransparent.Size
+                Text: ="Connect with someone new"
+                Tooltip: =Self.Text
+                Width: =205*1
+                X: =imgSeparator1_RandomMatch.X + imgSeparator1_RandomMatch.Width
+                Y: =(Parent.Height - Self.Height) / 2
+                ZIndex: =4
+
+    conInvitePeople_Random As groupContainer:
+        DisplayMode: =DisplayMode.Edit
+        Fill: |-
+            =If(
+                gblThemeDark Or gblThemeHiCo,
+                gblAppColors.OverlayLight,
+                gblAppColors.OverlayDark
+            )
+        Height: =Parent.Height
+        LayoutAlignItems: =LayoutAlignItems.Start
+        LayoutDirection: =LayoutDirection.Horizontal
+        LayoutJustifyContent: =LayoutJustifyContent.Start
+        LayoutMode: =LayoutMode.Manual
+        LayoutOverflowX: =LayoutOverflow.Hide
+        LayoutOverflowY: =LayoutOverflow.Hide
+        Visible: =locShowInvitePeopleDialog
+        Width: =Parent.Width
+        X: =0*1
+        Y: =0*1
+        ZIndex: =4
+
+        lblInvitePeopleBackground_RandomMatch As label:
+            BorderColor: =gblAppStyles.Label.BorderColor
+            BorderThickness: =gblAppStyles.Label.BorderThickness
+            Color: =gblAppStyles.Label.Color
+            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+            DisabledColor: =gblAppStyles.Label.DisabledColor
+            DisabledFill: =gblAppStyles.Label.DisabledFill
+            Fill: =gblAppStyles.Background.Fill
+            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            Height: =450*1
+            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+            HoverColor: =gblAppStyles.Label.HoverColor
+            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+            PressedColor: =gblAppStyles.Label.PressedColor
+            Size: =gblAppStyles.Label.Size.ExtraLarge
+            Text: =""
+            Tooltip: =Self.Text
+            Width: |-
+                =If(
+                    'Random Match Screen'.Size = ScreenSize.ExtraLarge || 'Random Match Screen'.Size = ScreenSize.Large,
+                    600 * 1,
+                    Parent.Width - 20*2
+                )
+            Wrap: =false
+            X: =(Parent.Width - Self.Width) / 2
+            Y: =(Parent.Height - Self.Height) / 2
+            ZIndex: =2
+
+        lblInvitePeopleHeader_RandomMatch As label:
+            BorderColor: =gblAppStyles.Label.BorderColor
+            BorderThickness: =gblAppStyles.Label.BorderThickness
+            Color: =gblAppStyles.Label.Color
+            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+            DisabledColor: =gblAppStyles.Label.DisabledColor
+            DisabledFill: =gblAppStyles.Label.DisabledFill
+            Fill: =gblAppStyles.Label.Fill
+            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            FontWeight: =FontWeight.Bold
+            Height: =32*1
+            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+            HoverColor: =gblAppStyles.Label.HoverColor
+            HoverFill: =gblAppStyles.Label.HoverFill
+            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+            PressedColor: =gblAppStyles.Label.PressedColor
+            PressedFill: =gblAppStyles.Label.PressedFill
+            Size: =gblAppStyles.Label.Size.Large
+            Text: ="Post about Get Connected"
+            Tooltip: =Self.Text
+            Width: =lblInvitePeopleBackground_RandomMatch.X + lblInvitePeopleBackground_RandomMatch.Width - Self.X - 60
+            Wrap: =false
+            X: =lblInvitePeopleBackground_RandomMatch.X + 20
+            Y: =lblInvitePeopleBackground_RandomMatch.Y + 20
+            ZIndex: =3
+
+        lblTeam_RandomMatch As label:
+            BorderColor: =gblAppStyles.Label.BorderColor
+            BorderThickness: =gblAppStyles.Label.BorderThickness
+            Color: =gblAppStyles.Label.Color
+            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+            DisabledColor: =gblAppStyles.Label.DisabledColor
+            DisabledFill: =gblAppStyles.Label.DisabledFill
+            Fill: =gblAppStyles.Label.Fill
+            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            Height: =32*1
+            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+            HoverColor: =gblAppStyles.Label.HoverColor
+            HoverFill: =gblAppStyles.Label.HoverFill
+            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+            PressedColor: =gblAppStyles.Label.PressedColor
+            PressedFill: =gblAppStyles.Label.PressedFill
+            Size: =gblAppStyles.Label.Size.Medium
+            Text: ="Team"
+            Tooltip: =Self.Text
+            Width: =lblInvitePeopleBackground_RandomMatch.X + lblInvitePeopleBackground_RandomMatch.Width - Self.X - 20
+            Wrap: =false
+            X: =lblInvitePeopleHeader_RandomMatch.X
+            Y: =lblInvitePeopleHeader_RandomMatch.Y + lblInvitePeopleHeader_RandomMatch.Height + 20
+            ZIndex: =4
+
+        cmbTeam_RandomMatch As combobox:
+            AccessibleLabel: ="combo box"
+            BorderColor: =gblAppStyles.Dropdown.BorderColor
+            BorderThickness: =gblAppStyles.Dropdown.BorderThickness
+            ChevronBackground: =gblAppStyles.Dropdown.ChevronBackground
+            ChevronDisabledBackground: =gblAppStyles.Dropdown.ChevronDisabledBackground
+            ChevronDisabledFill: =gblAppStyles.Dropdown.ChevronDisabledFill
+            ChevronFill: =gblAppStyles.Dropdown.ChevronFill
+            ChevronHoverBackground: =gblAppStyles.Dropdown.ChevronHoverBackground
+            ChevronHoverFill: =gblAppStyles.Dropdown.ChevronHoverFill
+            Color: =gblAppStyles.Dropdown.Color
+            DefaultSelectedItems: |-
+                =Filter(
+                    MicrosoftTeams.GetAllTeams().value,
+                    id = Param("groupId")
+                )
+            DisabledBorderColor: =gblAppStyles.Dropdown.DisabledBorderColor
+            DisabledColor: =gblAppStyles.Dropdown.DisabledColor
+            DisabledFill: =gblAppStyles.Dropdown.DisabledFill
+            DisplayFields: =["displayName"]
+            Fill: =gblAppStyles.Dropdown.Fill
+            FocusedBorderColor: =gblAppStyles.Dropdown.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Dropdown.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            Height: =32*1
+            HoverBorderColor: =gblAppStyles.Dropdown.HoverBorderColor
+            HoverColor: =gblAppStyles.Dropdown.HoverColor
+            HoverFill: =gblAppStyles.Dropdown.HoverFill
+            InputTextPlaceholder: ="Select a team"
+            Items: =MicrosoftTeams.GetAllTeams().value
+            PaddingLeft: =12
+            PressedFill: =gblAppStyles.Dropdown.PressedFill
+            SearchFields: =["displayName"]
+            SearchItems: =Search(MicrosoftTeams.GetAllTeams().value,cmbTeam_RandomMatch.SearchText,"displayName")
+            SelectionColor: =gblAppStyles.Dropdown.SelectionColor
+            SelectionFill: =gblAppStyles.Dropdown.SelectionFill
+            SelectionTagColor: =gblAppStyles.Dropdown.SelectionColor
+            SelectionTagFill: =gblAppStyles.Dropdown.SelectionFill
+            SelectMultiple: =false
+            Size: =gblAppStyles.Dropdown.Size
+            Tooltip: =
+            Width: =lblTeam_RandomMatch.Width
+            X: =lblTeam_RandomMatch.X
+            Y: =lblTeam_RandomMatch.Y + lblTeam_RandomMatch.Height
+            ZIndex: =5
+
+        lblChannel_RandomMatch As label:
+            BorderColor: =gblAppStyles.Label.BorderColor
+            BorderThickness: =gblAppStyles.Label.BorderThickness
+            Color: =gblAppStyles.Label.Color
+            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+            DisabledColor: =gblAppStyles.Label.DisabledColor
+            DisabledFill: =gblAppStyles.Label.DisabledFill
+            Fill: =gblAppStyles.Label.Fill
+            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            Height: =32*1
+            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+            HoverColor: =gblAppStyles.Label.HoverColor
+            HoverFill: =gblAppStyles.Label.HoverFill
+            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+            PressedColor: =gblAppStyles.Label.PressedColor
+            PressedFill: =gblAppStyles.Label.PressedFill
+            Size: =gblAppStyles.Label.Size.Medium
+            Text: ="Channel"
+            Tooltip: =Self.Text
+            Width: =lblInvitePeopleBackground_RandomMatch.X + lblInvitePeopleBackground_RandomMatch.Width - Self.X - 20
+            Wrap: =false
+            X: =lblInvitePeopleHeader_RandomMatch.X
+            Y: =cmbTeam_RandomMatch.Y + cmbTeam_RandomMatch.Height + 10
+            ZIndex: =6
+
+        cmbChannel_RandomMatch As combobox:
+            AccessibleLabel: ="combo box"
+            BorderColor: =gblAppStyles.Dropdown.BorderColor
+            BorderThickness: =gblAppStyles.Dropdown.BorderThickness
+            ChevronBackground: =gblAppStyles.Dropdown.ChevronBackground
+            ChevronDisabledBackground: =gblAppStyles.Dropdown.ChevronDisabledBackground
+            ChevronDisabledFill: =gblAppStyles.Dropdown.ChevronDisabledFill
+            ChevronFill: =gblAppStyles.Dropdown.ChevronFill
+            ChevronHoverBackground: =gblAppStyles.Dropdown.ChevronHoverBackground
+            ChevronHoverFill: =gblAppStyles.Dropdown.ChevronHoverFill
+            Color: =gblAppStyles.Dropdown.Color
+            DefaultSelectedItems: |-
+                =If(
+                    !IsBlank(Param("groupId")),
+                    Filter(
+                        MicrosoftTeams.GetChannelsForGroup(Param("groupId")).value,
+                        id = Param("channelId")
+                    )
+                )
+            DisabledBorderColor: =gblAppStyles.Dropdown.DisabledBorderColor
+            DisabledColor: =gblAppStyles.Dropdown.DisabledColor
+            DisabledFill: =gblAppStyles.Dropdown.DisabledFill
+            DisplayFields: =["displayName"]
+            Fill: =gblAppStyles.Dropdown.Fill
+            FocusedBorderColor: =gblAppStyles.Dropdown.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Dropdown.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            Height: =32*1
+            HoverBorderColor: =gblAppStyles.Dropdown.HoverBorderColor
+            HoverColor: =gblAppStyles.Dropdown.HoverColor
+            HoverFill: =gblAppStyles.Dropdown.HoverFill
+            InputTextPlaceholder: ="Select a channel"
+            Items: |-
+                =If(
+                    !IsBlank(cmbTeam_RandomMatch.Selected.id),
+                    MicrosoftTeams.GetChannelsForGroup(cmbTeam_RandomMatch.Selected.id).value
+                )
+            PaddingLeft: =12
+            PressedFill: =gblAppStyles.Dropdown.PressedFill
+            SearchFields: =["displayName"]
+            SearchItems: |-
+                =Search(If(
+                    !IsBlank(cmbTeam_RandomMatch.Selected.id),
+                    MicrosoftTeams.GetChannelsForGroup(cmbTeam_RandomMatch.Selected.id).value
+                ),cmbChannel_RandomMatch.SearchText,"displayName")
+            SelectionColor: =gblAppStyles.Dropdown.SelectionColor
+            SelectionFill: =gblAppStyles.Dropdown.SelectionFill
+            SelectionTagColor: =gblAppStyles.Dropdown.SelectionColor
+            SelectionTagFill: =gblAppStyles.Dropdown.SelectionFill
+            SelectMultiple: =false
+            Size: =gblAppStyles.Dropdown.Size
+            Tooltip: =
+            Width: =lblChannel_RandomMatch.Width
+            X: =lblChannel_RandomMatch.X
+            Y: =lblChannel_RandomMatch.Y + lblChannel_RandomMatch.Height
+            ZIndex: =7
+
+        lblMessage_RandomMatch As label:
+            BorderColor: =gblAppStyles.Label.BorderColor
+            BorderThickness: =gblAppStyles.Label.BorderThickness
+            Color: =gblAppStyles.Label.Color
+            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+            DisabledColor: =gblAppStyles.Label.DisabledColor
+            DisabledFill: =gblAppStyles.Label.DisabledFill
+            Fill: =gblAppStyles.Label.Fill
+            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            Height: =32*1
+            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+            HoverColor: =gblAppStyles.Label.HoverColor
+            HoverFill: =gblAppStyles.Label.HoverFill
+            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+            PressedColor: =gblAppStyles.Label.PressedColor
+            PressedFill: =gblAppStyles.Label.PressedFill
+            Size: =gblAppStyles.Label.Size.Medium
+            Text: ="Message"
+            Tooltip: =Self.Text
+            Width: =lblInvitePeopleBackground_RandomMatch.X + lblInvitePeopleBackground_RandomMatch.Width - Self.X - 20
+            Wrap: =false
+            X: =lblInvitePeopleHeader_RandomMatch.X
+            Y: =cmbChannel_RandomMatch.Y + cmbChannel_RandomMatch.Height + 10
+            ZIndex: =8
+
+        txtMessage_RandomMatch As text:
+            AccessibleLabel: =Self.HintText
+            BorderColor: =gblAppStyles.TextInput.BorderColor
+            BorderThickness: =gblAppStyles.TextInput.BorderThickness
+            Color: =gblAppStyles.TextInput.Color
+            Default: ="Want to meet and learn more about your colleagues? Let’s try Get Connected!"
+            DisabledBorderColor: =gblAppStyles.TextInput.DisabledBorderColor
+            DisabledColor: =gblAppStyles.TextInput.DisabledColor
+            DisabledFill: =gblAppStyles.TextInput.DisabledFill
+            Fill: =gblAppStyles.TextInput.Fill
+            FocusedBorderColor: =gblAppStyles.TextInput.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.TextInput.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            Height: =32*3
+            HintText: ="Enter message here"
+            HoverBorderColor: =gblAppStyles.TextInput.HoverBorderColor
+            HoverColor: =gblAppStyles.TextInput.HoverColor
+            HoverFill: =gblAppStyles.TextInput.HoverFill
+            Mode: =TextMode.MultiLine
+            PressedBorderColor: =gblAppStyles.TextInput.PressedBorderColor
+            PressedColor: =gblAppStyles.TextInput.PressedColor
+            PressedFill: =gblAppStyles.TextInput.PressedFill
+            RadiusBottomLeft: =gblAppStyles.TextInput.RadiusBottomLeft
+            RadiusBottomRight: =gblAppStyles.TextInput.RadiusBottomRight
+            RadiusTopLeft: =gblAppStyles.TextInput.RadiusTopLeft
+            RadiusTopRight: =gblAppStyles.TextInput.RadiusTopRight
+            Size: =gblAppStyles.TextInput.Size
+            Tooltip: =Self.HintText
+            Width: =lblMessage_RandomMatch.Width
+            X: =lblMessage_RandomMatch.X
+            Y: =lblMessage_RandomMatch.Y + lblMessage_RandomMatch.Height
+            ZIndex: =9
+
+        imgCancelInvite_RandomMatch As image:
+            AccessibleLabel: ="Click to close invite dialog"
+            Height: =32*1
+            Image: |-
+                =If(
+                    gblThemeDark || gblThemeHiCo,
+                    Cancel_Dark,
+                    Cancel_Default
+                )
+            OnSelect: |-
+                =UpdateContext({locShowInvitePeopleDialog: false})
+            PaddingBottom: =4
+            PaddingLeft: =4
+            PaddingRight: =4
+            PaddingTop: =4
+            TabIndex: |-
+                =If(
+                    Self.Visible,
+                    0,
+                    -1
+                )
+            Width: =32*1
+            X: =lblInvitePeopleBackground_RandomMatch.X + lblInvitePeopleBackground_RandomMatch.Width - Self.Width - 20
+            Y: =lblInvitePeopleBackground_RandomMatch.Y + 20
+            ZIndex: =10
+
+        btnPost_RandomMatch As button:
+            BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+            BorderThickness: =gblAppStyles.ButtonPrimary.BorderThickness
+            Color: =gblAppStyles.ButtonPrimary.Color
+            DisabledBorderColor: =gblAppStyles.ButtonPrimary.DisabledBorderColor
+            DisabledColor: =gblAppStyles.ButtonPrimary.DisabledColor
+            DisabledFill: =gblAppStyles.ButtonPrimary.DisabledFill
+            Fill: =gblAppStyles.ButtonPrimary.Fill
+            FocusedBorderColor: =gblAppStyles.ButtonPrimary.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.ButtonPrimary.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            Height: =32*1
+            HoverBorderColor: =gblAppStyles.ButtonPrimary.HoverBorderColor
+            HoverColor: =gblAppStyles.ButtonPrimary.HoverColor
+            HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+            OnSelect: |-
+                =MicrosoftTeams.PostMessageToChannelV3(
+                    cmbTeam_RandomMatch.Selected.id,
+                    cmbChannel_RandomMatch.Selected.id,
+                    {
+                        content: txtMessage_RandomMatch.Text,
+                        contentType: "text"
+                    },
+                    {subject: "Get Connected!"}
+                );
+                UpdateContext({locShowInvitePeopleDialog: false})
+            PressedBorderColor: =gblAppStyles.ButtonPrimary.PressedBorderColor
+            PressedColor: =gblAppStyles.ButtonPrimary.PressedColor
+            PressedFill: =gblAppStyles.ButtonPrimary.PressedFill
+            RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+            RadiusBottomRight: =gblAppStyles.ButtonPrimary.RadiusBottomRight
+            RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+            RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+            Size: =gblAppStyles.ButtonPrimary.Size
+            Text: ="Post"
+            Tooltip: =Self.Text
+            Width: =100*1
+            X: =lblInvitePeopleBackground_RandomMatch.X + lblInvitePeopleBackground_RandomMatch.Width - Self.Width - 20
+            Y: =lblInvitePeopleBackground_RandomMatch.Y + lblInvitePeopleBackground_RandomMatch.Height - Self.Height - 20
+            ZIndex: =11
+

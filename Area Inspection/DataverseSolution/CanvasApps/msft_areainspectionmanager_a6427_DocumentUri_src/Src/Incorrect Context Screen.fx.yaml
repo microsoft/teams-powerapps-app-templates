@@ -1,0 +1,261 @@
+"'Incorrect Context Screen' As screen":
+    Fill: =gblAppStyles.Background.Fill
+
+    conIncorrectContext As groupContainer:
+        Height: =Parent.Height
+        Width: =Parent.Width
+        X: =0*0
+        Y: =0*0
+        ZIndex: =6
+
+        btnIncorrectContext_Exit As button:
+            BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+            BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+            Color: =gblAppStyles.ButtonSecondary.Color
+            DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+            DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+            DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+            Fill: =gblAppStyles.ButtonSecondary.Fill
+            FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+            HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+            HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+            OnSelect: =Exit()
+            PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+            PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+            PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+            RadiusBottomLeft: =gblAppStyles.ButtonSecondary.RadiusBottomLeft
+            RadiusBottomRight: =gblAppStyles.ButtonSecondary.RadiusBottomRight
+            RadiusTopLeft: =gblAppStyles.ButtonSecondary.RadiusTopLeft
+            RadiusTopRight: =gblAppStyles.ButtonSecondary.RadiusTopRight
+            Size: =gblAppStyles.ButtonSecondary.Size
+            Text: |-
+                =With(
+                    {
+                        varDefault: "Close",
+                        varOOBTextId: "btnStepImageClose__locText"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            Width: =200
+            X: =(Parent.Width - Self.Width) / 2
+            Y: =lblIncorrectContext_Explanation.Y + lblIncorrectContext_Explanation.Height + 24
+            ZIndex: =1
+
+        imgIncorrectContext As image:
+            AccessibleLabel: =lblIncorrectContext_Explanation.Text
+            Height: =200
+            Image: |-
+                =If(
+                    Param("source") <> "teamstab",
+                    Image_SomethingWentWrong,
+                    Not(
+                        Param("hostClientType") in [
+                            "web",
+                            "desktop"
+                        ]
+                    ),
+                    Image_AppNotSupported_Mobile
+                )
+            Tooltip: ="Something went wrong"
+            Width: =200
+            X: =(Parent.Width - Self.Width) / 2
+            Y: =(Parent.Height - Self.Height) / 2
+            ZIndex: =2
+
+        lblIncorrectContext_Explanation As label:
+            Align: =Align.Center
+            BorderColor: =gblAppStyles.Label.BorderColor
+            BorderThickness: =gblAppStyles.Label.BorderThickness
+            Color: |
+                =// Non-variable colors, while variable is established
+                Switch(
+                    Param("theme"),
+                    "contrast",
+                    White,
+                    "dark",
+                    White,
+                    ColorValue("#252423") // NeutralWebGray190
+                )
+            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+            DisabledColor: =gblAppStyles.Label.DisabledColor
+            DisabledFill: =gblAppStyles.Label.DisabledFill
+            Fill: =Transparent
+            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            Height: =72
+            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+            HoverColor: =gblAppStyles.Label.HoverColor
+            HoverFill: =gblAppStyles.Label.HoverFill
+            PaddingLeft: =60
+            PaddingRight: =60
+            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+            PressedColor: =gblAppStyles.Label.PressedColor
+            PressedFill: =gblAppStyles.Label.PressedFill
+            Size: =gblAppStyles.Label.Size.Medium
+            Text: |-
+                =If(
+                    Param("source") <> "teamstab",
+                    With(
+                        {
+                            varDefault: "App only supported in Microsoft Teams. To open the app, please use Microsoft Teams app on your phone or desktop.",
+                            varOOBTextId: "_translateCommon__IncorrectContext_TeamsRequired"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    ),
+                    Not(
+                        Param("hostClientType") in [
+                            "web",
+                            "desktop"
+                        ]
+                    ),
+                    With(
+                        {
+                            varDefault: "However, you can use it on a desktop computer.",
+                            varOOBTextId: "_translateCommon__IncorrectContextMobile"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                )
+            Width: =Parent.Width
+            X: =0*0
+            Y: =lblIncorrectContext_Notification.Y + lblIncorrectContext_Notification.Height
+            ZIndex: =3
+
+        lblIncorrectContext_Notification As label:
+            Align: =Align.Center
+            AutoHeight: =true
+            BorderColor: =gblAppStyles.Label.BorderColor
+            BorderThickness: =gblAppStyles.Label.BorderThickness
+            Color: |
+                =// Non-variable colors, while variable is established
+                Switch(
+                    Param("theme"),
+                    "contrast",
+                    White,
+                    "dark",
+                    White,
+                    ColorValue("#252423") // NeutralWebGray190
+                )
+            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+            DisabledColor: =gblAppStyles.Label.DisabledColor
+            DisabledFill: =gblAppStyles.Label.DisabledFill
+            Fill: =Transparent
+            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            FontWeight: =FontWeight.Semibold
+            Height: =32
+            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+            HoverColor: =gblAppStyles.Label.HoverColor
+            HoverFill: =gblAppStyles.Label.HoverFill
+            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+            PressedColor: =gblAppStyles.Label.PressedColor
+            PressedFill: =gblAppStyles.Label.PressedFill
+            Size: =gblAppStyles.Label.Size.Large
+            Text: |-
+                =If(
+                    Param("source") <> "teamstab",
+                    With(
+                        {
+                            varDefault: "Oops! Please try again.",
+                            varOOBTextId: "lblIncorrectContext_Notification__locText"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    ),
+                    Not(
+                        Param("hostClientType") in [
+                            "web",
+                            "desktop"
+                        ]
+                    ),
+                    With(
+                        {
+                            varDefault: "This app isn't supported on mobile devices.",
+                            varOOBTextId: "lblIncorrectContextMobile__locText"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                )
+            Width: =Parent.Width
+            X: =0*0
+            Y: =imgIncorrectContext.Y + imgIncorrectContext.Height + 10
+            ZIndex: =4
+
+        btnIncorrectContext_Hidden_StyleErrorFallback As button:
+            Fill: =RGBA(166, 166, 166, 1)
+            Font: =Font.'Segoe UI'
+            Height: =btnIncorrectContext_Exit.Height
+            HoverFill: =ColorFade(Self.Fill, -20%)
+            OnSelect: =Select(btnIncorrectContext_Exit)
+            Size: =btnIncorrectContext_Exit.Size
+            Text: =btnIncorrectContext_Exit.Text
+            Visible: =IsBlankOrError(gblAppStyles)
+            Width: =btnIncorrectContext_Exit.Width
+            X: =btnIncorrectContext_Exit.X
+            Y: =400
+            ZIndex: =5
+

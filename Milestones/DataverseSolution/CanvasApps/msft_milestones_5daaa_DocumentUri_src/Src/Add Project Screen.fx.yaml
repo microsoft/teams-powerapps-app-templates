@@ -1,0 +1,3073 @@
+"'Add Project Screen' As screen":
+    Fill: =gblAppStyles.Background.Fill
+    OnVisible: |
+        =UpdateContext(
+            {
+                locAddProject: true,
+                locShowProjectTeamAssignment: false
+            }
+        );
+        UpdateContext(
+            {
+                locAddProject: true
+            }
+        );
+        Reset(txtNewProjectName);
+        ClearCollect(
+            colNewProjectMilestones,
+            {
+                Name: With(
+                    {
+                        varDefault: "Milestone1",
+                        varOOBTextId: "_translateCommon__MilestoneNumber1"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                ),
+                Color: "#5AC6CC",
+                DarkColor: "002F31",
+                ETA: Today(),
+                Order: 1
+            },
+            {
+                Name: With(
+                    {
+                        varDefault: "Milestone2",
+                        varOOBTextId: "_translateCommon__MilestoneNumber2"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                ),
+                Color: "#C5E9EA",
+                DarkColor: "#025C5F",
+                ETA: Today(),
+                Order: 2
+            },
+            {
+                Name: With(
+                    {
+                        varDefault: "Milestone3",
+                        varOOBTextId: "_translateCommon__MilestoneNumber3"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                ),
+                Color: "#F0F9FA",
+                DarkColor: "#03787C",
+                ETA: Today(),
+                Order: 3
+            }
+        );
+        Clear(colNewProjectTeamMembers);
+        Collect(
+            colNewProjectTeamMembers,
+            {
+                appEmailAddress: User().Email,
+                appDisplayName: Office365Users.UserProfileV2(User().Email).displayName
+            }
+        );
+        Reset(txtAssignmentSearchUser);
+        Reset(galAddMilestones);
+        
+        //set focus start
+        UpdateContext({locSetFocusTimerStart: false});
+        UpdateContext({locSetFocusControlTarget: "txtNewProjectName"});
+        UpdateContext({locSetFocusTimerStart: true});
+        //set focus end
+
+    tmrSetFocus_AddProjects As timer:
+        AutoStart: =locSetFocusTimerStart
+        Color: =RGBA(0, 0, 0, 0)
+        Duration: =100
+        Fill: =RGBA(0, 0, 0, 0)
+        Height: =0
+        HoverFill: =Transparent
+        OnTimerEnd: |
+            =Switch(
+                locSetFocusControlTarget,
+                "txtAssignmentSearchUser",
+                SetFocus(txtAssignmentSearchUser),
+                "txtNewProjectName",
+                SetFocus(txtNewProjectName)
+            );
+        OnTimerStart: =
+        Size: =0
+        TabIndex: =-1
+        Width: =0
+        X: =Parent.Width - Self.Width
+        Y: =Parent.Height - Self.Height
+        ZIndex: =4
+
+    lblAnnounce_AddProjects As label:
+        Font: =Font.'Segoe UI'
+        Height: =0*0
+        Live: =Live.Assertive
+        PaddingBottom: =0
+        PaddingLeft: =0
+        PaddingRight: =0
+        PaddingTop: =0
+        Text: =locScreenReaderAnnouncedText //this text is announced by screen readers, when the variable is updated
+        Width: =0*0
+        X: =Parent.Width - Self.Width
+        Y: =Parent.Height - Self.Height
+        ZIndex: =5
+
+    conAddProject As groupContainer:
+        Height: =Parent.Height
+        Width: =Parent.Width - Self.X
+        X: =0*1
+        Y: =0*0
+        ZIndex: =6
+
+        cnvAddProject As fluidGrid.fluidGridWithBlankCard:
+            BorderThickness: =0
+            Height: =Parent.Height
+            Width: =Parent.Width - Self.X
+            X: =0*1
+            Y: =0*1
+            ZIndex: =25
+
+            dtcAddProject As dataCard:
+                BorderColor: =RGBA(0, 0, 0, 1)
+                BorderStyle: =BorderStyle.Solid
+                BorderThickness: =0
+                DisplayMode: =DisplayMode.Edit
+                Fill: =RGBA(0, 0, 0, 0)
+                Height: =Parent.Height
+                Width: =Parent.Width 
+                X: =0*1
+                Y: =0*1
+                ZIndex: =1
+
+                lblNewProjectHeader As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Bold
+                    Height: =40*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Role: =TextRole.Heading1
+                    Size: =gblAppStyles.Label.Size.Large
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "New project",
+                                varOOBTextId: "lblNewProjectHeader__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Tooltip: =Self.Text
+                    Width: =250*1
+                    X: =imgBack_AddProject.X + imgBack_AddProject.Width
+                    Y: =20*1
+                    ZIndex: =1
+
+                lblNewProjectName As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =40*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =If(
+                            locShowProjectTeamAssignment,
+                            With(
+                                {
+                                    varDefault: "Project members",
+                                    varOOBTextId: "lblNewProjectName1__locText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            ),
+                            With(
+                                {
+                                    varDefault: "Name",
+                                    varOOBTextId: "lblNewProjectName2__locText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        )
+                    Tooltip: =Self.Text
+                    Width: =250*1
+                    X: =30*1
+                    Y: =lblNewProjectHeader.Y + lblNewProjectHeader.Height
+                    ZIndex: =3
+
+                txtNewProjectName As text:
+                    AccessibleLabel: =Self.HintText
+                    BorderColor: =gblAppStyles.TextInput.BorderColor
+                    BorderThickness: =gblAppStyles.TextInput.BorderThickness
+                    Color: =gblAppStyles.TextInput.Color
+                    Default: =""
+                    DisabledBorderColor: =gblAppStyles.TextInput.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.TextInput.DisabledColor
+                    DisabledFill: =gblAppStyles.TextInput.DisabledFill
+                    Fill: =gblAppStyles.TextInput.Fill
+                    FocusedBorderColor: =gblAppStyles.TextInput.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.TextInput.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HintText: |-
+                        =With(
+                            {
+                                varDefault: "Give your project a name",
+                                varOOBTextId: "txtNewProjectName__locHintText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    HoverBorderColor: =gblAppStyles.TextInput.HoverBorderColor
+                    HoverColor: =gblAppStyles.TextInput.HoverColor
+                    HoverFill: =gblAppStyles.TextInput.HoverFill
+                    MaxLength: =750
+                    PressedBorderColor: =gblAppStyles.TextInput.PressedBorderColor
+                    PressedColor: =gblAppStyles.TextInput.PressedColor
+                    PressedFill: =gblAppStyles.TextInput.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.TextInput.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.TextInput.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.TextInput.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.TextInput.RadiusTopRight
+                    Size: =gblAppStyles.TextInput.Size
+                    TabIndex: |-
+                        =If(
+                            locAddProject,
+                            1,
+                            -1
+                        )
+                    Tooltip: =Self.HintText
+                    Visible: =!locShowProjectTeamAssignment
+                    Width: =galAddMilestones.Width
+                    X: =lblNewProjectName.X
+                    Y: =lblNewProjectName.Y + lblNewProjectName.Height
+                    ZIndex: =4
+
+                "galAddMilestones As gallery.'BrowseLayout_Vertical_OneTextVariant_ver4.0'":
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "List of milestones",
+                                varOOBTextId: "galAddMilestones__locAccessibleText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    BorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                    Default: |-
+                        =LookUp(
+                            colNewProjectMilestones,
+                            Order = Last(Self.AllItems).Order
+                        )
+                    Fill: =Transparent
+                    FocusedBorderThickness: =2
+                    Height: =Self.TemplateHeight * CountRows(Self.AllItems)
+                    Items: =colNewProjectMilestones
+                    Layout: =Layout.Vertical
+                    LoadingSpinner: =App.ActiveScreen.LoadingSpinner
+                    TabIndex: |-
+                        =If(
+                            locAddProject && Self.Visible,
+                            1,
+                            -1
+                        )
+                    TemplateFill: =Transparent
+                    TemplatePadding: =0
+                    TemplateSize: =75*1
+                    Visible: =!locShowProjectTeamAssignment
+                    Width: |-
+                        =Max(
+                            650,
+                            Parent.Width / 2
+                        )
+                    X: =30*1
+                    Y: =txtNewProjectName.Y + txtNewProjectName.Height + 20
+                    ZIndex: =5
+
+                    lblAddMilestoneName As label:
+                        BorderColor: =gblAppStyles.Label.BorderColor
+                        BorderThickness: =gblAppStyles.Label.BorderThickness
+                        Color: =gblAppStyles.Label.Color 
+                        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                        DisabledColor: |-
+                            =If(
+                                gblThemeHiCo,
+                                gblAppStyles.Label.Color,
+                                gblAppStyles.Label.DisabledColor
+                            )
+                        DisabledFill: =gblAppStyles.Label.DisabledFill
+                        DisplayMode: =Parent.DisplayMode
+                        Fill: =gblAppStyles.Label.Fill
+                        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        FontWeight: =FontWeight.Normal
+                        Height: =25*1
+                        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                        HoverColor: =gblAppStyles.Label.HoverColor
+                        HoverFill: =gblAppStyles.Label.HoverFill
+                        OnSelect: =Select(Parent)
+                        PaddingBottom: =0
+                        PaddingRight: =0.00
+                        PaddingTop: =0.00
+                        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                        PressedColor: =gblAppStyles.Label.PressedColor
+                        PressedFill: =gblAppStyles.Label.PressedFill
+                        Size: =gblAppStyles.Label.Size.Medium
+                        Text: =ThisItem.Name
+                        Tooltip: =Self.Text
+                        Width: =100
+                        Wrap: =false
+                        X: =0*1
+                        Y: =6*1
+                        ZIndex: =2
+
+                    lblAddMilestoneETA As label:
+                        BorderColor: =gblAppStyles.Label.BorderColor
+                        BorderThickness: =gblAppStyles.Label.BorderThickness
+                        Color: =gblAppStyles.Label.Color
+                        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                        DisabledColor: |-
+                            =If(
+                                gblThemeHiCo,
+                                gblAppStyles.Label.Color,
+                                gblAppStyles.Label.DisabledColor
+                            )
+                        DisabledFill: =gblAppStyles.Label.DisabledFill
+                        DisplayMode: =Parent.DisplayMode
+                        Fill: =gblAppStyles.Label.Fill
+                        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        FontWeight: =FontWeight.Normal
+                        Height: =25*1
+                        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                        HoverColor: =gblAppStyles.Label.HoverColor
+                        HoverFill: =gblAppStyles.Label.HoverFill
+                        OnSelect: =Select(Parent)
+                        PaddingBottom: =0
+                        PaddingLeft: =0
+                        PaddingRight: =0.00
+                        PaddingTop: =0.00
+                        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                        PressedColor: =gblAppStyles.Label.PressedColor
+                        PressedFill: =gblAppStyles.Label.PressedFill
+                        Size: =gblAppStyles.Label.Size.Medium
+                        Text: |-
+                            =With(
+                                {
+                                    varDefault: "Date",
+                                    varOOBTextId: "lblAddMilestoneETA__locText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        Tooltip: =Self.Text
+                        Width: =100
+                        Wrap: =false
+                        X: =txtAddMilestoneName.X + txtAddMilestoneName.Width + 20 * 1
+                        Y: =6*1
+                        ZIndex: =3
+
+                    txtAddMilestoneName As text:
+                        AccessibleLabel: =Self.HintText
+                        BorderColor: =gblAppStyles.TextInput.BorderColor
+                        BorderThickness: =gblAppStyles.TextInput.BorderThickness
+                        Color: =gblAppStyles.TextInput.Color
+                        Default: =ThisItem.Name
+                        DisabledBorderColor: =gblAppStyles.TextInput.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.TextInput.DisabledColor
+                        DisabledFill: =gblAppStyles.TextInput.DisabledFill
+                        Fill: =gblAppStyles.TextInput.Fill
+                        FocusedBorderColor: =gblAppStyles.TextInput.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.TextInput.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        Height: =32*1
+                        HintText: =ThisItem.Name
+                        HoverBorderColor: =gblAppStyles.TextInput.HoverBorderColor
+                        HoverColor: =gblAppStyles.TextInput.HoverColor
+                        HoverFill: =gblAppStyles.TextInput.HoverFill
+                        MaxLength: =750
+                        OnSelect: |-
+                            =UpdateContext({locMilestoneColorPicker: false})
+                        PaddingLeft: =15*1
+                        PressedBorderColor: =gblAppStyles.TextInput.PressedBorderColor
+                        PressedColor: =gblAppStyles.TextInput.PressedColor
+                        PressedFill: =gblAppStyles.TextInput.PressedFill
+                        RadiusBottomLeft: =gblAppStyles.TextInput.RadiusBottomLeft
+                        RadiusBottomRight: =gblAppStyles.TextInput.RadiusBottomRight
+                        RadiusTopLeft: =gblAppStyles.TextInput.RadiusTopLeft
+                        RadiusTopRight: =gblAppStyles.TextInput.RadiusTopRight
+                        Size: =gblAppStyles.TextInput.Size
+                        TabIndex: |-
+                            =If(
+                                locAddProject && Self.Visible,
+                                0,
+                                -1
+                            )
+                        Tooltip: =Self.HintText
+                        Width: =(Parent.Width - Self.X*2) / 1.75
+                        X: =btnMilestoneColor.X + btnMilestoneColor.Width + 10
+                        Y: =35
+                        ZIndex: =4
+
+                    "datMilestoneTargetDate As 'Date picker'":
+                        AcceptsFocus: |-
+                            =If(
+                                locAddProject && Self.Visible,
+                                true,
+                                false
+                            )
+                        AccessibleLabel: |-
+                            =With(
+                                {
+                                    varDefault: "Target date",
+                                    varOOBTextId: "datMilestoneTargetDate__locAccessibleText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        AllowTextInput: =true
+                        DisplayMode: =DisplayMode.Edit
+                        FirstDayOfWeek: =1
+                        FontWeight: ="normal"
+                        Height: =txtAddMilestoneName.Height
+                        IconSize: =16
+                        OnSelect: =false
+                        PaddingBottom: =0
+                        PaddingTop: =0
+                        Tooltip: |-
+                            =With(
+                                {
+                                    varDefault: "Target date",
+                                    varOOBTextId: "datMilestoneTargetDate__locAccessibleText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        Value: =Today() + (ThisItem.Order - 1) * 7
+                        Visible: =true
+                        Width: =Parent.Width - Self.X - imgDeleteMilestone.Width - 20*2
+                        X: =lblAddMilestoneETA.X
+                        Y: =txtAddMilestoneName.Y
+                        ZIndex: =5
+
+                    imgDeleteMilestone As image:
+                        AccessibleLabel: |-
+                            =With(
+                                {
+                                    varDefault: "Click to delete the milestone",
+                                    varOOBTextId: "imgDeleteMilestone__locAccessibleText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        DisabledFill: |-
+                            =With(
+                                {
+                                    varImageIsCategory: LookUp(
+                                        staticIcons,
+                                        staticIconName = "Delete"
+                                    ).staticIconIsCategory
+                                },
+                                If(
+                                    varImageIsCategory,
+                                    gblAppStyles.Icons.DisabledFill_Category,
+                                    Transparent
+                                )
+                            )
+                        Fill: |-
+                            =With(
+                                {
+                                    varImageIsCategory: LookUp(
+                                        staticIcons,
+                                        staticIconName = "Delete"
+                                    ).staticIconIsCategory
+                                },
+                                If(
+                                    varImageIsCategory,
+                                    gblAppStyles.Icons.Fill_Category,
+                                    Transparent
+                                )
+                            )
+                        Height: =22*1
+                        Image: |
+                            =With(
+                                {
+                                    varImageRecord: LookUp(
+                                        staticIcons,
+                                        staticIconName = "Delete"
+                                    ),
+                                    varColor: If(
+                                        Self.DisplayMode = DisplayMode.Disabled,
+                                        gblAppStyles.Icons.DisabledColor,
+                                        gblAppStyles.Icons.Color
+                                    )
+                                },
+                                With(
+                                    {
+                                        varImageData: Concatenate(
+                                            "data:image/svg+xml;utf8, ",
+                                            EncodeUrl(
+                                                Concatenate(
+                                                    "<svg viewBox='",
+                                                    varImageRecord.staticIconViewbox,
+                                                    "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                    varImageRecord.staticIconPath,
+                                                    "' fill='#",
+                                                    varColor,
+                                                    "'/></svg>"
+                                                )
+                                            )
+                                        )
+                                    },
+                                    varImageData
+                                )
+                            )
+                        OnSelect: |-
+                            =Remove(
+                                colNewProjectMilestones,
+                                ThisItem
+                            );
+                            //screen reader start
+                            UpdateContext(
+                                {
+                                    locScreenReaderAnnouncedText: With(
+                                        {
+                                            varAnnouncedText: With(
+                                                {
+                                                    varDefault: "Milestone deleted",
+                                                    varOOBTextId: "imgDeleteMilestone_Announcement"
+                                                },
+                                                With(
+                                                    {
+                                                        varLocalizedText: LookUp(
+                                                            colLocalization,
+                                                            OOBTextID = varOOBTextId,
+                                                            LocalizedText
+                                                        )
+                                                    },
+                                                    Coalesce(
+                                                        varLocalizedText,
+                                                        varDefault
+                                                    )
+                                                )
+                                            )
+                                        },
+                                        If(
+                                            locScreenReaderAnnouncedText = varAnnouncedText,
+                                            Concatenate(
+                                                varAnnouncedText,
+                                                " "
+                                            ),
+                                            varAnnouncedText
+                                        )
+                                    )
+                                }
+                            );
+                            //screen reader end
+                        PaddingRight: =0.00
+                        PaddingTop: =0.00
+                        RadiusBottomLeft: =5
+                        RadiusBottomRight: =5
+                        RadiusTopLeft: =5
+                        RadiusTopRight: =5
+                        TabIndex: |-
+                            =If(
+                                locAddProject && Self.Visible,
+                                0,
+                                -1
+                            )
+                        Tooltip: =Self.AccessibleLabel
+                        Width: =22*1
+                        X: =Parent.Width - Self.Width - 20
+                        Y: =datMilestoneTargetDate.Y + (datMilestoneTargetDate.Height - Self.Height) / 2
+                        ZIndex: =6
+
+                    btnMilestoneColor As button:
+                        BorderColor: =Transparent
+                        BorderThickness: =0
+                        Color: =Transparent
+                        DisabledColor: =RGBA(0, 0, 0, 0)
+                        DisabledFill: =Self.Fill
+                        DisplayMode: =Parent.DisplayMode
+                        Fill: |-
+                            =If(
+                                !IsBlank(galMilestoneColorPicker.Selected.Color),
+                                ColorValue(Text(galMilestoneColorPicker.Selected.Color)),
+                                If(
+                                    gblThemeDark,
+                                    ColorValue(ThisItem.DarkColor),
+                                    ColorValue(ThisItem.Color)
+                                )
+                            )
+                        FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                        FocusedBorderThickness: =2
+                        Font: =Font.'Segoe UI'
+                        Height: =32*1
+                        HoverColor: =RGBA(0, 0, 0, 0)
+                        HoverFill: =Self.Fill
+                        OnSelect: |-
+                            =UpdateContext({locMilestoneColorPicker: true}); 
+                            //screen reader start
+                            UpdateContext(
+                                {
+                                    locScreenReaderAnnouncedText: With(
+                                        {
+                                            varAnnouncedText: With(
+                                                {
+                                                    varDefault: "Opening color picker",
+                                                    varOOBTextId: "btnOpenColorPicker_Announcement"
+                                                },
+                                                With(
+                                                    {
+                                                        varLocalizedText: LookUp(
+                                                            colLocalization,
+                                                            OOBTextID = varOOBTextId,
+                                                            LocalizedText
+                                                        )
+                                                    },
+                                                    Coalesce(
+                                                        varLocalizedText,
+                                                        varDefault
+                                                    )
+                                                )
+                                            )
+                                        },
+                                        If(
+                                            locScreenReaderAnnouncedText = varAnnouncedText,
+                                            Concatenate(
+                                                varAnnouncedText,
+                                                " "
+                                            ),
+                                            varAnnouncedText
+                                        )
+                                    )
+                                }
+                            );
+                            //screen reader end
+                        PaddingBottom: =2
+                        PaddingLeft: =2
+                        PaddingRight: =2
+                        PaddingTop: =2
+                        PressedColor: =Transparent
+                        PressedFill: =Self.Fill
+                        RadiusBottomLeft: =5
+                        RadiusBottomRight: =5
+                        RadiusTopLeft: =5
+                        RadiusTopRight: =5
+                        Size: =17.48
+                        TabIndex: |-
+                            =If(
+                                locAddProject && Self.Visible,
+                                0,
+                                -1
+                            )
+                        Text: |-
+                            =With(
+                                {
+                                    varDefault: "Milestone color",
+                                    varOOBTextId: "btnMilestoneColor__locText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        Tooltip: =Self.Text
+                        Visible: =!(ThisItem.IsSelected && locMilestoneColorPicker)
+                        Width: =32*1
+                        X: =10*1
+                        Y: =txtAddMilestoneName.Y + (txtAddMilestoneName.Height - Self.Height) / 2
+                        ZIndex: =7
+
+                    galMilestoneColorPicker As gallery.galleryHorizontal:
+                        AccessibleLabel: |-
+                            =With(
+                                {
+                                    varDefault: "List of colors",
+                                    varOOBTextId: "galMilestoneColorPicker__locAccessibleText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        BorderColor: =gblAppStyles.ButtonPrimary.Fill
+                        BorderThickness: =1
+                        Default: |-
+                            =If(
+                                gblThemeDark,
+                                LookUp(
+                                    colProjectCoverColors,
+                                    Theme = "dark" && Color = ThisItem.DarkColor
+                                ),
+                                LookUp(
+                                    colProjectCoverColors,
+                                    Theme = "default" && Color = ThisItem.Color
+                                )
+                            )
+                        Fill: =gblAppStyles.Background.Fill
+                        FocusedBorderThickness: =2
+                        Height: =32*1
+                        Items: |-
+                            =Filter(
+                                colProjectCoverColors,
+                                Theme = If(
+                                    gblThemeDark,
+                                    "dark",
+                                    "default"
+                                )
+                            )
+                        OnSelect: |-
+                            =UpdateContext({locMilestoneColorPicker: false})
+                        ShowScrollbar: =false
+                        TabIndex: |-
+                            =If(
+                                locAddProject && Self.Visible,
+                                0,
+                                -1
+                            )
+                        TemplatePadding: =0
+                        TemplateSize: =38
+                        Visible: =ThisItem.IsSelected && locMilestoneColorPicker
+                        Width: =Self.TemplateWidth * 14
+                        X: =imgMilestoneCloseColorPicker.X + imgMilestoneCloseColorPicker.Width + 5
+                        Y: =txtAddMilestoneName.Y
+                        ZIndex: =8
+
+                        btnColorPreview As button:
+                            BorderColor: =White
+                            Color: =Transparent
+                            Fill: =ColorValue(ThisItem.Color)
+                            FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                            FocusedBorderThickness: =2
+                            Font: =Font.'Segoe UI'
+                            Height: =24*1
+                            HoverBorderColor: =Self.BorderColor
+                            HoverColor: =Self.Color
+                            HoverFill: =Self.Fill
+                            OnSelect: =Select(Parent)
+                            PressedBorderColor: =Self.BorderColor
+                            PressedColor: =Self.Color
+                            PressedFill: =Self.Fill
+                            RadiusBottomLeft: =5
+                            RadiusBottomRight: =5
+                            RadiusTopLeft: =5
+                            RadiusTopRight: =5
+                            TabIndex: |-
+                                =If(
+                                    locAddProject && Self.Visible,
+                                    0,
+                                    -1
+                                )
+                            Text: |-
+                                =With(
+                                    {
+                                        varDefault: "Click to select the color",
+                                        varOOBTextId: "btnProjectColorForeground__locText"
+                                    },
+                                    With(
+                                        {
+                                            varLocalizedText: LookUp(
+                                                colLocalization,
+                                                OOBTextID = varOOBTextId,
+                                                LocalizedText
+                                            )
+                                        },
+                                        Coalesce(
+                                            varLocalizedText,
+                                            varDefault
+                                        )
+                                    )
+                                ) & " " & ThisItem.Color
+                            Tooltip: =Self.Text
+                            Width: =24*1
+                            X: =10
+                            Y: =4*1
+                            ZIndex: =1
+
+                        imgSelectedMilestoneColor As image:
+                            AccessibleLabel: |-
+                                =With(
+                                    {
+                                        varDefault: "Selected color",
+                                        varOOBTextId: "imgSelectedMilestoneColor__locAccessibleText"
+                                    },
+                                    With(
+                                        {
+                                            varLocalizedText: LookUp(
+                                                colLocalization,
+                                                OOBTextID = varOOBTextId,
+                                                LocalizedText
+                                            )
+                                        },
+                                        Coalesce(
+                                            varLocalizedText,
+                                            varDefault
+                                        )
+                                    )
+                                )
+                            Height: =22
+                            Image: |
+                                =With(
+                                    {
+                                        varImageRecord: LookUp(
+                                            staticIcons,
+                                            staticIconName = "Check"
+                                        ),
+                                        varColor: If(
+                                            Self.DisplayMode = DisplayMode.Disabled,
+                                            gblAppStyles.Icons.DisabledColor,
+                                            gblAppStyles.Icons.Color
+                                        )
+                                    },
+                                    With(
+                                        {
+                                            varImageData: Concatenate(
+                                                "data:image/svg+xml;utf8, ",
+                                                EncodeUrl(
+                                                    Concatenate(
+                                                        "<svg viewBox='",
+                                                        varImageRecord.staticIconViewbox,
+                                                        "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                        varImageRecord.staticIconPath,
+                                                        "' fill='#",
+                                                        varColor,
+                                                        "'/></svg>"
+                                                    )
+                                                )
+                                            )
+                                        },
+                                        varImageData
+                                    )
+                                )
+                            OnSelect: =Select(Parent)
+                            PaddingBottom: =2
+                            PaddingLeft: =2
+                            PaddingRight: =2
+                            PaddingTop: =2
+                            Tooltip: =Self.AccessibleLabel
+                            Visible: =ThisItem.IsSelected
+                            Width: =22
+                            X: =btnColorPreview.X + (btnColorPreview.Width - Self.Width) / 2
+                            Y: =btnColorPreview.Y + (btnColorPreview.Width - Self.Height) / 2
+                            ZIndex: =2
+
+                    imgMilestoneCloseColorPicker As image:
+                        AccessibleLabel: |-
+                            =With(
+                                {
+                                    varDefault: "Click to close color picker",
+                                    varOOBTextId: "_translateCommon__CloseColorPicker"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        DisabledFill: |-
+                            =With(
+                                {
+                                    varImageIsCategory: LookUp(
+                                        staticIcons,
+                                        staticIconName = "Dismiss"
+                                    ).staticIconIsCategory
+                                },
+                                If(
+                                    varImageIsCategory,
+                                    gblAppStyles.Icons.DisabledFill_Category,
+                                    Transparent
+                                )
+                            )
+                        Fill: |-
+                            =With(
+                                {
+                                    varImageIsCategory: LookUp(
+                                        staticIcons,
+                                        staticIconName = "Dismiss"
+                                    ).staticIconIsCategory
+                                },
+                                If(
+                                    varImageIsCategory,
+                                    gblAppStyles.Icons.Fill_Category,
+                                    Transparent
+                                )
+                            )
+                        Height: =32*1
+                        Image: |
+                            =With(
+                                {
+                                    varImageRecord: LookUp(
+                                        staticIcons,
+                                        staticIconName = "Dismiss"
+                                    ),
+                                    varColor: If(
+                                        Self.DisplayMode = DisplayMode.Disabled,
+                                        gblAppStyles.Icons.DisabledColor,
+                                        gblAppStyles.Icons.Color
+                                    )
+                                },
+                                With(
+                                    {
+                                        varImageData: Concatenate(
+                                            "data:image/svg+xml;utf8, ",
+                                            EncodeUrl(
+                                                Concatenate(
+                                                    "<svg viewBox='",
+                                                    varImageRecord.staticIconViewbox,
+                                                    "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                    varImageRecord.staticIconPath,
+                                                    "' fill='#",
+                                                    varColor,
+                                                    "'/></svg>"
+                                                )
+                                            )
+                                        )
+                                    },
+                                    varImageData
+                                )
+                            )
+                        OnSelect: |-
+                            =UpdateContext({locMilestoneColorPicker: false});
+                            //screen reader start
+                            UpdateContext(
+                                {
+                                    locScreenReaderAnnouncedText: With(
+                                        {
+                                            varAnnouncedText: With(
+                                                {
+                                                    varDefault: "Color picker closed",
+                                                    varOOBTextId: "btnCloseColorPicker_Announcement"
+                                                },
+                                                With(
+                                                    {
+                                                        varLocalizedText: LookUp(
+                                                            colLocalization,
+                                                            OOBTextID = varOOBTextId,
+                                                            LocalizedText
+                                                        )
+                                                    },
+                                                    Coalesce(
+                                                        varLocalizedText,
+                                                        varDefault
+                                                    )
+                                                )
+                                            )
+                                        },
+                                        If(
+                                            locScreenReaderAnnouncedText = varAnnouncedText,
+                                            Concatenate(
+                                                varAnnouncedText,
+                                                " "
+                                            ),
+                                            varAnnouncedText
+                                        )
+                                    )
+                                }
+                            );
+                            //screen reader end
+                        PaddingBottom: =4
+                        PaddingLeft: =4
+                        PaddingRight: =4
+                        PaddingTop: =4
+                        RadiusBottomLeft: =5
+                        RadiusBottomRight: =5
+                        RadiusTopLeft: =5
+                        RadiusTopRight: =5
+                        TabIndex: |-
+                            =If(
+                                locAddProject && Self.Visible,
+                                0,
+                                -1
+                            )
+                        Tooltip: =Self.AccessibleLabel
+                        Visible: =ThisItem.IsSelected && locMilestoneColorPicker
+                        Width: =32*1
+                        X: =btnMilestoneColor.X
+                        Y: =txtAddMilestoneName.Y
+                        ZIndex: =9
+
+                btnNextNewProjectMilestones As button:
+                    BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+                    BorderThickness: =gblAppStyles.ButtonPrimary.BorderThickness
+                    Color: =gblAppStyles.ButtonPrimary.Color
+                    DisabledBorderColor: =gblAppStyles.ButtonPrimary.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.ButtonPrimary.DisabledColor
+                    DisabledFill: =gblAppStyles.ButtonPrimary.DisabledFill
+                    DisplayMode: |-
+                        =If(
+                            IsBlank(txtNewProjectName.Text),
+                            DisplayMode.Disabled,
+                            DisplayMode.Edit
+                        )
+                    Fill: =gblAppStyles.ButtonPrimary.Fill
+                    FocusedBorderColor: =gblAppStyles.ButtonPrimary.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.ButtonPrimary.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32
+                    HoverBorderColor: =gblAppStyles.ButtonPrimary.HoverBorderColor
+                    HoverColor: =gblAppStyles.ButtonPrimary.HoverColor
+                    HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+                    OnSelect: |-
+                        =UpdateContext(
+                            {
+                                locShowProjectTeamAssignment: true
+                            }
+                        );
+                        //set focus start
+                        UpdateContext({locSetFocusTimerStart: false});
+                        UpdateContext({locSetFocusControlTarget: "txtAssignmentSearchUser"});
+                        UpdateContext({locSetFocusTimerStart: true});
+                        //set focus end
+                        //screen reader start
+                        UpdateContext(
+                            {
+                                locScreenReaderAnnouncedText: With(
+                                    {
+                                        varAnnouncedText: With(
+                                            {
+                                                varDefault: "Navigating to the next step to add team members to the project",
+                                                varOOBTextId: "btnNextNewProjectMilestones_Announcement"
+                                            },
+                                            With(
+                                                {
+                                                    varLocalizedText: LookUp(
+                                                        colLocalization,
+                                                        OOBTextID = varOOBTextId,
+                                                        LocalizedText
+                                                    )
+                                                },
+                                                Coalesce(
+                                                    varLocalizedText,
+                                                    varDefault
+                                                )
+                                            )
+                                        )
+                                    },
+                                    If(
+                                        locScreenReaderAnnouncedText = varAnnouncedText,
+                                        Concatenate(
+                                            varAnnouncedText,
+                                            " "
+                                        ),
+                                        varAnnouncedText
+                                    )
+                                )
+                            }
+                        );
+                        //screen reader end
+                    PressedBorderColor: =gblAppStyles.ButtonPrimary.PressedBorderColor
+                    PressedColor: =gblAppStyles.ButtonPrimary.PressedColor
+                    PressedFill: =gblAppStyles.ButtonPrimary.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.ButtonPrimary.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+                    Size: =gblAppStyles.ButtonPrimary.Size
+                    TabIndex: |-
+                        =If(
+                            Self.Visible,
+                            0,
+                            -1
+                        )
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Next",
+                                varOOBTextId: "btnNextNewProjectMilestones__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Tooltip: =Self.Text
+                    Visible: =!locShowProjectTeamAssignment
+                    Width: =100
+                    X: =Parent.Width - Self.Width - 25
+                    Y: =lblNewProjectHeader.Y + (lblNewProjectHeader.Height - Self.Height)/2
+                    ZIndex: =8
+
+                grpAddMilestone As group:
+                    Height: =5
+                    Width: =5
+                    X: =-30
+                    Y: =-508
+                    ZIndex: =9
+
+                    imgAddMilestone As image:
+                        AccessibleLabel: |-
+                            =With(
+                                {
+                                    varDefault: "Click to add a milestone",
+                                    varOOBTextId: "imgAddMilestone__locAccessibleText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        DisabledFill: |-
+                            =With(
+                                {
+                                    varImageIsCategory: LookUp(
+                                        staticIcons,
+                                        staticIconName = "Add"
+                                    ).staticIconIsCategory
+                                },
+                                If(
+                                    varImageIsCategory,
+                                    gblAppStyles.Icons.DisabledFill_Category,
+                                    Transparent
+                                )
+                            )
+                        Fill: |-
+                            =With(
+                                {
+                                    varImageIsCategory: LookUp(
+                                        staticIcons,
+                                        staticIconName = "Add"
+                                    ).staticIconIsCategory
+                                },
+                                If(
+                                    varImageIsCategory,
+                                    gblAppStyles.Icons.Fill_Category,
+                                    Transparent
+                                )
+                            )
+                        Height: =22*1
+                        Image: |
+                            =With(
+                                {
+                                    varImageRecord: LookUp(
+                                        staticIcons,
+                                        staticIconName = "Add"
+                                    ),
+                                    varColor: If(
+                                        Self.DisplayMode = DisplayMode.Disabled,
+                                        gblAppStyles.Icons.DisabledColor,
+                                        gblAppStyles.Icons.Color
+                                    )
+                                },
+                                With(
+                                    {
+                                        varImageData: Concatenate(
+                                            "data:image/svg+xml;utf8, ",
+                                            EncodeUrl(
+                                                Concatenate(
+                                                    "<svg viewBox='",
+                                                    varImageRecord.staticIconViewbox,
+                                                    "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                    varImageRecord.staticIconPath,
+                                                    "' fill='#",
+                                                    varColor,
+                                                    "'/></svg>"
+                                                )
+                                            )
+                                        )
+                                    },
+                                    varImageData
+                                )
+                            )
+                        OnSelect: |-
+                            =Collect(
+                                colNewProjectMilestones,
+                                {
+                                    Name: "Milestone " & CountRows(colNewProjectMilestones) + 1,
+                                    Color: "",
+                                    ETA: Today(),
+                                    Order: CountRows(colNewProjectMilestones) + 1
+                                }
+                            );
+                            Reset(galAddMilestones);
+                            //screen reader start
+                            UpdateContext(
+                                {
+                                    locScreenReaderAnnouncedText: With(
+                                        {
+                                            varAnnouncedText: With(
+                                                {
+                                                    varDefault: "New milestone added",
+                                                    varOOBTextId: "btnAddMilestone_Announcement"
+                                                },
+                                                With(
+                                                    {
+                                                        varLocalizedText: LookUp(
+                                                            colLocalization,
+                                                            OOBTextID = varOOBTextId,
+                                                            LocalizedText
+                                                        )
+                                                    },
+                                                    Coalesce(
+                                                        varLocalizedText,
+                                                        varDefault
+                                                    )
+                                                )
+                                            )
+                                        },
+                                        If(
+                                            locScreenReaderAnnouncedText = varAnnouncedText,
+                                            Concatenate(
+                                                varAnnouncedText,
+                                                " "
+                                            ),
+                                            varAnnouncedText
+                                        )
+                                    )
+                                }
+                            );
+                            //screen reader end
+                        PaddingRight: =0.00
+                        PaddingTop: =0.00
+                        RadiusBottomLeft: =5
+                        RadiusBottomRight: =5
+                        RadiusTopLeft: =5
+                        RadiusTopRight: =5
+                        TabIndex: |-
+                            =If(
+                                true,
+                                -1,
+                                0
+                            )
+                        Tooltip: =Self.AccessibleLabel
+                        Visible: =!locShowProjectTeamAssignment
+                        Width: =22*1
+                        X: =30*1
+                        Y: =btnAddMilestone.Y + (btnAddMilestone.Height - Self.Height) / 2
+                        ZIndex: =6
+
+                    btnAddMilestone As button:
+                        Align: =Align.Left
+                        BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                        BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+                        Color: =gblAppStyles.ButtonTransparent.Color
+                        DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.ButtonTransparent.DisabledColor
+                        DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                        Fill: =gblAppStyles.ButtonTransparent.Fill
+                        FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        FontWeight: =FontWeight.Normal
+                        Height: =26*1
+                        HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                        HoverColor: =gblAppStyles.ButtonTransparent.HoverColor
+                        HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+                        OnSelect: |-
+                            =Collect(
+                                colNewProjectMilestones,
+                                {
+                                    Name: "Milestone " & CountRows(colNewProjectMilestones) + 1,
+                                    Color: "",
+                                    ETA: Today(),
+                                    Order: CountRows(colNewProjectMilestones) + 1
+                                }
+                            );
+                            Reset(galAddMilestones);
+                            //screen reader start
+                            UpdateContext(
+                                {
+                                    locScreenReaderAnnouncedText: With(
+                                        {
+                                            varAnnouncedText: With(
+                                                {
+                                                    varDefault: "New milestone added",
+                                                    varOOBTextId: "btnAddMilestone_Announcement"
+                                                },
+                                                With(
+                                                    {
+                                                        varLocalizedText: LookUp(
+                                                            colLocalization,
+                                                            OOBTextID = varOOBTextId,
+                                                            LocalizedText
+                                                        )
+                                                    },
+                                                    Coalesce(
+                                                        varLocalizedText,
+                                                        varDefault
+                                                    )
+                                                )
+                                            )
+                                        },
+                                        If(
+                                            locScreenReaderAnnouncedText = varAnnouncedText,
+                                            Concatenate(
+                                                varAnnouncedText,
+                                                " "
+                                            ),
+                                            varAnnouncedText
+                                        )
+                                    )
+                                }
+                            );
+                            //screen reader end
+                        PaddingBottom: =0
+                        PaddingLeft: =32
+                        PaddingRight: =0.00
+                        PaddingTop: =0.00
+                        PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                        PressedColor: =gblAppStyles.ButtonTransparent.PressedColor
+                        PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+                        RadiusBottomLeft: =gblAppStyles.ButtonTransparent.RadiusBottomLeft
+                        RadiusBottomRight: =gblAppStyles.ButtonTransparent.RadiusBottomRight
+                        RadiusTopLeft: =gblAppStyles.ButtonTransparent.RadiusTopLeft
+                        RadiusTopRight: =gblAppStyles.ButtonTransparent.RadiusTopRight
+                        Size: =gblAppStyles.ButtonTransparent.Size
+                        TabIndex: |-
+                            =If(
+                                locAddProject && Self.Visible,
+                                1,
+                                -1
+                            )
+                        Text: |-
+                            =With(
+                                {
+                                    varDefault: "Add a milestone",
+                                    varOOBTextId: "btnAddMilestone__loc_Text"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        Tooltip: =Self.Text
+                        Visible: =!locShowProjectTeamAssignment
+                        Width: =galAddMilestones.Width
+                        X: =30*1
+                        Y: =galAddMilestones.Y + galAddMilestones.Height + 20
+                        ZIndex: =7
+
+                btnAddMilestoneBack As button:
+                    BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+                    BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+                    Color: =gblAppStyles.ButtonSecondary.Color
+                    DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+                    DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+                    Fill: =gblAppStyles.ButtonSecondary.Fill
+                    FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Normal
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+                    HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+                    HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+                    OnSelect: |-
+                        =UpdateContext({locShowProjectTeamAssignment:false});
+                        //set focus start
+                        UpdateContext({locSetFocusTimerStart: false});
+                        UpdateContext({locSetFocusControlTarget: "txtNewProjectName"});
+                        UpdateContext({locSetFocusTimerStart: true});
+                        //set focus end
+                        //screen reader start
+                        UpdateContext(
+                            {
+                                locScreenReaderAnnouncedText: With(
+                                    {
+                                        varAnnouncedText: With(
+                                            {
+                                                varDefault: "Navigating back to add milestones to the project",
+                                                varOOBTextId: "btnAddMilestoneBack_Announcement"
+                                            },
+                                            With(
+                                                {
+                                                    varLocalizedText: LookUp(
+                                                        colLocalization,
+                                                        OOBTextID = varOOBTextId,
+                                                        LocalizedText
+                                                    )
+                                                },
+                                                Coalesce(
+                                                    varLocalizedText,
+                                                    varDefault
+                                                )
+                                            )
+                                        )
+                                    },
+                                    If(
+                                        locScreenReaderAnnouncedText = varAnnouncedText,
+                                        Concatenate(
+                                            varAnnouncedText,
+                                            " "
+                                        ),
+                                        varAnnouncedText
+                                    )
+                                )
+                            }
+                        );
+                        //screen reader end
+                    PaddingBottom: =0
+                    PaddingLeft: =0
+                    PaddingRight: =0.00
+                    PaddingTop: =0.00
+                    PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+                    PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+                    PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.ButtonSecondary.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.ButtonSecondary.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.ButtonSecondary.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.ButtonSecondary.RadiusTopRight
+                    Size: =gblAppStyles.ButtonSecondary.Size
+                    TabIndex: |-
+                        =If(
+                            locAddProject && Self.Visible,
+                            0,
+                            -1
+                        )
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Back",
+                                varOOBTextId: "btnAddMilestoneBack__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Tooltip: =Self.Text
+                    Visible: =locShowProjectTeamAssignment
+                    Width: =75
+                    X: =btnCreateProject.X - Self.Width - 20
+                    Y: =btnCreateProject.Y
+                    ZIndex: =11
+
+                "galAddTeamMembers As gallery.'BrowseLayout_Vertical_OneTextVariant_ver4.0'":
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "List of team members",
+                                varOOBTextId: "galAddTeamMembers__locAccessibleText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    BorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                    Default: ={}
+                    Fill: =Transparent
+                    FocusedBorderThickness: =2
+                    Height: =Self.TemplateHeight*7
+                    Items: =colNewProjectTeamMembers
+                    Layout: =Layout.Vertical
+                    LoadingSpinner: =App.ActiveScreen.LoadingSpinner
+                    TabIndex: |-
+                        =If(
+                            locAddProject && Self.Visible,
+                            1,
+                            -1
+                        )
+                    TemplateFill: =Transparent
+                    TemplatePadding: =0
+                    TemplateSize: =35*1
+                    Visible: =locShowProjectTeamAssignment && CountRows(Self.AllItems) > 0 && IsBlank(txtAssignmentSearchUser)
+                    Width: |-
+                        =Max(
+                            650,
+                            Parent.Width / 2
+                        )
+                    X: =30*1
+                    Y: =txtNewProjectName.Y + txtNewProjectName.Height + 20
+                    ZIndex: =12
+
+                    lblAddTeamMemberName As label:
+                        BorderColor: =gblAppStyles.Label.BorderColor
+                        BorderThickness: =gblAppStyles.Label.BorderThickness
+                        Color: =gblAppStyles.Label.Color 
+                        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                        DisabledColor: |-
+                            =If(
+                                gblThemeHiCo,
+                                gblAppStyles.Label.Color,
+                                gblAppStyles.Label.DisabledColor
+                            )
+                        DisabledFill: =gblAppStyles.Label.DisabledFill
+                        DisplayMode: =Parent.DisplayMode
+                        Fill: =gblAppStyles.Label.Fill
+                        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        FontWeight: =FontWeight.Normal
+                        Height: =25*1
+                        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                        HoverColor: =gblAppStyles.Label.HoverColor
+                        HoverFill: =gblAppStyles.Label.HoverFill
+                        OnSelect: =Select(Parent)
+                        PaddingBottom: =0
+                        PaddingRight: =0.00
+                        PaddingTop: =0.00
+                        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                        PressedColor: =gblAppStyles.Label.PressedColor
+                        PressedFill: =gblAppStyles.Label.PressedFill
+                        Size: =gblAppStyles.Label.Size.Medium
+                        Text: =ThisItem.appDisplayName
+                        Tooltip: =Self.Text
+                        Width: =Parent.Width - Self.X - imgRemoveTeamMember.Width - 30
+                        Wrap: =false
+                        X: =40*1
+                        Y: =5*1
+                        ZIndex: =1
+
+                    imgRemoveTeamMember As image:
+                        AccessibleLabel: |-
+                            =With(
+                                {
+                                    varDefault: "Click to remove the team member",
+                                    varOOBTextId: "imgRemoveTeamMember__locAccessibleText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        DisabledFill: |-
+                            =With(
+                                {
+                                    varImageIsCategory: LookUp(
+                                        staticIcons,
+                                        staticIconName = "Delete"
+                                    ).staticIconIsCategory
+                                },
+                                If(
+                                    varImageIsCategory,
+                                    gblAppStyles.Icons.DisabledFill_Category,
+                                    Transparent
+                                )
+                            )
+                        Fill: |-
+                            =With(
+                                {
+                                    varImageIsCategory: LookUp(
+                                        staticIcons,
+                                        staticIconName = "Delete"
+                                    ).staticIconIsCategory
+                                },
+                                If(
+                                    varImageIsCategory,
+                                    gblAppStyles.Icons.Fill_Category,
+                                    Transparent
+                                )
+                            )
+                        Height: =22*1
+                        Image: |
+                            =With(
+                                {
+                                    varImageRecord: LookUp(
+                                        staticIcons,
+                                        staticIconName = "Delete"
+                                    ),
+                                    varColor: If(
+                                        Self.DisplayMode = DisplayMode.Disabled,
+                                        gblAppStyles.Icons.DisabledColor,
+                                        gblAppStyles.Icons.Color
+                                    )
+                                },
+                                With(
+                                    {
+                                        varImageData: Concatenate(
+                                            "data:image/svg+xml;utf8, ",
+                                            EncodeUrl(
+                                                Concatenate(
+                                                    "<svg viewBox='",
+                                                    varImageRecord.staticIconViewbox,
+                                                    "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                    varImageRecord.staticIconPath,
+                                                    "' fill='#",
+                                                    varColor,
+                                                    "'/></svg>"
+                                                )
+                                            )
+                                        )
+                                    },
+                                    varImageData
+                                )
+                            )
+                        OnSelect: |-
+                            =Remove(
+                                colNewProjectTeamMembers,
+                                ThisItem
+                            );
+                            //screen reader start
+                            UpdateContext(
+                                {
+                                    locScreenReaderAnnouncedText: With(
+                                        {
+                                            varAnnouncedText: With(
+                                                {
+                                                    varDefault: "Team member removed",
+                                                    varOOBTextId: "imgRemoveTeamMember_Announcement"
+                                                },
+                                                With(
+                                                    {
+                                                        varLocalizedText: LookUp(
+                                                            colLocalization,
+                                                            OOBTextID = varOOBTextId,
+                                                            LocalizedText
+                                                        )
+                                                    },
+                                                    Coalesce(
+                                                        varLocalizedText,
+                                                        varDefault
+                                                    )
+                                                )
+                                            )
+                                        },
+                                        If(
+                                            locScreenReaderAnnouncedText = varAnnouncedText,
+                                            Concatenate(
+                                                varAnnouncedText,
+                                                " "
+                                            ),
+                                            varAnnouncedText
+                                        )
+                                    )
+                                }
+                            );
+                            //screen reader end
+                        PaddingRight: =0.00
+                        PaddingTop: =0.00
+                        RadiusBottomLeft: =5
+                        RadiusBottomRight: =5
+                        RadiusTopLeft: =5
+                        RadiusTopRight: =5
+                        TabIndex: |-
+                            =If(
+                                locAddProject && Self.Visible,
+                                0,
+                                -1
+                            )
+                        Tooltip: =Self.AccessibleLabel
+                        Width: =22*1
+                        X: =Parent.Width-Self.Width- 20
+                        Y: =lblAddTeamMemberName.Y + (lblAddTeamMemberName.Height - Self.Height) / 2
+                        ZIndex: =2
+
+                    shpTeamMemberDefault As circle:
+                        Fill: =gblAppStyles.Background.Fill
+                        Height: =imgTeamMember.Height
+                        OnSelect: =Select(Parent)
+                        Width: =imgTeamMember.Width
+                        X: =imgTeamMember.X
+                        Y: =imgTeamMember.Y
+                        ZIndex: =3
+
+                    imgTeamMemberDefault As image:
+                        AccessibleLabel: |-
+                            =With(
+                                {
+                                    varDefault: "Photo of the team member to which this work item is assigned to",
+                                    varOOBTextId: "imgWorkItemAssignedTo__locAccessibleText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+                        Height: =imgTeamMember.Height
+                        Image: |-
+                            =With(
+                                {
+                                    varImageRecord: LookUp(
+                                        staticIcons,
+                                        staticIconName = "Person"
+                                    ),
+                                    varColor: If(
+                                        Self.DisplayMode = DisplayMode.Disabled,
+                                        gblAppStyles.Icons.DisabledColor,
+                                        gblAppStyles.Icons.Color
+                                    )
+                                },
+                                With(
+                                    {
+                                        varImageData: Concatenate(
+                                            "data:image/svg+xml;utf8, ",
+                                            EncodeUrl(
+                                                Concatenate(
+                                                    "<svg viewBox='",
+                                                    varImageRecord.staticIconViewbox,
+                                                    "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                    varImageRecord.staticIconPath,
+                                                    "' fill='#",
+                                                    varColor,
+                                                    "'/></svg>"
+                                                )
+                                            )
+                                        )
+                                    },
+                                    varImageData
+                                )
+                            )
+                        OnSelect: =Select(Parent)
+                        PaddingBottom: =4
+                        PaddingLeft: =4
+                        PaddingRight: =4
+                        PaddingTop: =4
+                        RadiusBottomLeft: =30
+                        RadiusBottomRight: =30
+                        RadiusTopLeft: =30
+                        RadiusTopRight: =30
+                        Tooltip: =Self.AccessibleLabel
+                        Width: =imgTeamMember.Width
+                        X: =imgTeamMember.X
+                        Y: =imgTeamMember.Y
+                        ZIndex: =4
+
+                    imgTeamMember As image:
+                        AccessibleLabel: |-
+                            =With(
+                                {
+                                    varDefault: "Team member photo",
+                                    varOOBTextId: "imgTeamMember__locAccessibleText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        Height: =28
+                        Image: |-
+                            =/*If(
+                                !IsBlank(ThisItem.appEmailAddress),
+                                If(
+                                    !IsBlank(Office365Users.UserPhotoV2(ThisItem.appEmailAddress)),
+                                    Office365Users.UserPhotoV2(ThisItem.appEmailAddress),
+                                    Blank()
+                                )
+                            )*/
+                            If(
+                                !IsBlank(ThisItem.appEmailAddress),
+                                With(
+                                    {varImage: Office365Users.UserPhotoV2(ThisItem.appEmailAddress)},
+                                    If(
+                                        !IsBlank(varImage),
+                                        varImage,
+                                        Blank()
+                                    )
+                                ),
+                                Blank()
+                            )
+                        OnSelect: =Select(Parent)
+                        RadiusBottomLeft: =30
+                        RadiusBottomRight: =30
+                        RadiusTopLeft: =30
+                        RadiusTopRight: =30
+                        Tooltip: =Self.AccessibleLabel
+                        Width: =28
+                        X: =10*1
+                        Y: =lblAddTeamMemberName.Y + (lblAddTeamMemberName.Height - Self.Height) / 2
+                        ZIndex: =5
+
+                btnCreateProject As button:
+                    BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+                    BorderThickness: =gblAppStyles.ButtonPrimary.BorderThickness
+                    Color: =gblAppStyles.ButtonPrimary.Color
+                    DisabledBorderColor: =gblAppStyles.ButtonPrimary.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.ButtonPrimary.DisabledColor
+                    DisabledFill: =gblAppStyles.ButtonPrimary.DisabledFill
+                    DisplayMode: |-
+                        =If(
+                            IsBlank(txtNewProjectName.Text),
+                            DisplayMode.Disabled,
+                            DisplayMode.Edit
+                        )
+                    Fill: =gblAppStyles.ButtonPrimary.Fill
+                    FocusedBorderColor: =gblAppStyles.ButtonPrimary.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.ButtonPrimary.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.ButtonPrimary.HoverBorderColor
+                    HoverColor: =gblAppStyles.ButtonPrimary.HoverColor
+                    HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+                    OnSelect: |-
+                        =UpdateContext(
+                            {
+                                locShowProjectTeamAssignment: true,
+                                locAddProject: false
+                            }
+                        );
+                        UpdateContext(
+                            {
+                                locNewProject: IfError(Patch(
+                                    Projects,
+                                    Defaults(Projects),
+                                    {
+                                        'Cover Color': "#BDBDE6",
+                                        'Cover Color Dark': "#33344A",
+                                        Name: txtNewProjectName.Text
+                                    }),Blank())
+                                
+                            })
+                        ;
+                        ForAll(
+                            colNewProjectTeamMembers,
+                            IfError(Patch(
+                                'Project Team Members',
+                                Defaults('Project Team Members'),
+                                {
+                                    Name: appDisplayName,
+                                    'User ID': Office365Users.UserProfileV2(appEmailAddress).userPrincipalName,
+                                    Project: locNewProject
+                                }
+                            ),Blank())
+                        );
+                        ForAll(
+                            galAddMilestones.AllItems,
+                            IfError(Patch(
+                                'Project Milestones',
+                                Defaults('Project Milestones'),
+                                {
+                                    Color: Coalesce(
+                                        If(
+                                            gblThemeDark,
+                                            LookUp(
+                                                colProjectCoverColors,
+                                                Base = galMilestoneColorPicker.Selected.Base && Theme = "default"
+                                            ).Color,
+                                            galMilestoneColorPicker.Selected.Color
+                                        ),
+                                        "#E0E0E0"
+                                    ),
+                                    'Color Dark': Coalesce(
+                                        If(
+                                            gblThemeDark,
+                                            galMilestoneColorPicker.Selected.Color,
+                                            LookUp(
+                                                colProjectCoverColors,
+                                                Base = galMilestoneColorPicker.Selected.Base && Theme = "dark"
+                                            ).Color
+                                        ),
+                                        "#E0E0E0"
+                                    ),
+                                    'Milestone Date': datMilestoneTargetDate.Value,
+                                    Name: txtAddMilestoneName.Text,
+                                    Project: locNewProject
+                                }
+                            ),Blank())
+                        );
+                        Set(
+                            gblProject,
+                            LookUp(
+                                Projects,
+                                Project = locNewProject.Project
+                            )
+                        );
+                        ClearCollect(
+                            colWorkItems,
+                            Filter(
+                                'Project Work Items',
+                                Project.Project = gblProject.Project
+                            )
+                        );
+                        //screen reader start
+                        UpdateContext(
+                            {
+                                locScreenReaderAnnouncedText: With(
+                                    {
+                                        varAnnouncedText: With(
+                                            {
+                                                varDefault: "Project has been created",
+                                                varOOBTextId: "btnCreateProject_Announcement"
+                                            },
+                                            With(
+                                                {
+                                                    varLocalizedText: LookUp(
+                                                        colLocalization,
+                                                        OOBTextID = varOOBTextId,
+                                                        LocalizedText
+                                                    )
+                                                },
+                                                Coalesce(
+                                                    varLocalizedText,
+                                                    varDefault
+                                                )
+                                            )
+                                        )
+                                    },
+                                    If(
+                                        locScreenReaderAnnouncedText = varAnnouncedText,
+                                        Concatenate(
+                                            varAnnouncedText,
+                                            " "
+                                        ),
+                                        varAnnouncedText
+                                    )
+                                )
+                            }
+                        );
+                        //screen reader end
+                        Navigate(
+                            'Projects Screen',
+                            ScreenTransition.Fade,
+                            {locBackNavigation: true}
+                        )
+                    PressedBorderColor: =gblAppStyles.ButtonPrimary.PressedBorderColor
+                    PressedColor: =gblAppStyles.ButtonPrimary.PressedColor
+                    PressedFill: =gblAppStyles.ButtonPrimary.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.ButtonPrimary.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+                    Size: =gblAppStyles.ButtonPrimary.Size
+                    TabIndex: |-
+                        =If(
+                            locAddProject && Self.Visible,
+                            0,
+                            -1
+                        )
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Create",
+                                varOOBTextId: "btnCreateProject__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Tooltip: =Self.Text
+                    Visible: =locShowProjectTeamAssignment
+                    Width: =100
+                    X: =btnNextNewProjectMilestones.X
+                    Y: =btnNextNewProjectMilestones.Y
+                    ZIndex: =14
+
+                txtAssignmentSearchUser As text:
+                    AccessibleLabel: ="Text box for search assignment user"
+                    BorderColor: |
+                        =gblAppStyles.TextInput.BorderColor
+                    BorderThickness: =gblAppStyles.TextInput.BorderThickness
+                    Color: =gblAppStyles.TextInput.Color
+                    Default: =
+                    DelayOutput: =true
+                    DisabledBorderColor: =gblAppStyles.TextInput.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.TextInput.DisabledColor
+                    DisabledFill: =gblAppStyles.TextInput.DisabledFill
+                    EnableSpellCheck: =true
+                    Fill: =gblAppStyles.TextInput.Fill
+                    FocusedBorderColor: =White //gblAppStyles.TextInput.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.TextInput.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32
+                    HintText: |-
+                        =With(
+                            {
+                                varDefault: "Enter a name to add a team member",
+                                varOOBTextId: "txtAssignmentSearchUser__locHintText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    HoverBorderColor: =gblAppStyles.TextInput.HoverBorderColor
+                    HoverColor: =gblAppStyles.TextInput.HoverColor
+                    HoverFill: =gblAppStyles.TextInput.HoverFill
+                    PressedBorderColor: =gblAppStyles.TextInput.PressedBorderColor
+                    PressedColor: =gblAppStyles.TextInput.PressedColor
+                    PressedFill: =gblAppStyles.TextInput.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.TextInput.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.TextInput.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.TextInput.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.TextInput.RadiusTopRight
+                    Size: =gblAppStyles.TextInput.Size
+                    TabIndex: |-
+                        =If(
+                            Self.Visible,
+                            1,
+                            -1
+                        )
+                    Tooltip: =Self.HintText
+                    Visible: =locShowProjectTeamAssignment
+                    Width: =galAddMilestones.Width
+                    X: =30*1
+                    Y: =lblNewProjectName.Y+lblNewProjectName.Height
+                    ZIndex: =15
+
+                galAssignUser As gallery.galleryVertical:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "List of users",
+                                varOOBTextId: "galAssignUser__locAccessibleText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    BorderColor: =Transparent
+                    Fill: =Transparent //gblAppStyles.Gallery.Fill
+                    Height: =galAddTeamMembers.Height
+                    Items: |-
+                        =If(
+                            IsBlank(txtAssignmentSearchUser.Text),
+                            Blank(),
+                            Filter(
+                                Office365Users.SearchUser({searchTerm: txtAssignmentSearchUser.Text}),
+                                Not(UserPrincipalName in colNewProjectTeamMembers.appEmailAddress)
+                            )
+                        )
+                    Layout: =Layout.Vertical
+                    OnSelect: |
+                        =UpdateContext(
+                            {
+                                locUserPrincipalName: ThisItem.UserPrincipalName
+                            }
+                        );
+                        Collect(
+                            colNewProjectTeamMembers,
+                            {appEmailAddress: locUserPrincipalName, appDisplayName: Office365Users.UserProfileV2(locUserPrincipalName).displayName}
+                        );
+                        Reset(txtAssignmentSearchUser);
+                    TabIndex: |-
+                        =If(
+                            locAddProject && Self.Visible,
+                            0,
+                            -1
+                        )
+                    TemplateSize: =42
+                    Visible: =locShowProjectTeamAssignment && !IsBlank(txtAssignmentSearchUser)
+                    Width: |-
+                        =Max(
+                            650,
+                            Parent.Width / 2
+                        )
+                    X: =30*1
+                    Y: =txtNewProjectName.Y + txtNewProjectName.Height + 20
+                    ZIndex: =16
+
+                    lblAssignUser_DisplayName As label:
+                        BorderColor: =gblAppStyles.Label.BorderColor
+                        BorderThickness: =gblAppStyles.Label.BorderThickness
+                        Color: =gblAppStyles.Label.Color
+                        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.Label.DisabledColor
+                        DisabledFill: =gblAppStyles.Label.DisabledFill
+                        Fill: =gblAppStyles.Label.Fill
+                        FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                        FocusedBorderThickness: =1
+                        Font: =Font.'Segoe UI'
+                        Height: =25*1
+                        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                        HoverColor: =gblAppStyles.Label.HoverColor
+                        HoverFill: =gblAppStyles.Label.HoverFill
+                        OnSelect: =Select(Parent)
+                        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                        PressedColor: =gblAppStyles.Label.PressedColor
+                        PressedFill: =gblAppStyles.Label.PressedFill
+                        Size: =gblAppStyles.Label.Size.Medium
+                        TabIndex: |-
+                            =If(
+                                locAddProject && Self.Visible,
+                                0,
+                                -1
+                            )
+                        Text: =ThisItem.DisplayName
+                        Tooltip: =Self.Text
+                        Width: =Parent.TemplateWidth - Self.X
+                        Wrap: =false
+                        X: =btnAssignUser_Initials.X + btnAssignUser_Initials.Width + 10
+                        Y: =5*1
+                        ZIndex: =2
+
+                    shpAssignUser_Divider As rectangle:
+                        AccessibleLabel: |-
+                            =With(
+                                {
+                                    varDefault: "Divider to separate users in users list",
+                                    varOOBTextId: "shpAssignUser_Divider__locAccessibleText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        Fill: =gblAppStyles.Dividers.Background
+                        Height: =1
+                        OnSelect: =Select(Parent)
+                        Width: =lblAssignUser_DisplayName.Width
+                        X: =lblAssignUser_DisplayName.X
+                        Y: =Parent.TemplateHeight - Self.Height
+                        ZIndex: =4
+
+                    btnAssignUser_Initials As button:
+                        BorderThickness: =0
+                        Color: =gblAppStyles.ButtonPrimary.Color
+                        DisabledBorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+                        DisabledFill: =gblAppStyles.ButtonPrimary.DisabledFill
+                        Fill: =gblAppStyles.ButtonPrimary.Fill
+                        Font: =Font.'Segoe UI'
+                        Height: =28
+                        HoverColor: =gblAppStyles.ButtonPrimary.HoverColor
+                        OnSelect: =Select(Parent)
+                        PaddingBottom: =0
+                        PaddingLeft: =0
+                        PaddingRight: =0
+                        PaddingTop: =0
+                        RadiusBottomLeft: =36
+                        RadiusBottomRight: =36
+                        RadiusTopLeft: =36
+                        RadiusTopRight: =36
+                        Size: =gblAppStyles.Label.Size.Medium
+                        TabIndex: |-
+                            =If(
+                                true,
+                                -1,
+                                0
+                            )
+                        Text: =Left(ThisItem.GivenName,1) & Left(ThisItem.Surname,1)
+                        Tooltip: =Self.Text
+                        Width: =28
+                        X: =10
+                        Y: =lblAssignUser_DisplayName.Y + (lblAssignUser_DisplayName.Height -Self.Height) / 2
+                        ZIndex: =6
+
+                imgSearchUserIcon As image:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "Search icon",
+                                varOOBTextId: "imgSearchUserIcon__locAccessibleText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    DisabledFill: |-
+                        =With(
+                            {
+                                varImageIsCategory: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Search"
+                                ).staticIconIsCategory
+                            },
+                            If(
+                                varImageIsCategory,
+                                gblAppStyles.Icons.DisabledFill_Category,
+                                Transparent
+                            )
+                        )
+                    Fill: |-
+                        =With(
+                            {
+                                varImageIsCategory: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Search"
+                                ).staticIconIsCategory
+                            },
+                            If(
+                                varImageIsCategory,
+                                gblAppStyles.Icons.Fill_Category,
+                                Transparent
+                            )
+                        )
+                    Height: =22
+                    Image: |-
+                        =With(
+                            {
+                                varImageRecord: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Search"
+                                ),
+                                varColor: If(
+                                    Self.DisplayMode = DisplayMode.Disabled,
+                                    gblAppStyles.Icons.DisabledColor,
+                                    gblAppStyles.Icons.Color
+                                )
+                            },
+                            With(
+                                {
+                                    varImageData: Concatenate(
+                                        "data:image/svg+xml;utf8, ",
+                                        EncodeUrl(
+                                            Concatenate(
+                                                "<svg viewBox='",
+                                                varImageRecord.staticIconViewbox,
+                                                "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                varImageRecord.staticIconPath,
+                                                "' fill='#",
+                                                varColor,
+                                                "'/></svg>"
+                                            )
+                                        )
+                                    )
+                                },
+                                varImageData
+                            )
+                        )
+                    PaddingBottom: =2
+                    PaddingLeft: =2
+                    PaddingRight: =2
+                    PaddingTop: =2
+                    RadiusBottomLeft: =5
+                    RadiusBottomRight: =5
+                    RadiusTopLeft: =5
+                    RadiusTopRight: =5
+                    Tooltip: =Self.AccessibleLabel
+                    Visible: =locShowProjectTeamAssignment && IsBlank(txtAssignmentSearchUser)
+                    Width: =22
+                    X: =txtAssignmentSearchUser.X + txtAssignmentSearchUser.Width - Self.Width - 8
+                    Y: =txtAssignmentSearchUser.Y+(txtAssignmentSearchUser.Height-Self.Height)/2
+                    ZIndex: =17
+
+                imgCloseSearchUserIcon As image:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "Click to close the search",
+                                varOOBTextId: "imgCloseSearchWorkItem__locAccessibleText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    DisabledFill: |-
+                        =With(
+                            {
+                                varImageIsCategory: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Dismiss"
+                                ).staticIconIsCategory
+                            },
+                            If(
+                                varImageIsCategory,
+                                gblAppStyles.Icons.DisabledFill_Category,
+                                Transparent
+                            )
+                        )
+                    Fill: |-
+                        =With(
+                            {
+                                varImageIsCategory: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Dismiss"
+                                ).staticIconIsCategory
+                            },
+                            If(
+                                varImageIsCategory,
+                                gblAppStyles.Icons.Fill_Category,
+                                Transparent
+                            )
+                        )
+                    Height: =22
+                    Image: |-
+                        =With(
+                            {
+                                varImageRecord: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Dismiss"
+                                ),
+                                varColor: If(
+                                    Self.DisplayMode = DisplayMode.Disabled,
+                                    gblAppStyles.Icons.DisabledColor,
+                                    gblAppStyles.Icons.Color
+                                )
+                            },
+                            With(
+                                {
+                                    varImageData: Concatenate(
+                                        "data:image/svg+xml;utf8, ",
+                                        EncodeUrl(
+                                            Concatenate(
+                                                "<svg viewBox='",
+                                                varImageRecord.staticIconViewbox,
+                                                "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                varImageRecord.staticIconPath,
+                                                "' fill='#",
+                                                varColor,
+                                                "'/></svg>"
+                                            )
+                                        )
+                                    )
+                                },
+                                varImageData
+                            )
+                        )
+                    OnSelect: |-
+                        =Reset(txtAssignmentSearchUser);
+                        //screen reader start
+                        UpdateContext(
+                            {
+                                locScreenReaderAnnouncedText: With(
+                                    {
+                                        varAnnouncedText: With(
+                                            {
+                                                varDefault: "User search box cleared",
+                                                varOOBTextId: "imgCloseSearchUserIcon_Announcement"
+                                            },
+                                            With(
+                                                {
+                                                    varLocalizedText: LookUp(
+                                                        colLocalization,
+                                                        OOBTextID = varOOBTextId,
+                                                        LocalizedText
+                                                    )
+                                                },
+                                                Coalesce(
+                                                    varLocalizedText,
+                                                    varDefault
+                                                )
+                                            )
+                                        )
+                                    },
+                                    If(
+                                        locScreenReaderAnnouncedText = varAnnouncedText,
+                                        Concatenate(
+                                            varAnnouncedText,
+                                            " "
+                                        ),
+                                        varAnnouncedText
+                                    )
+                                )
+                            }
+                        );
+                        //screen reader end
+                    PaddingBottom: =2
+                    PaddingLeft: =2
+                    PaddingRight: =2
+                    PaddingTop: =2
+                    RadiusBottomLeft: =5
+                    RadiusBottomRight: =5
+                    RadiusTopLeft: =5
+                    RadiusTopRight: =5
+                    TabIndex: |-
+                        =If(
+                            locAddProject && Self.Visible,
+                            0,
+                            -1
+                        )
+                    Tooltip: =Self.AccessibleLabel
+                    Visible: =locShowProjectTeamAssignment && !IsBlank(txtAssignmentSearchUser)
+                    Width: =22
+                    X: =imgSearchUserIcon.X
+                    Y: =imgSearchUserIcon.Y
+                    ZIndex: =18
+
+                lblSearchTeamMemberLine1 As label:
+                    Align: =Align.Center
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =32
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Search for a user",
+                                varOOBTextId: "lblSearchTeamMemberLine1__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Tooltip: =Self.Text
+                    VerticalAlign: =VerticalAlign.Top
+                    Visible: =CountRows(galAssignUser.AllItems) = 0 && IsBlank(txtAssignmentSearchUser) && locShowProjectTeamAssignment && CountRows(galAddTeamMembers.AllItems) = 0
+                    Width: =Parent.Width - Self.X - Self.X
+                    X: =txtAssignmentSearchUser.X
+                    Y: =imgSearchTeamMember.Y + imgSearchTeamMember.Height
+                    ZIndex: =19
+
+                lblSearchTeamMemberLine2 As label:
+                    Align: =Align.Center
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Type in the Search box above.",
+                                varOOBTextId: "lblSearchTeamMemberLine2__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Tooltip: =Self.Text
+                    VerticalAlign: =VerticalAlign.Top
+                    Visible: =CountRows(galAssignUser.AllItems) = 0 && IsBlank(txtAssignmentSearchUser) && locShowProjectTeamAssignment && CountRows(galAddTeamMembers.AllItems) = 0
+                    Width: =Parent.Width - Self.X - Self.X
+                    X: =txtAssignmentSearchUser.X
+                    Y: =lblSearchTeamMemberLine1.Y + lblSearchTeamMemberLine1.Height
+                    ZIndex: =20
+
+                imgSearchTeamMember As image:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "Image for user search",
+                                varOOBTextId: "imgSearchTeamMember__locAccessibleText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Height: =Self.Width
+                    Image: =Image_ZeroState_People
+                    Tooltip: =Self.AccessibleLabel
+                    Visible: =CountRows(galAssignUser.AllItems) = 0 && IsBlank(txtAssignmentSearchUser) && locShowProjectTeamAssignment && CountRows(galAddTeamMembers.AllItems) = 0
+                    Width: =650/4
+                    X: =(Parent.Width - Self.Width) / 2
+                    Y: =txtAssignmentSearchUser.Y + txtAssignmentSearchUser.Height + 20
+                    ZIndex: =21
+
+                lblSearchTeamMemberNoResultsLine1 As label:
+                    Align: =Align.Center
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =32
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "No results",
+                                varOOBTextId: "lblSearchTeamMemberNoResultsLine1__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    VerticalAlign: =VerticalAlign.Top
+                    Visible: =CountRows(galAssignUser.AllItems) = 0 && !IsBlank(txtAssignmentSearchUser) && locShowProjectTeamAssignment
+                    Width: =Parent.Width - Self.X - Self.X
+                    X: =txtAssignmentSearchUser.X
+                    Y: =imgSearchTeamMemberNoResults.Y + imgSearchTeamMemberNoResults.Height
+                    ZIndex: =22
+
+                lblSearchTeamMemberNoResultsLine2 As label:
+                    Align: =Align.Center
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Try a different name.",
+                                varOOBTextId: "lblSearchTeamMemberNoResultsLine2__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    VerticalAlign: =VerticalAlign.Top
+                    Visible: =CountRows(galAssignUser.AllItems) = 0 && !IsBlank(txtAssignmentSearchUser) && locShowProjectTeamAssignment
+                    Width: =Parent.Width - Self.X - Self.X
+                    X: =txtAssignmentSearchUser.X
+                    Y: =lblSearchTeamMemberNoResultsLine1.Y + lblSearchTeamMemberNoResultsLine1.Height
+                    ZIndex: =23
+
+                imgSearchTeamMemberNoResults As image:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "Image for user search with no results",
+                                varOOBTextId: "imgSearchTeamMemberNoResults__locAccessibleText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Height: =Self.Width
+                    Image: =Image_ZeroState_People_NoResults
+                    Visible: =CountRows(galAssignUser.AllItems) = 0 && !IsBlank(txtAssignmentSearchUser) && locShowProjectTeamAssignment
+                    Width: =650/4
+                    X: =(Parent.Width - Self.Width) / 2
+                    Y: =txtAssignmentSearchUser.Y + txtAssignmentSearchUser.Height + 20
+                    ZIndex: =24
+
+                imgBack_AddProject As image:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "Click to go back",
+                                varOOBTextId: "imgBack_Settings__locAccessibleText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    DisabledFill: |-
+                        =With(
+                            {
+                                varImageIsCategory: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Back"
+                                ).staticIconIsCategory
+                            },
+                            If(
+                                varImageIsCategory,
+                                gblAppStyles.Icons.DisabledFill_Category,
+                                Transparent
+                            )
+                        )
+                    Fill: |-
+                        =With(
+                            {
+                                varImageIsCategory: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Back"
+                                ).staticIconIsCategory
+                            },
+                            If(
+                                varImageIsCategory,
+                                gblAppStyles.Icons.Fill_Category,
+                                Transparent
+                            )
+                        )
+                    Height: =40
+                    Image: |
+                        =With(
+                            {
+                                varImageRecord: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Back"
+                                ),
+                                varColor: If(
+                                    Self.DisplayMode = DisplayMode.Disabled,
+                                    gblAppStyles.Icons.DisabledColor,
+                                    gblAppStyles.Icons.Color
+                                )
+                            },
+                            With(
+                                {
+                                    varImageData: Concatenate(
+                                        "data:image/svg+xml;utf8, ",
+                                        EncodeUrl(
+                                            Concatenate(
+                                                "<svg viewBox='",
+                                                varImageRecord.staticIconViewbox,
+                                                "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                varImageRecord.staticIconPath,
+                                                "' fill='#",
+                                                varColor,
+                                                "'/></svg>"
+                                            )
+                                        )
+                                    )
+                                },
+                                varImageData
+                            )
+                        )
+                    OnSelect: |-
+                        =//screen reader start
+                        UpdateContext(
+                            {
+                                locScreenReaderAnnouncedText: With(
+                                    {
+                                        varAnnouncedText: With(
+                                            {
+                                                varDefault: "Navigating back to the projects screen",
+                                                varOOBTextId: "imgBack_Settings_Announcement"
+                                            },
+                                            With(
+                                                {
+                                                    varLocalizedText: LookUp(
+                                                        colLocalization,
+                                                        OOBTextID = varOOBTextId,
+                                                        LocalizedText
+                                                    )
+                                                },
+                                                Coalesce(
+                                                    varLocalizedText,
+                                                    varDefault
+                                                )
+                                            )
+                                        )
+                                    },
+                                    If(
+                                        locScreenReaderAnnouncedText = varAnnouncedText,
+                                        Concatenate(
+                                            varAnnouncedText,
+                                            " "
+                                        ),
+                                        varAnnouncedText
+                                    )
+                                )
+                            }
+                        );
+                        //screen reader end
+                        Navigate(
+                            'Projects Screen',
+                            ScreenTransition.Fade,
+                            {
+                                locBackNavigation: true,
+                                locProjectSortOrder: locProjectSortOrder,
+                                locExpandProjectList: locExpandProjectList,
+                                locAddProject: false,
+                                locSortWorkItemBy: locSortWorkItemBy,
+                                locShowSearchWorkItem: locShowSearchWorkItem,
+                                locAddWorkItem: locAddWorkItem,
+                                locProjectStatusSelection: locProjectStatusSelection,
+                                locWorkItemSortOrder: locWorkItemSortOrder
+                            }
+                        )
+                    PaddingBottom: =10
+                    PaddingLeft: =10
+                    PaddingRight: =10
+                    PaddingTop: =10
+                    RadiusBottomLeft: =5
+                    RadiusBottomRight: =5
+                    RadiusTopLeft: =5
+                    RadiusTopRight: =5
+                    TabIndex: |-
+                        =If(
+                            Self.Visible,
+                            1,
+                            -1
+                        )
+                    Tooltip: =Self.AccessibleLabel
+                    Width: =40
+                    X: =20*1
+                    Y: =lblNewProjectHeader.Y
+                    ZIndex: =25
+

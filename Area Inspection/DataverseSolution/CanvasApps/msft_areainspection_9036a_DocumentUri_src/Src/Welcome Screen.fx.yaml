@@ -1,0 +1,1355 @@
+"'Welcome Screen' As screen":
+    Fill: |+
+        =gblAppStyles.Background.Fill
+        
+    OnVisible: |+
+        =//update counts only when the user navigates to this screen after completing an inspection
+        If(
+            gblUpdateInspectionCount,
+        //total inspections - last 7 days
+            ClearCollect(
+                colWeekInspections,
+                Filter(
+                    'Area Inspections',
+                    'Area Inspections (Views)'.'Active Area Inspections - Last 7 Days'
+                )
+            );
+            
+        //total inspection count - last 7 days
+        Set(
+                gblTotalInspectionCount,
+                CountRows(colWeekInspections)
+            );
+            
+        //current user inspection count - last 7 days
+        Set(
+                gblCurrentUserInspectionCount,
+                CountRows(
+                    Filter(
+                        colWeekInspections,
+                        Owner = gblCurrUser
+                    )
+                )
+            );
+            
+        //total issues - last 7 days
+        ClearCollect(
+                colWeekIssues,
+                Filter(
+                    'Area Inspection Steps',
+                    'Area Inspection Steps (Views)'.'Active Area Inspection Steps - Last 7 Days',
+                    Outcome = 'Inspection Outcome'.Issue
+                )
+            );
+            
+        //current user issues count - last 7 days
+        Set(
+                gblCurrentUserIssueCount,
+                CountRows(
+                    Filter(
+                        colWeekIssues,
+                        Owner = gblCurrUser
+                    )
+                )
+            );
+            
+        //total issue count - last 7 days
+        Set(
+                gblTotalIssueCount,
+                CountRows(colWeekIssues)
+            );
+            
+        //team inspection durations
+        Clear(colTeamDurations);
+            ForAll(
+                Filter(
+                    colWeekInspections,
+                    !IsBlank('Started On') && !IsBlank('Ended On')
+                ),
+                Collect(
+                    colTeamDurations,
+                    DateDiff(
+                        'Started On',
+                        'Ended On',
+                        Minutes
+                    )
+                )
+            );
+            
+        //team average inspection time
+        Set(
+                gblTeamAvgTime,
+                RoundUp(
+                    Sum(
+                        colTeamDurations,
+                        Value
+                    ) / CountRows(colTeamDurations),
+                    0
+                )
+            );
+            
+        //current user inspection durations
+        Clear(colUserDurations);
+            ForAll(
+                Filter(
+                    colWeekInspections,
+                    !IsBlank('Started On') && !IsBlank('Ended On'),
+                    Owner = gblCurrUser
+                ),
+                Collect(
+                    colUserDurations,
+                    DateDiff(
+                        'Started On',
+                        'Ended On',
+                        Minutes
+                    )
+                )
+            );
+            
+        //current user average inspection time
+        Set(
+                gblUserAvgTime,
+                RoundUp(
+                    Sum(
+                        colUserDurations,
+                        Value
+                    ) / CountRows(colUserDurations),
+                    0
+                )
+            )
+        );
+        //planner stats:
+        If(
+            IsBlank(locRefreshPlannerTasks),
+            UpdateContext({locRefreshPlannerTasks: true})
+        );
+        Set(
+            gblUserCanAccessPlanner,
+            gblPlannerPlanId in Planner.ListMyPlansV2().value.id
+        );
+        If(
+            !IsBlank(gblPlannerPlanId) && gblUserCanAccessPlanner && gblRecordSettings.'Is Enabled Tasks' = 'Is Enabled Tasks (Area Inspection Settings)'.Yes,
+            If(
+                !IsBlank(gblRecordSettings.'Parameter (Planner Id)'),
+                ClearCollect(
+                    colPlannerTasks,
+                    Planner.ListTasksV3(
+                        gblPlannerPlanId,
+                        gblPlannerGroupId
+                    ).value
+                );
+                Planner.ListTasks(gblPlannerPlanId).value;
+                Planner.ListMyTasks().value;
+                Clear(colTasksForMe);
+                Collect(
+                    colTasksForMe,
+                    Filter(
+                        galPlannerMyTasks.AllItems,
+                        planId = gblPlannerPlanId,
+                        percentComplete < 100
+                    )
+                );
+                Clear(colTasksForAll);
+                Collect(
+                    colTasksForAll,
+                    Filter(
+                        galPlannerTasks.AllItems,
+                        planId = gblPlannerPlanId,
+                        percentComplete < 100
+                    )
+                );
+                Clear(colOverdueTasks);
+                Collect(
+                    colOverdueTasks,
+                    Filter(
+                        galPlannerMyTasks.AllItems,
+                        planId = gblPlannerPlanId,
+                        percentComplete < 100,
+                        dueDateTime < Now()
+                    )
+                )
+            )
+        );
+        //reset the variable to be prepared for the next inspection
+        Set(
+            gblInspectionPatchComplete,
+            false
+        );
+        
+
+    cnvWelcome As fluidGrid.fluidGridWithBlankCard:
+        BorderThickness: =0
+        Height: =Parent.Height - Self.Y
+        Width: =Parent.Width
+        ZIndex: =1
+
+        dtcWelcome As dataCard:
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            BorderThickness: =0
+            DisplayMode: =DisplayMode.Edit
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =conWeekGlance.Y+conWeekGlance.Height
+            Width: =Parent.Width
+            X: =0
+            Y: =0
+            ZIndex: =1
+
+            btnCollectStats As button:
+                Color: =RGBA(0, 0, 0, 0)
+                Fill: =RGBA(0, 0, 0, 0)
+                Height: =1
+                OnSelect: |-
+                    =ClearCollect(
+                        colWeekInspections,
+                        Filter(
+                            'Area Inspections',
+                            'Area Inspections (Views)'.'Active Area Inspections - Last 7 Days'
+                        )
+                    );
+                    //total inspection count - last 7 days
+                    Set(
+                        gblTotalInspectionCount,
+                        CountRows(colWeekInspections)
+                    );
+                    //current user inspection count - last 7 days
+                    Set(
+                        gblCurrentUserInspectionCount,
+                        CountRows(
+                            Filter(
+                                colWeekInspections,
+                                Owner = gblCurrUser
+                            )
+                        )
+                    );
+                    ClearCollect(
+                        colWeekIssues,
+                        Filter(
+                            'Area Inspection Steps',
+                            'Area Inspection Steps (Views)'.'Active Area Inspection Steps - Last 7 Days',
+                            Outcome = 'Inspection Outcome'.Issue
+                        )
+                    );
+                    //current user issues count - last 7 days
+                    Set(
+                        gblCurrentUserIssueCount,
+                        CountRows(
+                            Filter(
+                                colWeekIssues,
+                                Owner = gblCurrUser
+                            )
+                        )
+                    );
+                    //total issue count - last 7 days
+                    Set(
+                        gblTotalIssueCount,
+                        CountRows(colWeekIssues)
+                    );
+                    //team inspection durations
+                    Clear(colTeamDurations);
+                    ForAll(
+                        Filter(
+                            colWeekInspections,
+                            !IsBlank('Started On') && !IsBlank('Ended On')
+                        ),
+                        Collect(
+                            colTeamDurations,
+                            DateDiff(
+                                'Started On',
+                                'Ended On',
+                                Minutes
+                            )
+                        )
+                    );
+                    //team average inspection time
+                    Set(
+                        gblTeamAvgTime,
+                        RoundUp(
+                            Sum(
+                                colTeamDurations,
+                                Value
+                            ) / CountRows(colTeamDurations),
+                            0
+                        )
+                    );
+                    //current user inspection durations
+                    Clear(colUserDurations);
+                    ForAll(
+                        Filter(
+                            colWeekInspections,
+                            !IsBlank('Started On') && !IsBlank('Ended On'),
+                            Owner = gblCurrUser
+                        ),
+                        Collect(
+                            colUserDurations,
+                            DateDiff(
+                                'Started On',
+                                'Ended On',
+                                Minutes
+                            )
+                        )
+                    );
+                    //current user average inspection time
+                    Set(
+                        gblUserAvgTime,
+                        RoundUp(
+                            Sum(
+                                colUserDurations,
+                                Value
+                            ) / CountRows(colUserDurations),
+                            0
+                        )
+                    );
+                    ClearCollect(
+                        colAreaInspectionLocations,
+                        Filter(
+                            'Area Inspection Locations',
+                            'Area Inspection Locations (Views)'.'Active Area Inspection Locations'
+                        )
+                    )
+                Size: =24
+                Text: ="Hidden button for calculations"
+                Width: =1
+                X: =513
+                Y: =751
+                ZIndex: =1
+
+            lblWelcomeHeader As label:
+                AutoHeight: =true
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Bold
+                Height: =76
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PaddingLeft: =28
+                PaddingTop: =If(gblAppMobileOnDesktop, 5, 20)
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Role: =TextRole.Heading1
+                Size: =gblAppStyles.Label.Size.ExtraLarge+4
+                Text: |
+                    =With(
+                        {
+                            varTimeValueNow: Hour(Now()),
+                            varTimeValueMorning: 5,
+                            varTimeValueAfternoon: 12,
+                            varTimeValueEvening: 20
+                        },
+                        With(
+                            {
+                                varGreeting: If(
+                                    varTimeValueNow >= varTimeValueMorning And varTimeValueNow < varTimeValueAfternoon,
+                                    "morning",
+                                    varTimeValueNow >= varTimeValueAfternoon And varTimeValueNow < varTimeValueEvening,
+                                    "afternoon",
+                                    "evening"
+                                )
+                            },
+                    With({varDefault:varGreeting & ", " & gblCurrUser.'First Name',varOOBTextId:"_translateVariable_"& Proper(varGreeting) & "Greeting",varParam0:gblCurrUser.'First Name'},With({varLocalizedText:LookUp(colLocalization,OOBTextID=varOOBTextId,LocalizedText)},If(IsBlankOrError(varParam0),Coalesce(varLocalizedText,varDefault),Coalesce(Substitute(varLocalizedText,"{0}",Text(varParam0)),varDefault))))
+                        )
+                    )
+                Width: |
+                    =Switch(
+                        'Welcome Screen'.Size,
+                        ScreenSize.ExtraLarge,
+                        btnInspect.X - Self.X,
+                        ScreenSize.Large,
+                        btnInspect.X - Self.X,
+                        ScreenSize.Medium,
+                        btnInspect.X - Self.X,
+                        ScreenSize.Small,
+                        Parent.Width - Self.X - 20,
+                        Parent.Width - Self.X - 20
+                    )
+                Y: =20
+                ZIndex: =3
+
+            lblWelcomeBody As label:
+                AutoHeight: =true
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =70
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PaddingLeft: =28
+                PaddingRight: =20
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Large
+                Text: |-
+                    =With(
+                        {
+                            varDefault: "Glad to have you here, we are ready for you to perform an " & Lower(gblWorkType) & ".",
+                            varOOBTextId: "_translateVariable_WelcomeMessageFor" & gblWorkType,
+                            varParam0: Blank()
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            If(
+                                IsBlankOrError(varParam0),
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                ),
+                                Coalesce(
+                                    Substitute(
+                                        varLocalizedText,
+                                        "{0}",
+                                        Text(varParam0)
+                                    ),
+                                    varDefault
+                                )
+                            )
+                        )
+                    )
+                VerticalAlign: =VerticalAlign.Top
+                Width: |-
+                    =If(
+                        gblAppMobileOnDesktop && btnContinueInspection.Visible,
+                        Parent.Width - btnInspect.Width*2 - 28*2,
+                        Parent.Width
+                    )// Parent.Width //640
+                Y: =lblWelcomeHeader.Y+lblWelcomeHeader.Height+10
+                ZIndex: =4
+
+            btnInspect As button:
+                BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+                BorderThickness: =gblAppStyles.ButtonPrimary.BorderThickness
+                Color: =gblAppStyles.ButtonPrimary.Color
+                DisabledBorderColor: =gblAppStyles.ButtonPrimary.DisabledBorderColor
+                DisabledColor: =gblAppStyles.ButtonPrimary.DisabledColor
+                DisabledFill: =gblAppStyles.ButtonPrimary.DisabledFill
+                Fill: =gblAppStyles.ButtonPrimary.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonPrimary.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonPrimary.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =70
+                HoverBorderColor: =gblAppStyles.ButtonPrimary.HoverBorderColor
+                HoverColor: =gblAppStyles.ButtonPrimary.HoverColor
+                HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+                OnSelect: |-
+                    =Navigate(
+                        'Items Screen',
+                        ScreenTransition.Fade
+                    );
+                    //code to retain state when switchin Teams tabs
+                    Clear(colLastInspection);
+                    Clear(colLastInspectionSteps);
+                    Clear(colStepDetails);
+                    Clear(colStepOutcomes);
+                    Clear(colImages);
+                    Clear(colSelectedLocation);
+                    SaveData(
+                        colLastInspection,
+                        "colLastInspection"
+                    );
+                    SaveData(
+                        colLastInspectionSteps,
+                        "colLastInspectionSteps"
+                    );
+                    SaveData(
+                        colStepDetails,
+                        "colStepDetails"
+                    );
+                    SaveData(
+                        colStepOutcomes,
+                        "colStepOutcomes"
+                    );
+                    SaveData(
+                        colImages,
+                        "colImages"
+                    );
+                    SaveData(
+                        colSelectedLocation,
+                        "colSelectedLocation"
+                    );
+                PressedBorderColor: =gblAppStyles.ButtonPrimary.PressedBorderColor
+                PressedColor: =gblAppStyles.ButtonPrimary.PressedColor
+                PressedFill: =gblAppStyles.ButtonPrimary.PressedFill
+                RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.ButtonPrimary.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+                Size: =gblAppStyles.ButtonPrimary.Size
+                Text: |-
+                    =Switch(
+                        gblWorkType,
+                        "Inspection",
+                        With(
+                            {
+                                varDefault: "Perform an inspection",
+                                varOOBTextId: "_translateCommon_PeformInspection"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        ),
+                        "Audit",
+                        With(
+                            {
+                                varDefault: "Perform an audit",
+                                varOOBTextId: "_translateCommon_PeformAudit"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        ),
+                        "Walk",
+                        With(
+                            {
+                                varDefault: "Perform a walk",
+                                varOOBTextId: "_translateCommon_PeformWalk"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        ),
+                        With(
+                            {
+                                varDefault: "Perform an inspection",
+                                varOOBTextId: "_translateCommon_PeformInspection"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    )
+                Tooltip: =Self.Text
+                Width: |-
+                    =Switch(
+                        'Welcome Screen'.Size,
+                        ScreenSize.ExtraLarge,
+                        Max(
+                            Parent.Width * .2,
+                            400
+                        ),
+                        ScreenSize.Large,
+                        Max(
+                            Parent.Width * .2,
+                            350
+                        ),
+                        ScreenSize.Medium,
+                        Max(
+                            Parent.Width * .2,
+                            300
+                        ),
+                        ScreenSize.Small,
+                        Parent.Width - (2*28),
+                        Parent.Width - (2*28)
+                    )
+                X: |-
+                    =Switch(
+                        'Welcome Screen'.Size,
+                        ScreenSize.ExtraLarge,
+                        Parent.Width - Self.Width - 28,
+                        ScreenSize.Large,
+                        Parent.Width - Self.Width - 28,
+                        ScreenSize.Medium,
+                        Parent.Width - Self.Width - 28,
+                        ScreenSize.Small,
+                        28,
+                        28
+                    )
+                Y: |-
+                    =//If(btnContinueInspection.Visible, btnContinueInspection.Y+btnContinueInspection.Height+20,  lblWelcomeBody.Y+lblWelcomeBody.Height+40)
+                    Switch(
+                        'Welcome Screen'.Size,
+                        ScreenSize.ExtraLarge,
+                        35, //lblWelcomeBody.Y,
+                        ScreenSize.Large,
+                        35, //lblWelcomeBody.Y,
+                        ScreenSize.Medium,
+                        35, //lblWelcomeBody.Y,
+                        ScreenSize.Small,
+                        If(btnContinueInspection.Visible, btnContinueInspection.Y+btnContinueInspection.Height+20,  lblWelcomeBody.Y+lblWelcomeBody.Height+40),
+                        If(btnContinueInspection.Visible, btnContinueInspection.Y+btnContinueInspection.Height+20,  lblWelcomeBody.Y+lblWelcomeBody.Height+40)
+                    )
+                ZIndex: =5
+
+            btnContinueInspection As button:
+                BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+                BorderThickness: =gblAppStyles.ButtonPrimary.BorderThickness
+                Color: =gblAppStyles.ButtonPrimary.Color
+                DisabledBorderColor: =gblAppStyles.ButtonPrimary.DisabledBorderColor
+                DisabledColor: =gblAppStyles.ButtonPrimary.DisabledColor
+                DisabledFill: =gblAppStyles.ButtonPrimary.DisabledFill
+                Fill: =gblAppStyles.ButtonPrimary.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonPrimary.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonPrimary.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =70
+                HoverBorderColor: =gblAppStyles.ButtonPrimary.HoverBorderColor
+                HoverColor: =gblAppStyles.ButtonPrimary.HoverColor
+                HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+                OnSelect: |-
+                    =Set(
+                        gblBackNav,
+                        true
+                    );
+                    Navigate(
+                        'Checklist Steps Screen',
+                        ScreenTransition.Fade
+                    )
+                PressedBorderColor: =gblAppStyles.ButtonPrimary.PressedBorderColor
+                PressedColor: =gblAppStyles.ButtonPrimary.PressedColor
+                PressedFill: =gblAppStyles.ButtonPrimary.PressedFill
+                RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.ButtonPrimary.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+                Size: =gblAppStyles.ButtonPrimary.Size
+                Text: |
+                    =//"Continue last " &  Lower(gblWorkType)
+                    With({varDefault: "Continue last inspection",varOOBTextId: "_translateCommon_ContinueLast" & gblWorkType},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                Tooltip: =Self.Text
+                Visible: =CountRows(colLastInspection)>0  && !(Param("hostClientType") in ["web"])
+                Width: |-
+                    =Switch(
+                        'Welcome Screen'.Size,
+                        ScreenSize.ExtraLarge,
+                        Max(
+                            Parent.Width * .2,
+                            400
+                        ),
+                        ScreenSize.Large,
+                        Max(
+                            Parent.Width * .2,
+                            350
+                        ),
+                        ScreenSize.Medium,
+                        Max(
+                            Parent.Width * .2,
+                            300
+                        ),
+                        ScreenSize.Small,
+                        Parent.Width - (2*28),
+                        Parent.Width - (2*28)
+                    )
+                X: |-
+                    =Switch(
+                        'Welcome Screen'.Size,
+                        ScreenSize.ExtraLarge,
+                        Parent.Width - Self.Width*2 - 28*2,
+                        ScreenSize.Large,
+                        Parent.Width - Self.Width*2 - 28*2,
+                        ScreenSize.Medium,
+                        Parent.Width - Self.Width*2 - 28*2,
+                        ScreenSize.Small,
+                        28,
+                        28
+                    )
+                Y: |-
+                    =//lblWelcomeBody.Y+lblWelcomeBody.Height+40
+                    Switch(
+                        'Welcome Screen'.Size,
+                        ScreenSize.ExtraLarge,
+                        35, //lblWelcomeBody.Y,
+                        ScreenSize.Large,
+                        35, //lblWelcomeBody.Y,
+                        ScreenSize.Medium,
+                        35, //lblWelcomeBody.Y,
+                        ScreenSize.Small,
+                        lblWelcomeBody.Y + lblWelcomeBody.Height + 40,
+                        lblWelcomeBody.Y + lblWelcomeBody.Height + 40
+                    )
+                ZIndex: =14
+
+            conTasksStats As groupContainer:
+                Height: |-
+                    =If(
+                        gblRecordSettings.'Is Enabled Tasks' = 'Is Enabled Tasks (Area Inspection Settings)'.No || IsBlank(gblRecordSettings),
+                        0,
+                        If(
+                            gblAppMobileOnDesktop,
+                            440,
+                            360
+                        )
+                    )
+                Visible: =gblRecordSettings.'Is Enabled Tasks' = 'Is Enabled Tasks (Area Inspection Settings)'.Yes
+                Width: |+
+                    =Switch(
+                        'Welcome Screen'.Size,
+                        ScreenSize.ExtraLarge,
+                        Parent.Width * 0.5,
+                        ScreenSize.Large,
+                        Parent.Width * 0.5,
+                        ScreenSize.Medium,
+                        Parent.Width,
+                        ScreenSize.Small,
+                        Parent.Width,
+                        Parent.Width
+                    )
+                    
+                Y: |-
+                    =If(
+                        gblAppMobileOnDesktop,
+                        btnInspect.Y + btnInspect.Height + 20,
+                        btnInspect.Y + btnInspect.Height
+                    )
+                ZIndex: =16
+
+                lblTasksHeader As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Bold
+                    Height: =47
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PaddingLeft: =0
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.ExtraLarge
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: gblWorkType & " tasks",
+                                varOOBTextId: "_translateVariable_" & gblWorkType & "Tasks"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                        //gblWorkType & " tasks" //"Inspection"
+                    Visible: =gblRecordSettings.'Is Enabled Tasks' = 'Is Enabled Tasks (Area Inspection Settings)'.Yes
+                    Width: =589
+                    X: =28
+                    Y: =31
+                    ZIndex: =1
+
+                btnTasksBody As button:
+                    Align: =Align.Left
+                    BorderThickness: =0
+                    Color: =RGBA(0, 0, 0, 0)
+                    DisabledColor: |-
+                        =If(
+                            gblThemeHiCo,
+                            gblAppStyles.ButtonPrimary.BorderColor,
+                            Transparent
+                        )
+                    DisabledFill: =gblAppStyles.ButtonBackground.DisabledFill
+                    DisplayMode: =DisplayMode.Disabled
+                    Height: =If(gblAppMobileOnDesktop,350,280)
+                    RadiusBottomLeft: =gblAppStyles.ButtonBackground.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.ButtonBackground.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.ButtonBackground.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.ButtonBackground.RadiusTopRight
+                    Text: ="Background button for inspection tasks"
+                    VerticalAlign: =VerticalAlign.Top
+                    Visible: =gblRecordSettings.'Is Enabled Tasks' = 'Is Enabled Tasks (Area Inspection Settings)'.Yes
+                    Width: =Parent.Width - Self.X - 28
+                    X: =28
+                    Y: =85
+                    ZIndex: =2
+
+                btnOpenTasks As button:
+                    BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+                    BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+                    Color: =gblAppStyles.ButtonTransparent.Color
+                    DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+                    DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+                    Fill: =gblAppStyles.ButtonSecondary.Fill
+                    FocusedBorderColor: =gblAppStyles.ButtonPrimary.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness + 1
+                    Font: =Font.'Segoe UI'
+                    Height: =55
+                    HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+                    HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+                    HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+                    OnSelect: |-
+                        =If(
+                            IsBlank(gblPlannerPlanId),
+                            Navigate(
+                                'Missing Settings Screen 2',
+                                ScreenTransition.Fade,
+                                {locNoPlannerAccess: false}
+                            ),
+                            !gblUserCanAccessPlanner,
+                            Navigate(
+                                'Missing Settings Screen 2',
+                                ScreenTransition.Fade,
+                                {locNoPlannerAccess: true}
+                            ),
+                            Launch(
+                                "https://tasks.office.com/" & gblParamTenantId & "/" & localeID & "/Home/Planner/#/plantaskboard?groupId=" & gblPlannerGroupId & "&planId=" & gblPlannerPlanId,
+                                {},
+                                LaunchTarget.New
+                            )
+                        )
+                    PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+                    PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+                    PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.ButtonSecondary.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.ButtonSecondary.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.ButtonSecondary.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.ButtonSecondary.RadiusTopRight
+                    Size: =gblAppStyles.ButtonSecondary.Size
+                    Text: |-
+                        =With({varDefault: "Open Tasks",varOOBTextId: "btnOpenTasks__loc_Text"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Tooltip: =Self.Text
+                    Visible: =gblRecordSettings.'Is Enabled Tasks' = 'Is Enabled Tasks (Area Inspection Settings)'.Yes
+                    Width: =Parent.Width - 65*2
+                    X: =65 //(Parent.Width - Self.Width)/2
+                    Y: =btnTasksBody.Y+btnTasksBody.Height-Self.Height-25
+                    ZIndex: =11
+
+                "galMyTasks As gallery.'BrowseLayout_Horizontal_TwoTextOneImageVariant_ver4.0'":
+                    AccessibleLabel: ="Inpsection task stats"
+                    DisplayMode: =DisplayMode.View
+                    Height: =btnOpenTasks.Y - Self.Y
+                    Items: |-
+                        =Table(
+                            {
+                                Image: With(
+                                    {
+                                        varImageRecord: LookUp(
+                                            staticIcons,
+                                            staticIconName = "Important"
+                                        ),
+                                        varColor: If(
+                                            Self.DisplayMode = DisplayMode.Disabled,
+                                            gblAppStyles.Icons.DisabledColor,
+                                            gblAppStyles.Icons.Color
+                                        )
+                                    },
+                                    With(
+                                        {
+                                            varImageData: Concatenate(
+                                                "data:image/svg+xml;utf8, ",
+                                                EncodeUrl(
+                                                    Concatenate(
+                                                        "<svg viewBox='",
+                                                        varImageRecord.staticIconViewbox,
+                                                        "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                        varImageRecord.staticIconPath,
+                                                        "' fill='#",
+                                                        varColor,
+                                                        "'/></svg>"
+                                                    )
+                                                )
+                                            )
+                                        },
+                                        varImageData
+                                    )
+                                ),
+                                Count: CountRows(colOverdueTasks),
+                                Label: With({varDefault: "Overdue",varOOBTextId: "lblOverdueDescription__loc_Text"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault))),
+                                AccLabel: With({varDefault: "Image For Important Badge",varOOBTextId: "imgImpBadge__loc_Text"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault))),
+                                AddText: "Overdue tasks"
+                        
+                            },
+                            {
+                                Image: With(
+                                    {
+                                        varImageRecord: LookUp(
+                                            staticIcons,
+                                            staticIconName = "Person"
+                                        ),
+                                        varColor: If(
+                                            Self.DisplayMode = DisplayMode.Disabled,
+                                            gblAppStyles.Icons.DisabledColor,
+                                            gblAppStyles.Icons.Color
+                                        )
+                                    },
+                                    With(
+                                        {
+                                            varImageData: Concatenate(
+                                                "data:image/svg+xml;utf8, ",
+                                                EncodeUrl(
+                                                    Concatenate(
+                                                        "<svg viewBox='",
+                                                        varImageRecord.staticIconViewbox,
+                                                        "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                        varImageRecord.staticIconPath,
+                                                        "' fill='#",
+                                                        varColor,
+                                                        "'/></svg>"
+                                                    )
+                                                )
+                                            )
+                                        },
+                                        varImageData
+                                    )
+                                ),
+                                Count: CountRows(colTasksForMe),
+                                Label: With({varDefault: "To me",varOOBTextId: "lblToMeTitle__loc_Text"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault))),
+                                AccLabel: With({varDefault: "Image For To Me Badge",varOOBTextId: "imgToMeBadge__loc_Text"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault))),
+                                AddText: "Tasks assigned to me"
+                            },
+                            {
+                                Image: With(
+                                    {
+                                        varImageRecord: LookUp(
+                                            staticIcons,
+                                            staticIconName = "Tasks"
+                                        ),
+                                        varColor: If(
+                                            Self.DisplayMode = DisplayMode.Disabled,
+                                            gblAppStyles.Icons.DisabledColor,
+                                            gblAppStyles.Icons.Color
+                                        )
+                                    },
+                                    With(
+                                        {
+                                            varImageData: Concatenate(
+                                                "data:image/svg+xml;utf8, ",
+                                                EncodeUrl(
+                                                    Concatenate(
+                                                        "<svg viewBox='",
+                                                        varImageRecord.staticIconViewbox,
+                                                        "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                        varImageRecord.staticIconPath,
+                                                        "' fill='#",
+                                                        varColor,
+                                                        "'/></svg>"
+                                                    )
+                                                )
+                                            )
+                                        },
+                                        varImageData
+                                    )
+                                ),
+                                Count: CountRows(colTasksForAll),
+                                Label: With({varDefault: "Active",varOOBTextId: "lblActive__loc_Text"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault))),
+                                AccLabel: With({varDefault: "Image For Active Badge",varOOBTextId: "imgActiveBadge__loc_Text"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault))),
+                                AddText: "Active tasks"
+                            }
+                        )
+                    TabIndex: |-
+                        =If(
+                            true,
+                            -1,
+                            0
+                        )
+                    TemplatePadding: =0
+                    TemplateSize: =Self.Width / 3
+                    Visible: =gblRecordSettings.'Is Enabled Tasks' = 'Is Enabled Tasks (Area Inspection Settings)'.Yes
+                    Width: =Parent.Width - Self.X - 20
+                    X: =40
+                    Y: =btnTasksBody.Y
+                    ZIndex: =13
+
+                    imgCategory As image:
+                        DisplayMode: =DisplayMode.View
+                        Height: =Self.Width
+                        Image: =ThisItem.Image
+                        OnSelect: =Select(Parent)
+                        Width: =If(gblAppMobileOnDesktop,48,40)
+                        X: =(Parent.TemplateWidth / 2) - (Self.Width / 2)
+                        Y: =40
+                        ZIndex: =1
+
+                    lblCount As label:
+                        Align: =Align.Center
+                        Color: =gblAppStyles.Label.Color
+                        DisplayMode: =DisplayMode.View
+                        Font: =Font.'Segoe UI'
+                        Height: =Self.Size * 1.8
+                        OnSelect: =Select(Parent)
+                        PaddingBottom: =0
+                        PaddingLeft: =0
+                        PaddingRight: =0
+                        PaddingTop: =0
+                        Size: =If(gblAppMobileOnDesktop,gblAppStyles.Label.Size.ExtraLarge,gblAppStyles.Label.Size.Large)
+                        Text: =ThisItem.Count & Char(10) & ThisItem.AddText
+                        VerticalAlign: =VerticalAlign.Top
+                        Width: =Parent.TemplateWidth //- 64
+                        X: =0 //32
+                        Y: =imgCategory.Y + imgCategory.Height + 16
+                        ZIndex: =2
+
+                    lblCategory As label:
+                        Align: =Align.Center
+                        Color: =gblAppStyles.Label.Color
+                        DisplayMode: =DisplayMode.View
+                        Font: =Font.'Segoe UI'
+                        Height: =50
+                        OnSelect: =Select(Parent)
+                        PaddingBottom: =0
+                        PaddingLeft: =0
+                        PaddingRight: =0
+                        PaddingTop: =0
+                        Size: =gblAppStyles.Label.Size.Medium
+                        Text: =ThisItem.Label
+                        Width: =lblCount.Width
+                        X: =lblCount.X
+                        Y: =lblCount.Y+lblCount.Height
+                        ZIndex: =3
+
+            conWeekGlance As groupContainer:
+                Height: =450
+                Width: |-
+                    =Switch(
+                        'Welcome Screen'.Size,
+                        ScreenSize.ExtraLarge,
+                        Parent.Width * 0.5,
+                        ScreenSize.Large,
+                        Parent.Width * 0.5,
+                        ScreenSize.Medium,
+                        Parent.Width,
+                        ScreenSize.Small,
+                        Parent.Width,
+                        Parent.Width
+                    )
+                X: |-
+                    =If(
+                        gblRecordSettings.'Is Enabled Tasks' = 'Is Enabled Tasks (Area Inspection Settings)'.No || IsBlank(gblRecordSettings),
+                        0,
+                        Switch(
+                            'Welcome Screen'.Size,
+                            ScreenSize.ExtraLarge,
+                            conTasksStats.X + conTasksStats.Width,
+                            ScreenSize.Large,
+                            conTasksStats.X + conTasksStats.Width,
+                            ScreenSize.Medium,
+                            0,
+                            ScreenSize.Small,
+                            0,
+                            0
+                        )
+                    )
+                Y: |-
+                    =If(
+                        gblRecordSettings.'Is Enabled Tasks' = 'Is Enabled Tasks (Area Inspection Settings)'.No || IsBlank(gblRecordSettings),
+                        Switch(
+                            'Welcome Screen'.Size,
+                            ScreenSize.ExtraLarge,
+                            lblWelcomeBody.Y + lblWelcomeBody.Height + 20,
+                            ScreenSize.Large,
+                            lblWelcomeBody.Y + lblWelcomeBody.Height + 20,
+                            ScreenSize.Medium,
+                            btnInspect.Y + btnInspect.Height,
+                            ScreenSize.Small,
+                            btnInspect.Y + btnInspect.Height,
+                            btnInspect.Y + btnInspect.Height
+                        ),
+                        Switch(
+                            'Welcome Screen'.Size,
+                            ScreenSize.ExtraLarge,
+                            conTasksStats.Y,
+                            ScreenSize.Large,
+                            conTasksStats.Y,
+                            ScreenSize.Medium,
+                            conTasksStats.Y + conTasksStats.Height,
+                            ScreenSize.Small,
+                            conTasksStats.Y + conTasksStats.Height,
+                            conTasksStats.Y + conTasksStats.Height
+                        )
+                    )
+                ZIndex: =17
+
+                lblWeekStatsHeader As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Bold
+                    Height: =47
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PaddingLeft: =0
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.ExtraLarge
+                    Text: |-
+                        =With({varDefault: "This week at a glance",varOOBTextId: "lblWeekStatsHeader__loc_Text"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Width: =589
+                    X: =28
+                    Y: =30
+                    ZIndex: =1
+
+                btnWeekStatsBody As button:
+                    Align: =Align.Left
+                    BorderThickness: =If(gblThemeHiCo, 1, 0)
+                    Color: =RGBA(0, 0, 0, 0)
+                    DisabledBorderColor: =If(gblThemeHiCo, gblAppStyles.ButtonPrimary.BorderColor, Transparent)
+                    DisabledColor: =RGBA(0, 0, 0, 0)
+                    DisabledFill: =gblAppStyles.ButtonBackground.DisabledFill
+                    DisplayMode: =DisplayMode.Disabled
+                    Height: =350
+                    HoverColor: =RGBA(0, 0, 0, 0)
+                    RadiusBottomLeft: =gblAppStyles.ButtonBackground.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.ButtonBackground.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.ButtonBackground.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.ButtonBackground.RadiusTopRight
+                    Text: ="Background button for weekly statistics body"
+                    VerticalAlign: =VerticalAlign.Top
+                    Width: =Parent.Width - Self.X - 28
+                    X: =28
+                    Y: =85
+                    ZIndex: =2
+
+                "galWeeklyStats As gallery.'BrowseLayout_Vertical_TwoTextOneImageVariant_ver4.0'":
+                    AccessibleLabel: ="Weekly stats"
+                    Height: =btnWeekStatsBody.Height
+                    Items: |-
+                        =Table(
+                            {
+                                Image: With(
+                                    {
+                                        varImageRecord: LookUp(
+                                            staticIcons,
+                                            staticIconName = "Badge"
+                                        ),
+                                        varColor: If(
+                                            Self.DisplayMode = DisplayMode.Disabled,
+                                            gblAppStyles.Icons.DisabledColor,
+                                            gblAppStyles.Icons.Color
+                                        )
+                                    },
+                                    With(
+                                        {
+                                            varImageData: Concatenate(
+                                                "data:image/svg+xml;utf8, ",
+                                                EncodeUrl(
+                                                    Concatenate(
+                                                        "<svg viewBox='",
+                                                        varImageRecord.staticIconViewbox,
+                                                        "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                        varImageRecord.staticIconPath,
+                                                        "' fill='#",
+                                                        varColor,
+                                                        "'/></svg>"
+                                                    )
+                                                )
+                                            )
+                                        },
+                                        varImageData
+                                    )
+                                ),
+                                Label1: //"You contributed <b><font>" & gblCurrentUserInspectionCount & "</font></b> " & Lower(gblWorkType) & " reports to teams total of <b><font>" & gblTotalInspectionCount & ".",
+                                With({varDefault: "You contributed <b><font>" & gblCurrentUserInspectionCount & "</font></b> " & Lower(gblWorkType) & " reports to teams total of <b><font>" & gblTotalInspectionCount & ".",varOOBTextId:"_translateCommon_" & gblWorkType & "CountStats",varParam0:"<b><font>" & gblCurrentUserInspectionCount & "</font></b>",varParam1:"<b><font>" & gblTotalInspectionCount & "</font></b>",varParam2:Blank()},With({varLocalizedText:LookUp(colLocalization,OOBTextID=varOOBTextId,LocalizedText)},If(IsBlankOrError(varParam0),Coalesce(varLocalizedText,varDefault),Coalesce(Substitute(Substitute(Substitute(varLocalizedText,"{0}",Text(varParam0)),"{1}",Text(varParam1)),"{2}",Text(varParam2)),varDefault)))),
+                                Label2: "",
+                                AccLabel: With({varDefault: "Image For Badge",varOOBTextId: "imgBadge__loc_Text"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                            },
+                            {
+                                Image: With(
+                                    {
+                                        varImageRecord: LookUp(
+                                            staticIcons,
+                                            staticIconName = "Clock"
+                                        ),
+                                        varColor: If(
+                                            Self.DisplayMode = DisplayMode.Disabled,
+                                            gblAppStyles.Icons.DisabledColor,
+                                            gblAppStyles.Icons.Color
+                                        )
+                                    },
+                                    With(
+                                        {
+                                            varImageData: Concatenate(
+                                                "data:image/svg+xml;utf8, ",
+                                                EncodeUrl(
+                                                    Concatenate(
+                                                        "<svg viewBox='",
+                                                        varImageRecord.staticIconViewbox,
+                                                        "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                        varImageRecord.staticIconPath,
+                                                        "' fill='#",
+                                                        varColor,
+                                                        "'/></svg>"
+                                                    )
+                                                )
+                                            )
+                                        },
+                                        varImageData
+                                    )
+                                ),
+                                Label1: With({varDefault: "Your avg " & Lower(gblWorkType) & " time",varOOBTextId: "_translateVariable_Avg" & gblWorkType & "Time"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault))), //"Your avg " & Lower(gblWorkType) & " time",
+                                Label2: //"<b>" & gblUserAvgTime & " mins" & "</b>" & " vs teams avg of " & gblTeamAvgTime & " mins"
+                                With({varDefault: "<b>" & gblUserAvgTime & " mins" & "</b>" & " vs teams avg of " & gblTeamAvgTime & " mins",varOOBTextId:"htmInspectionTime__loc_HTMLText",varParam0:"<b>" & gblUserAvgTime & "</b>",varParam1:gblTeamAvgTime,varParam2:Blank()},With({varLocalizedText:LookUp(colLocalization,OOBTextID=varOOBTextId,LocalizedText)},If(IsBlankOrError(varParam0),Coalesce(varLocalizedText,varDefault),Coalesce(Substitute(Substitute(Substitute(varLocalizedText,"{0}",Text(varParam0)),"{1}",Text(varParam1)),"{2}",Text(varParam2)),varDefault)))),
+                                AccLabel: With({varDefault: "Image For Time",varOOBTextId: "imgTime__loc_Text"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                            },
+                            {
+                                Image: With(
+                                    {
+                                        varImageRecord: LookUp(
+                                            staticIcons,
+                                            staticIconName = "Issues noted"
+                                        ),
+                                        varColor: If(
+                                            Self.DisplayMode = DisplayMode.Disabled,
+                                            gblAppStyles.Icons.DisabledColor,
+                                            gblAppStyles.Icons.Color
+                                        )
+                                    },
+                                    With(
+                                        {
+                                            varImageData: Concatenate(
+                                                "data:image/svg+xml;utf8, ",
+                                                EncodeUrl(
+                                                    Concatenate(
+                                                        "<svg viewBox='",
+                                                        varImageRecord.staticIconViewbox,
+                                                        "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                        varImageRecord.staticIconPath,
+                                                        "' fill='#",
+                                                        varColor,
+                                                        "'/></svg>"
+                                                    )
+                                                )
+                                            )
+                                        },
+                                        varImageData
+                                    )
+                                ),
+                                Label1: With({varDefault: "Issues reported by you",varOOBTextId: "lblIssues__loc_Text"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault))), //"Issues reported by you",
+                                Label2: With({varDefault: "<b>" & gblCurrentUserIssueCount & "</b>" & " vs teams total of " & gblTotalIssueCount,varOOBTextId:"htmIssues__loc_HTMLText",varParam0:"<b>" & gblCurrentUserIssueCount & "</b>",varParam1:gblTotalIssueCount,varParam2:Blank()},With({varLocalizedText:LookUp(colLocalization,OOBTextID=varOOBTextId,LocalizedText)},If(IsBlankOrError(varParam0),Coalesce(varLocalizedText,varDefault),Coalesce(Substitute(Substitute(Substitute(varLocalizedText,"{0}",Text(varParam0)),"{1}",Text(varParam1)),"{2}",Text(varParam2)),varDefault)))) ,
+                                AccLabel: With({varDefault: "Image For Issues",varOOBTextId: "imgIssues__loc_Text"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                                //"<b>" & gblCurrentUserIssueCount & "</b>" & " vs teams total of " & gblTotalIssueCount
+                            }
+                        )
+                    Layout: =Layout.Vertical
+                    TabIndex: |-
+                        =If(
+                            true,
+                            -1,
+                            0
+                        )
+                    TemplatePadding: =0
+                    TemplateSize: =110
+                    Width: =Parent.Width - Self.X - 28
+                    X: =28
+                    Y: =85
+                    ZIndex: =11
+
+                    imgStat As image:
+                        DisplayMode: =DisplayMode.View
+                        Height: =Self.Width
+                        Image: =ThisItem.Image
+                        OnSelect: =Select(Parent)
+                        Tooltip: =ThisItem.AccLabel
+                        Width: =If(gblAppMobileOnDesktop,48,40)
+                        X: =20
+                        Y: =If(gblAppMobileOnDesktop , (Parent.TemplateHeight / 2) - (Self.Height / 2)+10, (Parent.TemplateHeight / 2) - (Self.Height / 2)+10)
+                        ZIndex: =1
+
+                    htmStat As htmlViewer:
+                        Color: =gblAppStyles.HTML.Color
+                        DisplayMode: =DisplayMode.View
+                        Font: =Font.'Segoe UI'
+                        Height: =90
+                        HtmlText: |-
+                            =ThisItem.Label1 & If(
+                                !IsBlank(ThisItem.Label2),
+                                If(
+                                    !gblAppMobileOnDesktop,
+                                    "<br>",
+                                    " "
+                                ) & ThisItem.Label2 & If(
+                                    gblAppMobileOnDesktop,
+                                    "."
+                                )
+                            ) 
+                        OnSelect: =Select(Parent)
+                        PaddingTop: |-
+                            =If(
+                                gblAppMobileOnDesktop,
+                                If(
+                                    galWeeklyStats.Width > 742,
+                                    25, If(ThisItem.Label1 = "Issues reported by you", 25,  5)
+                                ),
+                                5
+                            )
+                        Size: =gblAppStyles.HTML.Size.Large
+                        Width: =Parent.TemplateWidth - Self.X
+                        X: =70
+                        Y: =20
+                        ZIndex: =6
+

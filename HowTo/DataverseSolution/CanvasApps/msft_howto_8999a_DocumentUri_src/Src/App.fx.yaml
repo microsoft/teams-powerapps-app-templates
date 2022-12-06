@@ -1,0 +1,47 @@
+App As appinfo:
+    BackEnabled: =true
+    OnStart: |-
+        =//user language
+        Set(
+            gblUserLanguage,
+            Switch(
+                Left(
+                    Language(),
+                    2
+                ),
+                "de",
+                "de-DE",
+                "en",
+                "en-US",
+                "es",
+                "es-ES",
+                "fr",
+                "fr-FR",
+                "it",
+                "it-IT",
+                "ja",
+                "ja-JP",
+                "nl",
+                "nl-NL",
+                "pt",
+                "pt-BR",
+                "en-US"//default
+            )
+        );
+        //build localization collection, with user's language
+        ClearCollect(
+            colLocalization,
+            Filter(
+                staticLocalizations,
+                LanguageTag = gblUserLanguage
+            )
+        );
+        // Stock Images
+        ClearCollect(
+            colStockImages,
+            {appStockImage: Blank()},
+            {appStockImage: SurfaceDuo},
+            {appStockImage: SurfaceGo},
+            {appStockImage: Headphones}
+        )
+

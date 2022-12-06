@@ -1,0 +1,238 @@
+"'Hidden Admin Screen' As screen":
+    Fill: =gblAppStyles.Background.Fill
+    OnVisible: =
+
+    DataTable1 As dataTable.datatable:
+        BorderStyle: =BorderStyle.Solid
+        DisplayMode: =DisplayMode.Edit
+        Fill: =RGBA(0, 0, 0, 0)
+        HeadingSize: =21
+        Height: =230
+        Items: =Filter('Issue Reports', 'Issue Reports (Views)'.'My Issue Reports')
+        Size: =21
+        Width: =640
+        X: =0
+        Y: =904
+        ZIndex: =2
+
+        Name_Column1 As dataTableColumn.textualColumn:
+            AutoWidth: =true
+            DisplayMode: =DisplayMode.Edit
+            FieldDisplayName: ="Name"
+            FieldName: ="msft_name"
+            FieldVariantName: ="textualColumn"
+            Height: =Parent.Height
+            LayoutHeight: =Parent.Height
+            Order: =1
+            Text: =ThisItem.Name
+            Width: =100
+            X: =0
+            Y: =0
+            ZIndex: =3
+
+        "'Created On_Column1' As dataTableColumn.dateTimeColumn":
+            DisplayMode: =DisplayMode.Edit
+            FieldDisplayName: ="Created On"
+            FieldName: ="createdon"
+            FieldVariantName: ="dateTimeColumn"
+            Height: =Parent.Height
+            LayoutHeight: =Parent.Height
+            Order: =2
+            Text: =Text(ThisItem.'Created On',DateTimeFormat.LongDateTime)
+            Width: =100
+            X: =0
+            Y: =0
+            ZIndex: =4
+
+    DataTable2 As dataTable.datatable:
+        BorderStyle: =BorderStyle.Solid
+        DisplayMode: =DisplayMode.Edit
+        Fill: =RGBA(0, 0, 0, 0)
+        HeadingSize: =21
+        Height: =260
+        Items: ='Issue Report Settings'
+        Size: =21
+        Width: =640
+        X: =0
+        Y: =612
+        ZIndex: =4
+
+        Name_Column2 As dataTableColumn.textualColumn:
+            DisplayMode: =DisplayMode.Edit
+            FieldDisplayName: ="Name"
+            FieldName: ="msft_name"
+            FieldVariantName: ="textualColumn"
+            Height: =Parent.Height
+            LayoutHeight: =Parent.Height
+            Order: =1
+            Text: =ThisItem.Name
+            Width: =100
+            X: =0
+            Y: =0
+            ZIndex: =5
+
+        "'Created On_Column2' As dataTableColumn.dateTimeColumn":
+            DisplayMode: =DisplayMode.Edit
+            FieldDisplayName: ="Created On"
+            FieldName: ="createdon"
+            FieldVariantName: ="dateTimeColumn"
+            Height: =Parent.Height
+            LayoutHeight: =Parent.Height
+            Order: =2
+            Text: =Text(ThisItem.'Created On',DateTimeFormat.LongDateTime)
+            Width: =100
+            X: =0
+            Y: =0
+            ZIndex: =6
+
+        "'Parameter (Team Id)_Column1' As dataTableColumn.textualColumn":
+            DisplayMode: =DisplayMode.Edit
+            FieldDisplayName: ="Parameter (Team Id)"
+            FieldName: ="msft_parameterteamid"
+            FieldVariantName: ="textualColumn"
+            Height: =Parent.Height
+            LayoutHeight: =Parent.Height
+            Order: =3
+            Text: =ThisItem.'Parameter (Team Id)'
+            Width: =100
+            X: =0
+            Y: =0
+            ZIndex: =7
+
+        "'Parameter (SharePoint Location)_Column1' As dataTableColumn.textualColumn":
+            DisplayMode: =DisplayMode.Edit
+            FieldDisplayName: ="Parameter (SharePoint Location)"
+            FieldName: ="msft_parametersharepointlocation"
+            FieldVariantName: ="textualColumn"
+            Height: =Parent.Height
+            LayoutHeight: =Parent.Height
+            Order: =4
+            Text: =ThisItem.'Parameter (SharePoint Location)'
+            Width: =100
+            X: =0
+            Y: =0
+            ZIndex: =8
+
+        "'Parameter (Planner Id)_Column1' As dataTableColumn.textualColumn":
+            DisplayMode: =DisplayMode.Edit
+            FieldDisplayName: ="Parameter (Planner Id)"
+            FieldName: ="msft_parameterplannerid"
+            FieldVariantName: ="textualColumn"
+            Height: =Parent.Height
+            LayoutHeight: =Parent.Height
+            Order: =5
+            Text: =ThisItem.'Parameter (Planner Id)'
+            Width: =100
+            X: =0
+            Y: =0
+            ZIndex: =9
+
+        "'Parameter (Channel Id)_Column1' As dataTableColumn.textualColumn":
+            DisplayMode: =DisplayMode.Edit
+            FieldDisplayName: ="Parameter (Channel Id)"
+            FieldName: ="msft_parameterchannelid"
+            FieldVariantName: ="textualColumn"
+            Height: =Parent.Height
+            LayoutHeight: =Parent.Height
+            Order: =6
+            Text: =ThisItem.'Parameter (Channel Id)'
+            Width: =100
+            X: =0
+            Y: =0
+            ZIndex: =10
+
+    tglAdmin_Context As toggleSwitch:
+        AccessibleLabel: ="Toggle that indicates the app is in the correct context"
+        BorderColor: =gblAppStyles.Toggle.BorderColor
+        BorderThickness: =gblAppStyles.Toggle.BorderThickness
+        Color: =gblAppStyles.Toggle.Color
+        DisabledBorderColor: =gblAppStyles.Toggle.DisabledBorderColor
+        DisabledColor: =gblAppStyles.Toggle.DisabledColor
+        FalseFill: =gblAppStyles.Toggle.FalseFill
+        FalseHoverFill: =gblAppStyles.Toggle.FalseHoverFill
+        FalseText: ="Context Off"
+        FocusedBorderColor: =gblAppStyles.Toggle.FocusedBorderColor
+        FocusedBorderThickness: =gblAppStyles.Toggle.FocusedBorderThickness
+        Font: =Font.'Segoe UI'
+        HandleFill: =If(Self.Value,gblAppStyles.Toggle.HandleFillTrue,gblAppStyles.Toggle.HandleFillFalse)
+        Height: =48
+        HoverBorderColor: =gblAppStyles.Toggle.HoverBorderColor
+        PressedBorderColor: =gblAppStyles.Toggle.PressedBorderColor
+        Size: =gblAppStyles.Toggle.Size
+        TrueFill: =gblAppStyles.Toggle.TrueFill
+        TrueHoverFill: =gblAppStyles.Toggle.TrueHoverFill
+        TrueText: ="Context On"
+        Width: =300
+        X: =gblPadding.Page
+        Y: =gblPadding.Page
+        ZIndex: =5
+
+    tglAdmin_DarkMode As toggleSwitch:
+        AccessibleLabel: ="Toggle that indicates the app should be set to Dark Mode"
+        BorderColor: =gblAppStyles.Toggle.BorderColor
+        BorderThickness: =gblAppStyles.Toggle.BorderThickness
+        Color: =gblAppStyles.Toggle.Color
+        DisabledBorderColor: =gblAppStyles.Toggle.DisabledBorderColor
+        DisabledColor: =gblAppStyles.Toggle.DisabledColor
+        FalseFill: =gblAppStyles.Toggle.FalseFill
+        FalseHoverFill: =gblAppStyles.Toggle.FalseHoverFill
+        FalseText: ="Dark Mode Off"
+        FocusedBorderColor: =gblAppStyles.Toggle.FocusedBorderColor
+        FocusedBorderThickness: =gblAppStyles.Toggle.FocusedBorderThickness
+        Font: =Font.'Segoe UI'
+        HandleFill: =If(Self.Value,gblAppStyles.Toggle.HandleFillTrue,gblAppStyles.Toggle.HandleFillFalse)
+        Height: =48
+        HoverBorderColor: =gblAppStyles.Toggle.HoverBorderColor
+        OnChange: =
+        PressedBorderColor: =gblAppStyles.Toggle.PressedBorderColor
+        Size: =gblAppStyles.Toggle.Size
+        TrueFill: =gblAppStyles.Toggle.TrueFill
+        TrueHoverFill: =gblAppStyles.Toggle.TrueHoverFill
+        TrueText: ="Dark Mode On"
+        Width: =tglAdmin_Context.Width
+        X: =tglAdmin_Context.X
+        Y: =tglAdmin_Context.Y + tglAdmin_Context.Height + gblPadding.Page
+        ZIndex: =6
+
+    tglAdmin_ContrastMode As toggleSwitch:
+        AccessibleLabel: ="Toggle that indicates the app should be set to High Contrast Mode"
+        BorderColor: =gblAppStyles.Toggle.BorderColor
+        BorderThickness: =gblAppStyles.Toggle.BorderThickness
+        Color: =gblAppStyles.Toggle.Color
+        DisabledBorderColor: =gblAppStyles.Toggle.DisabledBorderColor
+        DisabledColor: =gblAppStyles.Toggle.DisabledColor
+        FalseFill: =gblAppStyles.Toggle.FalseFill
+        FalseHoverFill: =gblAppStyles.Toggle.FalseHoverFill
+        FalseText: ="High Contrast Off"
+        FocusedBorderColor: =gblAppStyles.Toggle.FocusedBorderColor
+        FocusedBorderThickness: =gblAppStyles.Toggle.FocusedBorderThickness
+        Font: =Font.'Segoe UI'
+        HandleFill: =If(Self.Value,gblAppStyles.Toggle.HandleFillTrue,gblAppStyles.Toggle.HandleFillFalse)
+        Height: =48
+        HoverBorderColor: =gblAppStyles.Toggle.HoverBorderColor
+        OnChange: =
+        PressedBorderColor: =gblAppStyles.Toggle.PressedBorderColor
+        Size: =gblAppStyles.Toggle.Size
+        TrueFill: =gblAppStyles.Toggle.TrueFill
+        TrueHoverFill: =gblAppStyles.Toggle.TrueHoverFill
+        TrueText: ="High Contrast On"
+        Width: =tglAdmin_Context.Width
+        X: =tglAdmin_Context.X
+        Y: =tglAdmin_DarkMode.Y + tglAdmin_DarkMode.Height + gblPadding.Page
+        ZIndex: =7
+
+    lblAdmin_Notice As label:
+        Font: =Font.'Segoe UI'
+        FontWeight: =FontWeight.Semibold
+        Height: =210
+        Text: |-
+            ="The Toggles above allow you to emulate various scenarios within the Studio.
+            
+            Change their values, within the context of the Studio, to explore various scenarios.
+            
+            Changing the Default values will impact the actual app behavior. DO NOT UPDATE the default values."
+        Width: =Parent.Width - (2 * Self.X)
+        X: =tglAdmin_ContrastMode.X
+        Y: =tglAdmin_ContrastMode.Y + tglAdmin_ContrastMode.Height
+        ZIndex: =8
+

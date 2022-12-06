@@ -1,0 +1,96 @@
+App As appinfo:
+    BackEnabled: =false
+    OnStart: |
+        =//app loading
+        Set(
+            gblAppLoaded,
+            false
+        );
+        //user profile loading
+        Set(
+            gblHasProfileLoaded,
+            false
+        );
+        //user language
+        Set(
+            gblUserLanguage,
+            Switch(
+                Left(
+                    Language(),
+                    2
+                ),
+                "de",
+                "de-DE",
+                "en",
+                "en-US",
+                "es",
+                "es-ES",
+                "fr",
+                "fr-FR",
+                "it",
+                "it-IT",
+                "ja",
+                "ja-JP",
+                "nl",
+                "nl-NL",
+                "pt",
+                "pt-BR",
+                "en-US"//default
+            )
+        );
+        //build localization collection, with user's language
+        ClearCollect(
+            colLocalization,
+            Filter(
+                staticLocalizations,
+                LanguageTag = gblUserLanguage
+            )
+        );
+        //table of character widths for auto width labels
+        ClearCollect(
+            colCharWidth,
+            staticCharWidths
+        );
+        //params
+        Concurrent(
+            Set(
+                gblThemeDark,
+                Param("theme") = "dark" Or (tglAdmin_DarkMode.Value)//for testing within studio
+            ),
+            Set(
+                gblThemeHiCo,
+                Param("theme") = "contrast" Or (tglAdmin_ContrastMode.Value)//for testing within studio
+            ),
+            Set(
+                gblMobileMode,
+                true//Param("hostClientType") = "android" Or (Param("hostClientType") = "ios" And App.Width < 800) Or (tglAdmin_Mobile.Value) //for testing within studio
+            ),
+            Set(
+                gblIsHostClientWeb,
+                Param("hostClientType") = "web"
+            )
+        );
+        Set(
+            gblAppSetting_inputMobileOnWeb,
+            false
+        );
+        Set(
+            gblAppSetting_inputMobile,
+            gblMobileMode
+        );
+        Set(
+            gblAppSetting_inputScaleFontsBy,
+            0
+        );
+        //current user's email 
+        Set(
+            gblCurrUserEmail,
+            User().Email
+        );
+        //app loaded
+        Set(
+            gblAppLoaded,
+            true
+        );
+    SizeBreakpoints: =[600, 950, 1200]
+

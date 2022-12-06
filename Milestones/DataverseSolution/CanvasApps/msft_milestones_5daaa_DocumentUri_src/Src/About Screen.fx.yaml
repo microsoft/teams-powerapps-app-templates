@@ -1,0 +1,1391 @@
+"'About Screen' As screen":
+    Fill: =gblAppStyles.Background.Fill
+    LoadingSpinner: =LoadingSpinner.Data
+    LoadingSpinnerColor: |-
+        =If(
+            gblThemeHiCo,
+            gblAppColors.HighContrastHyperlinks,
+            gblThemeDark,
+            gblAppColors.TeamsDarkPrimary,
+            gblAppColors.TeamsDefaultPrimary
+        )
+
+    lblAnnounce_About As label:
+        DisplayMode: =DisplayMode.Disabled
+        Font: =Font.'Segoe UI'
+        Height: =0*0
+        Live: =Live.Assertive
+        PaddingBottom: =0
+        PaddingLeft: =0
+        PaddingRight: =0
+        PaddingTop: =0
+        Text: =locScreenReaderAnnouncedText //this text is announced by screen readers, when the variable is updated
+        Visible: =false
+        Width: =0*0
+        X: =Parent.Width - Self.Width
+        Y: =Parent.Height - Self.Height
+        ZIndex: =1
+
+    conNavigation_About As groupContainer:
+        Height: =80*1
+        Width: =Parent.Width - Self.X
+        X: =0*1
+        Y: =0*0
+        ZIndex: =4
+
+        imgBack_About As image:
+            AccessibleLabel: |-
+                =With(
+                    {
+                        varDefault: "Click to go back",
+                        varOOBTextId: "imgBack_About__locAccessibleText"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            DisabledFill: |-
+                =With(
+                    {
+                        varImageIsCategory: LookUp(
+                            staticIcons,
+                            staticIconName = "Back"
+                        ).staticIconIsCategory
+                    },
+                    If(
+                        varImageIsCategory,
+                        gblAppStyles.Icons.DisabledFill_Category,
+                        Transparent
+                    )
+                )
+            DisplayMode: |-
+                =If(
+                    locAddProject,
+                    DisplayMode.Disabled,
+                    DisplayMode.Edit
+                )
+            Fill: |-
+                =With(
+                    {
+                        varImageIsCategory: LookUp(
+                            staticIcons,
+                            staticIconName = "Back"
+                        ).staticIconIsCategory
+                    },
+                    If(
+                        varImageIsCategory,
+                        gblAppStyles.Icons.Fill_Category,
+                        Transparent
+                    )
+                )
+            Height: =40
+            Image: |
+                =With(
+                    {
+                        varImageRecord: LookUp(
+                            staticIcons,
+                            staticIconName = "Back"
+                        ),
+                        varColor: If(
+                            Self.DisplayMode = DisplayMode.Disabled,
+                            gblAppStyles.Icons.DisabledColor,
+                            gblAppStyles.Icons.Color
+                        )
+                    },
+                    With(
+                        {
+                            varImageData: Concatenate(
+                                "data:image/svg+xml;utf8, ",
+                                EncodeUrl(
+                                    Concatenate(
+                                        "<svg viewBox='",
+                                        varImageRecord.staticIconViewbox,
+                                        "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                        varImageRecord.staticIconPath,
+                                        "' fill='#",
+                                        varColor,
+                                        "'/></svg>"
+                                    )
+                                )
+                            )
+                        },
+                        varImageData
+                    )
+                )
+            OnSelect: |-
+                =//screen reader start
+                UpdateContext(
+                    {
+                        locScreenReaderAnnouncedText: With(
+                            {
+                                varAnnouncedText: With(
+                                    {
+                                        varDefault: "Navigating back to the projects screen",
+                                        varOOBTextId: "imgBack_Settings_Announcement"
+                                    },
+                                    With(
+                                        {
+                                            varLocalizedText: LookUp(
+                                                colLocalization,
+                                                OOBTextID = varOOBTextId,
+                                                LocalizedText
+                                            )
+                                        },
+                                        Coalesce(
+                                            varLocalizedText,
+                                            varDefault
+                                        )
+                                    )
+                                )
+                            },
+                            If(
+                                locScreenReaderAnnouncedText = varAnnouncedText,
+                                Concatenate(
+                                    varAnnouncedText,
+                                    " "
+                                ),
+                                varAnnouncedText
+                            )
+                        )
+                    }
+                );
+                //screen reader end
+                
+                Navigate(
+                    'Projects Screen',
+                    ScreenTransition.Fade,
+                    {
+                        locBackNavigation: true,
+                        locProjectSortOrder: locProjectSortOrder,
+                        locExpandProjectList: locExpandProjectList,
+                        locAddProject: locAddProject,
+                        locSortWorkItemBy: locSortWorkItemBy,
+                        locShowSearchWorkItem: locShowSearchWorkItem,
+                        locAddWorkItem: locAddWorkItem,
+                        locProjectStatusSelection: locProjectStatusSelection,
+                        locWorkItemSortOrder: locWorkItemSortOrder
+                    }
+                )
+            PaddingBottom: =10
+            PaddingLeft: =10
+            PaddingRight: =10
+            PaddingTop: =10
+            RadiusBottomLeft: =5
+            RadiusBottomRight: =5
+            RadiusTopLeft: =5
+            RadiusTopRight: =5
+            TabIndex: =0
+            Tooltip: =Self.AccessibleLabel
+            Width: =40
+            X: =20*1
+            Y: =lblAbout.Y
+            ZIndex: =1
+
+        lblAbout As label:
+            BorderColor: =gblAppStyles.Label.BorderColor
+            BorderThickness: =gblAppStyles.Label.BorderThickness
+            Color: =gblAppStyles.Label.Color
+            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+            DisabledColor: =gblAppStyles.Label.DisabledColor
+            DisabledFill: =gblAppStyles.Label.DisabledFill
+            Fill: =gblAppStyles.Label.Fill
+            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            FontWeight: =FontWeight.Bold
+            Height: =40*1
+            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+            HoverColor: =gblAppStyles.Label.HoverColor
+            HoverFill: =gblAppStyles.Label.HoverFill
+            PaddingBottom: =0
+            PaddingTop: =0
+            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+            PressedColor: =gblAppStyles.Label.PressedColor
+            PressedFill: =gblAppStyles.Label.PressedFill
+            Role: =TextRole.Heading1
+            Size: =gblAppStyles.Label.Size.Large
+            TabIndex: =0
+            Text: |-
+                =With(
+                    {
+                        varDefault: "About",
+                        varOOBTextId: "lblAbout__locText"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            Tooltip: =Self.Text
+            Width: =150*1
+            X: =imgBack_About.X + imgBack_About.Width
+            Y: =20*1
+            ZIndex: =2
+
+    conBody_About As groupContainer:
+        Height: =Parent.Height - Self.Y
+        Width: =Parent.Width - Self.X
+        X: =0*1
+        Y: |
+            =conNavigation_About.Y + conNavigation_About.Height
+        ZIndex: =5
+
+        cnvBody_About As fluidGrid.fluidGridWithBlankCard:
+            BorderThickness: =0
+            Height: =Parent.Height - Self.Y
+            Width: =Parent.Width
+            X: =0*0
+            Y: =0*0
+            ZIndex: =2
+
+            dtcBody_About As dataCard.blankCard:
+                BorderColor: =RGBA(0, 0, 0, 1)
+                BorderStyle: =BorderStyle.Solid
+                DisplayMode: =DisplayMode.Edit
+                Fill: =RGBA(0, 0, 0, 0)
+                Height: |-
+                    =Switch(
+                        'About Screen'.Size,
+                        Small,
+                        conAbout_Version.Y,
+                        Medium,
+                        conAbout_OtherApps_1.Height,
+                        conAbout_OtherApps_1.Height
+                    ) + 20*1
+                Width: =Parent.Width
+                X: =0*0
+                Y: =0
+                ZIndex: =2
+
+                conAbout_Version As groupContainer:
+                    Height: |-
+                        =btnAbout_AppVersion_CurrentVersion.Y + btnAbout_AppVersion_CurrentVersion.Height + If(
+                            'About Screen'.Size > 1,
+                            20,
+                            20
+                        )
+                    Width: |-
+                        =//Switch('About Screen(old)'.Size,Small, Parent .Width,Medium, Parent .Width*0.5, Parent .Width*0.33)
+                        conAbout_OtherApps_1.Width
+                    X: =0*0
+                    Y: =conAbout_OtherApps_1.Y + conAbout_OtherApps_1.Height + 20
+                    ZIndex: =1
+
+                    btnAbout_AppVersion_CurrentVersion As button:
+                        AutoDisableOnSelect: =false
+                        BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+                        BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+                        Color: =gblAppStyles.Label.Color
+                        DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+                        DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+                        DisplayMode: =DisplayMode.View
+                        Fill: =gblAppStyles.ButtonSecondary.Fill
+                        FocusedBorderColor: =Self.PressedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        FontWeight: =FontWeight.Bold
+                        Height: =64
+                        HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+                        HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+                        HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+                        OnSelect: =
+                        PaddingLeft: =0
+                        PaddingRight: =0
+                        PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+                        PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+                        PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+                        RadiusBottomLeft: =gblAppStyles.ButtonBackground.RadiusBottomLeft
+                        RadiusBottomRight: =gblAppStyles.ButtonBackground.RadiusBottomRight
+                        RadiusTopLeft: =gblAppStyles.ButtonBackground.RadiusTopLeft
+                        RadiusTopRight: =gblAppStyles.ButtonBackground.RadiusTopRight
+                        Size: =gblAppStyles.Label.Size.ExtraLarge
+                        TabIndex: |-
+                            =If(
+                                true,
+                                -1,
+                                0
+                            )
+                        Text: ="1.0.1"
+                        Width: =64
+                        X: =20
+                        Y: =lblAbout_AppVersion_Title_1.Y + lblAbout_AppVersion_Title_1.Height + 16
+                        ZIndex: =1
+
+                    lblAbout_AppVersion_TeamOwnerWarning_1 As label:
+                        Color: =gblAppStyles.Label.Color
+                        DisplayMode: =DisplayMode.View
+                        Font: =Font.'Segoe UI'
+                        FontWeight: =FontWeight.Lighter
+                        Height: =18
+                        PaddingBottom: =Switch('About Screen'.Size, ScreenSize.Small, 0, 0)
+                        PaddingLeft: =20
+                        PaddingRight: =0
+                        PaddingTop: =0
+                        Size: =gblAppStyles.Label.Size.Small
+                        Text: |-
+                            =//With({varDefault:"This app is currently in preview. Check Teams App Store if a new version is available.",varOOBTextId:"_translateCommon__About_AppVersionNotes_Preview"},With({varLocalizedText:LookUp(colLocalization,OOBTextID=varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                            "Note: Only Team owners and original installer can update the app."
+                        VerticalAlign: =VerticalAlign.Top
+                        Width: =Parent.Width - Self.X - 40
+                        X: =84
+                        Y: =58
+                        ZIndex: =2
+
+                    lblAbout_AppVersion_CurrentNotes_1 As label:
+                        Color: =gblAppStyles.Label.Color
+                        DisplayMode: =DisplayMode.View
+                        Font: =Font.'Segoe UI'
+                        Height: =19
+                        PaddingBottom: =0
+                        PaddingLeft: =20
+                        PaddingRight: =20
+                        PaddingTop: =0
+                        Size: =gblAppStyles.Label.Size.Small
+                        Text: |-
+                            =//With({varDefault:"Initial release",varOOBTextId:"_translateCommon__About_AppVersionNotes_Initial"},With({varLocalizedText:LookUp(colLocalization,OOBTextID=varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                            With({varDefault:"This app is currently in preview. Check Teams App Store if a new version is available.",varOOBTextId:"_translateCommon__About_AppVersionNotes_Preview"},With({varLocalizedText:LookUp(colLocalization,OOBTextID=varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                        VerticalAlign: =VerticalAlign.Top
+                        Width: =Parent.Width - Self.X - 40
+                        Wrap: =false
+                        X: =btnAbout_AppVersion_CurrentVersion.X + btnAbout_AppVersion_CurrentVersion.Width
+                        Y: =btnAbout_AppVersion_CurrentVersion.Y
+                        ZIndex: =3
+
+                    lblAbout_AppVersion_Title_1 As label:
+                        Color: =gblAppStyles.Label.Color
+                        DisplayMode: =DisplayMode.View
+                        Font: =Font.'Segoe UI'
+                        FontWeight: =FontWeight.Semibold
+                        Height: =24
+                        Size: =gblAppStyles.Label.Size.Medium
+                        Text: |-
+                            =With(
+                                {
+                                    varDefault: "App version",
+                                    varOOBTextId: "_translateCommon__About_AppInTeamStore"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        VerticalAlign: =VerticalAlign.Bottom
+                        Width: =Parent.Width - Self.X - 20
+                        X: =20
+                        Y: =0*0
+                        ZIndex: =4
+
+                    imgAbout_AppVersion_OpenInTeamsStore_1 As image:
+                        DisabledFill: |-
+                            =With(
+                                {
+                                    varImageIsCategory: LookUp(
+                                        staticIcons,
+                                        staticIconName = "AppStore"
+                                    ).staticIconIsCategory
+                                },
+                                If(
+                                    varImageIsCategory,
+                                    gblAppStyles.Icons.DisabledFill_Category,
+                                    Transparent
+                                )
+                            )
+                        Fill: |-
+                            =With(
+                                {
+                                    varImageIsCategory: LookUp(
+                                        staticIcons,
+                                        staticIconName = "AppStore"
+                                    ).staticIconIsCategory
+                                },
+                                If(
+                                    varImageIsCategory,
+                                    gblAppStyles.Icons.Fill_Category,
+                                    Transparent
+                                )
+                            )
+                        Height: =28
+                        Image: |-
+                            =With(
+                                {
+                                    varImageRecord: LookUp(
+                                        staticIcons,
+                                        staticIconName = "AppStore"
+                                    ),
+                                    varColor: If(
+                                        Self.DisplayMode = DisplayMode.Disabled,
+                                        gblAppStyles.Icons.DisabledColor,
+                                        gblAppStyles.Icons.Color
+                                    )
+                                },
+                                With(
+                                    {
+                                        varImageData: Concatenate(
+                                            "data:image/svg+xml;utf8, ",
+                                            EncodeUrl(
+                                                Concatenate(
+                                                    "<svg viewBox='",
+                                                    varImageRecord.staticIconViewbox,
+                                                    "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                    varImageRecord.staticIconPath,
+                                                    "' fill='#",
+                                                    varColor,
+                                                    "'/></svg>"
+                                                )
+                                            )
+                                        )
+                                    },
+                                    varImageData
+                                )
+                            )
+                        OnSelect: =
+                        PaddingBottom: =4
+                        PaddingRight: =8
+                        PaddingTop: =4
+                        Width: =Self.Height
+                        X: =btnAbout_AppVersion_OpenInTeamsStore.X
+                        Y: =76
+                        ZIndex: =5
+
+                    btnAbout_AppVersion_OpenInTeamsStore As button:
+                        Align: =Align.Left
+                        BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                        BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+                        Color: =gblAppStyles.ButtonTransparent.Color
+                        DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.ButtonTransparent.DisabledColor
+                        DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                        Fill: =gblAppStyles.ButtonTransparent.Fill
+                        FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        Height: =28
+                        HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                        HoverColor: =gblAppStyles.ButtonTransparent.HoverColor
+                        HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+                        OnSelect: |-
+                            =Launch(
+                                If(
+                                    gblIsHostClientWeb,
+                                    "https://teams.microsoft.com/l/app/040880f4-0c68-4c38-8821-d5efd2b6ddbe?source=store-copy-link",
+                                    "msteams://teams.microsoft.com/l/app/040880f4-0c68-4c38-8821-d5efd2b6ddbe?source=store-copy-link"
+                                ),
+                                {},
+                                LaunchTarget.New
+                            )
+                        PaddingLeft: =28
+                        PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                        PressedColor: =gblAppStyles.ButtonTransparent.PressedColor
+                        PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+                        RadiusBottomLeft: =gblAppStyles.ButtonTransparent.RadiusBottomLeft
+                        RadiusBottomRight: =gblAppStyles.ButtonTransparent.RadiusBottomRight
+                        RadiusTopLeft: =gblAppStyles.ButtonTransparent.RadiusTopLeft
+                        RadiusTopRight: =gblAppStyles.ButtonTransparent.RadiusTopRight
+                        Size: =gblAppStyles.Label.Size.Small
+                        TabIndex: |-
+                            =If(
+                                Self.Visible,
+                                0,
+                                -1
+                            )
+                        Text: |-
+                            =/*With(
+                                {
+                                    varDefault: "Check for updates",
+                                    varOOBTextId: "_translateCommon__About_AppLink"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )*/"Check for updates"
+                        X: =btnAbout_AppVersion_CurrentVersion.X + btnAbout_AppVersion_CurrentVersion.Width + 20
+                        Y: =76
+                        ZIndex: =6
+
+                conAbout_OtherApps_1 As groupContainer:
+                    Height: =btnAbout_Intro_Background_1.Y + btnAbout_Intro_Background_1.Height
+                    Width: |-
+                        =If(
+                            'About Screen'.Width <=680,
+                            Parent.Width ,
+                            Parent.Width - 20
+                        )
+                    X: =0*0
+                    Y: =conAbout_Help.Y + conAbout_Help.Height
+                    ZIndex: =2
+
+                    btnAbout_Intro_Background_1 As button:
+                        Align: =Align.Left
+                        AutoDisableOnSelect: =false
+                        BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+                        BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+                        Color: =gblAppStyles.ButtonSecondary.Color
+                        DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+                        DisabledFill: =Self.Fill
+                        DisplayMode: =DisplayMode.Disabled
+                        Fill: =gblAppStyles.ButtonSecondary.Fill
+                        FocusedBorderColor: =Self.PressedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        Height: |-
+                            =If(
+                                'About Screen'.Width<=680,
+                                192 * 2,
+                                192
+                            )
+                        HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+                        HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+                        HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+                        OnSelect: =
+                        PaddingLeft: =
+                        PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+                        PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+                        PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+                        RadiusBottomLeft: =gblAppStyles.ButtonBackground.RadiusBottomLeft
+                        RadiusBottomRight: =gblAppStyles.ButtonBackground.RadiusBottomRight
+                        RadiusTopLeft: =gblAppStyles.ButtonBackground.RadiusTopLeft
+                        RadiusTopRight: =gblAppStyles.ButtonBackground.RadiusTopRight
+                        Size: =gblAppStyles.Label.Size.Medium
+                        TabIndex: |-
+                            =If(
+                                Self.Visible,
+                                0,
+                                -1
+                            )
+                        Text: =""
+                        Width: |-
+                            =If(
+                                'About Screen'.Width <=680,
+                                Parent.Width -40,
+                                Parent.Width-40
+                            )
+                        X: =lblAbout_OtherApps_1.X
+                        Y: =lblAbout_OtherApps_1.Y+lblAbout_OtherApps_1.Height+12
+                        ZIndex: =1
+
+                    lblAbout_OtherApps_1 As label:
+                        Color: =gblAppStyles.Label.Color
+                        DisplayMode: =DisplayMode.View
+                        Font: =Font.'Segoe UI'
+                        FontWeight: =FontWeight.Semibold
+                        Height: =24*1
+                        Size: =gblAppStyles.Label.Size.Medium
+                        Text: |-
+                            =With(
+                                {
+                                    varDefault: "Explore more app templates built with Power Apps",
+                                    varOOBTextId: "_translateCommon__About_ExploreMoreApps"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        Tooltip: =Self.Text
+                        VerticalAlign: =VerticalAlign.Bottom
+                        Width: =Parent.Width - Self.X *2
+                        Wrap: =false
+                        X: =20*1
+                        Y: =12
+                        ZIndex: =2
+
+                    Image2 As image:
+                        Height: =124
+                        Image: =More_apps
+                        Width: =256
+                        X: =lblAbout_OtherApps_1.X+30
+                        Y: =btnAbout_Intro_Background_1.Y+ 25
+                        ZIndex: =3
+
+                    lblAbout_Intro_Header_1 As label:
+                        AutoHeight: =true
+                        BorderColor: =gblAppStyles.Label.BorderColor
+                        BorderThickness: =gblAppStyles.Label.BorderThickness
+                        Color: =gblAppStyles.Label.Color
+                        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.Label.DisabledColor
+                        DisabledFill: =gblAppStyles.Label.DisabledFill
+                        Fill: =gblAppStyles.Label.Fill
+                        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        FontWeight: =FontWeight.Bold
+                        Height: =32*1
+                        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                        HoverColor: =gblAppStyles.Label.HoverColor
+                        HoverFill: =gblAppStyles.Label.HoverFill
+                        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                        PressedColor: =gblAppStyles.Label.PressedColor
+                        PressedFill: =gblAppStyles.Label.PressedFill
+                        Size: =gblAppStyles.Label.Size.Medium
+                        Text: ="Enjoying this app?"
+                        Tooltip: =Self.Text
+                        Width: =500
+                        X: |-
+                            =If(
+                                'About Screen'.Width<=680,
+                                Image2.X,
+                                348
+                            )
+                        Y: |-
+                            =
+                            If(
+                                'About Screen'.Width <= 680,
+                                Image2.Y+ Image2.Height+25,
+                                btnAbout_Intro_Background_1.Y+25)
+                        ZIndex: =4
+
+                    lblAbout_Intro_Header_2 As label:
+                        AutoHeight: =true
+                        BorderColor: =gblAppStyles.Label.BorderColor
+                        BorderThickness: =gblAppStyles.Label.BorderThickness
+                        Color: =gblAppStyles.Label.Color
+                        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.Label.DisabledColor
+                        DisabledFill: =gblAppStyles.Label.DisabledFill
+                        Fill: =gblAppStyles.Label.Fill
+                        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        FontWeight: =FontWeight.Bold
+                        Height: =32*1
+                        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                        HoverColor: =gblAppStyles.Label.HoverColor
+                        HoverFill: =gblAppStyles.Label.HoverFill
+                        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                        PressedColor: =gblAppStyles.Label.PressedColor
+                        PressedFill: =gblAppStyles.Label.PressedFill
+                        Size: =gblAppStyles.Label.Size.Medium
+                        Text: ="There are many more template to explore in Teams app store built with Power Apps."
+                        Tooltip: =Self.Text
+                        Width: =btnAbout_Intro_Background_1.Width - Self.X -40
+                        X: =lblAbout_Intro_Header_1.X
+                        Y: =lblAbout_Intro_Header_1.Y+lblAbout_Intro_Header_1.Height
+                        ZIndex: =5
+
+                    btnAbout_Help_1 As button:
+                        BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+                        BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+                        Color: =gblAppStyles.ButtonSecondary.Color
+                        DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+                        DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+                        Fill: =gblAppStyles.ButtonSecondary.Fill
+                        FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        Height: =32*1
+                        HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+                        HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+                        HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+                        OnSelect: |-
+                            =Launch(
+                                "https://aka.ms/TeamsSamplePowerApps",
+                                {},
+                                LaunchTarget.New
+                            )
+                        PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+                        PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+                        PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+                        RadiusBottomLeft: =gblAppStyles.ButtonSecondary.RadiusBottomLeft
+                        RadiusBottomRight: =gblAppStyles.ButtonSecondary.RadiusBottomRight
+                        RadiusTopLeft: =gblAppStyles.ButtonSecondary.RadiusTopLeft
+                        RadiusTopRight: =gblAppStyles.ButtonSecondary.RadiusTopRight
+                        Size: =gblAppStyles.ButtonSecondary.Size
+                        Text: ="Learn more"
+                        Tooltip: =Self.Text
+                        Width: =100
+                        X: =lblAbout_Intro_Header_1.X
+                        Y: |-
+                            =//lblAbout_Intro_Header_2.Y+56
+                            
+                            If(
+                                'About Screen'.Size = ScreenSize.Small,
+                                lblAbout_Intro_Header_2.Y+76,
+                                lblAbout_Intro_Header_2.Y+56)
+                        ZIndex: =6
+
+                conAbout_Intro As groupContainer:
+                    Height: =galAbout_Intro.Height
+                    Width: =Parent.Width - Self.X
+                    X: =0*1
+                    Y: =0*1
+                    ZIndex: =3
+
+                    galAbout_Intro As gallery.galleryVertical:
+                        AccessibleLabel: |-
+                            =With(
+                                {
+                                    varDefault: "Gallery of helpful links",
+                                    varOOBTextId: "_translateCommon__About_LinkGallery"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        BorderColor: =Transparent
+                        Height: |-
+                            =Switch(
+                                'About Screen'.Size,
+                                ScreenSize.Small,
+                                CountRows(Self.AllItems) * (Self.TemplateHeight + Self.TemplatePadding) + Self.TemplatePadding,
+                                With(
+                                    {
+                                        varWrapCount: Switch(
+                                            'About Screen'.Size,
+                                            Small,
+                                            1,
+                                            Medium,
+                                            1,
+                                            Large,
+                                            1,
+                                            ExtraLarge,
+                                            2
+                                        ),
+                                        varHeight: Self.TemplateHeight + (1.5 * Self.TemplatePadding),
+                                        varItems: CountRows(Self.AllItems)
+                                    },
+                                    RoundUp(
+                                        varItems / varWrapCount,
+                                        0
+                                    ) * (Self.TemplateHeight + Self.TemplatePadding) + Self.TemplatePadding 
+                                )
+                            )
+                        Items: |-
+                            =Table(
+                                {
+                                    tblHeader: "Manage projects effectively by phasing efforts around key milestones.",
+                                    tblLine1: "Plan and track projects your way, in a highly customizable, easy-to-use dashboard.",
+                                    tblLine2: "At a glance, see team capacity, priority and status of work items, and how you’re tracking towards milestones.",
+                                    tblLine3: "Help your team stay focused by reviewing tasks right in Teams.",
+                                    tblUrl: "https://www.youtube.com/watch?v=4PUZlwmTDXQ"
+                                }
+                                
+                            )
+                        Layout: =Layout.Vertical
+                        OnSelect: |-
+                            =Launch(
+                                ThisItem.tblUrl,
+                                {},
+                                LaunchTarget.New
+                            )
+                        TabIndex: |-
+                            =If(
+                                Self.Visible,
+                                0,
+                                -1
+                            )
+                        TemplatePadding: =20
+                        TemplateSize: |-
+                            =If(
+                                'About Screen'.Width <=680,
+                                180 * 2,
+                                If('About Screen'.Size = ScreenSize.Medium,230,180)
+                            )
+                        Width: |-
+                            =If(
+                                'About Screen'.Width <=680,
+                                Parent.Width ,
+                                Parent.Width - 20
+                            )
+                        WrapCount: |-
+                            =Switch(
+                                'About Screen'.Size,
+                                Small,
+                                1,
+                                Medium,
+                                1,
+                                Large,
+                                1,
+                                ExtraLarge,
+                                1
+                            )
+                        X: =0*0
+                        Y: =0*1
+                        ZIndex: =5
+
+                        btnAbout_Intro_Background As button:
+                            Align: =Align.Left
+                            AutoDisableOnSelect: =false
+                            BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+                            BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+                            Color: =gblAppStyles.ButtonSecondary.Color
+                            DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+                            DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+                            DisabledFill: =Self.Fill
+                            DisplayMode: =DisplayMode.Disabled
+                            Fill: =gblAppStyles.ButtonSecondary.Fill
+                            FocusedBorderColor: =Self.PressedBorderColor
+                            FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+                            Font: =Font.'Segoe UI'
+                            Height: =Parent.TemplateHeight
+                            HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+                            HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+                            HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+                            OnSelect: =Select(Parent)
+                            PaddingLeft: =Parent.TemplateHeight
+                            PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+                            PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+                            PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+                            RadiusBottomLeft: =gblAppStyles.ButtonBackground.RadiusBottomLeft
+                            RadiusBottomRight: =gblAppStyles.ButtonBackground.RadiusBottomRight
+                            RadiusTopLeft: =gblAppStyles.ButtonBackground.RadiusTopLeft
+                            RadiusTopRight: =gblAppStyles.ButtonBackground.RadiusTopRight
+                            Size: =gblAppStyles.Label.Size.Medium
+                            TabIndex: |-
+                                =If(
+                                    Self.Visible,
+                                    0,
+                                    -1
+                                )
+                            Text: =""
+                            Width: =Parent.TemplateWidth
+                            X: =0*0
+                            Y: =0*0
+                            ZIndex: =2
+
+                        vidAbout_Intro As videoPlayback:
+                            Height: |-
+                                =If(
+                                    'About Screen'.Width <= 680,
+                                    Parent.TemplateHeight / 2,
+                                    Parent.TemplateHeight
+                                )
+                            Media: =ThisItem.tblUrl
+                            Width: |-
+                                =If(
+                                    'About Screen'.Width <= 680,
+                                    Parent.TemplateWidth,
+                                    250 * 1
+                                )
+                            X: =0*1
+                            ZIndex: =4
+
+                        lblAbout_Intro_Header As label:
+                            AutoHeight: =true
+                            BorderColor: =gblAppStyles.Label.BorderColor
+                            BorderThickness: =gblAppStyles.Label.BorderThickness
+                            Color: =gblAppStyles.Label.Color
+                            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                            DisabledColor: =gblAppStyles.Label.DisabledColor
+                            DisabledFill: =gblAppStyles.Label.DisabledFill
+                            Fill: =gblAppStyles.Label.Fill
+                            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                            Font: =Font.'Segoe UI'
+                            FontWeight: =FontWeight.Bold
+                            Height: =32*1
+                            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                            HoverColor: =gblAppStyles.Label.HoverColor
+                            HoverFill: =gblAppStyles.Label.HoverFill
+                            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                            PressedColor: =gblAppStyles.Label.PressedColor
+                            PressedFill: =gblAppStyles.Label.PressedFill
+                            Size: =gblAppStyles.Label.Size.Medium
+                            Text: =ThisItem.tblHeader
+                            Tooltip: =Self.Text
+                            Width: =btnAbout_Intro_Background.Width - Self.X - 20
+                            X: |-
+                                =If(
+                                    'About Screen'.Width<=  680,
+                                    20,
+                                    vidAbout_Intro.X + vidAbout_Intro.Width + 20
+                                )
+                            Y: |-
+                                =If(
+                                    'About Screen'.Width <= 680,vidAbout_Intro.Y + vidAbout_Intro.Height + 20, 20*1)
+                            ZIndex: =5
+
+                        lblAbout_Intro_Line1 As label:
+                            AutoHeight: =true
+                            BorderColor: =gblAppStyles.Label.BorderColor
+                            BorderThickness: =gblAppStyles.Label.BorderThickness
+                            Color: =gblAppStyles.Label.Color
+                            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                            DisabledColor: =gblAppStyles.Label.DisabledColor
+                            DisabledFill: =gblAppStyles.Label.DisabledFill
+                            Fill: =gblAppStyles.Label.Fill
+                            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                            Font: =Font.'Segoe UI'
+                            Height: =32*1
+                            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                            HoverColor: =gblAppStyles.Label.HoverColor
+                            HoverFill: =gblAppStyles.Label.HoverFill
+                            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                            PressedColor: =gblAppStyles.Label.PressedColor
+                            PressedFill: =gblAppStyles.Label.PressedFill
+                            Size: =gblAppStyles.Label.Size.Medium
+                            Text: =ThisItem.tblLine1
+                            Tooltip: =Self.Text
+                            Width: =btnAbout_Intro_Background.Width - Self.X
+                            X: =imgAbout_Intro_Line1.X + imgAbout_Intro_Line1.Width
+                            Y: =lblAbout_Intro_Header.Y + lblAbout_Intro_Header.Height + 10
+                            ZIndex: =6
+
+                        lblAbout_Intro_Line2 As label:
+                            AutoHeight: =true
+                            BorderColor: =gblAppStyles.Label.BorderColor
+                            BorderThickness: =gblAppStyles.Label.BorderThickness
+                            Color: =gblAppStyles.Label.Color
+                            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                            DisabledColor: =gblAppStyles.Label.DisabledColor
+                            DisabledFill: =gblAppStyles.Label.DisabledFill
+                            Fill: =gblAppStyles.Label.Fill
+                            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                            Font: =Font.'Segoe UI'
+                            Height: =32*1
+                            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                            HoverColor: =gblAppStyles.Label.HoverColor
+                            HoverFill: =gblAppStyles.Label.HoverFill
+                            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                            PressedColor: =gblAppStyles.Label.PressedColor
+                            PressedFill: =gblAppStyles.Label.PressedFill
+                            Size: =gblAppStyles.Label.Size.Medium
+                            Text: =ThisItem.tblLine2
+                            Tooltip: =Self.Text
+                            Width: =btnAbout_Intro_Background.Width - Self.X
+                            X: =imgAbout_Intro_Line2.X + imgAbout_Intro_Line2.Width
+                            Y: =lblAbout_Intro_Line1.Y + lblAbout_Intro_Line1.Height
+                            ZIndex: =7
+
+                        lblAbout_Intro_Line3 As label:
+                            AutoHeight: =true
+                            BorderColor: =gblAppStyles.Label.BorderColor
+                            BorderThickness: =gblAppStyles.Label.BorderThickness
+                            Color: =gblAppStyles.Label.Color
+                            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                            DisabledColor: =gblAppStyles.Label.DisabledColor
+                            DisabledFill: =gblAppStyles.Label.DisabledFill
+                            Fill: =gblAppStyles.Label.Fill
+                            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                            Font: =Font.'Segoe UI'
+                            Height: =32*1
+                            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                            HoverColor: =gblAppStyles.Label.HoverColor
+                            HoverFill: =gblAppStyles.Label.HoverFill
+                            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                            PressedColor: =gblAppStyles.Label.PressedColor
+                            PressedFill: =gblAppStyles.Label.PressedFill
+                            Size: =gblAppStyles.Label.Size.Medium
+                            Text: =ThisItem.tblLine3
+                            Tooltip: =Self.Text
+                            Width: =btnAbout_Intro_Background.Width - Self.X
+                            X: =imgAbout_Intro_Line3.X + imgAbout_Intro_Line3.Width
+                            Y: =lblAbout_Intro_Line2.Y + lblAbout_Intro_Line2.Height
+                            ZIndex: =8
+
+                        imgAbout_Intro_Line1 As image:
+                            Height: =32
+                            Image: |-
+                                =If(
+                                    gblThemeDark || gblThemeHiCo,
+                                    Checkmark_Dark,
+                                    Checkmark
+                                )
+                            OnSelect: =Select(Parent)
+                            PaddingBottom: =6
+                            PaddingLeft: =6
+                            PaddingRight: =6
+                            PaddingTop: =6
+                            Width: =32
+                            X: |-
+                                =If(
+                                    'About Screen'.Width <= 680,
+                                    20 - 6,
+                                    vidAbout_Intro.X + vidAbout_Intro.Width + 20 - 6
+                                )
+                            Y: =lblAbout_Intro_Header.Y + lblAbout_Intro_Header.Height + 10
+                            ZIndex: =9
+
+                        imgAbout_Intro_Line2 As image:
+                            Height: =32
+                            Image: |-
+                                =If(
+                                    gblThemeDark || gblThemeHiCo,
+                                    Checkmark_Dark,
+                                    Checkmark
+                                )
+                            OnSelect: =Select(Parent)
+                            PaddingBottom: =6
+                            PaddingLeft: =6
+                            PaddingRight: =6
+                            PaddingTop: =6
+                            Width: =32
+                            X: =imgAbout_Intro_Line1.X
+                            Y: =lblAbout_Intro_Line1.Y + lblAbout_Intro_Line1.Height
+                            ZIndex: =10
+
+                        imgAbout_Intro_Line3 As image:
+                            Height: =32
+                            Image: |-
+                                =If(
+                                    gblThemeDark || gblThemeHiCo,
+                                    Checkmark_Dark,
+                                    Checkmark
+                                )
+                            OnSelect: =Select(Parent)
+                            PaddingBottom: =6
+                            PaddingLeft: =6
+                            PaddingRight: =6
+                            PaddingTop: =6
+                            Width: =32
+                            X: =imgAbout_Intro_Line1.X
+                            Y: =lblAbout_Intro_Line2.Y + lblAbout_Intro_Line2.Height
+                            ZIndex: =11
+
+                conAbout_Help As groupContainer:
+                    Height: =galAbout_Help.Height + galAbout_Help.Y
+                    Width: =Parent.Width
+                    Y: =conAbout_Intro.Y + conAbout_Intro.Height
+                    ZIndex: =4
+
+                    galAbout_Help As gallery.galleryVertical:
+                        AccessibleLabel: |-
+                            =With(
+                                {
+                                    varDefault: "Gallery of helpful links",
+                                    varOOBTextId: "_translateCommon__About_LinkGallery"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        BorderColor: =Transparent
+                        Height: |-
+                            =Switch(
+                                'About Screen'.Size,
+                                ScreenSize.Small,
+                                CountRows(Self.AllItems) * (Self.TemplateHeight + Self.TemplatePadding) + Self.TemplatePadding,
+                                With(
+                                    {
+                                        varWrapCount: Switch(
+                                            'About Screen'.Size,
+                                            Small,
+                                            1,
+                                            Medium,
+                                            2,
+                                            Large,
+                                            3,
+                                            ExtraLarge,
+                                            4
+                                        ),
+                                        varHeight: Self.TemplateHeight + (1.5 * Self.TemplatePadding),
+                                        varItems: CountRows(Self.AllItems)
+                                    },
+                                    RoundUp(
+                                        varItems / varWrapCount,
+                                        0
+                                    ) * (Self.TemplateHeight + Self.TemplatePadding) + Self.TemplatePadding //varHeight
+                                )
+                            )
+                        Items: |-
+                            =Table(
+                                {
+                                    tblLine1: "Learn how to use this app",
+                                    tblLine2: "Follow the detailed documentation to get to know the basics of the app.",
+                                    tblLinkText:"Learn more",
+                                    tblUrl: "https://aka.ms/TeamsMilestonesDocs",
+                                    tblButtonWidth: 100, 
+                                    tblImage: LearnHowTo
+                                },
+                                {
+                                    tblLine1: "Deploy it to your org",
+                                    tblLine2: "Take the app that was built within a Teams team and share it with your broader org.",
+                                    tblLinkText:"Learn more",
+                                    tblUrl: "https://aka.ms/TeamsMilestonesDeploy",
+                                    tblButtonWidth: 100, 
+                                    tblImage: DeployToOrg
+                                },
+                            {
+                                    tblLine1: "Customize this app template",
+                                    tblLine2: "Want to make quick tweaks or add more unique features? Let’s start customizing.",
+                                    tblLinkText:"Customize using Power Apps",
+                                    tblUrl: "https://aka.ms/TeamsMilestonesExtend",
+                                    tblButtonWidth: 210, 
+                                    tblImage: CustomizeAppTemplate
+                                },
+                                {
+                                    tblLine1: "Engage with the community",
+                                    tblLine2: "Have an idea for extension or need inspiration? Engage with the community.",
+                                    tblLinkText:"Go to Power Apps Community",
+                                    tblUrl: "https://aka.ms/TeamsMilestonesEngage",
+                                    tblButtonWidth: 230, 
+                                    tblImage: EngageWithCommunity
+                                }
+                            )
+                        Layout: =Layout.Vertical
+                        OnSelect: |-
+                            =Launch(
+                                ThisItem.tblUrl,
+                                {},
+                                LaunchTarget.New
+                            )
+                        TabIndex: |-
+                            =If(
+                                Self.Visible,
+                                0,
+                                -1
+                            )
+                        TemplatePadding: =20
+                        TemplateSize: =360
+                        Width: |-
+                            =If(
+                                'About Screen'.Width <=680,
+                                Parent.Width ,
+                                Parent.Width - 20
+                            )
+                        WrapCount: |-
+                            =//Switch('About Screen'.Size,Small,1,Medium,2,Large,3,ExtraLarge,4)
+                            If('About Screen'.Width <= 680,1,If('About Screen'.Size = Medium,2,If('About Screen'.Size = Large,3,4)))
+                        X: =0*0
+                        Y: =lblAbout_Help.Y + lblAbout_Help.Height - 8
+                        ZIndex: =1
+
+                        btnAbout_Help_Background As button:
+                            Align: =Align.Left
+                            AutoDisableOnSelect: =false
+                            BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+                            BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+                            Color: =gblAppStyles.ButtonSecondary.Color
+                            DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+                            DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+                            DisabledFill: =Self.Fill
+                            DisplayMode: =DisplayMode.Disabled
+                            Fill: =gblAppStyles.ButtonSecondary.Fill
+                            FocusedBorderColor: =Self.PressedBorderColor
+                            FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+                            Font: =Font.'Segoe UI'
+                            Height: =Parent.TemplateHeight
+                            HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+                            HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+                            HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+                            OnSelect: =Select(Parent)
+                            PaddingLeft: =Parent.TemplateHeight
+                            PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+                            PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+                            PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+                            RadiusBottomLeft: =gblAppStyles.ButtonBackground.RadiusBottomLeft
+                            RadiusBottomRight: =gblAppStyles.ButtonBackground.RadiusBottomRight
+                            RadiusTopLeft: =gblAppStyles.ButtonBackground.RadiusTopLeft
+                            RadiusTopRight: =gblAppStyles.ButtonBackground.RadiusTopRight
+                            Size: =gblAppStyles.Label.Size.Medium
+                            TabIndex: |-
+                                =If(
+                                    Self.Visible,
+                                    0,
+                                    -1
+                                )
+                            Text: =
+                            Width: =Parent.TemplateWidth
+                            X: =0*0
+                            Y: =0*0
+                            ZIndex: =2
+
+                        imgAbout_Help_Icon As image:
+                            Height: =200
+                            Image: =ThisItem.tblImage
+                            OnSelect: =Select(Parent)
+                            PaddingBottom: =16
+                            PaddingLeft: =16
+                            PaddingRight: =16
+                            PaddingTop: =16
+                            Width: =Self.Height
+                            X: =(Parent.TemplateWidth - Self.Width) / 2
+                            ZIndex: =3
+
+                        lblAbout_Help_Header As label:
+                            Align: =Align.Center
+                            BorderColor: =gblAppStyles.Label.BorderColor
+                            BorderThickness: =gblAppStyles.Label.BorderThickness
+                            Color: =gblAppStyles.Label.Color
+                            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                            DisabledColor: =gblAppStyles.Label.DisabledColor
+                            DisabledFill: =gblAppStyles.Label.DisabledFill
+                            Fill: =gblAppStyles.Label.Fill
+                            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                            Font: =Font.'Segoe UI'
+                            FontWeight: =FontWeight.Bold
+                            Height: =32*1
+                            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                            HoverColor: =gblAppStyles.Label.HoverColor
+                            HoverFill: =gblAppStyles.Label.HoverFill
+                            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                            PressedColor: =gblAppStyles.Label.PressedColor
+                            PressedFill: =gblAppStyles.Label.PressedFill
+                            Size: =gblAppStyles.Label.Size.Medium
+                            Text: =ThisItem.tblLine1
+                            Tooltip: =Self.Text
+                            Width: =Parent.TemplateWidth
+                            Wrap: =false
+                            X: =0*1
+                            Y: =imgAbout_Help_Icon.Y + imgAbout_Help_Icon.Height 
+                            ZIndex: =4
+
+                        lblAbout_Help_Body As label:
+                            Align: =Align.Center
+                            AutoHeight: =true
+                            BorderColor: =gblAppStyles.Label.BorderColor
+                            BorderThickness: =gblAppStyles.Label.BorderThickness
+                            Color: =gblAppStyles.Label.Color
+                            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                            DisabledColor: =gblAppStyles.Label.DisabledColor
+                            DisabledFill: =gblAppStyles.Label.DisabledFill
+                            Fill: =gblAppStyles.Label.Fill
+                            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                            Font: =Font.'Segoe UI'
+                            Height: =32*1
+                            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                            HoverColor: =gblAppStyles.Label.HoverColor
+                            HoverFill: =gblAppStyles.Label.HoverFill
+                            PaddingLeft: =25
+                            PaddingRight: =25
+                            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                            PressedColor: =gblAppStyles.Label.PressedColor
+                            PressedFill: =gblAppStyles.Label.PressedFill
+                            Size: =gblAppStyles.Label.Size.Medium
+                            Text: =ThisItem.tblLine2
+                            Tooltip: =Self.Text
+                            Width: =Parent.TemplateWidth
+                            X: =0*1
+                            Y: =lblAbout_Help_Header.Y + lblAbout_Help_Header.Height + 4
+                            ZIndex: =5
+
+                        btnAbout_Help As button:
+                            BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+                            BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+                            Color: =gblAppStyles.ButtonSecondary.Color
+                            DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+                            DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+                            DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+                            Fill: =gblAppStyles.ButtonSecondary.Fill
+                            FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                            FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+                            Font: =Font.'Segoe UI'
+                            Height: =32*1
+                            HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+                            HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+                            HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+                            OnSelect: =Select(Parent)
+                            PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+                            PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+                            PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+                            RadiusBottomLeft: =gblAppStyles.ButtonSecondary.RadiusBottomLeft
+                            RadiusBottomRight: =gblAppStyles.ButtonSecondary.RadiusBottomRight
+                            RadiusTopLeft: =gblAppStyles.ButtonSecondary.RadiusTopLeft
+                            RadiusTopRight: =gblAppStyles.ButtonSecondary.RadiusTopRight
+                            Size: =gblAppStyles.ButtonSecondary.Size
+                            Text: =ThisItem.tblLinkText
+                            Tooltip: =Self.Text
+                            Width: =ThisItem.tblButtonWidth
+                            X: =(Parent.TemplateWidth - Self.Width) / 2
+                            Y: =Parent.TemplateHeight - Self.Height - 20
+                            ZIndex: =6
+
+                    lblAbout_Help As label:
+                        Color: =gblAppStyles.Label.Color
+                        DisplayMode: =DisplayMode.View
+                        Font: =Font.'Segoe UI'
+                        FontWeight: =FontWeight.Semibold
+                        Height: =24*1
+                        Size: =gblAppStyles.Label.Size.Medium
+                        Text: |-
+                            =/*With(
+                                {
+                                    varDefault: "Do more with Get Connected app template",
+                                    varOOBTextId: "_translateCommon__About_Greeting"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )*/"Do more with Milestones app template"
+                        Tooltip: =Self.Text
+                        VerticalAlign: =VerticalAlign.Bottom
+                        Width: =Parent.Width - Self.X - 20*1
+                        X: =20*1
+                        Y: =12
+                        ZIndex: =2
+

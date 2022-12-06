@@ -1,0 +1,2547 @@
+"'Contact Detail Screen' As screen":
+    Fill: =gblAppStyles.Background.Fill
+    LoadingSpinner: =LoadingSpinner.Data
+    LoadingSpinnerColor: =gblAppStyles.ButtonPrimary.Fill
+    OnHidden: |-
+        =UpdateContext(
+            {
+                locVisibleDialog: false,
+                locVisibleDialogDelete: false,
+                locContactEmail_New: Blank(),
+                locContactName_New: Blank()
+            }
+        );
+        Reset(cmbContactDetail_Content_SelectAContact);
+        Reset(tglContactDetail_Content_Internal);
+        Reset(drpContactDetail_Content_Category);
+        Reset(txtContactDetail_Content_Description);
+        Reset(txtContactDetail_Content_Email);
+        Reset(txtContactDetail_Content_Name);
+
+    tmrSetFocus_ContactDetail As timer:
+        AutoStart: =locSetFocusTimerStart
+        Color: =RGBA(0, 0, 0, 0)
+        DisplayMode: =DisplayMode.Disabled
+        Duration: =100
+        Fill: =RGBA(0, 0, 0, 0)
+        Height: =0
+        HoverFill: =Transparent
+        OnTimerEnd: |
+            =Switch(
+                locSetFocusControlTarget,
+                "icnContactDetail_Delete_Cancel",
+                SetFocus(icnContactDetail_Delete_Cancel)
+            );
+        PaddingBottom: =0
+        PaddingLeft: =0
+        PaddingRight: =0
+        PaddingTop: =0
+        Size: =0
+        TabIndex: =-1
+        Visible: =false
+        Width: =0
+        X: =Parent.Width - Self.Width
+        Y: =Parent.Height - Self.Height
+        ZIndex: =1
+
+    cnvContactDetail As fluidGrid.fluidGridWithBlankCard:
+        BorderThickness: =0
+        Height: =Parent.Height - Self.Y
+        Width: =Parent.Width
+        Y: =conContactDetail_Actions.Y + conContactDetail_Actions.Height
+        ZIndex: =2
+
+        dtcContactDetail_Content As dataCard:
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            BorderThickness: =0
+            DisplayMode: =DisplayMode.Edit
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =shpContactDetail_Divider.Y + shpContactDetail_Divider.Height + gblPadding.Page
+            Width: =Min(Parent.Width,900)
+            X: =0
+            Y: =0
+            ZIndex: =1
+
+            shpContactDetail_Divider As rectangle:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                DisplayMode: =DisplayMode.Disabled
+                Fill: =gblAppStyles.Dividers.Elements
+                Height: =1.5
+                Width: =Parent.Width - Self.X - gblPadding.Page
+                X: =gblPadding.Page
+                Y: =conContactDetail_Content.Y + conContactDetail_Content.Height + (2 * gblPadding.Page)
+                ZIndex: =15
+
+            conContactDetail_Content As groupContainer:
+                Height: |-
+                    =If(
+                        tglContactDetail_Content_Internal.Value,
+                        txtContactDetail_Content_Description.Y + txtContactDetail_Content_Description.Height,
+                        txtContactDetail_Content_Email.Y + txtContactDetail_Content_Email.Height
+                    ) + gblPadding.Page
+                Width: =Parent.Width
+                X: =0*0
+                Y: =0*0
+                ZIndex: =17
+
+                txtContactDetail_Content_Email As text:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "Text input to add contact's email",
+                                varOOBTextId: "txtContactDetail_Content_Email__AccessibleLabel"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    BorderColor: =gblAppStyles.TextInput.BorderColor
+                    BorderThickness: =gblAppStyles.TextInput.BorderThickness
+                    Color: =gblAppStyles.TextInput.Color
+                    Default: =Text(Coalesce(locContactEmail_New,gblRecordBulletinContact.Email))
+                    DelayOutput: =true
+                    DisabledBorderColor: =gblAppStyles.TextInput.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.TextInput.DisabledColor
+                    DisabledFill: =gblAppStyles.TextInput.DisabledFill
+                    EnableSpellCheck: =true
+                    Fill: =gblAppStyles.TextInput.Fill
+                    FocusedBorderColor: =gblAppStyles.TextInput.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.TextInput.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32
+                    HintText: |-
+                        =With(
+                        {
+                        varDefault: "Add contact's email",
+                        varOOBTextId: "txtContactDetail_Content_Email__HintText"
+                        },
+                        With(
+                        {
+                        varLocalizedText: LookUp(
+                        colLocalization,
+                        OOBTextId = varOOBTextId,
+                        LocalizedText
+                        )
+                        },
+                        Coalesce(
+                        varLocalizedText,
+                        varDefault
+                        )
+                        )
+                        )
+                    HoverBorderColor: =gblAppStyles.TextInput.HoverBorderColor
+                    HoverColor: =gblAppStyles.TextInput.HoverColor
+                    HoverFill: =gblAppStyles.TextInput.HoverFill
+                    MaxLength: =100
+                    PaddingLeft: =5
+                    PressedBorderColor: =gblAppStyles.TextInput.PressedBorderColor
+                    PressedColor: =gblAppStyles.TextInput.PressedColor
+                    PressedFill: =gblAppStyles.TextInput.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.TextInput.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.TextInput.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.TextInput.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.TextInput.RadiusTopRight
+                    Size: =gblAppStyles.TextInput.Size
+                    TabIndex: =If(locVisibleDialog,-1,0)
+                    Tooltip: =Self.HintText
+                    Visible: =!tglContactDetail_Content_Internal.Value
+                    Width: =lblContactDetail_Content_Email.Width
+                    X: =lblContactDetail_Content_Email.X
+                    Y: =lblContactDetail_Content_Email.Y + lblContactDetail_Content_Email.Height
+                    ZIndex: =1
+
+                lblContactDetail_Content_Email As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: |
+                        =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =32
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =
+                    PaddingBottom: =0
+                    PaddingLeft: =0
+                    PaddingRight: =0
+                    PaddingTop: =0
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                        {
+                        varDefault: "Email",
+                        varOOBTextId: "lblContactDetail_Content_Email__Text"
+                        },
+                        With(
+                        {
+                        varLocalizedText: LookUp(
+                        colLocalization,
+                        OOBTextId = varOOBTextId,
+                        LocalizedText
+                        )
+                        },
+                        Coalesce(
+                        varLocalizedText,
+                        varDefault
+                        )
+                        )
+                        )
+                    Visible: =!tglContactDetail_Content_Internal.Value
+                    Width: =txtContactDetail_Content_Description.Width
+                    Wrap: =false
+                    X: =txtContactDetail_Content_Description.X
+                    Y: =txtContactDetail_Content_Description.Y + txtContactDetail_Content_Description.Height + gblPadding.Page
+                    ZIndex: =2
+
+                txtContactDetail_Content_Description As text:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "Text input to add description",
+                                varOOBTextId: "txtContactDetail_Content_Description__AccessibleLabel"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    BorderColor: =gblAppStyles.TextInput.BorderColor
+                    BorderThickness: =gblAppStyles.TextInput.BorderThickness
+                    Color: =gblAppStyles.TextInput.Color
+                    Default: =Text(gblRecordBulletinContact.Description)
+                    DelayOutput: =true
+                    DisabledBorderColor: =gblAppStyles.TextInput.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.TextInput.DisabledColor
+                    DisabledFill: =gblAppStyles.TextInput.DisabledFill
+                    EnableSpellCheck: =true
+                    Fill: =gblAppStyles.TextInput.Fill
+                    FocusedBorderColor: =gblAppStyles.TextInput.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.TextInput.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32
+                    HintText: |-
+                        =With(
+                        {
+                        varDefault: "Add description",
+                        varOOBTextId: "txtContactDetail_Content_Description__HintText"
+                        },
+                        With(
+                        {
+                        varLocalizedText: LookUp(
+                        colLocalization,
+                        OOBTextId = varOOBTextId,
+                        LocalizedText
+                        )
+                        },
+                        Coalesce(
+                        varLocalizedText,
+                        varDefault
+                        )
+                        )
+                        )
+                    HoverBorderColor: =gblAppStyles.TextInput.HoverBorderColor
+                    HoverColor: =gblAppStyles.TextInput.HoverColor
+                    HoverFill: =gblAppStyles.TextInput.HoverFill
+                    MaxLength: =100
+                    PaddingLeft: =5
+                    PaddingRight: =8
+                    PressedBorderColor: =gblAppStyles.TextInput.PressedBorderColor
+                    PressedColor: =gblAppStyles.TextInput.PressedColor
+                    PressedFill: =gblAppStyles.TextInput.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.TextInput.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.TextInput.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.TextInput.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.TextInput.RadiusTopRight
+                    Size: =gblAppStyles.TextInput.Size
+                    TabIndex: =If(locVisibleDialog,-1,0)
+                    Tooltip: =Self.HintText
+                    Width: =lblContactDetail_Content_Description.Width
+                    X: =lblContactDetail_Content_Description.X
+                    Y: =lblContactDetail_Content_Description.Y + lblContactDetail_Content_Description.Height
+                    ZIndex: =3
+
+                lblContactDetail_Content_Description As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: |
+                        =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =32
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =
+                    PaddingBottom: =0
+                    PaddingLeft: =0
+                    PaddingRight: =0
+                    PaddingTop: =0
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                        {
+                        varDefault: "Description",
+                        varOOBTextId: "lblContactDetail_Content_Description__Text"
+                        },
+                        With(
+                        {
+                        varLocalizedText: LookUp(
+                        colLocalization,
+                        OOBTextId = varOOBTextId,
+                        LocalizedText
+                        )
+                        },
+                        Coalesce(
+                        varLocalizedText,
+                        varDefault
+                        )
+                        )
+                        )
+                    Width: =Parent.Width - Self.X - gblPadding.Page
+                    Wrap: =false
+                    X: =lblContactDetail_Content_Category.X + lblContactDetail_Content_Category.Width + gblPadding.Page
+                    Y: =105
+                    ZIndex: =4
+
+                drpContactDetail_Content_Category As dropdown:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "Drop down of categories",
+                                varOOBTextId: "drpContactDetail_Content_Category__AccessibleLabel"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    BorderColor: =gblAppStyles.Dropdown.BorderColor
+                    BorderThickness: =gblAppStyles.Dropdown.BorderThickness
+                    ChevronBackground: =gblAppStyles.Dropdown.ChevronBackground
+                    ChevronDisabledBackground: =gblAppStyles.Dropdown.ChevronDisabledBackground
+                    ChevronDisabledFill: =gblAppStyles.Dropdown.ChevronDisabledFill
+                    ChevronFill: =gblAppStyles.Dropdown.ChevronFill
+                    ChevronHoverBackground: =gblAppStyles.Dropdown.ChevronHoverBackground
+                    ChevronHoverFill: =gblAppStyles.Dropdown.ChevronHoverFill
+                    Color: =gblAppStyles.Dropdown.Color
+                    Default: =gblRecordBulletinContact.Category.Name
+                    DisabledBorderColor: =gblAppStyles.Dropdown.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Dropdown.DisabledColor
+                    DisabledFill: =gblAppStyles.Dropdown.DisabledFill
+                    Fill: =gblAppStyles.Dropdown.Fill
+                    FocusedBorderColor: =gblAppStyles.Dropdown.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Dropdown.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32
+                    HoverBorderColor: =gblAppStyles.Dropdown.HoverBorderColor
+                    HoverColor: =gblAppStyles.Dropdown.HoverColor
+                    HoverFill: =gblAppStyles.Dropdown.HoverFill
+                    Items: =Filter('Bulletin Link Categories','Bulletin Link Categories (Views)'.'Active Bulletin Link Categories')
+                    OnChange: |-
+                        =// [Screen Reader Start]
+                        UpdateContext(
+                            {
+                                locScreenReaderAnnouncedText: With(
+                                    {
+                                        varAnnouncedText: With(
+                                            {
+                                                varDefault: Self.Selected.Name & " is now selected",
+                                                varOOBTextId: "drpContactDetail_Content_Category__Announcement",
+                                                varParam0: Self.Selected.Name
+                                            },
+                                            With(
+                                                {
+                                                    varLocalizedText: LookUp(
+                                                        colLocalization,
+                                                        OOBTextId = varOOBTextId,
+                                                        LocalizedText
+                                                    )
+                                                },
+                                                If(
+                                                    IsBlankOrError(varParam0),
+                                                    Coalesce(
+                                                        varLocalizedText,
+                                                        varDefault
+                                                    ),
+                                                    Coalesce(
+                                                        Substitute(
+                                                            varLocalizedText,
+                                                            "{0}",
+                                                            Text(varParam0)
+                                                        ),
+                                                        varDefault
+                                                    )
+                                                )
+                                            )
+                                        )
+                                    },
+                                    If(
+                                        locScreenReaderAnnouncedText = varAnnouncedText,
+                                        Concatenate(
+                                            varAnnouncedText,
+                                            " "
+                                        ),
+                                        varAnnouncedText
+                                    )
+                                )
+                            }
+                        );
+                        // [Screen Reader End]
+                    OnSelect: |-
+                        =false;
+                        //screen reader start
+                        UpdateContext(
+                            {
+                                locScreenReaderAnnouncedText: With(
+                                    {
+                                        varAnnouncedText: With(
+                                            {
+                                                varDefault: "{0} is now selected",
+                                                varOOBTextId: "drpContactDetail_Content_Category__Announcement"
+                                            },
+                                            With(
+                                                {
+                                                    varLocalizedText: LookUp(
+                                                        colLocalization,
+                                                        OOBTextId = varOOBTextId,
+                                                        LocalizedText
+                                                    )
+                                                },
+                                                Coalesce(
+                                                    varLocalizedText,
+                                                    varDefault
+                                                )
+                                            )
+                                        )
+                                    },
+                                    If(
+                                        locScreenReaderAnnouncedText = varAnnouncedText,
+                                        Concatenate(
+                                            varAnnouncedText,
+                                            " "
+                                        ),
+                                        varAnnouncedText
+                                    )
+                                )
+                            }
+                        );
+                        //screen reader end
+                    PressedBorderColor: =gblAppStyles.Dropdown.PressedBorderColor
+                    PressedColor: =gblAppStyles.Dropdown.PressedColor
+                    PressedFill: =gblAppStyles.Dropdown.PressedFill
+                    Reset: =true
+                    SelectionColor: =gblAppStyles.Dropdown.SelectionColor
+                    SelectionFill: =gblAppStyles.Dropdown.SelectionFill
+                    Size: =gblAppStyles.Dropdown.Size
+                    TabIndex: =If(locVisibleDialog,-1,0)
+                    Tooltip: =Self.AccessibleLabel
+                    Width: =lblContactDetail_Content_Category.Width
+                    X: =gblPadding.Page
+                    Y: =lblContactDetail_Content_Category.Height + lblContactDetail_Content_Category.Y
+                    ZIndex: =5
+
+                lblContactDetail_Content_Category As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: |
+                        =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =32
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =
+                    PaddingBottom: =0
+                    PaddingLeft: =0
+                    PaddingRight: =0
+                    PaddingTop: =0
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                        {
+                        varDefault: "Category",
+                        varOOBTextId: "lblContactDetail_Content_Category__Text"
+                        },
+                        With(
+                        {
+                        varLocalizedText: LookUp(
+                        colLocalization,
+                        OOBTextId = varOOBTextId,
+                        LocalizedText
+                        )
+                        },
+                        Coalesce(
+                        varLocalizedText,
+                        varDefault
+                        )
+                        )
+                        )
+                    Width: =280
+                    Wrap: =false
+                    X: =gblPadding.Page
+                    Y: =tglContactDetail_Content_Internal.Y + tglContactDetail_Content_Internal.Height + gblPadding.Page
+                    ZIndex: =6
+
+                txtContactDetail_Content_Name As text:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "Text input to add contact's name",
+                                varOOBTextId: "txtContactDetail_Content_Name__AccessibleLabel"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    BorderColor: =gblAppStyles.TextInput.BorderColor
+                    BorderThickness: =gblAppStyles.TextInput.BorderThickness
+                    Color: =gblAppStyles.TextInput.Color
+                    Default: =Text(Coalesce(locContactName_New,gblRecordBulletinContact.Name))
+                    DelayOutput: =true
+                    DisabledBorderColor: =gblAppStyles.TextInput.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.TextInput.DisabledColor
+                    DisabledFill: =gblAppStyles.TextInput.DisabledFill
+                    EnableSpellCheck: =true
+                    Fill: =gblAppStyles.TextInput.Fill
+                    FocusedBorderColor: =gblAppStyles.TextInput.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.TextInput.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32
+                    HintText: |-
+                        =With(
+                        {
+                        varDefault: "Add contact's name",
+                        varOOBTextId: "txtContactDetail_Content_Name__HintText"
+                        },
+                        With(
+                        {
+                        varLocalizedText: LookUp(
+                        colLocalization,
+                        OOBTextId = varOOBTextId,
+                        LocalizedText
+                        )
+                        },
+                        Coalesce(
+                        varLocalizedText,
+                        varDefault
+                        )
+                        )
+                        )
+                    HoverBorderColor: =gblAppStyles.TextInput.HoverBorderColor
+                    HoverColor: =gblAppStyles.TextInput.HoverColor
+                    HoverFill: =gblAppStyles.TextInput.HoverFill
+                    MaxLength: =100
+                    PaddingLeft: =5
+                    PressedBorderColor: =gblAppStyles.TextInput.PressedBorderColor
+                    PressedColor: =gblAppStyles.TextInput.PressedColor
+                    PressedFill: =gblAppStyles.TextInput.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.TextInput.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.TextInput.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.TextInput.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.TextInput.RadiusTopRight
+                    Size: =gblAppStyles.TextInput.Size
+                    TabIndex: =If(locVisibleDialog,-1,0)
+                    Tooltip: =Self.HintText
+                    Visible: =!tglContactDetail_Content_Internal.Value
+                    Width: =lblContactDetail_Content_Name.Width
+                    X: =lblContactDetail_Content_Name.X
+                    Y: =lblContactDetail_Content_Name.Y + lblContactDetail_Content_Name.Height
+                    ZIndex: =7
+
+                lblContactDetail_Content_Name As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: |
+                        =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =32
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =
+                    PaddingBottom: =0
+                    PaddingLeft: =0
+                    PaddingRight: =0
+                    PaddingTop: =0
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                        {
+                        varDefault: "Name",
+                        varOOBTextId: "lblContactDetail_Content_Name__Text"
+                        },
+                        With(
+                        {
+                        varLocalizedText: LookUp(
+                        colLocalization,
+                        OOBTextId = varOOBTextId,
+                        LocalizedText
+                        )
+                        },
+                        Coalesce(
+                        varLocalizedText,
+                        varDefault
+                        )
+                        )
+                        )
+                    Visible: =!tglContactDetail_Content_Internal.Value
+                    Width: =Parent.Width - Self.X - gblPadding.Page
+                    Wrap: =false
+                    X: =lblContactDetail_Content_Internal.X + lblContactDetail_Content_Internal.Width + gblPadding.Page
+                    Y: =20
+                    ZIndex: =8
+
+                cmbContactDetail_Content_SelectAContact As combobox:
+                    AccessibleLabel: |-
+                        =With(
+                        {
+                        varDefault: "List of Office contacts to select from",
+                        varOOBTextId: "cmbContactDetail_Content_SelectAContact__AccessibleLabel"
+                        },
+                        With(
+                        {
+                        varLocalizedText: LookUp(
+                        colLocalization,
+                        OOBTextId = varOOBTextId,
+                        LocalizedText
+                        )
+                        },
+                        Coalesce(
+                        varLocalizedText,
+                        varDefault
+                        )
+                        )
+                        )
+                    BorderColor: =gblAppStyles.Dropdown.BorderColor
+                    BorderThickness: =gblAppStyles.Dropdown.BorderThickness
+                    ChevronBackground: =gblAppStyles.Dropdown.ChevronBackground
+                    ChevronDisabledBackground: =gblAppStyles.Dropdown.ChevronDisabledBackground
+                    ChevronDisabledFill: =gblAppStyles.Dropdown.ChevronDisabledFill
+                    ChevronFill: =gblAppStyles.Dropdown.ChevronFill
+                    ChevronHoverBackground: =gblAppStyles.Dropdown.ChevronHoverBackground
+                    ChevronHoverFill: =gblAppStyles.Dropdown.ChevronHoverFill
+                    Color: =gblAppStyles.Dropdown.Color
+                    DefaultSelectedItems: =[gblRecordBulletinContact.Name]
+                    DisabledBorderColor: =gblAppStyles.Dropdown.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Dropdown.DisabledColor
+                    DisabledFill: =gblAppStyles.Dropdown.DisabledFill
+                    DisplayFields: =["DisplayName"]
+                    Fill: =gblAppStyles.Dropdown.Fill
+                    FocusedBorderColor: =gblAppStyles.Dropdown.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Dropdown.FocusedBorderThickness
+                    Height: =32
+                    HoverBorderColor: =gblAppStyles.Dropdown.HoverBorderColor
+                    HoverColor: =gblAppStyles.Dropdown.HoverColor
+                    HoverFill: =gblAppStyles.Dropdown.HoverFill
+                    InputTextPlaceholder: ="Search for someone"
+                    Items: |-
+                        =Office365Users.SearchUser({searchTerm: Self.SearchText})
+                    OnChange: |-
+                        =// Set Selections
+                        With(
+                            {varSelected: Self.Selected},
+                            UpdateContext(
+                                {
+                                    locContactName_New: varSelected.DisplayName,
+                                    locContactEmail_New: varSelected.UserPrincipalName
+                                }
+                            )
+                        );
+                        // Reset other controls
+                        Reset(txtContactDetail_Content_Name);
+                        Reset(txtContactDetail_Content_Email);
+                        // [Screen Reader Start]
+                        UpdateContext(
+                            {
+                                locScreenReaderAnnouncedText: With(
+                                    {
+                                        varAnnouncedText: With(
+                                            {
+                                                varDefault: Self.Selected.DisplayName & " is now selected",
+                                                varOOBTextId: "drpContactDetail_Content_Category__Announcement",
+                                                varParam0: Self.Selected.DisplayName
+                                            },
+                                            With(
+                                                {
+                                                    varLocalizedText: LookUp(
+                                                        colLocalization,
+                                                        OOBTextId = varOOBTextId,
+                                                        LocalizedText
+                                                    )
+                                                },
+                                                If(
+                                                    IsBlankOrError(varParam0),
+                                                    Coalesce(
+                                                        varLocalizedText,
+                                                        varDefault
+                                                    ),
+                                                    Coalesce(
+                                                        Substitute(
+                                                            varLocalizedText,
+                                                            "{0}",
+                                                            Text(varParam0)
+                                                        ),
+                                                        varDefault
+                                                    )
+                                                )
+                                            )
+                                        )
+                                    },
+                                    If(
+                                        locScreenReaderAnnouncedText = varAnnouncedText,
+                                        Concatenate(
+                                            varAnnouncedText,
+                                            " "
+                                        ),
+                                        varAnnouncedText
+                                    )
+                                )
+                            }
+                        );
+                        // [Screen Reader End]
+                    OnSelect: |-
+                        =false;
+                        //screen reader start
+                        UpdateContext(
+                            {
+                                locScreenReaderAnnouncedText: With(
+                                    {
+                                        varAnnouncedText: With(
+                                            {
+                                                varDefault: "List of Office contacts is now filtered by {0}",
+                                                varOOBTextId: "cmbContactDetail_Content_SelectAContact__Announcement"
+                                            },
+                                            With(
+                                                {
+                                                    varLocalizedText: LookUp(
+                                                        colLocalization,
+                                                        OOBTextId = varOOBTextId,
+                                                        LocalizedText
+                                                    )
+                                                },
+                                                Coalesce(
+                                                    varLocalizedText,
+                                                    varDefault
+                                                )
+                                            )
+                                        )
+                                    },
+                                    If(
+                                        locScreenReaderAnnouncedText = varAnnouncedText,
+                                        Concatenate(
+                                            varAnnouncedText,
+                                            " "
+                                        ),
+                                        varAnnouncedText
+                                    )
+                                )
+                            }
+                        );
+                        //screen reader end
+                    PressedBorderColor: =gblAppStyles.Dropdown.PressedBorderColor
+                    PressedColor: =gblAppStyles.Dropdown.PressedColor
+                    PressedFill: =gblAppStyles.Dropdown.PressedFill
+                    SearchFields: =["DisplayName"]
+                    SearchItems: |-
+                        =Search(Office365Users.SearchUser({searchTerm: Self.SearchText}),cmbContactDetail_Content_SelectAContact.SearchText,"DisplayName")
+                    SelectionColor: =gblAppStyles.Dropdown.SelectionColor
+                    SelectionFill: |
+                        =gblAppStyles.Dropdown.SelectionFill
+                    SelectMultiple: =false
+                    Size: =gblAppStyles.Dropdown.Size
+                    TabIndex: =If(locVisibleDialog,-1,0)
+                    Visible: =tglContactDetail_Content_Internal.Value
+                    Width: =lblContactDetail_Content_SelectAContact.Width
+                    X: =lblContactDetail_Content_SelectAContact.X
+                    Y: =lblContactDetail_Content_SelectAContact.Y + lblContactDetail_Content_SelectAContact.Height
+                    ZIndex: =9
+
+                lblContactDetail_Content_SelectAContact As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: |
+                        =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =36
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =
+                    PaddingBottom: =0
+                    PaddingLeft: =0
+                    PaddingRight: =0
+                    PaddingTop: =0
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                        {
+                        varDefault: "Select a contact",
+                        varOOBTextId: "lblContactDetail_Content_SelectAContact__Text"
+                        },
+                        With(
+                        {
+                        varLocalizedText: LookUp(
+                        colLocalization,
+                        OOBTextId = varOOBTextId,
+                        LocalizedText
+                        )
+                        },
+                        Coalesce(
+                        varLocalizedText,
+                        varDefault
+                        )
+                        )
+                        )
+                    Visible: =tglContactDetail_Content_Internal.Value
+                    Width: =Parent.Width - Self.X - gblPadding.Page
+                    Wrap: =false
+                    X: =lblContactDetail_Content_Internal.X + lblContactDetail_Content_Internal.Width + gblPadding.Page
+                    Y: =lblContactDetail_Content_Internal.Y
+                    ZIndex: =10
+
+                tglContactDetail_Content_Internal As toggleSwitch:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "Toggle indicating contact is selected from Office contacts",
+                                varOOBTextId: "tglContactDetail_Content_Internal__AccessibleLabel"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    BorderColor: =gblAppStyles.Toggle.BorderColor
+                    BorderThickness: =gblAppStyles.Toggle.BorderThickness
+                    Color: =gblAppStyles.Toggle.Color
+                    Default: |-
+                        =If(
+                            IsBlankOrError(gblRecordBulletinContact),
+                            true,
+                            gblRecordBulletinContact.'Internal?' = 'Internal? (Bulletin Contacts)'.Yes
+                        )
+                    DisabledBorderColor: =gblAppStyles.Toggle.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Toggle.DisabledColor
+                    FalseFill: =gblAppStyles.Toggle.FalseFill
+                    FalseHoverFill: =gblAppStyles.Toggle.FalseHoverFill
+                    FalseText: |-
+                        =With(
+                            {
+                                varDefault: "No",
+                                varOOBTextId: "tglContactDetail_Content_Internal__Value-False"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    FocusedBorderColor: =gblAppStyles.Toggle.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Toggle.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    HandleFill: =If(Self.Value,gblAppStyles.Toggle.HandleFillTrue,gblAppStyles.Toggle.HandleFillFalse)
+                    Height: =32
+                    HoverBorderColor: =gblAppStyles.Toggle.HoverBorderColor
+                    OnCheck: |-
+                        =// [Screen Reader Start]
+                        UpdateContext(
+                            {
+                                locScreenReaderAnnouncedText: With(
+                                    {
+                                        varAnnouncedText: With(
+                                            {
+                                                varDefault: "List of Office contacts shown to select a contact", // Default Text to use
+                                                varOOBTextId: "tglContactDetail_Content_Internal__Announcement-True" // Localized version
+                                            },
+                                            With(
+                                                {
+                                                    varLocalizedText: LookUp(
+                                                        colLocalization,
+                                                        OOBTextId = varOOBTextId,
+                                                        LocalizedText
+                                                    )
+                                                },
+                                                Coalesce(
+                                                    varLocalizedText,
+                                                    varDefault
+                                                )
+                                            )
+                                        )
+                                    },
+                                    If(
+                                        locScreenReaderAnnouncedText = varAnnouncedText,
+                                        Concatenate(
+                                            varAnnouncedText,
+                                            " "
+                                        ),
+                                        varAnnouncedText // If clicked twice, will append blank space to update variable
+                                    )
+                                )
+                            }
+                        );
+                        // [Screen Reader End]
+                    OnSelect: |-
+                        =false;
+                        //screen reader start
+                        UpdateContext(
+                            {
+                                locScreenReaderAnnouncedText: With(
+                                    {
+                                        varAnnouncedText: With(
+                                            {
+                                                varDefault: "List of Office contacts shown to select a contact",
+                                                varOOBTextId: "tglContactDetail_Content_Internal__Announcement"
+                                            },
+                                            With(
+                                                {
+                                                    varLocalizedText: LookUp(
+                                                        colLocalization,
+                                                        OOBTextId = varOOBTextId,
+                                                        LocalizedText
+                                                    )
+                                                },
+                                                Coalesce(
+                                                    varLocalizedText,
+                                                    varDefault
+                                                )
+                                            )
+                                        )
+                                    },
+                                    If(
+                                        locScreenReaderAnnouncedText = varAnnouncedText,
+                                        Concatenate(
+                                            varAnnouncedText,
+                                            " "
+                                        ),
+                                        varAnnouncedText
+                                    )
+                                )
+                            }
+                        );
+                        //screen reader end
+                    OnUncheck: |-
+                        =// [Screen Reader Start]
+                        UpdateContext(
+                            {
+                                locScreenReaderAnnouncedText: With(
+                                    {
+                                        varAnnouncedText: With(
+                                            {
+                                                varDefault: "List of Office contacts hidden; enter contact details", // Default Text to use
+                                                varOOBTextId: "tglContactDetail_Content_Internal__Announcement-False" // Localized version
+                                            },
+                                            With(
+                                                {
+                                                    varLocalizedText: LookUp(
+                                                        colLocalization,
+                                                        OOBTextId = varOOBTextId,
+                                                        LocalizedText
+                                                    )
+                                                },
+                                                Coalesce(
+                                                    varLocalizedText,
+                                                    varDefault
+                                                )
+                                            )
+                                        )
+                                    },
+                                    If(
+                                        locScreenReaderAnnouncedText = varAnnouncedText,
+                                        Concatenate(
+                                            varAnnouncedText,
+                                            " "
+                                        ),
+                                        varAnnouncedText // If clicked twice, will append blank space to update variable
+                                    )
+                                )
+                            }
+                        );
+                        // [Screen Reader End]
+                    PressedBorderColor: =gblAppStyles.Toggle.PressedBorderColor
+                    Size: =gblAppStyles.Toggle.Size
+                    TabIndex: =If(locVisibleDialog,-1,0)
+                    Tooltip: =Self.AccessibleLabel
+                    TrueFill: =gblAppStyles.Toggle.TrueFill
+                    TrueHoverFill: =gblAppStyles.Toggle.TrueHoverFill
+                    TrueText: |-
+                        =With(
+                            {
+                                varDefault: "Yes",
+                                varOOBTextId: "tglContactDetail_Content_Internal__Value-True"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    X: =gblPadding.Page
+                    Y: =lblContactDetail_Content_Internal.Y + lblContactDetail_Content_Internal.Height
+                    ZIndex: =11
+
+                lblContactDetail_Content_Internal As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: |
+                        =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =32
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =
+                    PaddingBottom: =0
+                    PaddingLeft: =0
+                    PaddingRight: =0
+                    PaddingTop: =0
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                        {
+                        varDefault: "Office user?",
+                        varOOBTextId: "lblContactDetail_Content_Internal__Text"
+                        },
+                        With(
+                        {
+                        varLocalizedText: LookUp(
+                        colLocalization,
+                        OOBTextId = varOOBTextId,
+                        LocalizedText
+                        )
+                        },
+                        Coalesce(
+                        varLocalizedText,
+                        varDefault
+                        )
+                        )
+                        )
+                    Width: =280
+                    Wrap: =false
+                    X: =gblPadding.Page
+                    Y: =gblPadding.Page
+                    ZIndex: =12
+
+        dtcContactDetail_Preview As dataCard.blankCard:
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            DisplayMode: =DisplayMode.Edit
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =300 
+            Width: =Min(Parent.Width,900)
+            X: =0
+            Y: =0
+            ZIndex: =2
+
+            lblContactDetail_Preview_Header As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: |
+                    =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                DisplayMode: =DisplayMode.View
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Semibold
+                Height: =36
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                OnSelect: =
+                PaddingBottom: =0
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: |-
+                    =With(
+                    {
+                    varDefault: "Preview",
+                    varOOBTextId: "lblContactDetail_Preview_Header__Text"
+                    },
+                    With(
+                    {
+                    varLocalizedText: LookUp(
+                    colLocalization,
+                    OOBTextId = varOOBTextId,
+                    LocalizedText
+                    )
+                    },
+                    Coalesce(
+                    varLocalizedText,
+                    varDefault
+                    )
+                    )
+                    )
+                Width: =Parent.Width - Self.X - gblPadding.Page
+                Wrap: =false
+                X: =gblPadding.Page
+                Y: =0*0
+                ZIndex: =2
+
+            conContactDetail_Preview As groupContainer:
+                Height: =btnContactDetail_Preview_Background.Height
+                Width: =btnContactDetail_Preview_Background.Width
+                X: =gblPadding.Page
+                Y: =lblContactDetail_Preview_Header.Y + lblContactDetail_Preview_Header.Height + gblPadding.Page
+                ZIndex: =8
+
+                btnContactDetail_Preview_Background As button:
+                    BorderColor: =gblAppStyles.ButtonBackground.BorderColor
+                    BorderThickness: =gblAppStyles.ButtonBackground.BorderThickness
+                    Color: =gblAppStyles.ButtonBackground.Color
+                    DisabledBorderColor: =gblAppStyles.ButtonBackground.DisabledBorderColor
+                    DisabledColor: =Transparent
+                    DisabledFill: =gblAppStyles.ButtonSecondary.Fill
+                    DisplayMode: =DisplayMode.Disabled
+                    Fill: =gblAppStyles.ButtonBackground.Fill
+                    FocusedBorderColor: =gblAppStyles.ButtonBackground.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.ButtonBackground.FocusedBorderThickness
+                    Height: =64
+                    HoverBorderColor: =gblAppStyles.ButtonBackground.HoverBorderColor
+                    HoverColor: =gblAppStyles.ButtonBackground.HoverColor
+                    HoverFill: =gblAppStyles.ButtonBackground.HoverFill
+                    OnSelect: =
+                    PressedBorderColor: =gblAppStyles.ButtonBackground.PressedBorderColor
+                    PressedColor: =gblAppStyles.ButtonBackground.PressedColor
+                    PressedFill: =gblAppStyles.ButtonBackground.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.ButtonBackground.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.ButtonBackground.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.ButtonBackground.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.ButtonBackground.RadiusTopRight
+                    Size: =gblAppStyles.ButtonBackground.Size
+                    Text: =lblContactDetail_Preview_Header.Text
+                    Tooltip: =Self.Text
+                    Width: =280
+                    X: =0*0
+                    Y: =0*0
+                    ZIndex: =1
+
+                lblContactDetail_Preview_Name As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: |
+                        =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =btnContactDetail_Preview_Background.Height * .5
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =
+                    PaddingBottom: =4
+                    PaddingLeft: =12
+                    PaddingRight: =0
+                    PaddingTop: =4
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: =Text(Coalesce(locContactName_New,gblRecordBulletinContact.Name))
+                    VerticalAlign: =VerticalAlign.Bottom
+                    Width: =imgContactDetail_Preview_Email.X - Self.X
+                    Wrap: =false
+                    X: =imgContactDetail_Preview_Picture.X + imgContactDetail_Preview_Picture.Width
+                    Y: =btnContactDetail_Preview_Background.Y
+                    ZIndex: =2
+
+                lblContactDetail_Preview_Description As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: |
+                        =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =btnContactDetail_Preview_Background.Height * .5
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =
+                    PaddingBottom: =4
+                    PaddingLeft: =12
+                    PaddingRight: =0
+                    PaddingTop: =4
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Small
+                    Text: =txtContactDetail_Content_Description.Text
+                    VerticalAlign: =VerticalAlign.Top
+                    Width: =imgContactDetail_Preview_Email.X - Self.X
+                    Wrap: =false
+                    X: =imgContactDetail_Preview_Picture.X + imgContactDetail_Preview_Picture.Width
+                    Y: =lblContactDetail_Preview_Name.Y + lblContactDetail_Preview_Name.Height
+                    ZIndex: =3
+
+                imgContactDetail_Preview_Email As image:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "Preview of the email button for contacts",
+                                varOOBTextId: "imgContactDetail_Preview_Email__AccessibleLabel__AccessibleLabel"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Height: =64
+                    Image: |-
+                        =With(
+                            {
+                                varImageRecord: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Chat"
+                                ),
+                                varColor: gblAppStyles.Icons.Color
+                            },
+                            With(
+                                {
+                                    varImageData: Concatenate(
+                                        "data:image/svg+xml;utf8, ",
+                                        EncodeUrl(
+                                            Concatenate(
+                                                "<svg viewBox='",
+                                                varImageRecord.staticIconViewbox,
+                                                "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                varImageRecord.staticIconPath,
+                                                "' fill='#",
+                                                varColor,
+                                                "'/></svg>"
+                                            )
+                                        )
+                                    )
+                                },
+                                varImageData
+                            )
+                        )
+                    OnSelect: =
+                    PaddingBottom: =22
+                    PaddingLeft: =6
+                    PaddingRight: =6
+                    PaddingTop: =22
+                    Tooltip: =Self.AccessibleLabel
+                    Width: =32
+                    X: =216
+                    Y: =0*0
+                    ZIndex: =4
+
+                imgContactDetail_Preview_Picture As image:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "Preview of the contact image",
+                                varOOBTextId: "imgContactDetail_Preview_Picture__AccessibleLabel__AccessibleLabel"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    DisplayMode: =DisplayMode.View
+                    Height: =44
+                    Image: |-
+                        =If(
+                            !IsBlankOrError(Text(locContactEmail_New)) Or !IsBlankOrError(Text(gblRecordBulletinContact.Email)),
+                            Office365Users.UserPhotoV2(
+                                Text(
+                                    Coalesce(
+                                        locContactEmail_New,
+                                        gblRecordBulletinContact.Email
+                                    )
+                                )
+                            ),
+                            SampleImage
+                        )
+                    RadiusBottomLeft: =44
+                    RadiusBottomRight: =44
+                    RadiusTopLeft: =44
+                    RadiusTopRight: =44
+                    Tooltip: =Self.AccessibleLabel
+                    Width: =44
+                    X: =10
+                    Y: =10
+                    ZIndex: =5
+
+                imgContactDetail_Preview_Launch As image:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "Preview of the message button for contacts",
+                                varOOBTextId: "imgContactDetail_Preview_Launch__AccessibleLabel__AccessibleLabel"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Height: =64
+                    Image: |-
+                        =With(
+                            {
+                                varImageRecord: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Inbox"
+                                ),
+                                varColor: gblAppStyles.Icons.Color
+                            },
+                            With(
+                                {
+                                    varImageData: Concatenate(
+                                        "data:image/svg+xml;utf8, ",
+                                        EncodeUrl(
+                                            Concatenate(
+                                                "<svg viewBox='",
+                                                varImageRecord.staticIconViewbox,
+                                                "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                varImageRecord.staticIconPath,
+                                                "' fill='#",
+                                                varColor,
+                                                "'/></svg>"
+                                            )
+                                        )
+                                    )
+                                },
+                                varImageData
+                            )
+                        )
+                    OnSelect: =
+                    PaddingBottom: =22
+                    PaddingLeft: =6
+                    PaddingRight: =6
+                    PaddingTop: =22
+                    Tooltip: =Self.AccessibleLabel
+                    Width: =32
+                    X: =248
+                    Y: =0*0
+                    ZIndex: =6
+
+    conContactDetail_Actions As groupContainer:
+        Height: =60
+        Width: =Parent.Width
+        X: =0*0
+        Y: =0*0
+        ZIndex: =3
+
+        btnContactDetail_Save As button:
+            BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+            BorderThickness: =gblAppStyles.ButtonPrimary.BorderThickness
+            Color: =gblAppStyles.ButtonPrimary.Color
+            DisabledBorderColor: =gblAppStyles.ButtonPrimary.DisabledBorderColor
+            DisabledColor: =gblAppStyles.ButtonPrimary.DisabledColor
+            DisabledFill: =gblAppStyles.ButtonPrimary.DisabledFill
+            DisplayMode: |-
+                =With(
+                    {
+                        // Check for Valid Data Entry
+                        varValidCategory: !IsBlank(drpContactDetail_Content_Category.Selected),
+                        varValidName: !IsBlank(txtContactDetail_Content_Name.Text),
+                        varValidEmail: !IsBlank(txtContactDetail_Content_Email.Text),
+                        varValidDescription: !IsBlank(txtContactDetail_Content_Description.Text),
+                        // Check for Updated Fields
+                        varDirtyCategory: drpContactDetail_Content_Category.Selected.Name <> Text(gblRecordBulletinContact.Category.Name),
+                        varDirtyName: txtContactDetail_Content_Name.Text <> Text(gblRecordBulletinContact.Name),
+                        varDirtyEmail: txtContactDetail_Content_Email.Text <> Text(gblRecordBulletinContact.Email),
+                        varDirtyDescription: txtContactDetail_Content_Description.Text <> gblRecordBulletinContact.Description,
+                        varDirtyInternal: If(
+                            tglContactDetail_Content_Internal.Value,
+                            'Internal? (Bulletin Contacts)'.Yes,
+                            'Internal? (Bulletin Contacts)'.No
+                        ) <> gblRecordBulletinContact.'Internal?'
+                    },
+                    If(
+                        And(
+                            varValidCategory,
+                            varValidName,
+                            varValidEmail,
+                            varValidDescription
+                        ),
+                        If(
+                            Or(
+                                varDirtyCategory,
+                                varDirtyName,
+                                varDirtyEmail,
+                                varDirtyDescription,
+                                varDirtyInternal
+                            ),
+                            DisplayMode.Edit,
+                            DisplayMode.Disabled
+                        ),
+                        DisplayMode.Disabled
+                    )
+                )
+            Fill: =gblAppStyles.ButtonPrimary.Fill
+            FocusedBorderColor: =gblAppStyles.ButtonPrimary.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.ButtonPrimary.FocusedBorderThickness
+            Height: =32
+            HoverBorderColor: =gblAppStyles.ButtonPrimary.HoverBorderColor
+            HoverColor: =gblAppStyles.ButtonPrimary.HoverColor
+            HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+            OnSelect: |
+                =// Block user entry; code processing
+                UpdateContext({locBlockUserInput: true});
+                // Patch record, and update variable
+                Set(
+                    gblRecordBulletinContact,
+                    Patch(
+                        'Bulletin Contacts',
+                        {
+                            'Bulletin Contact': gblRecordBulletinContact.'Bulletin Contact',
+                            Category: drpContactDetail_Content_Category.Selected,
+                            Name: Coalesce(
+                                locContactName_New,
+                                txtContactDetail_Content_Name.Text
+                            ),
+                            Description: txtContactDetail_Content_Description.Text,
+                            Email: Coalesce(
+                                locContactEmail_New,
+                                txtContactDetail_Content_Email.Text
+                            ),
+                            'Internal?': If(
+                                tglContactDetail_Content_Internal.Value,
+                                'Internal? (Bulletin Contacts)'.Yes,
+                                'Internal? (Bulletin Contacts)'.No
+                            )
+                        }
+                    )
+                );
+                Navigate(
+                    'Links and Contacts Screen',
+                    ScreenTransition.None
+                );
+                // Allow user entry; code completed
+                UpdateContext({locBlockUserInput: false});
+            PressedBorderColor: =gblAppStyles.ButtonPrimary.PressedBorderColor
+            PressedColor: =gblAppStyles.ButtonPrimary.PressedColor
+            PressedFill: =gblAppStyles.ButtonPrimary.PressedFill
+            RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+            RadiusBottomRight: =gblAppStyles.ButtonPrimary.RadiusBottomRight
+            RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+            RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+            Size: =gblAppStyles.ButtonPrimary.Size
+            TabIndex: =If(locVisibleDialog,-1,0)
+            Text: |-
+                =With(
+                {
+                varDefault: "Save",
+                varOOBTextId: "btnContactDetail_Save__Text"
+                },
+                With(
+                {
+                varLocalizedText: LookUp(
+                colLocalization,
+                OOBTextId = varOOBTextId,
+                LocalizedText
+                )
+                },
+                Coalesce(
+                varLocalizedText,
+                varDefault
+                )
+                )
+                ) 
+            Tooltip: =Self.Text
+            Width: =96
+            X: =Parent.Width -Self.Width -gblPadding.Page
+            Y: =(Parent.Height - Self.Height) / 2
+            ZIndex: =2
+
+        lblContactDetail_Header As label:
+            BorderColor: =gblAppStyles.Label.BorderColor
+            BorderThickness: =gblAppStyles.Label.BorderThickness
+            Color: =gblAppStyles.Label.Color
+            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+            DisabledColor: |
+                =gblAppStyles.Label.DisabledColor
+            DisabledFill: =gblAppStyles.Label.DisabledFill
+            DisplayMode: =DisplayMode.View
+            Fill: =gblAppStyles.Label.Fill
+            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            FontWeight: =FontWeight.Semibold
+            Height: =Parent.Height
+            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+            HoverColor: =gblAppStyles.Label.HoverColor
+            HoverFill: =gblAppStyles.Label.HoverFill
+            OnSelect: =
+            PaddingBottom: =4
+            PaddingLeft: =4
+            PaddingRight: =4
+            PaddingTop: =4
+            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+            PressedColor: =gblAppStyles.Label.PressedColor
+            PressedFill: =gblAppStyles.Label.PressedFill
+            Role: =TextRole.Heading1
+            Size: =gblAppStyles.Label.Size.Large
+            Text: |-
+                =If(
+                    IsBlankOrError(gblRecordBulletinContact),
+                    With(
+                    {
+                        varDefault: "New contact",
+                        varOOBTextId: "lblContactDetail_Header__Text-New"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                ),
+                    With(
+                    {
+                        varDefault: "Edit contact",
+                        varOOBTextId: "lblContactDetail_Header__Text-Edit"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+                )
+            Width: =btnContactDetail_Action_Delete.X - Self.X
+            Wrap: =false
+            X: =imgContactDetail_Back.X +imgContactDetail_Back.Width
+            Y: =0*0
+            ZIndex: =6
+
+        imgContactDetail_Back As image:
+            AccessibleLabel: |-
+                =With(
+                    {
+                        varDefault: "Click to navigate back to home screen",
+                        varOOBTextId: "imgContactDetail_Back__AccessibleLabel__AccessibleLabel"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+            DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+            DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+            Fill: =gblAppStyles.ButtonTransparent.Fill
+            FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+            Height: =Parent.Height - (2* Self.Y)
+            HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+            HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+            Image: |-
+                =With(
+                    {
+                        varImageRecord: LookUp(
+                            staticIcons,
+                            staticIconName = "Back"
+                        ),
+                        varColor: gblAppStyles.Icons.Color
+                    },
+                    With(
+                        {
+                            varImageData: Concatenate(
+                                "data:image/svg+xml;utf8, ",
+                                EncodeUrl(
+                                    Concatenate(
+                                        "<svg viewBox='",
+                                        varImageRecord.staticIconViewbox,
+                                        "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                        varImageRecord.staticIconPath,
+                                        "' fill='#",
+                                        varColor,
+                                        "'/></svg>"
+                                    )
+                                )
+                            )
+                        },
+                        varImageData
+                    )
+                )
+            OnSelect: |-
+                =UpdateContext({locBlockUserInput:true});
+                Navigate('Links and Contacts Screen',ScreenTransition.Fade);
+                UpdateContext({locBlockUserInput:false});
+            PaddingBottom: =12
+            PaddingLeft: =8
+            PaddingRight: =8
+            PaddingTop: =12
+            PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+            PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+            TabIndex: =If(locVisibleDialog,-1,0)
+            Tooltip: =Self.AccessibleLabel
+            Width: =44
+            X: =2*1
+            Y: =2*1
+            ZIndex: =7
+
+        btnContactDetail_Cancel As button:
+            AutoDisableOnSelect: =false
+            BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+            BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+            Color: =gblAppStyles.ButtonSecondary.Color
+            DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+            DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+            DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+            Fill: =gblAppStyles.ButtonSecondary.Fill
+            FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            Height: =32
+            HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+            HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+            HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+            OnSelect: |-
+                =UpdateContext({locBlockUserInput:true});
+                Navigate('Links and Contacts Screen',ScreenTransition.Fade);
+                UpdateContext({locBlockUserInput:false});
+            PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+            PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+            PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+            RadiusBottomLeft: =gblAppStyles.ButtonSecondary.RadiusBottomLeft
+            RadiusBottomRight: =gblAppStyles.ButtonSecondary.RadiusBottomRight
+            RadiusTopLeft: =gblAppStyles.ButtonSecondary.RadiusTopLeft
+            RadiusTopRight: =gblAppStyles.ButtonSecondary.RadiusTopRight
+            Size: =gblAppStyles.ButtonSecondary.Size
+            TabIndex: =If(locVisibleDialog,-1,0)
+            Text: |-
+                =With(
+                {
+                varDefault: "Cancel",
+                varOOBTextId: "btnContactDetail_Cancel__Text"
+                },
+                With(
+                {
+                varLocalizedText: LookUp(
+                colLocalization,
+                OOBTextId = varOOBTextId,
+                LocalizedText
+                )
+                },
+                Coalesce(
+                varLocalizedText,
+                varDefault
+                )
+                )
+                )
+            Tooltip: =Self.Text
+            Width: =96
+            X: =btnContactDetail_Save.X - Self.Width - gblPadding.Page
+            Y: =(Parent.Height - Self.Height) / 2
+            ZIndex: =8
+
+        imgContactDetail_Delete As image:
+            AccessibleLabel: |-
+                =With(
+                    {
+                        varDefault: "Click to delete this contact",
+                        varOOBTextId: "imgContactDetail_Delete__AccessibleLabel"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            DisplayMode: =DisplayMode.View
+            Height: =32
+            Image: |-
+                =With(
+                    {
+                        varImageRecord: LookUp(
+                            staticIcons,
+                            staticIconName = "Delete"
+                        ),
+                        varColor: gblAppStyles.Icons.Color_Red
+                    },
+                    With(
+                        {
+                            varImageData: Concatenate(
+                                "data:image/svg+xml;utf8, ",
+                                EncodeUrl(
+                                    Concatenate(
+                                        "<svg viewBox='",
+                                        varImageRecord.staticIconViewbox,
+                                        "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                        varImageRecord.staticIconPath,
+                                        "' fill='#",
+                                        varColor,
+                                        "'/></svg>"
+                                    )
+                                )
+                            )
+                        },
+                        varImageData
+                    )
+                )
+            OnSelect: =
+            PaddingBottom: =(Self.Width - 26)
+            PaddingLeft: =(Self.Width - 26)
+            PaddingRight: =(Self.Width - 26)
+            PaddingTop: =(Self.Width - 26)
+            Tooltip: =Self.AccessibleLabel
+            Visible: =!IsBlankOrError(gblRecordBulletinContact)
+            Width: =32
+            X: =btnContactDetail_Action_Delete.X + btnContactDetail_Action_Delete.Width - Self.Width
+            Y: =btnContactDetail_Action_Delete.Y
+            ZIndex: =9
+
+        btnContactDetail_Action_Delete As button:
+            Align: =Align.Right
+            BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+            BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+            Color: =gblAppStyles.ButtonTransparent.Color
+            DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+            DisabledColor: =gblAppStyles.ButtonTransparent.DisabledColor
+            DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+            Fill: =gblAppStyles.ButtonTransparent.Fill
+            FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+            Height: =imgContactDetail_Delete.Height
+            HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+            HoverColor: =gblAppStyles.ButtonTransparent.HoverColor
+            HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+            OnSelect: |-
+                =// Reset Checkbox and Show Modal Dialog
+                Reset(chkLinkDetail_Delete_Confirm);
+                UpdateContext(
+                    {
+                        locVisibleDialog: true,
+                        locVisibleDialogDelete: true
+                    }
+                );
+                // [Set Focus Start]
+                UpdateContext({locSetFocusTimerStart: false});
+                UpdateContext({locSetFocusControlTarget: "icnContactDetail_Delete_Cancel"});
+                UpdateContext({locSetFocusTimerStart: true});
+                // [Set Focus End]
+                // [Screen Reader Start]
+                UpdateContext(
+                    {
+                        locScreenReaderAnnouncedText: With(
+                            {
+                                varAnnouncedText: With(
+                                    {
+                                        varDefault: "A dialog to confirm deletion is shown", // Default Text to use
+                                        varOOBTextId: "btnContactDetail_Action_Delete__Announced" // Localized version
+                                    },
+                                    With(
+                                        {
+                                            varLocalizedText: LookUp(
+                                                colLocalization,
+                                                OOBTextId = varOOBTextId,
+                                                LocalizedText
+                                            )
+                                        },
+                                        Coalesce(
+                                            varLocalizedText,
+                                            varDefault
+                                        )
+                                    )
+                                )
+                            },
+                            If(
+                                locScreenReaderAnnouncedText = varAnnouncedText,
+                                Concatenate(
+                                    varAnnouncedText,
+                                    " "
+                                ),
+                                varAnnouncedText // If clicked twice, will append blank space to update variable
+                            )
+                        )
+                    }
+                );
+                // [Screen Reader End]
+            PaddingLeft: =0
+            PaddingRight: =imgContactDetail_Delete.Width + 4
+            PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+            PressedColor: =gblAppStyles.ButtonTransparent.PressedColor
+            PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+            RadiusBottomLeft: =gblAppStyles.ButtonTransparent.RadiusBottomLeft
+            RadiusBottomRight: =gblAppStyles.ButtonTransparent.RadiusBottomRight
+            RadiusTopLeft: =gblAppStyles.ButtonTransparent.RadiusTopLeft
+            RadiusTopRight: =gblAppStyles.ButtonTransparent.RadiusTopRight
+            Size: =gblAppStyles.ButtonTransparent.Size
+            TabIndex: =If(locVisibleDialog,-1,0)
+            Text: |-
+                =With(
+                {
+                varDefault: "Delete",
+                varOOBTextId: "btnContactDetail_Action_Delete__Text"
+                },
+                With(
+                {
+                varLocalizedText: LookUp(
+                colLocalization,
+                OOBTextId = varOOBTextId,
+                LocalizedText
+                )
+                },
+                Coalesce(
+                varLocalizedText,
+                varDefault
+                )
+                )
+                )
+            Visible: =!IsBlankOrError(gblRecordBulletinContact)
+            Width: =96
+            X: =btnContactDetail_Cancel.X - Self.Width - gblPadding.ButtonText
+            Y: =(Parent.Height - Self.Height) / 2
+            ZIndex: =10
+
+    conModalDialog_ContactDetail As groupContainer:
+        Fill: =gblAppStyles.Dialogs.Fill
+        Height: =Parent.Height
+        Visible: =locVisibleDialog
+        Width: =Parent.Width
+        ZIndex: =4
+
+        lblModalDialog_ContactDetail_Cancel As label:
+            BorderColor: =RGBA(0, 0, 0, 0)
+            Color: =RGBA(0, 0, 0, 0)
+            FocusedBorderThickness: =0.25
+            Height: =Parent.Height
+            OnSelect: |-
+                =UpdateContext({locVisibleDialog: false})
+            Text: |-
+                =With(
+                {
+                varDefault: "Cancel",
+                varOOBTextId: "lblModalDialog_ContactDetail_Cancel__Text"
+                },
+                With(
+                {
+                varLocalizedText: LookUp(
+                colLocalization,
+                OOBTextId = varOOBTextId,
+                LocalizedText
+                )
+                },
+                Coalesce(
+                varLocalizedText,
+                varDefault
+                )
+                )
+                )
+            Width: =Parent.Width
+            X: =0*0
+            Y: =0*0
+            ZIndex: =1
+
+        conModalDialog_ContactDetail_Delete As groupContainer:
+            Fill: =gblAppStyles.Background.Fill
+            Height: =300
+            Visible: =locVisibleDialogDelete
+            X: =(Parent.Width - Self.Width)/2
+            Y: =(Parent.Height - Self.Height)/2
+            ZIndex: =2
+
+            btnContactDetail_Delete_Confirm As button:
+                BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+                BorderThickness: =gblAppStyles.ButtonPrimary.BorderThickness
+                Color: =gblAppStyles.ButtonPrimary.Color
+                DisabledBorderColor: =gblAppStyles.ButtonPrimary.DisabledBorderColor
+                DisabledColor: =gblAppStyles.ButtonPrimary.DisabledColor
+                DisabledFill: =gblAppStyles.ButtonPrimary.DisabledFill
+                DisplayMode: |-
+                    =If(
+                        chkContactDetail_Delete_Confirm.Value,
+                        DisplayMode.Edit,
+                        DisplayMode.Disabled
+                    )
+                Fill: =gblAppStyles.ButtonPrimary.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonPrimary.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonPrimary.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =32
+                HoverBorderColor: =gblAppStyles.ButtonPrimary.HoverBorderColor
+                HoverColor: =gblAppStyles.ButtonPrimary.HoverColor
+                HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+                OnSelect: |
+                    =// Block User Input
+                    UpdateContext({locBlockUserInput: true});
+                    // Remove Bulletin Contact
+                    Remove(
+                        'Bulletin Contacts',
+                        gblRecordBulletinContact
+                    );
+                    // [Screen Reader Start]
+                    UpdateContext(
+                        {
+                            locScreenReaderAnnouncedText: With(
+                                {
+                                    varAnnouncedText: With(
+                                        {
+                                            varDefault: "The contact has been deleted", // Default Text to use
+                                            varOOBTextId: "btnContactDetail_Delete_Confirm__Announced" // Localized version
+                                        },
+                                        With(
+                                            {
+                                                varLocalizedText: LookUp(
+                                                    colLocalization,
+                                                    OOBTextId = varOOBTextId,
+                                                    LocalizedText
+                                                )
+                                            },
+                                            Coalesce(
+                                                varLocalizedText,
+                                                varDefault
+                                            )
+                                        )
+                                    )
+                                },
+                                If(
+                                    locScreenReaderAnnouncedText = varAnnouncedText,
+                                    Concatenate(
+                                        varAnnouncedText,
+                                        " "
+                                    ),
+                                    varAnnouncedText // If clicked twice, will append blank space to update variable
+                                )
+                            )
+                        }
+                    );
+                    // [Screen Reader End]
+                    Navigate(
+                        'Links and Contacts Screen',
+                        ScreenTransition.Fade
+                    );
+                    Reset(chkContactDetail_Delete_Confirm);
+                    UpdateContext({locBlockUserInput: false});
+                PressedBorderColor: =gblAppStyles.ButtonPrimary.PressedBorderColor
+                PressedColor: =gblAppStyles.ButtonPrimary.PressedColor
+                PressedFill: =gblAppStyles.ButtonPrimary.PressedFill
+                RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.ButtonPrimary.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+                Size: =gblAppStyles.ButtonPrimary.Size
+                TabIndex: =If(locVisibleDialogDelete,0,-1)
+                Text: |-
+                    =With(
+                    {
+                    varDefault: "Delete",
+                    varOOBTextId: "btnContactDetail_Delete_Confirm__Text"
+                    },
+                    With(
+                    {
+                    varLocalizedText: LookUp(
+                    colLocalization,
+                    OOBTextId = varOOBTextId,
+                    LocalizedText
+                    )
+                    },
+                    Coalesce(
+                    varLocalizedText,
+                    varDefault
+                    )
+                    )
+                    )
+                Tooltip: =Self.Text
+                Width: =96
+                X: =Parent.Width - Self.Width - 32
+                Y: =228
+                ZIndex: =1
+
+            btnContactDetail_Delete_Cancel As button:
+                BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+                BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+                Color: =gblAppStyles.ButtonSecondary.Color
+                DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+                DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+                DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+                Fill: =gblAppStyles.ButtonSecondary.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =btnContactDetail_Delete_Confirm.Height
+                HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+                HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+                HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+                OnSelect: |-
+                    =// Close Modal Dialog
+                    UpdateContext(
+                        {
+                            locVisibleDialog: false,
+                            locVisibleDialogDelete: false
+                        }
+                    );
+                    // Reset Focus
+                    SetFocus(btnContactDetail_Action_Delete);
+                    // [Screen Reader Start]
+                    UpdateContext(
+                        {
+                            locScreenReaderAnnouncedText: With(
+                                {
+                                    varAnnouncedText: With(
+                                        {
+                                            varDefault: "The delete dialog has been closed", // Default Text to use
+                                            varOOBTextId: "btnContactDetail_Delete_Cancel__Announced" // Localized version
+                                        },
+                                        With(
+                                            {
+                                                varLocalizedText: LookUp(
+                                                    colLocalization,
+                                                    OOBTextId = varOOBTextId,
+                                                    LocalizedText
+                                                )
+                                            },
+                                            Coalesce(
+                                                varLocalizedText,
+                                                varDefault
+                                            )
+                                        )
+                                    )
+                                },
+                                If(
+                                    locScreenReaderAnnouncedText = varAnnouncedText,
+                                    Concatenate(
+                                        varAnnouncedText,
+                                        " "
+                                    ),
+                                    varAnnouncedText // If clicked twice, will append blank space to update variable
+                                )
+                            )
+                        }
+                    );
+                    // [Screen Reader End]
+                PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+                PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+                PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+                RadiusBottomLeft: =gblAppStyles.ButtonSecondary.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.ButtonSecondary.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.ButtonSecondary.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.ButtonSecondary.RadiusTopRight
+                Size: =gblAppStyles.ButtonSecondary.Size
+                TabIndex: =If(locVisibleDialogDelete,0,-1)
+                Text: |-
+                    =With(
+                    {
+                    varDefault: "Cancel",
+                    varOOBTextId: "btnContactDetail_Delete_Cancel__Text"
+                    },
+                    With(
+                    {
+                    varLocalizedText: LookUp(
+                    colLocalization,
+                    OOBTextId = varOOBTextId,
+                    LocalizedText
+                    )
+                    },
+                    Coalesce(
+                    varLocalizedText,
+                    varDefault
+                    )
+                    )
+                    )
+                Tooltip: =Self.Text
+                Width: =btnContactDetail_Delete_Confirm.Width
+                X: =btnContactDetail_Delete_Confirm.X - Self.Width - 16
+                Y: =btnContactDetail_Delete_Confirm.Y
+                ZIndex: =2
+
+            chkContactDetail_Delete_Confirm As checkbox:
+                BorderColor: =gblAppStyles.Checkbox.BorderColor
+                BorderThickness: =gblAppStyles.Checkbox.BorderThickness
+                CheckboxBackgroundFill: =gblAppStyles.Checkbox.CheckboxBackgroundFill
+                CheckboxBorderColor: =gblAppStyles.Checkbox.CheckboxBorderColor
+                CheckboxSize: =24
+                CheckmarkFill: =gblAppStyles.Checkbox.CheckmarkFill
+                Color: =gblAppStyles.Checkbox.Color
+                DisabledBorderColor: =gblAppStyles.Checkbox.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Checkbox.DisabledColor
+                DisabledFill: =gblAppStyles.Checkbox.DisabledFill
+                Fill: =gblAppStyles.Checkbox.Fill
+                FocusedBorderColor: =gblAppStyles.Checkbox.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Checkbox.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =36
+                HoverBorderColor: =gblAppStyles.Checkbox.HoverBorderColor
+                HoverColor: =gblAppStyles.Checkbox.HoverColor
+                HoverFill: =gblAppStyles.Checkbox.HoverFill
+                OnCheck: |-
+                    =// [Screen Reader Start]
+                    UpdateContext(
+                        {
+                            locScreenReaderAnnouncedText: With(
+                                {
+                                    varAnnouncedText: With(
+                                        {
+                                            varDefault: "Checkbox is checked. Record can be deleted.", // Default Text to use
+                                            varOOBTextId: "chkContactDetail_Delete_Confirm__Announcement-Checked" // Localized version
+                                        },
+                                        With(
+                                            {
+                                                varLocalizedText: LookUp(
+                                                    colLocalization,
+                                                    OOBTextId = varOOBTextId,
+                                                    LocalizedText
+                                                )
+                                            },
+                                            Coalesce(
+                                                varLocalizedText,
+                                                varDefault
+                                            )
+                                        )
+                                    )
+                                },
+                                If(
+                                    locScreenReaderAnnouncedText = varAnnouncedText,
+                                    Concatenate(
+                                        varAnnouncedText,
+                                        " "
+                                    ),
+                                    varAnnouncedText // If clicked twice, will append blank space to update variable
+                                )
+                            )
+                        }
+                    );
+                    // [Screen Reader End]
+                OnUncheck: |-
+                    =// [Screen Reader Start]
+                    UpdateContext(
+                        {
+                            locScreenReaderAnnouncedText: With(
+                                {
+                                    varAnnouncedText: With(
+                                        {
+                                            varDefault: "Checkbox is unchecked. Record cannot be deleted.", // Default Text to use
+                                            varOOBTextId: "chkContactDetail_Delete_Confirm__Announcement-Unchecked" // Localized version
+                                        },
+                                        With(
+                                            {
+                                                varLocalizedText: LookUp(
+                                                    colLocalization,
+                                                    OOBTextId = varOOBTextId,
+                                                    LocalizedText
+                                                )
+                                            },
+                                            Coalesce(
+                                                varLocalizedText,
+                                                varDefault
+                                            )
+                                        )
+                                    )
+                                },
+                                If(
+                                    locScreenReaderAnnouncedText = varAnnouncedText,
+                                    Concatenate(
+                                        varAnnouncedText,
+                                        " "
+                                    ),
+                                    varAnnouncedText // If clicked twice, will append blank space to update variable
+                                )
+                            )
+                        }
+                    );
+                    // [Screen Reader End]
+                PressedBorderColor: =gblAppStyles.Checkbox.PressedBorderColor
+                PressedColor: =gblAppStyles.Checkbox.PressedColor
+                PressedFill: =gblAppStyles.Checkbox.PressedFill
+                Size: =gblAppStyles.Checkbox.Size
+                TabIndex: =If(locVisibleDialogDelete,0,-1)
+                Text: |-
+                    =With(
+                        {
+                            varDefault: "I understand.",
+                            varOOBTextId: "chkContactDetail_Delete_Confirm__Text"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                X: =40
+                Y: =151
+                ZIndex: =3
+
+            lblContactDetail_Delete_WarningDescription As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =71
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: |-
+                    =With(
+                    {
+                    varDefault: "You're about to permanently delete this contact. You can't undo this action.",
+                    varOOBTextId: "lblContactDetail_Delete_WarningDescription__Text"
+                    },
+                    With(
+                    {
+                    varLocalizedText: LookUp(
+                    colLocalization,
+                    OOBTextId = varOOBTextId,
+                    LocalizedText
+                    )
+                    },
+                    Coalesce(
+                    varLocalizedText,
+                    varDefault
+                    )
+                    )
+                    )
+                Width: =Parent.Width - 64
+                X: =32
+                Y: =78
+                ZIndex: =6
+
+            lblContactDetail_Delete_WarningTitle As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Bold
+                Height: =28
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Large
+                Text: |-
+                    =With(
+                    {
+                    varDefault: "Delete contact",
+                    varOOBTextId: "lblContactDetail_Delete_WarningTitle__Text"
+                    },
+                    With(
+                    {
+                    varLocalizedText: LookUp(
+                    colLocalization,
+                    OOBTextId = varOOBTextId,
+                    LocalizedText
+                    )
+                    },
+                    Coalesce(
+                    varLocalizedText,
+                    varDefault
+                    )
+                    )
+                    )
+                VerticalAlign: =VerticalAlign.Bottom
+                Width: =Parent.Width - Self.X
+                X: =32 * 1
+                Y: =48 * 1
+                ZIndex: =7
+
+            icnContactDetail_Delete_Cancel As image:
+                BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+                DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+                DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                Fill: =gblAppStyles.ButtonTransparent.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                Height: =32
+                HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+                Image: |-
+                    =With(
+                        {
+                            varImageRecord: LookUp(
+                                staticIcons,
+                                staticIconName = "Dismiss"
+                            ),
+                            varColor: If(
+                                Self.DisplayMode = DisplayMode.Disabled,
+                                gblAppStyles.Icons.DisabledColor,
+                                gblAppStyles.Icons.Color_Gray
+                            )
+                        },
+                        With(
+                            {
+                                varImageData: Concatenate(
+                                    "data:image/svg+xml;utf8, ",
+                                    EncodeUrl(
+                                        Concatenate(
+                                            "<svg viewBox='",
+                                            varImageRecord.staticIconViewbox,
+                                            "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                            varImageRecord.staticIconPath,
+                                            "' fill='#",
+                                            varColor,
+                                            "'/></svg>"
+                                        )
+                                    )
+                                )
+                            },
+                            varImageData
+                        )
+                    )
+                OnSelect: =Select(btnContactDetail_Delete_Cancel)
+                PaddingBottom: =6
+                PaddingLeft: =6
+                PaddingRight: =6
+                PaddingTop: =6
+                PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+                TabIndex: =If(locVisibleDialogDelete,0,-1)
+                Width: =32
+                X: =Parent.Width - Self.Width - 4
+                Y: =4*1
+                ZIndex: =8
+
+    lblBlockUserInput_Contact As label:
+        DisabledFill: =RGBA(0, 0, 0, 0.05)
+        DisplayMode: =DisplayMode.Disabled
+        Font: =Font.'Segoe UI'
+        Height: =Parent.Height
+        Text: =""
+        Visible: =locBlockUserInput
+        Width: =Parent.Width
+        X: =0*0
+        Y: =0*0
+        ZIndex: =5
+
+    lblAnnounce_ContactDetail As label:
+        DisplayMode: =DisplayMode.Disabled
+        Height: =0*0
+        Live: =Live.Polite
+        PaddingBottom: =0
+        PaddingLeft: =0
+        PaddingRight: =0
+        PaddingTop: =0
+        Text: =locScreenReaderAnnouncedText // This text is announced by screen readers, when the variable is updated
+        Visible: =false
+        Width: =0*0
+        X: =Parent.Width - Self.Width
+        Y: =Parent.Height - Self.Height
+        ZIndex: =6
+

@@ -1,0 +1,695 @@
+"'Mobile Campaign Summary Screen' As screen":
+    Fill: =gblAppStyles.Background.Fill
+    LoadingSpinner: =LoadingSpinner.Data
+    LoadingSpinnerColor: =gblAppStyles.ButtonPrimary.Fill
+    OnVisible: =SetFocus(txtMobileCampaignSummary_Search)
+
+    conMobileCampaignSummary As groupContainer:
+        BorderColor: =gblAppStyles.Dividers.Elements
+        Fill: =gblAppStyles.Background.Fill
+        Height: =Parent.Height - Self.Y
+        Width: =Min(Parent.Width,gblMobileWidth)
+        X: =(Parent.Width - Min(Parent.Width,gblMobileWidth)) / 2
+        Y: =0*0
+        ZIndex: =1
+
+        "galMobileCampaignSummary As gallery.'BrowseLayout_Vertical_TwoTextOneImageVariant_ver4.0'":
+            AccessibleLabel: |-
+                =With(
+                    {
+                        varDefault: "Gallery of campaigns, based on search and status",
+                        varOOBTextId: "galCampaignSummary__locAccessibleLabel"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            DelayItemLoading: =true
+            Height: =Parent.Height - Self.Y
+            Items: |-
+                =Search(
+                    Filter(
+                        'Employee Idea Campaigns',
+                        'Employee Idea Campaigns (Views)'.'Active Employee Idea Campaigns'
+                    ),
+                    txtMobileCampaignSummary_Search.Text,
+                    "msft_name",
+                    "msft_description"
+                )
+                /*
+                Search(
+                    SortByColumns(
+                        Switch(
+                            locFilterCampaignStatus,
+                            "Active",
+                            Filter(
+                                'Employee Idea Campaigns',
+                                'Employee Idea Campaigns (Views)'.'Active Employee Idea Campaigns'
+                            ),
+                            "Not Started",
+                            Filter(
+                                'Employee Idea Campaigns',
+                                'Employee Idea Campaigns (Views)'.'Not Started Employee Idea Campaigns'
+                            ),
+                            "Expired",
+                            Filter(
+                                'Employee Idea Campaigns',
+                                'Employee Idea Campaigns (Views)'.'Expired Employee Idea Campaigns'
+                            ),
+                            Filter(
+                                'Employee Idea Campaigns',
+                                'Employee Idea Campaigns (Views)'.'All Employee Idea Campaigns'
+                            )
+                        ),
+                        "createdon",
+                        Descending
+                    ),
+                    txtMobileCampaignSummary_Search.Text,
+                    "msft_name",
+                    "msft_description"
+                )*/
+            Layout: =Layout.Vertical
+            LoadingSpinner: =LoadingSpinner.Data
+            LoadingSpinnerColor: =App.ActiveScreen.LoadingSpinnerColor
+            OnSelect: |-
+                =UpdateContext({locBlockUserInput: true});
+                Set(
+                    gblSelectedRecordCampaign,
+                    ThisItem
+                );
+                ClearCollect(
+                    colIdeas,
+                    Filter(
+                        'Employee Ideas',
+                        'Employee Ideas'[@Campaign].'Employee Idea Campaign' = gblSelectedRecordCampaign.'Employee Idea Campaign'
+                    )
+                );
+                Navigate(
+                    'Mobile Campaign Detail Screen',
+                    ScreenTransition.Fade
+                );
+                UpdateContext({locBlockUserInput: false});
+            TemplateFill: =Transparent
+            TemplatePadding: =gblPadding.Page
+            TemplateSize: =264
+            Width: =Parent.Width
+            WrapCount: =RoundDown(Self.Width / 300,0)
+            X: =0*0
+            Y: =conMobileCampaignSummarySearch.Y + conMobileCampaignSummarySearch.Height
+            ZIndex: =1
+
+            btnMobileCampaignSummary_Background As button:
+                BorderColor: =gblAppStyles.ButtonBackground.BorderColor
+                BorderThickness: =gblAppStyles.ButtonBackground.BorderThickness
+                Color: =gblAppStyles.ButtonBackground.Color
+                DisabledBorderColor: =gblAppStyles.ButtonBackground.DisabledBorderColor
+                DisabledColor: =gblAppStyles.ButtonBackground.DisabledColor
+                DisabledFill: =gblAppStyles.ButtonBackground.DisabledFill
+                DisplayMode: =DisplayMode.Disabled
+                Fill: =gblAppStyles.ButtonBackground.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonBackground.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonBackground.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =Parent.TemplateHeight
+                HoverBorderColor: =gblAppStyles.ButtonBackground.HoverBorderColor
+                HoverColor: =gblAppStyles.ButtonBackground.HoverColor
+                HoverFill: =gblAppStyles.ButtonBackground.HoverFill
+                OnSelect: =Select(Parent)
+                PressedBorderColor: =gblAppStyles.ButtonBackground.PressedBorderColor
+                PressedColor: =gblAppStyles.ButtonBackground.PressedColor
+                PressedFill: =gblAppStyles.ButtonBackground.PressedFill
+                RadiusBottomLeft: =gblAppStyles.ButtonBackground.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.ButtonBackground.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.ButtonBackground.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.ButtonBackground.RadiusTopRight
+                Size: =gblAppStyles.ButtonBackground.Size
+                TabIndex: =-1
+                Text: =""
+                Tooltip: =ThisItem.Description
+                Width: =Parent.TemplateWidth
+                ZIndex: =1
+
+            imgMobileCampaignSummary_CoverImage As image:
+                Height: =Parent.TemplateHeight *.55
+                Image: =Coalesce(ThisItem.'Cover Image'.Full,ThisItem.Icon)
+                ImagePosition: =ImagePosition.Fill
+                OnSelect: =Select(Parent)
+                RadiusTopLeft: =5
+                RadiusTopRight: =5
+                Width: =Parent.TemplateWidth
+                ZIndex: =2
+
+            lblMobileCampaignSummary_Title As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =Parent.TemplateHeight * .15
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                OnSelect: =Select(Parent)
+                PaddingBottom: =0
+                PaddingLeft: =16
+                PaddingRight: =16
+                PaddingTop: =0
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Large
+                Text: =ThisItem.Title
+                Width: =Parent.TemplateWidth
+                Wrap: =false
+                Y: =imgMobileCampaignSummary_CoverImage.Y + imgMobileCampaignSummary_CoverImage.Height
+                ZIndex: =3
+
+            lblMobileCampaignSummary_Description As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                LineHeight: =1.4
+                OnSelect: =Select(Parent)
+                PaddingBottom: =0
+                PaddingLeft: =16
+                PaddingRight: =16
+                PaddingTop: =0
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: =ThisItem.Description
+                VerticalAlign: =VerticalAlign.Top
+                Width: =lblMobileCampaignSummary_Title.Width
+                X: =lblMobileCampaignSummary_Title.X
+                Y: =lblMobileCampaignSummary_Title.Y + lblMobileCampaignSummary_Title.Height
+                ZIndex: =4
+
+            lblMobileCampaignSummary_Status As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: |-
+                    =With(
+                        {
+                            varColorActive: If(
+                                gblThemeHiCo,
+                                gblAppColors.HighContrastText,
+                                gblThemeDark,
+                                gblAppColors.MessagesDarkWebSuccessIcon,
+                                gblAppColors.MessagesDefaultWebSuccessIcon
+                            ),
+                            varColorExpired: If(
+                                gblThemeHiCo,
+                                gblAppColors.HighContrastText,
+                                gblThemeDark,
+                                gblAppColors.MessagesDarkWebErrorBlockIcon,
+                                gblAppColors.MessagesDefaultWebErrorBlockIcon
+                            ),
+                            varColorNotStarted: If(
+                                gblThemeHiCo,
+                                gblAppColors.HighContrastText,
+                                gblThemeDark,
+                                gblAppColors.MessagesDarkWebWarningIcon,
+                                gblAppColors.MessagesDefaultWebWarningIcon
+                            )
+                        },
+                        Switch(
+                            ThisItem.'Campaign Status',
+                            'Employee Idea Campaign Status'.Active,
+                            varColorActive,//gblColorPalette.TeamsBrand1,
+                            'Employee Idea Campaign Status'.Expired,
+                            varColorExpired,//gblColorPalette.StatusRedFaded,
+                            'Employee Idea Campaign Status'.'Not Started',
+                            varColorNotStarted,//gblColorPalette.StatusHighlight,
+                            gblAppStyles.ButtonPrimary.Fill
+                        )
+                    )
+                    //gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =Parent.TemplateHeight - Self.Y
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                OnSelect: =Select(Parent)
+                PaddingBottom: =12
+                PaddingLeft: =16
+                PaddingRight: =0
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Small
+                Text: |-
+                    =With(
+                        {
+                            varDateDiff: DateDiff(
+                                gblToday,
+                                Coalesce(
+                                    ThisItem.'End Date',
+                                    Today()
+                                )
+                            ),
+                            varLabelExpired: "Expired",
+                            varLabelNotStarted: "Not started"
+                        },
+                        With(
+                            {
+                                varDaysLeft: With(
+                                    {
+                                        varDefault: Concatenate(
+                                            Text(varDateDiff),
+                                            If (
+                                                varDateDiff = 1,
+                                                " day left",
+                                                " days left"
+                                            )
+                                        ),
+                                        varOOBTextId: If (
+                                            varDateDiff = 1,
+                                            "_translateVariable__dayleft",
+                                            "_translateVariable__daysleft"
+                                        ),
+                                        varParam0: varDateDiff,
+                                        varParam1: Blank(),
+                                        varParam2: Blank()
+                                    },
+                                    With(
+                                        {
+                                            varLocalizedText: LookUp(
+                                                colLocalization,
+                                                OOBTextId = varOOBTextId,
+                                                LocalizedText
+                                            )
+                                        },
+                                        If(
+                                            IsBlankOrError(varParam0),
+                                            Coalesce(
+                                                varLocalizedText,
+                                                varDefault
+                                            ),
+                                            Coalesce(
+                                                Substitute(
+                                                    Substitute(
+                                                        Substitute(
+                                                            varLocalizedText,
+                                                            "{0}",
+                                                            Text(varParam0)
+                                                        ),
+                                                        "{1}",
+                                                        Text(varParam1)
+                                                    ),
+                                                    "{2}",
+                                                    Text(varParam2)
+                                                ),
+                                                varDefault
+                                            )
+                                        )
+                                    )
+                                )
+                            },
+                            If(
+                                ThisItem.'Campaign Status' = 'Employee Idea Campaign Status'.Expired,
+                                varLabelExpired,
+                                ThisItem.'Campaign Status' = 'Employee Idea Campaign Status'.'Not Started',
+                                varLabelNotStarted,
+                                varDaysLeft
+                            )
+                        )
+                    )
+                Width: =lblMobileCampaignSummary_IdeaCount.X - Self.X
+                Y: =lblMobileCampaignSummary_Description.Y + lblMobileCampaignSummary_Description.Height
+                ZIndex: =5
+
+            lblMobileCampaignSummary_IdeaCount As label:
+                Align: =Align.Right
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =lblMobileCampaignSummary_Status.Height
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                OnSelect: =Select(Parent)
+                PaddingBottom: =12
+                PaddingRight: =20
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Small
+                Text: |-
+                    =With(
+                        {varRows: ThisItem.'Employee Ideas'},// Idea Rows
+                        With(
+                            {
+                                varRowCount: Coalesce(
+                                    CountRows(varRows),
+                                    0// Indicates row count, and defaults to 0 if unknown (or zero)
+                                )
+                            },
+                            With(
+                                {
+                                    varDefault: Concatenate(
+                                        Text(varRowCount),
+                                        If(
+                                            varRowCount = 1,
+                                            " idea",
+                                            " ideas"
+                                        )
+                                    ),
+                                    varOOBTextId: If(
+                                        varRowCount = 1,
+                                        "_translateVariable__idea",
+                                        "_translateVariable__ideas"
+                                    ),
+                                    varParam0: varRowCount,
+                                    varParam1: Blank(),
+                                    varParam2: Blank()
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextId = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    If(
+                                        IsBlankOrError(varParam0),
+                                        Coalesce(
+                                            varLocalizedText,
+                                            varDefault
+                                        ),
+                                        Coalesce(
+                                            Substitute(
+                                                Substitute(
+                                                    Substitute(
+                                                        varLocalizedText,
+                                                        "{0}",
+                                                        Text(varParam0)
+                                                    ),
+                                                    "{1}",
+                                                    Text(varParam1)
+                                                ),
+                                                "{2}",
+                                                Text(varParam2)
+                                            ),
+                                            varDefault
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                Width: =130
+                X: =Parent.TemplateWidth - Self.Width
+                Y: =lblMobileCampaignSummary_Status.Y
+                ZIndex: =6
+
+            btnMobileCampaignSummary_SelectBorder As button:
+                BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+                Color: =Transparent
+                DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+                DisabledColor: =Transparent
+                DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                Fill: =gblAppStyles.ButtonTransparent.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =Parent.TemplateHeight
+                HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                HoverColor: =Transparent
+                HoverFill: =gblAppStyles.Gallery.HoverFill
+                OnSelect: =Select(Parent)
+                PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                PressedColor: =Transparent
+                PressedFill: =gblAppStyles.Gallery.PressedFill
+                RadiusBottomLeft: =gblAppStyles.ButtonTransparent.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.ButtonTransparent.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.ButtonTransparent.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.ButtonTransparent.RadiusTopRight
+                Size: =gblAppStyles.ButtonTransparent.Size
+                Text: |-
+                    =Concatenate(
+                        lblMobileCampaignSummary_Title.Text,
+                        lblMobileCampaignSummary_Description.Text,
+                        lblMobileCampaignSummary_Status.Text,
+                        lblMobileCampaignSummary_IdeaCount.Text
+                    )
+                Width: =Parent.TemplateWidth
+                ZIndex: =8
+
+        comZeroState_MobileCampaigns As comZeroState:
+            Height: =200
+            inputImage: =Image_ZeroState_Campaigns
+            inputSizePercent: =45
+            inputTextColor: =gblAppStyles.Label.Color
+            inputTextToDisplay: |-
+                =With(
+                    {
+                        varDefault: "No campaigns found",
+                        varOOBTextId: "comZeroState_Campaigns__locText"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            Visible: =IsEmpty(galMobileCampaignSummary.AllItems) And !IsBlank(txtMobileCampaignSummary_Search.Text)
+            Width: =galMobileCampaignSummary.Width
+            X: =galMobileCampaignSummary.X
+            Y: =galMobileCampaignSummary.Y
+            ZIndex: =2
+
+        conMobileCampaignSummarySearch As groupContainer:
+            Height: =Max(80,App.ActiveScreen.Height * .1)
+            Width: =Parent.Width
+            ZIndex: =4
+
+            txtMobileCampaignSummary_Search As text:
+                AccessibleLabel: |-
+                    =With(
+                        {
+                            varDefault: "Search campaigns",
+                            varOOBTextId: "_translateCommon__Searchcampaigns"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                BorderColor: =gblAppStyles.TextInput.BorderColor
+                BorderThickness: =gblAppStyles.TextInput.BorderThickness
+                Color: =gblAppStyles.TextInput.Color
+                Default: =""
+                DelayOutput: =true
+                DisabledBorderColor: =gblAppStyles.TextInput.DisabledBorderColor
+                DisabledColor: =gblAppStyles.TextInput.DisabledColor
+                DisabledFill: =gblAppStyles.TextInput.DisabledFill
+                Fill: =gblAppStyles.TextInput.Fill
+                FocusedBorderColor: =gblAppStyles.TextInput.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.TextInput.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =44
+                HintText: |-
+                    =With(
+                        {
+                            varDefault: "Search campaigns",
+                            varOOBTextId: "_translateCommon__Searchcampaigns"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                HoverBorderColor: =gblAppStyles.TextInput.HoverBorderColor
+                HoverColor: =gblAppStyles.TextInput.HoverColor
+                HoverFill: =gblAppStyles.TextInput.HoverFill
+                PaddingLeft: =imgMobileCampaigSummary_Search.Width
+                PressedBorderColor: =gblAppStyles.TextInput.PressedBorderColor
+                PressedColor: =gblAppStyles.TextInput.PressedColor
+                PressedFill: =gblAppStyles.TextInput.PressedFill
+                RadiusBottomLeft: =gblAppStyles.TextInput.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.TextInput.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.TextInput.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.TextInput.RadiusTopRight
+                Size: =gblAppStyles.TextInput.Size
+                Width: =Parent.Width - (2* Self.X)//imgMobileCampaignSummary_Filter.X - Self.X - gblPadding.Page
+                X: =gblPadding.Page
+                Y: =((Parent.Height - Self.Height) / 2)
+                ZIndex: =1
+
+            imgMobileCampaigSummary_Search As image:
+                AccessibleLabel: |-
+                    =With(
+                        {
+                            varDefault: "Click to search for campaigns",
+                            varOOBTextId: "imgCampaigSummary_Search__locAccessibleLabel"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                DisabledFill: |-
+                    =With(
+                        {
+                            varImageIsCategory: LookUp(
+                                staticIcons,
+                                staticIconName = "Search"
+                            ).staticIconIsCategory
+                        },
+                        If(
+                            varImageIsCategory,
+                            gblAppStyles.Icons.DisabledFill_Category,
+                            Transparent
+                        )
+                    )
+                DisplayMode: =DisplayMode.View
+                Fill: |-
+                    =With(
+                        {
+                            varImageIsCategory: LookUp(
+                                staticIcons,
+                                staticIconName = "Search"
+                            ).staticIconIsCategory
+                        },
+                        If(
+                            varImageIsCategory,
+                            gblAppStyles.Icons.Fill_Category,
+                            Transparent
+                        )
+                    )
+                Height: =txtMobileCampaignSummary_Search.Height
+                Image: |
+                    =With(
+                        {
+                            varImageRecord: LookUp(
+                                staticIcons,
+                                staticIconName = "Search"
+                            ),
+                            varColor: If(
+                                Self.DisplayMode = DisplayMode.Disabled,
+                                gblAppStyles.Icons.DisabledColor,
+                                gblAppStyles.Icons.Color_Gray
+                            )
+                        },
+                        With(
+                            {
+                                varImageData: Concatenate(
+                                    "data:image/svg+xml;utf8, ",
+                                    EncodeUrl(
+                                        Concatenate(
+                                            "<svg viewBox='",
+                                            varImageRecord.staticIconViewbox,
+                                            "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                            varImageRecord.staticIconPath,
+                                            "' fill='#",
+                                            varColor,
+                                            "'/></svg>"
+                                        )
+                                    )
+                                )
+                            },
+                            varImageData
+                        )
+                    )
+                OnSelect: =SetFocus(txtMobileCampaignSummary_Search)
+                PaddingBottom: =8
+                PaddingLeft: =8
+                PaddingRight: =8
+                PaddingTop: =8
+                RadiusBottomLeft: =5
+                RadiusBottomRight: =5
+                RadiusTopLeft: =5
+                RadiusTopRight: =5
+                Width: =Self.Height
+                X: =txtMobileCampaignSummary_Search.X
+                Y: =txtMobileCampaignSummary_Search.Y
+                ZIndex: =3
+
+    lblBlockUserInput_MobileCampaignSummary As label:
+        DisabledFill: =RGBA(0, 0, 0, 0.05)
+        DisplayMode: =DisplayMode.Disabled
+        Font: =Font.'Segoe UI'
+        Height: =Parent.Height
+        Text: =""
+        Visible: =locBlockUserInput
+        Width: =Parent.Width
+        X: =0*0
+        Y: =0*0
+        ZIndex: =2
+

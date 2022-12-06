@@ -1,0 +1,1763 @@
+"'Settings Screen' As screen":
+    Fill: =gblAppStyles.Background.Fill
+    OnVisible: =
+
+    conSettingsArea As groupContainer:
+        Fill: =Transparent
+        Height: =Parent.Height - Self.Y
+        Width: =Parent.Width - Self.X
+        X: =conSettingsActions.X
+        Y: =conSettingsActions.Y + conSettingsActions.Height
+        ZIndex: =1
+
+        cnvSettings As fluidGrid.fluidGridWithBlankCard:
+            BorderThickness: =0
+            Height: =Parent.Height - Self.Y
+            Width: =Parent.Width
+            X: =0*0
+            Y: =0*0
+            ZIndex: =23
+
+            dtcSettings_TeamRestriction As dataCard:
+                BorderColor: =RGBA(0, 0, 0, 1)
+                BorderStyle: =BorderStyle.Solid
+                BorderThickness: =0
+                DisplayMode: =DisplayMode.Edit
+                Fill: =RGBA(0, 0, 0, 0)
+                Height: =tglSettings_TeamOwnerRestricted.Y + tglSettings_TeamOwnerRestricted.Height + gblPadding.Page
+                Width: =Parent.Width
+                X: =0
+                Y: =0
+                ZIndex: =1
+
+                tglSettings_TeamOwnerRestricted As toggleSwitch:
+                    AccessibleLabel: ="Toggle which indicates if this app is limited to only Team Owners"
+                    BorderColor: =gblAppStyles.Toggle.BorderColor
+                    BorderThickness: =gblAppStyles.Toggle.BorderThickness
+                    Color: =gblAppStyles.Toggle.Color
+                    Default: =gblRecordSettings.'Team Owner Restricted?'
+                    DisabledBorderColor: =gblAppStyles.Toggle.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Toggle.DisabledColor
+                    DisplayMode: |-
+                        =If(
+                            Param("userTeamRole") = "0",
+                            DisplayMode.Edit,
+                            DisplayMode.Disabled
+                        )
+                    FalseFill: =gblAppStyles.Toggle.FalseFill
+                    FalseHoverFill: =gblAppStyles.Toggle.FalseHoverFill
+                    FocusedBorderColor: =gblAppStyles.Toggle.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Toggle.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    HandleFill: =If(Self.Value,gblAppStyles.Toggle.HandleFillTrue,gblAppStyles.Toggle.HandleFillFalse)
+                    Height: =22
+                    HoverBorderColor: =gblAppStyles.Toggle.HoverBorderColor
+                    PressedBorderColor: =gblAppStyles.Toggle.PressedBorderColor
+                    Size: =gblAppStyles.Toggle.Size
+                    TrueFill: =gblAppStyles.Toggle.TrueFill
+                    TrueHoverFill: =gblAppStyles.Toggle.TrueHoverFill
+                    Width: =72
+                    X: =lblSettings_TeamOwnerRestricted_Instructions.X
+                    Y: =lblSettings_TeamOwnerRestricted_Instructions.Y + lblSettings_TeamOwnerRestricted_Instructions.Height + 8
+                    ZIndex: =15
+
+                lblSettings_TeamOwnerRestricted_Instructions As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =24
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PaddingLeft: =0
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Should only Team owners be allowed to use/manage this app?",
+                                varOOBTextId: "lblSettings_TeamOwnerRestricted_Instructions__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Width: =lblSettings_TeamOwnerRestricted_Header.Width
+                    X: =lblSettings_TeamOwnerRestricted_Header.X
+                    Y: =lblSettings_TeamOwnerRestricted_Header.Y + lblSettings_TeamOwnerRestricted_Header.Height
+                    ZIndex: =16
+
+                lblSettings_TeamOwnerRestricted_OnlyOwners As label:
+                    Color: |-
+                        =If(
+                            gblThemeHiCo,// If Contrast
+                            gblAppColors.HighContrastDisabled,// Contrast Color
+                            gblThemeDark,// Else If Dark
+                            gblAppColors.MessagesDarkWebWarningIcon,// Dark Color
+                            gblAppColors.MessagesDefaultWebWarningIcon
+                        // Else, Default Color
+                        )
+                    DisplayMode: =DisplayMode.View
+                    Height: =tglSettings_TeamOwnerRestricted.Height + 4
+                    PaddingBottom: =2
+                    PaddingLeft: =12
+                    PaddingTop: =2
+                    Size: =gblAppStyles.Label.Size.Small
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "This setting is only available to Team owners",
+                                varOOBTextId: "lblSettgins_TeamOwnerRestricted_OnlyOwners__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Width: =300
+                    X: =tglSettings_TeamOwnerRestricted.X + tglSettings_TeamOwnerRestricted.Width
+                    Y: =tglSettings_TeamOwnerRestricted.Y - 2
+                    ZIndex: =17
+
+                lblSettings_TeamOwnerRestricted_Header As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =28
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PaddingLeft: =0
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Large
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Team Owner Restricted?",
+                                varOOBTextId: "lblSettings_TeamOwnerRestricted_Header__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Width: =Max(Parent.Width - Self.X,500)
+                    X: =gblPadding.Page
+                    Y: =gblPadding.Page
+                    ZIndex: =18
+
+            dtcSettings_Planner As dataCard.blankCard:
+                BorderColor: =RGBA(0, 0, 0, 1)
+                BorderStyle: =BorderStyle.Solid
+                DisplayMode: =DisplayMode.Edit
+                Fill: =RGBA(0, 0, 0, 0)
+                Height: =lblSettings_WarningDuplicateTasks.Y + lblSettings_WarningDuplicateTasks.Height + If(lblSettings_WarningNoTasks.Visible,16,0) + gblPadding.Page
+                Width: =1066
+                X: =0
+                Y: =1
+                ZIndex: =2
+
+                lblSettings_WarningDuplicateTasks As htmlViewer:
+                    BorderColor: =gblAppStyles.HTML.BorderColor
+                    BorderThickness: =gblAppStyles.HTML.BorderThickness
+                    Color: |-
+                        =If(
+                            gblThemeHiCo,
+                            gblAppColors.NeutralWebWhite,
+                            gblThemeDark,
+                            gblAppColors.MessagesDarkWebErrorBlockIcon,
+                            gblAppColors.MessagesDefaultWebErrorBlockIcon
+                        )
+                    DisabledBorderColor: =gblAppStyles.HTML.DisabledBorderColor
+                    DisabledFill: =gblAppStyles.HTML.DisabledFill
+                    Fill: =gblAppStyles.HTML.Fill
+                    Font: =Font.'Segoe UI'
+                    Height: =If(IsBlank(Self.HtmlText),0,55)
+                    HoverBorderColor: =gblAppStyles.HTML.HoverBorderColor
+                    HtmlText: |-
+                        =If(
+                            !IsBlank(gblSettingTeamId),
+                            If(
+                                drpSettings_Tasks.Selected.title in Filter(
+                                    Planner.ListGroupPlans(gblSettingTeamId).value,
+                                    id <> drpSettings_Tasks.Selected.id
+                                ).title,
+                                Concatenate(
+                                    With(
+                                        {
+                                            varDefault: "There are multiple Tasks instances with the same title in this Team.",
+                                            varOOBTextId: "_translateCommon__SetupMultipleTasks"
+                                        },
+                                        With(
+                                            {
+                                                varLocalizedText: LookUp(
+                                                    colLocalization,
+                                                    OOBTextId = varOOBTextId,
+                                                    LocalizedText
+                                                )
+                                            },
+                                            Coalesce(
+                                                varLocalizedText,
+                                                varDefault
+                                            )
+                                        )
+                                    ),
+                                    "<br>",
+                                    "<a href=",
+                                    Concatenate(
+                                        "https://tasks.office.com/Home/Planner#/plantaskboard?",
+                                        "groupId=",
+                                        gblSettingTeamId,
+                                        "&planId=",
+                                        drpSettings_Tasks.Selected.id
+                                    ),
+                                    ">",
+                                    With(
+                                        {
+                                            varDefault: "Click here</a> to open Planner, to verify your selection",
+                                            varOOBTextId: "_translateCommon__SetupConfirmTasks"
+                                        },
+                                        With(
+                                            {
+                                                varLocalizedText: LookUp(
+                                                    colLocalization,
+                                                    OOBTextId = varOOBTextId,
+                                                    LocalizedText
+                                                )
+                                            },
+                                            Coalesce(
+                                                varLocalizedText,
+                                                varDefault
+                                            ) & If(
+                                                !IsBlankOrError(varLocalizedText),
+                                                "</a>",
+                                                ""
+                                            )
+                                        )
+                                    )
+                                ),
+                                Blank()
+                            ),
+                            Blank()
+                        )
+                    Size: =gblAppStyles.HTML.Size.Medium
+                    Width: =drpSettings_Tasks.Width
+                    X: =drpSettings_Tasks.X
+                    Y: =drpSettings_Tasks.Y + drpSettings_Tasks.Height
+                    ZIndex: =2
+
+                lblSettings_WarningNoTasks As label:
+                    Color: |
+                        =If(
+                            gblThemeHiCo,
+                            gblAppColors.HighContrastHyperlinks,
+                            gblThemeDark,
+                            gblAppColors.MessagesDarkWebErrorBlockIcon,
+                            gblAppColors.MessagesDefaultWebErrorBlockIcon
+                        )
+                    Font: =Font.'Segoe UI'
+                    Height: =24
+                    PaddingLeft: =0
+                    Size: =9
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "No Planner instances for this Team, please add one using the Teams tab",
+                                varOOBTextId: "_translateCommon__SetupNoTasksInstances"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Visible: =IsBlankOrError(drpSettings_Tasks.Selected)
+                    Width: =lblSettings_Tasks.Width
+                    X: =lblSettings_Tasks.X
+                    Y: =drpSettings_Tasks.Y + drpSettings_Tasks.Height
+                    ZIndex: =3
+
+                drpSettings_Tasks As dropdown:
+                    AccessibleLabel: ="List of Planner instances for the Team, to indicate which one will store issues"
+                    BorderColor: =gblAppStyles.Dropdown.BorderColor
+                    BorderThickness: =gblAppStyles.Dropdown.BorderThickness
+                    ChevronBackground: =gblAppStyles.Dropdown.ChevronBackground
+                    ChevronDisabledBackground: =gblAppStyles.Dropdown.ChevronDisabledBackground
+                    ChevronDisabledFill: =gblAppStyles.Dropdown.ChevronDisabledFill
+                    ChevronFill: =gblAppStyles.Dropdown.ChevronFill
+                    ChevronHoverBackground: =gblAppStyles.Dropdown.ChevronHoverBackground
+                    ChevronHoverFill: =gblAppStyles.Dropdown.ChevronHoverFill
+                    Color: =gblAppStyles.Dropdown.Color
+                    Default: |-
+                        =// Lookup the Planner Id, to get its title
+                        If(
+                            Or(
+                                IsBlankOrError(gblSettingTeamId),
+                                IsBlankOrError(gblRecordSettings.'Parameter (Planner Id)')
+                            ),
+                            Blank(),
+                            LookUp(
+                                Planner.ListGroupPlans(gblSettingTeamId).value,
+                                id = gblRecordSettings.'Parameter (Planner Id)'
+                            ).title
+                        )
+                    DisabledBorderColor: =gblAppStyles.Dropdown.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Dropdown.DisabledColor
+                    DisabledFill: =gblAppStyles.Dropdown.DisabledFill
+                    DisplayMode: |-
+                        =If(
+                            IsBlankOrError(Self.Selected),
+                            DisplayMode.Disabled,
+                            DisplayMode.Edit
+                        )
+                    Fill: =gblAppStyles.Dropdown.Fill
+                    FocusedBorderColor: =gblAppStyles.Dropdown.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Dropdown.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32
+                    HoverBorderColor: =gblAppStyles.Dropdown.HoverBorderColor
+                    HoverColor: =gblAppStyles.Dropdown.HoverColor
+                    HoverFill: =gblAppStyles.Dropdown.HoverFill
+                    Items: |-
+                        =If(
+                            IsBlankOrError(drpSettings_Team.Selected),
+                            Blank(),
+                            Planner.ListGroupPlans(drpSettings_Team.Selected.id).value
+                        )
+                    PressedBorderColor: =gblAppStyles.Dropdown.PressedBorderColor
+                    PressedColor: =gblAppStyles.Dropdown.PressedColor
+                    PressedFill: =gblAppStyles.Dropdown.PressedFill
+                    SelectionColor: =gblAppStyles.Dropdown.SelectionColor
+                    SelectionFill: =gblAppStyles.Dropdown.SelectionFill
+                    Size: =gblAppStyles.Dropdown.Size
+                    Width: =Min(lblSettings_TeamOwnerRestricted_Header.Width,500)
+                    X: =lblSettings_TeamOwnerRestricted_Header.X
+                    Y: =lblSettings_TasksInstructions.Y + lblSettings_TasksInstructions.Height + 32
+                    ZIndex: =4
+
+                lblSettings_TasksInstructions As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =24
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PaddingLeft: =0
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Select the Planner instance where new issues will be stored",
+                                varOOBTextId: "lblSetup_TasksInstructions__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Width: =lblSettings_TeamOwnerRestricted_Header.Width
+                    X: =lblSettings_TeamOwnerRestricted_Header.X
+                    Y: =lblSettings_Tasks.Y + lblSettings_Tasks.Height
+                    ZIndex: =5
+
+                lblSettings_Tasks As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =32
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PaddingLeft: =0
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Large
+                    Text: ="Tasks"
+                    Width: =lblSettings_TeamOwnerRestricted_Header.Width
+                    X: =gblPadding.Page
+                    Y: =drpSettings_Team.Y + drpSettings_Team.Height + 16
+                    ZIndex: =6
+
+                drpSettings_Team As dropdown:
+                    AccessibleLabel: ="List of Planner instances for the Team, to indicate which one will store issues"
+                    BorderColor: =gblAppStyles.Dropdown.BorderColor
+                    BorderThickness: =gblAppStyles.Dropdown.BorderThickness
+                    ChevronBackground: =gblAppStyles.Dropdown.ChevronBackground
+                    ChevronDisabledBackground: =gblAppStyles.Dropdown.ChevronDisabledBackground
+                    ChevronDisabledFill: =gblAppStyles.Dropdown.ChevronDisabledFill
+                    ChevronFill: =gblAppStyles.Dropdown.ChevronFill
+                    ChevronHoverBackground: =gblAppStyles.Dropdown.ChevronHoverBackground
+                    ChevronHoverFill: =gblAppStyles.Dropdown.ChevronHoverFill
+                    Color: =gblAppStyles.Dropdown.Color
+                    Default: =IfError(MicrosoftTeams.GetTeam(gblRecordSettings.'Parameter (Team Id)').displayName,Blank())
+                    DisabledBorderColor: =gblAppStyles.Dropdown.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Dropdown.DisabledColor
+                    DisabledFill: =gblAppStyles.Dropdown.DisabledFill
+                    DisplayMode: |-
+                        =If(
+                            IsBlankOrError(Self.Selected),
+                            DisplayMode.Disabled,
+                            DisplayMode.Edit
+                        )
+                    Fill: =gblAppStyles.Dropdown.Fill
+                    FocusedBorderColor: =gblAppStyles.Dropdown.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Dropdown.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32
+                    HoverBorderColor: =gblAppStyles.Dropdown.HoverBorderColor
+                    HoverColor: =gblAppStyles.Dropdown.HoverColor
+                    HoverFill: =gblAppStyles.Dropdown.HoverFill
+                    Items: =MicrosoftTeams.GetAllTeams().value
+                    OnChange: =Reset(drpSettings_Tasks)
+                    PressedBorderColor: =gblAppStyles.Dropdown.PressedBorderColor
+                    PressedColor: =gblAppStyles.Dropdown.PressedColor
+                    PressedFill: =gblAppStyles.Dropdown.PressedFill
+                    SelectionColor: =gblAppStyles.Dropdown.SelectionColor
+                    SelectionFill: =gblAppStyles.Dropdown.SelectionFill
+                    Size: =gblAppStyles.Dropdown.Size
+                    Width: =Min(lblSettings_TeamOwnerRestricted_Header.Width,500)
+                    X: =lblSettings_TeamOwnerRestricted_Header.X
+                    Y: =lblSettings_TeamInstructions.Y + lblSettings_TeamInstructions.Height + 30
+                    ZIndex: =7
+
+                lblSettings_TeamInstructions As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =24
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PaddingLeft: =0
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Select the Planner instance you just added where issues will be stored",
+                                varOOBTextId: "lblSettings_TasksInstructions__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Substitute(
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    ),
+                                    "Planner",
+                                    "Team"
+                                )
+                            )
+                        )
+                    Width: =lblSettings_TeamOwnerRestricted_Header.Width
+                    X: =lblSettings_TeamOwnerRestricted_Header.X
+                    Y: =lblSettings_Team.Y + lblSettings_Team.Height
+                    ZIndex: =8
+
+                lblSettings_Team As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =32
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PaddingLeft: =0
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Large
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Team",
+                                varOOBTextId: "lblSettings_Tasks__Text"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Width: =lblSettings_TeamOwnerRestricted_Header.Width
+                    X: =gblPadding.Page
+                    Y: =0//gblPadding.Page
+                    ZIndex: =9
+
+                lblSettings_TeamInstructions_Suggestion As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =24
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PaddingLeft: =0
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Small
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Ensure that all app users have access to this team",
+                                varOOBTextId: "lblSettings_TeamInstructions_Suggestion__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Width: =Parent.Width - Self.X -20
+                    X: =imgSettings_TeamInstructions_Suggestion.X + imgSettings_TeamInstructions_Suggestion.Width + 5
+                    Y: =lblSettings_TeamInstructions.Y + lblSettings_TeamInstructions.Height
+                    ZIndex: =10
+
+                imgSettings_TeamInstructions_Suggestion As image:
+                    AccessibleLabel: ="Information about access to the team"
+                    DisabledFill: |-
+                        =With(
+                            {
+                                varImageIsCategory: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Settings"
+                                ).staticIconIsCategory
+                            },
+                            If(
+                                varImageIsCategory,
+                                gblAppStyles.Icons.DisabledFill_Category,
+                                Transparent
+                            )
+                        )
+                    Fill: |-
+                        =With(
+                            {
+                                varImageIsCategory: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Settings"
+                                ).staticIconIsCategory
+                            },
+                            If(
+                                varImageIsCategory,
+                                gblAppStyles.Icons.Fill_Category,
+                                Transparent
+                            )
+                        )
+                    Height: =18
+                    HoverFill: =Self.Fill
+                    Image: |-
+                        =With(
+                            {
+                                varImageRecord: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Info"
+                                ),
+                                varColor: If(
+                                    Self.DisplayMode = DisplayMode.Disabled,
+                                    gblAppStyles.Icons.DisabledColor,
+                                    gblAppStyles.Icons.Color
+                                )
+                            },
+                            With(
+                                {
+                                    varImageData: Concatenate(
+                                        "data:image/svg+xml;utf8, ",
+                                        EncodeUrl(
+                                            Concatenate(
+                                                "<svg viewBox='",
+                                                varImageRecord.staticIconViewbox,
+                                                "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                varImageRecord.staticIconPath,
+                                                "' fill='#",
+                                                varColor,
+                                                "'/></svg>"
+                                            )
+                                        )
+                                    )
+                                },
+                                varImageData
+                            )
+                        )
+                    PaddingBottom: =2
+                    PaddingLeft: =2
+                    PaddingRight: =2
+                    PaddingTop: =2
+                    PressedFill: =Self.Fill
+                    RadiusBottomLeft: =5
+                    RadiusBottomRight: =5
+                    RadiusTopLeft: =5
+                    RadiusTopRight: =5
+                    Tooltip: =Self.AccessibleLabel
+                    Width: =18
+                    X: =lblSettings_TeamInstructions.X - 2
+                    Y: =lblSettings_TeamInstructions_Suggestion.Y + (lblSettings_TeamInstructions_Suggestion.Height - Self.Height)/2 + 1
+                    ZIndex: =11
+
+                lblSettings_TaskInstructions_Suggestion As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =24
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PaddingLeft: =0
+                    PaddingTop: =5.83
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Small
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Ensure that all app users have access to this Tasks instance",
+                                varOOBTextId: "lblSettings_TaskInstructions_Suggestion__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Width: =Parent.Width - Self.X -20
+                    X: =imgSettings_TaskInstructions_Suggestion.X + imgSettings_TaskInstructions_Suggestion.Width + 5
+                    Y: |
+                        =lblSettings_TasksInstructions.Y + lblSettings_TasksInstructions.Height 
+                    ZIndex: =12
+
+                imgSettings_TaskInstructions_Suggestion As image:
+                    AccessibleLabel: ="Information about access to the task intance"
+                    DisabledFill: |-
+                        =With(
+                            {
+                                varImageIsCategory: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Settings"
+                                ).staticIconIsCategory
+                            },
+                            If(
+                                varImageIsCategory,
+                                gblAppStyles.Icons.DisabledFill_Category,
+                                Transparent
+                            )
+                        )
+                    Fill: |-
+                        =With(
+                            {
+                                varImageIsCategory: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Settings"
+                                ).staticIconIsCategory
+                            },
+                            If(
+                                varImageIsCategory,
+                                gblAppStyles.Icons.Fill_Category,
+                                Transparent
+                            )
+                        )
+                    Height: =18
+                    HoverFill: =Self.Fill
+                    Image: |-
+                        =With(
+                            {
+                                varImageRecord: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Info"
+                                ),
+                                varColor: If(
+                                    Self.DisplayMode = DisplayMode.Disabled,
+                                    gblAppStyles.Icons.DisabledColor,
+                                    gblAppStyles.Icons.Color
+                                )
+                            },
+                            With(
+                                {
+                                    varImageData: Concatenate(
+                                        "data:image/svg+xml;utf8, ",
+                                        EncodeUrl(
+                                            Concatenate(
+                                                "<svg viewBox='",
+                                                varImageRecord.staticIconViewbox,
+                                                "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                varImageRecord.staticIconPath,
+                                                "' fill='#",
+                                                varColor,
+                                                "'/></svg>"
+                                            )
+                                        )
+                                    )
+                                },
+                                varImageData
+                            )
+                        )
+                    PaddingBottom: =2
+                    PaddingLeft: =2
+                    PaddingRight: =2
+                    PaddingTop: =2
+                    PressedFill: =Self.Fill
+                    RadiusBottomLeft: =5
+                    RadiusBottomRight: =5
+                    RadiusTopLeft: =5
+                    RadiusTopRight: =5
+                    Tooltip: =Self.AccessibleLabel
+                    Width: =18
+                    X: =lblSettings_TeamInstructions.X - 2
+                    Y: =lblSettings_TaskInstructions_Suggestion.Y + (lblSettings_TaskInstructions_Suggestion.Height - Self.Height)/2 + 1
+                    ZIndex: =13
+
+            dtcSettings_SharePoint As dataCard.blankCard:
+                BorderColor: =RGBA(0, 0, 0, 1)
+                BorderStyle: =BorderStyle.Solid
+                DisplayMode: =DisplayMode.Edit
+                Fill: =RGBA(0, 0, 0, 0)
+                Height: =lblSettings_SharePoint_ErrorURL.Y + lblSettings_SharePoint_ErrorURL.Height + gblPadding.Page
+                Visible: =false
+                Width: =1066
+                X: =0
+                Y: =2
+                ZIndex: =3
+
+                lblSettings_SharePoint_ErrorURL As label:
+                    Color: |-
+                        =If(
+                            gblThemeHiCo,
+                            gblAppColors.NeutralWebWhite,
+                            gblThemeDark,
+                            gblAppColors.MessagesDarkWebErrorBlockIcon,
+                            gblAppColors.MessagesDefaultWebErrorBlockIcon
+                        )
+                    Font: =Font.'Segoe UI'
+                    Height: =64
+                    Size: =9
+                    Text: |-
+                        =// This formula checks a few different scenarios where the SharePoint URL may be incorrect
+                        With(
+                            {varSharePointUrl: txtSettings_SharePoint_URL.Text},
+                            With(
+                                {
+                                    varError_ValidUrl: IsMatch(
+                                        varSharePointUrl,
+                                        "^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$"
+                                    ),
+                                    varError_UrlSlashes: CountRows(
+                                        MatchAll(
+                                            varSharePointUrl,
+                                            "\/"
+                                        )
+                                    ) = 4,
+                                    varError_SharePointDotCom: !IsBlankOrError(
+                                        Find(
+                                            ".sharepoint.com/sites/",
+                                            varSharePointUrl
+                                        )
+                                    ),
+                                    varError_SiteName: !IsBlankOrError(
+                                        Right(
+                                            varSharePointUrl,
+                                            Len(varSharePointUrl) - (Find(
+                                                ".sharepoint.com/sites/",
+                                                varSharePointUrl
+                                            ) + 23)
+                                        )
+                                    )
+                                },
+                                If(
+                                    !IsBlank(varSharePointUrl),
+                                    If(
+                                        !varError_ValidUrl,
+                                        "Please enter a valid URL",
+                                        !varError_UrlSlashes,
+                                        "URL must have exactly 4 forward slashes, like https://contoso.sharepoint.com/sites/TeamName",
+                                        !varError_SharePointDotCom,
+                                        "URL must include .sharepoint.com/sites/",
+                                        !varError_SiteName,
+                                        "URL must include at least a three character site name",
+                                        Blank()
+                                    ),
+                                    Blank()
+                                )
+                            )
+                        )
+                    VerticalAlign: =VerticalAlign.Top
+                    Width: =Max(500,Parent.Width -Self.X)
+                    Wrap: =false
+                    X: =txtSettings_SharePoint_URL.X
+                    Y: =txtSettings_SharePoint_URL.Y +txtSettings_SharePoint_URL.Height
+                    ZIndex: =3
+
+                txtSettings_SharePoint_URL As text:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "Text input for the SharePoint URL, to store images for issues",
+                                varOOBTextId: "txtSetupSharePoint_URL__locAccessibleLabel"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    BorderColor: =gblAppStyles.TextInput.BorderColor
+                    BorderThickness: =gblAppStyles.TextInput.BorderThickness
+                    Color: =gblAppStyles.TextInput.Color
+                    Default: =gblSettingSharePointLocation
+                    DisabledBorderColor: =gblAppStyles.TextInput.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.TextInput.DisabledColor
+                    DisabledFill: =gblAppStyles.TextInput.DisabledFill
+                    Fill: =gblAppStyles.TextInput.Fill
+                    FocusedBorderColor: =gblAppStyles.TextInput.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.TextInput.FocusedBorderThickness
+                    Font: ='Segoe UI'
+                    Height: =32
+                    HintText: |-
+                        =With(
+                            {
+                                varDefault: "Ex: https://contoso.sharepoint.com/sites/TeamName",
+                                varOOBTextId: "_translateCommon__SetupSharePointUrl"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    HoverBorderColor: =gblAppStyles.TextInput.HoverBorderColor
+                    HoverColor: =gblAppStyles.TextInput.HoverColor
+                    HoverFill: =gblAppStyles.TextInput.HoverFill
+                    PaddingBottom: =4
+                    PaddingLeft: =8
+                    PaddingRight: =8
+                    PaddingTop: =4
+                    PressedBorderColor: =gblAppStyles.TextInput.PressedBorderColor
+                    PressedColor: =gblAppStyles.TextInput.PressedColor
+                    PressedFill: =gblAppStyles.TextInput.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.TextInput.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.TextInput.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.TextInput.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.TextInput.RadiusTopRight
+                    Size: =gblAppStyles.TextInput.Size
+                    Width: =Min(lblSettings_TeamOwnerRestricted_Header.Width,500)
+                    X: =htmSettingsSharePoint_Step3.X
+                    Y: =htmSettingsSharePoint_Step3.Y + htmSettingsSharePoint_Step3.Height + 16
+                    ZIndex: =4
+
+                htmSettingsSharePoint_Step3 As htmlViewer:
+                    BorderColor: =gblAppStyles.HTML.BorderColor
+                    BorderThickness: =gblAppStyles.HTML.BorderThickness
+                    Color: =gblAppStyles.HTML.Color
+                    DisabledBorderColor: =gblAppStyles.HTML.DisabledBorderColor
+                    DisabledFill: =gblAppStyles.HTML.DisabledFill
+                    Fill: =gblAppStyles.HTML.Fill
+                    Font: =Font.'Segoe UI'
+                    Height: =24
+                    HoverBorderColor: =gblAppStyles.HTML.HoverBorderColor
+                    HtmlText: |-
+                        =With(
+                            {
+                                varDefault: "<b>Step 3:</b> Copy the URL from the SharePoint site and paste it below",
+                                varOOBTextId: "_translateCommon__SetupStep3"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    PaddingBottom: =0
+                    PaddingLeft: =0
+                    PaddingRight: =0
+                    PaddingTop: =0
+                    Size: =gblAppStyles.HTML.Size.Medium
+                    Width: =Parent.Width - (2*Self.X)
+                    X: =gblPadding.Page
+                    Y: =imgSettings_SharePoint_Step2.Y +imgSettings_SharePoint_Step2.Height +24
+                    ZIndex: =5
+
+                imgSettings_SharePoint_Step2 As image:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "Select Site from your Tasks instance, to get the SharePoint URL",
+                                varOOBTextId: "imgSettings_SharePoint_Step2__locTooltip"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    CalculateOriginalDimensions: |
+                        =true
+                    Height: =161
+                    Image: =Image_SetupPlanner
+                    ImagePosition: =ImagePosition.Fill
+                    Width: =267
+                    X: =htmSettings_SharePoint_Step2.X
+                    Y: =htmSettings_SharePoint_Step2.Y +htmSettings_SharePoint_Step2.Height +8
+                    ZIndex: =6
+
+                htmSettings_SharePoint_Step2 As htmlViewer:
+                    BorderColor: =gblAppStyles.HTML.BorderColor
+                    BorderThickness: =gblAppStyles.HTML.BorderThickness
+                    Color: =gblAppStyles.HTML.Color
+                    DisabledBorderColor: =gblAppStyles.HTML.DisabledBorderColor
+                    DisabledFill: =gblAppStyles.HTML.DisabledFill
+                    Fill: =gblAppStyles.HTML.Fill
+                    Font: =Font.'Segoe UI'
+                    Height: =24
+                    HoverBorderColor: =gblAppStyles.HTML.HoverBorderColor
+                    HtmlText: |-
+                        =With(
+                            {
+                                varDefault: "<b>Step 2:</b> Select the ellipsis (...) menu, and choose Sites",
+                                varOOBTextId: "_translateCommon__SetupStep2"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    PaddingBottom: =0
+                    PaddingLeft: =0
+                    PaddingRight: =0
+                    PaddingTop: =0
+                    Size: =gblAppStyles.HTML.Size.Medium
+                    Width: =Parent.Width - (2*Self.X)
+                    X: =gblPadding.Page
+                    Y: =btnSettings_SharePoint_OpenTasks.Y +btnSettings_SharePoint_OpenTasks.Height +24
+                    ZIndex: =7
+
+                btnSettings_SharePoint_OpenTasks As button:
+                    BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+                    BorderThickness: =gblAppStyles.ButtonPrimary.BorderThickness
+                    Color: =gblAppStyles.ButtonPrimary.Color
+                    DisabledBorderColor: =gblAppStyles.ButtonPrimary.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.ButtonPrimary.DisabledColor
+                    DisabledFill: =gblAppStyles.ButtonPrimary.DisabledFill
+                    Fill: =gblAppStyles.ButtonPrimary.Fill
+                    FocusedBorderColor: =gblAppStyles.ButtonPrimary.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.ButtonPrimary.FocusedBorderThickness
+                    Font: ='Segoe UI'
+                    FontWeight: =FontWeight.Normal
+                    Height: =32
+                    HoverBorderColor: =gblAppStyles.ButtonPrimary.HoverBorderColor
+                    HoverColor: =gblAppStyles.ButtonPrimary.HoverColor
+                    HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+                    OnSelect: |-
+                        =Launch(
+                            Concatenate(
+                                "https://tasks.office.com/",
+                                "/Home/Planner/#/plantaskboard?groupId=",
+                                gblSettingTeamId,
+                                "&planId=",
+                                drpSettings_Tasks.Selected.id
+                            ),
+                            {},
+                            LaunchTarget.New
+                        );
+                    PaddingBottom: =4
+                    PaddingLeft: =4
+                    PaddingRight: =4
+                    PaddingTop: =4
+                    PressedBorderColor: =gblAppStyles.ButtonPrimary.PressedBorderColor
+                    PressedColor: =gblAppStyles.ButtonPrimary.PressedColor
+                    PressedFill: =gblAppStyles.ButtonPrimary.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+                    RadiusBottomRight: |
+                        =gblAppStyles.ButtonPrimary.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+                    Size: =gblAppStyles.ButtonPrimary.Size
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Open Tasks",
+                                varOOBTextId: "_translateCommon__OpenTasks"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Tooltip: =Self.Text
+                    Width: =120
+                    X: =htmSettings_SharePoint.X
+                    Y: =htmSettings_SharePoint.Y + htmSettings_SharePoint.Height + 8
+                    ZIndex: =8
+
+                htmSettings_SharePoint As htmlViewer:
+                    BorderColor: =gblAppStyles.HTML.BorderColor
+                    BorderThickness: =gblAppStyles.HTML.BorderThickness
+                    Color: =gblAppStyles.HTML.Color
+                    DisabledBorderColor: =gblAppStyles.HTML.DisabledBorderColor
+                    DisabledFill: =gblAppStyles.HTML.DisabledFill
+                    Fill: =gblAppStyles.HTML.Fill
+                    Font: =Font.'Segoe UI'
+                    Height: =24
+                    HoverBorderColor: =gblAppStyles.HTML.HoverBorderColor
+                    HtmlText: |-
+                        =With(
+                            {
+                                varDefault: "<b>Step 1:</b> Click the button, to open Tasks in a new window",
+                                varOOBTextId: "_translateCommon__SetupStep1"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    PaddingBottom: =0
+                    PaddingLeft: =0
+                    PaddingRight: =0
+                    PaddingTop: =0
+                    Size: =gblAppStyles.HTML.Size.Medium
+                    Width: =Parent.Width - (2*Self.X)
+                    X: =gblPadding.Page
+                    Y: =lblSettings_SharePoint.Y +lblSettings_SharePoint.Height +8
+                    ZIndex: =9
+
+                lblSettings_SharePoint As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =28
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PaddingLeft: =0
+                    PaddingTop: =2
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Large
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Image storage",
+                                varOOBTextId: "_translateCommon__SetupImageStorage"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Width: =lblSettings_TeamOwnerRestricted_Header.Width
+                    X: =gblPadding.Page
+                    Y: =gblPadding.Page
+                    ZIndex: =10
+
+    conSettingsNav As groupContainer:
+        Height: =Parent.Height - Self.Y
+        Width: |-
+            =If(
+                Parent.Width > 900,
+                300,
+                Parent.Width > 750,
+                250,
+                Parent.Width > 500,
+                200,
+                0
+            )
+        X: =0 * 0
+        Y: =comHeader_Settings.Y + comHeader_Settings.Height
+        ZIndex: =2
+
+        galSettings As gallery.galleryVertical:
+            AccessibleLabel: |-
+                =With(
+                    {
+                        varDefault: "Gallery of settings menu areas",
+                        varOOBTextId: "galSettings__locAccessibleLabel"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            BorderColor: =RGBA(0, 0, 0, 0)
+            Height: =Parent.Height - Self.Y
+            Items: |-
+                =Table(
+                    {
+                        tblIcon: With(
+                            {
+                                varImageRecord: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Settings filled"
+                                ),
+                                varColor: If(
+                                    Self.DisplayMode = DisplayMode.Disabled,
+                                    gblAppStyles.Icons.DisabledColor,
+                                    gblAppStyles.Icons.Color
+                                )
+                            },
+                            With(
+                                {
+                                    varImageData: Concatenate(
+                                        "data:image/svg+xml;utf8, ",
+                                        EncodeUrl(
+                                            Concatenate(
+                                                "<svg viewBox='",
+                                                varImageRecord.staticIconViewbox,
+                                                "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                varImageRecord.staticIconPath,
+                                                "' fill='#",
+                                                varColor,
+                                                "'/></svg>"
+                                            )
+                                        )
+                                    )
+                                },
+                                varImageData
+                            )
+                        ),
+                        tblText: With(
+                            {
+                                varDefault: "General",
+                                varOOBTextId: "lblSettingsArea__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    }
+                )
+            Layout: =Layout.Vertical
+            OnSelect: =
+            TabIndex: =0
+            TemplateFill: =gblAppStyles.Gallery.SelectedItem
+            TemplatePadding: =0
+            TemplateSize: =48
+            Width: =Parent.Width
+            X: =0 * 0
+            Y: =gblPadding.Page /2
+            ZIndex: =6
+
+            imgGalSettings_Icon As image:
+                DisplayMode: =DisplayMode.View
+                Fill: =Transparent
+                Height: =20
+                Image: =ThisItem.tblIcon
+                OnSelect: =Select(Parent)
+                RadiusBottomLeft: =4
+                RadiusBottomRight: =4
+                RadiusTopLeft: =4
+                RadiusTopRight: =4
+                Tooltip: ="General settings"
+                Width: =20
+                X: =16
+                Y: =(Parent.TemplateHeight - Self.Height) / 2
+                ZIndex: =2
+
+            lblGalSettings_Name As label:
+                Color: =gblAppStyles.Label.Color
+                DisplayMode: =DisplayMode.View
+                Font: =Font.'Segoe UI'
+                Height: =Parent.TemplateHeight
+                OnSelect: =Select(Parent)
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: =ThisItem.tblText
+                Width: =Parent.TemplateWidth - Self.X
+                Wrap: =false
+                X: =imgGalSettings_Icon.X + imgGalSettings_Icon.Width + 16
+                Y: =Parent.TemplateHeight * 0
+                ZIndex: =3
+
+        shpDividerSettingsNav As rectangle:
+            DisplayMode: =DisplayMode.View
+            Fill: =gblAppStyles.Dividers.Elements
+            Height: =Parent.Height
+            Width: =1
+            X: =Parent.Width - Self.Width
+            Y: =0*0
+            ZIndex: =7
+
+    conSettingsActions As groupContainer:
+        Height: =72
+        Width: =Parent.Width - Self.X
+        X: =conSettingsNav.X + conSettingsNav.Width
+        Y: =conSettingsNav.Y
+        ZIndex: =3
+
+        btnSettingsCancel As button:
+            BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+            BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+            Color: =gblAppStyles.ButtonSecondary.Color
+            DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+            DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+            DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+            Fill: =gblAppStyles.ButtonSecondary.Fill
+            FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+            Font: ='Segoe UI'
+            Height: =32
+            HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+            HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+            HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+            OnSelect: |
+                =Back();
+                Reset(drpSettings_Tasks);
+                Reset(txtSettings_SharePoint_URL);
+            PaddingBottom: =4
+            PaddingLeft: =4
+            PaddingRight: =4
+            PaddingTop: =4
+            PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+            PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+            PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+            RadiusBottomLeft: =gblAppStyles.ButtonSecondary.RadiusBottomLeft
+            RadiusBottomRight: =gblAppStyles.ButtonSecondary.RadiusBottomRight
+            RadiusTopLeft: =gblAppStyles.ButtonSecondary.RadiusTopLeft
+            RadiusTopRight: =gblAppStyles.ButtonSecondary.RadiusTopRight
+            Size: =gblAppStyles.ButtonSecondary.Size
+            Text: |-
+                =With(
+                    {
+                        varDefault: "Cancel",
+                        varOOBTextId: "_translateCommon__Cancel"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            Tooltip: =Self.Text
+            Width: =96
+            X: =Parent.Width - Self.Width - gblPadding.Page
+            Y: =(Parent.Height - Self.Height) / 2
+            ZIndex: =3
+
+        btnSettingsSave As button:
+            BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+            BorderThickness: =gblAppStyles.ButtonPrimary.BorderThickness
+            Color: =gblAppStyles.ButtonPrimary.Color
+            DisabledBorderColor: =gblAppStyles.ButtonPrimary.DisabledBorderColor
+            DisabledColor: =gblAppStyles.ButtonPrimary.DisabledColor
+            DisabledFill: =gblAppStyles.ButtonPrimary.DisabledFill
+            DisplayMode: |-
+                =If(
+                    Or(
+                        (And(
+                            !IsBlankOrError(drpSettings_Tasks.Selected),
+                            drpSettings_Tasks.Selected.id <> gblRecordSettings.'Parameter (Planner Id)'
+                        )),
+                        (And(
+                            (txtSettings_SharePoint_URL.Text <> gblSettingSharePointLocation),
+                            IsBlank(lblSettings_SharePoint_ErrorURL.Text),
+                            !IsBlank(txtSettings_SharePoint_URL.Text)
+                        )),
+                        (tglSettings_TeamOwnerRestricted.Value <> If(
+                            gblRecordSettings.'Team Owner Restricted?' = 'Team Owner Restricted? (Issue Report Settings)'.Yes,
+                            true,
+                            false
+                        ))
+                    ),
+                    DisplayMode.Edit,
+                    DisplayMode.Disabled
+                )
+            Fill: =gblAppStyles.ButtonPrimary.Fill
+            FocusedBorderColor: =gblAppStyles.ButtonPrimary.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.ButtonPrimary.FocusedBorderThickness
+            Font: ='Segoe UI'
+            Height: =32
+            HoverBorderColor: =gblAppStyles.ButtonPrimary.HoverBorderColor
+            HoverColor: =gblAppStyles.ButtonPrimary.HoverColor
+            HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+            OnSelect: |
+                =UpdateContext({locBlockUserInput: true});
+                Set(
+                    gblRecordSettings,
+                    IfError(
+                        Patch(
+                            'Issue Report Settings',
+                            {
+                                'Issue Report Settings': gblRecordSettings.'Issue Report Settings',
+                                'Parameter (Team Id)': drpSettings_Team.Selected.id,
+                                'Parameter (Planner Id)': drpSettings_Tasks.Selected.id,
+                                'Parameter (SharePoint Location)': txtSettings_SharePoint_URL.Text,
+                                'Team Owner Restricted?': If(
+                                    tglSettings_TeamOwnerRestricted.Value,
+                                    'Team Owner Restricted? (Issue Report Settings)'.Yes,
+                                    'Team Owner Restricted? (Issue Report Settings)'.No
+                                )
+                            }
+                        ),
+                        LookUp(
+                            'Issue Report Settings',
+                            true
+                        )
+                    )
+                );
+                Set(
+                    gblSettingPlannerPlanId,
+                    gblRecordSettings.'Parameter (Planner Id)'
+                );
+                Set(
+                    gblSettingSharePointLocation,
+                    gblRecordSettings.'Parameter (SharePoint Location)'
+                );
+                // Planner Buckets
+                Concurrent(
+                    If(
+                        !IsBlank(gblSettingPlannerPlanId) And !IsBlank(gblSettingTeamId),
+                        ClearCollect(
+                            colPlannerBuckets,
+                            Planner.ListBucketsV3(
+                                gblSettingPlannerPlanId,
+                                gblSettingTeamId
+                            ).value
+                        )
+                    ),
+                    // Planner Tasks
+                    If(
+                        !IsBlank(gblSettingPlannerPlanId) And !IsBlank(gblSettingTeamId),
+                        ClearCollect(
+                            colPlannerTasks,
+                            Planner.ListTasksV3(
+                                gblSettingPlannerPlanId,
+                                gblSettingTeamId
+                            ).value
+                        )
+                    )
+                );
+                Select(btnSettingsCancel);
+                UpdateContext({locBlockUserInput: false});
+            PaddingBottom: =4
+            PaddingLeft: =4
+            PaddingRight: =4
+            PaddingTop: =4
+            PressedBorderColor: =gblAppStyles.ButtonPrimary.PressedBorderColor
+            PressedColor: =gblAppStyles.ButtonPrimary.PressedColor
+            PressedFill: =gblAppStyles.ButtonPrimary.PressedFill
+            RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+            RadiusBottomRight: =gblAppStyles.ButtonPrimary.RadiusBottomRight
+            RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+            RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+            Size: =gblAppStyles.ButtonPrimary.Size
+            Text: |-
+                =With(
+                    {
+                        varDefault: "Save",
+                        varOOBTextId: "btnSettingsSave__locText"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            Tooltip: =Self.Text
+            Width: =100
+            X: =btnSettingsCancel.X - Self.Width - gblPadding.ButtonShape
+            Y: =btnSettingsCancel.Y
+            ZIndex: =4
+
+        lblSettingsArea As label:
+            BorderColor: =gblAppStyles.Label.BorderColor
+            BorderThickness: =gblAppStyles.Label.BorderThickness
+            Color: =gblAppStyles.Label.Color
+            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+            DisabledColor: =gblAppStyles.Label.DisabledColor
+            DisabledFill: =gblAppStyles.Label.DisabledFill
+            DisplayMode: =DisplayMode.View
+            Fill: =gblAppStyles.Label.Fill
+            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            FontWeight: =FontWeight.Semibold
+            Height: =Parent.Height
+            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+            HoverColor: =gblAppStyles.Label.HoverColor
+            HoverFill: =gblAppStyles.Label.HoverFill
+            PaddingBottom: =8
+            PaddingLeft: =gblPadding.Page
+            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+            PressedColor: =gblAppStyles.Label.PressedColor
+            PressedFill: =gblAppStyles.Label.PressedFill
+            Size: =gblAppStyles.Label.Size.ExtraLarge
+            Text: |-
+                =With(
+                    {
+                        varDefault: "General",
+                        varOOBTextId: "lblSettingsArea__locText"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            Width: =btnSettingsSave.X - 16
+            Wrap: =false
+            X: =0 * 0
+            Y: =0 * 0
+            ZIndex: =9
+
+    comHeader_Settings As comHeader:
+        Fill: =comHeader_Settings.inputStyles.Background.Fill
+        Height: =60*1
+        inputColors: =gblAppColors
+        inputDarkTheme: =gblThemeDark
+        inputExternalLinkSettings: =gblAppHeader.ViewInTasks
+        inputHeaderSettings: =gblAppHeader.Main
+        inputHelpIcon: |-
+            =With(
+                {
+                    varImageRecord: LookUp(
+                        staticIcons,
+                        staticIconName = If(
+                            App.ActiveScreen = 'About Screen',
+                            "Info filled",
+                            "Info"
+                        )
+                    ),
+                    varColor: gblAppStyles.Icons.Color
+                },
+                With(
+                    {
+                        varImageData: Concatenate(
+                            "data:image/svg+xml;utf8, ",
+                            EncodeUrl(
+                                Concatenate(
+                                    "<svg viewBox='",
+                                    varImageRecord.staticIconViewbox,
+                                    "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                    varImageRecord.staticIconPath,
+                                    "' fill='#",
+                                    varColor,
+                                    "'/></svg>"
+                                )
+                            )
+                        )
+                    },
+                    varImageData
+                )
+            )
+        inputHelpScreen: ='About Screen'
+        inputHighContrastTheme: =gblThemeHiCo
+        inputMenuItem1: =gblAppHeader.Insights
+        inputMenuItem2: =gblAppHeader.IssueTemplates
+        inputMenuItem3: =
+        inputMenuItem4: =
+        inputSettingsIcon: |
+            =With(
+                {
+                    varImageRecord: LookUp(
+                        staticIcons,
+                        staticIconName = If(
+                        App.ActiveScreen = 'Settings Screen',
+                        "Settings filled",
+                        "Settings"           
+                    )
+                    ),
+                    varColor: 
+                        gblAppStyles.Icons.Color
+                },
+                With(
+                    {
+                        varImageData: Concatenate(
+                            "data:image/svg+xml;utf8, ",
+                            EncodeUrl(
+                                Concatenate(
+                                    "<svg viewBox='",
+                                    varImageRecord.staticIconViewbox,
+                                    "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                    varImageRecord.staticIconPath,
+                                    "' fill='#",
+                                    varColor,
+                                    "'/></svg>"
+                                )
+                            )
+                        )
+                    },
+                    varImageData
+                )
+            )
+        inputSettingsScreen: ='Settings Screen'
+        inputStyles: =gblAppStyles
+        Width: =Parent.Width
+        X: =0*0
+        Y: =0*0
+        ZIndex: =5
+
+    lblBlockUserInput_Settings As label:
+        DisabledFill: =RGBA(0, 0, 0, 0.05)
+        DisplayMode: =DisplayMode.Disabled
+        Font: =Font.'Segoe UI'
+        Height: =Parent.Height
+        Text: =""
+        Visible: =locBlockUserInput
+        Width: =Parent.Width
+        X: =0*0
+        Y: =0*0
+        ZIndex: =6
+

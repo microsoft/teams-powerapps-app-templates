@@ -1,0 +1,565 @@
+App As appinfo:
+    BackEnabled: =false
+    MinScreenHeight: =320
+    MinScreenWidth: =320
+    OnStart: |
+        =//app loading
+        Set(
+            gblAppLoaded,
+            false
+        );
+        //localization
+        //user language
+        Set(
+            gblUserLanguage,
+            Switch(
+                Left(
+                    Language(),
+                    2
+                ),
+                "de",
+                "de-DE",
+                "en",
+                "en-US",
+                "es",
+                "es-ES",
+                "fr",
+                "fr-FR",
+                "it",
+                "it-IT",
+                "ja",
+                "ja-JP",
+                "nl",
+                "nl-NL",
+                "pt",
+                "pt-BR",
+                //default
+                "en-US"
+            )
+        );
+        //build localization collection, with user language
+        ClearCollect(
+            colLocalization,
+            Filter(
+                staticLocalizations,
+                LanguageTag = gblUserLanguage
+            )
+        );
+        Collect(
+            colLocalization,
+            Filter(
+                staticLocalizationsNewMessages,
+                LanguageTag = gblUserLanguage
+            )
+        );
+        Collect(
+            colLocalization,
+            Filter(
+                staticLocalizationNoChanngelAccess,
+                LanguageTag = gblUserLanguage
+            )
+        );
+        //fetch work type from settings to use inspection, audit, or walk - if there is no setting, use inspection
+        Set(
+            gblWorkType,
+            If(
+                IsBlank(First('Area Inspection Labels').'Work type'),
+                Text('Work types'.Inspection),
+                Text(First('Area Inspection Labels').'Work type')
+            )
+        );
+        //get Teams mode - dark, high contrast or default
+        Concurrent(
+            Set(
+                gblThemeDark,
+                Param("theme") = "dark"
+            ),
+            Set(
+                gblThemeHiCo,
+                Param("theme") = "contrast"
+            ),
+        //check if host client is mobile or not
+            Set(
+                gblIsHostClientMobile,
+                !(Param("hostClientType") in [
+                    "web",
+                    "desktop"
+                ])
+            );
+            Set(
+                gblAppMobileOnDesktop,
+                (Param("hostClientType") in [
+                    "web",
+                    "desktop"
+                ])
+            )
+        );
+        Clear(colMenuAreaTypes);
+        //add "All" to the collection of area types
+        ClearCollect(
+            colMenuAreaTypes,
+            "All"
+        );
+        //populate the collection with all area types, use menu labels if they exist, if not, use the first 10 characters of the area type name
+        ForAll(
+            'Area Inspection Location Types',
+            Collect(
+                colMenuAreaTypes,
+                If(
+                    IsBlank('Menu Label'),
+                    If(
+                        Len(Name) > 10,
+                        Left(
+                            Name,
+                            10
+                        ) & "...",
+                        Name
+                    ),
+                    'Menu Label'
+                )
+            )
+        );
+        //locale value to populate planner URL
+        Set(
+            localeID,
+            Param("locale")
+        );
+        //planner integration params
+        /*Concurrent(
+            Set(
+                gblParamTeamId,
+                Param("groupId")
+            ),
+            Set(
+                gblParamChannelId,
+                Param("channelId")
+            ),*/
+        Set(
+            gblParamTenantId,
+            Param("tenantId")
+            //)
+        );
+        //check for teams settings for current team and channel ID
+        Set(
+            gblRecordSettings,
+            First(
+                Filter(
+                    'Area Inspection Settings',
+                    'Area Inspection Settings (Views)'.'Active Teams Settings'
+                )
+            )
+        );
+        //variables for planner integration
+        If(
+            !IsBlank(gblRecordSettings),
+            Concurrent(
+                Set(
+                    gblPlannerPlanId,
+                    gblRecordSettings.'Parameter (Planner Id)'
+                ),
+                Set(
+                    gblPlannerGroupId,
+                    gblRecordSettings.'Parameter (Team Id)'
+                ),
+                Set(
+                    gblSettingSharePointLocation,
+                    gblRecordSettings.'Parameter (SharePoint Location)'
+                )
+            )
+        );
+        //collect all area types and their associated planner bucket id
+        Clear(colAreaTypes);
+        ForAll(
+            'Area Inspection Location Types',
+            Collect(
+                colAreaTypes,
+                {
+                    TypeName: Name,
+                    BucketID: 'Planner Bucket Id'
+                }
+            )
+        );
+        //get area and area type labels
+        ClearCollect(
+            colLabelSettings,
+            Filter(
+                'Area Inspection Labels',
+                'Area Inspection Labels (Views)'.'Active Area Inspection Labels'
+            )
+        );
+        Set(
+            gblCheckLabelSettings,
+            CountRows(colLabelSettings)
+        );
+        //if no settings exist, use Area and Area type, else use it from the settings
+        If(
+            gblCheckLabelSettings > 0,
+            Set(
+                areaLabel,
+                First('Area Inspection Labels').'Main section label'
+            );
+            Set(
+                areaTypeLabel,
+                First('Area Inspection Labels').'Sub section label'
+            ),
+            Set(
+                areaLabel,
+                "Area"
+            );
+            Set(
+                areaTypeLabel,
+                "Area type"
+            )
+        );
+        //area type icons
+        ClearCollect(
+            colLocationTypeIcons,
+            {
+                appIcon: Icon_Category_Beauty,
+                Name: "Beauty",
+                Order: 1
+            },
+            {
+                appIcon: Icon_Category_Bike,
+                Name: "Bike",
+                Order: 2
+            },
+            {
+                appIcon: Icon_Category_Bus,
+                Name: "Bus",
+                Order: 3
+            },
+            {
+                appIcon: Icon_Category_Car,
+                Name: "Car",
+                Order: 4
+            },
+            {
+                appIcon: Icon_Category_Car1,
+                Name: "Car1",
+                Order: 5
+            },
+            {
+                appIcon: Icon_Category_Car2,
+                Name: "Car2",
+                Order: 6
+            },
+            {
+                appIcon: Icon_Category_Clothing,
+                Name: "Clothing",
+                Order: 7
+            },
+            {
+                appIcon: Icon_Category_Communication,
+                Name: "Communication",
+                Order: 8
+            },
+            {
+                appIcon: Icon_Category_External,
+                Name: "External",
+                Order: 9
+            },
+            {
+                appIcon: Icon_Category_Factory,
+                Name: "Factory",
+                Order: 10
+            },
+            {
+                appIcon: Icon_Category_Focus,
+                Name: "Focus",
+                Order: 11
+            },
+            {
+                appIcon: Icon_Category_Food,
+                Name: "Food",
+                Order: 12
+            },
+            {
+                appIcon: Icon_Category_Gifts,
+                Name: "Gifts",
+                Order: 13
+            },
+            {
+                appIcon: Icon_Category_Globe,
+                Name: "Globe",
+                Order: 14
+            },
+            {
+                appIcon: Icon_Category_Hardware,
+                Name: "Hardware",
+                Order: 15
+            },
+            {
+                appIcon: Icon_Category_Home,
+                Name: "Home",
+                Order: 16
+            },
+            {
+                appIcon: Icon_Category_Index,
+                Name: "Index",
+                Order: 17
+            },
+            {
+                appIcon: Icon_Category_Interior,
+                Name: "Interior",
+                Order: 18
+            },
+            {
+                appIcon: Icon_Category_Inventory,
+                Name: "Inventory",
+                Order: 19
+            },
+            {
+                appIcon: Icon_Category_Office,
+                Name: "Office",
+                Order: 20
+            },
+            {
+                appIcon: Icon_Category_Organization,
+                Name: "Organization",
+                Order: 21
+            },
+            {
+                appIcon: Icon_Category_Outdoor,
+                Name: "Outdoor",
+                Order: 22
+            },
+            {
+                appIcon: Icon_Category_People,
+                Name: "People",
+                Order: 23
+            },
+            {
+                appIcon: Icon_Category_Phone,
+                Name: "Phone",
+                Order: 24
+            },
+            {
+                appIcon: Icon_Category_Rocket,
+                Name: "Rocket",
+                Order: 25
+            },
+            {
+                appIcon: Icon_Category_Rooms,
+                Name: "Rooms",
+                Order: 26
+            },
+            {
+                appIcon: Icon_Category_Sales,
+                Name: "Sales",
+                Order: 27
+            },
+            {
+                appIcon: Icon_Category_Scan,
+                Name: "Scan",
+                Order: 28
+            },
+            {
+                appIcon: Icon_Category_Science,
+                Name: "Science",
+                Order: 29
+            },
+            {
+                appIcon: Icon_Category_Security,
+                Name: "Security",
+                Order: 30
+            },
+            {
+                appIcon: Icon_Category_Service,
+                Name: "Service",
+                Order: 31
+            },
+            {
+                appIcon: Icon_Category_Stock,
+                Name: "Stock",
+                Order: 32
+            },
+            {
+                appIcon: Icon_Category_Store,
+                Name: "Store",
+                Order: 33
+            },
+            {
+                appIcon: Icon_Category_Train,
+                Name: "Train",
+                Order: 34
+            },
+            {
+                appIcon: Icon_Category_Travel,
+                Name: "Travel",
+                Order: 35
+            },
+            {
+                appIcon: Icon_Category_Truck,
+                Name: "Truck",
+                Order: 35
+            },
+            {
+                appIcon: Icon_Category_Wine,
+                Name: "Wine",
+                Order: 37
+            },
+            {
+                appIcon: Icon_Category_Work,
+                Name: "Work",
+                Order: 38
+            }
+        );
+        //current user's email
+        Set(
+            gblCurrUserEmail,
+            User().Email
+        );
+        //current user record
+        Set(
+            gblCurrUser,
+            LookUp(
+                Users,
+                domainname = gblCurrUserEmail
+            )
+        );
+        //total inspections - last 7 days
+        ClearCollect(
+            colWeekInspections,
+            Filter(
+                'Area Inspections',
+                'Area Inspections (Views)'.'Active Area Inspections - Last 7 Days'
+            )
+        );
+        //total inspection count - last 7 days
+        Set(
+            gblTotalInspectionCount,
+            CountRows(colWeekInspections)
+        );
+        //current user inspection count - last 7 days
+        Set(
+            gblCurrentUserInspectionCount,
+            CountRows(
+                Filter(
+                    colWeekInspections,
+                    Owner = gblCurrUser
+                )
+            )
+        );
+        //total issues - last 7 days
+        ClearCollect(
+            colWeekIssues,
+            Filter(
+                'Area Inspection Steps',
+                'Area Inspection Steps (Views)'.'Active Area Inspection Steps - Last 7 Days',
+                Outcome = 'Inspection Outcome'.Issue
+            )
+        );
+        //current user issues count - last 7 days
+        Set(
+            gblCurrentUserIssueCount,
+            CountRows(
+                Filter(
+                    colWeekIssues,
+                    Owner = gblCurrUser
+                )
+            )
+        );
+        //total issue count - last 7 days
+        Set(
+            gblTotalIssueCount,
+            CountRows(colWeekIssues)
+        );
+        //team inspection durations
+        Clear(colTeamDurations);
+        ForAll(
+            Filter(
+                colWeekInspections,
+                !IsBlank('Started On') && !IsBlank('Ended On')
+            ),
+            Collect(
+                colTeamDurations,
+                DateDiff(
+                    'Started On',
+                    'Ended On',
+                    Minutes
+                )
+            )
+        );
+        //team average inspection time
+        Set(
+            gblTeamAvgTime,
+            RoundUp(
+                Sum(
+                    colTeamDurations,
+                    Value
+                ) / CountRows(colTeamDurations),
+                0
+            )
+        );
+        //current user inspection durations
+        Clear(colUserDurations);
+        ForAll(
+            Filter(
+                colWeekInspections,
+                !IsBlank('Started On') && !IsBlank('Ended On'),
+                Owner = gblCurrUser
+            ),
+            Collect(
+                colUserDurations,
+                DateDiff(
+                    'Started On',
+                    'Ended On',
+                    Minutes
+                )
+            )
+        );
+        //current user average inspection time
+        Set(
+            gblUserAvgTime,
+            RoundUp(
+                Sum(
+                    colUserDurations,
+                    Value
+                ) / CountRows(colUserDurations),
+                0
+            )
+        );
+        //variable to control updating of inspection count when a user navigates to the Welcome screen
+        Set(
+            gblUpdateInspectionCount,
+            false
+        );
+        //code to retain state when switchin Teams tabs for individual inspections
+        LoadData(
+            colLastInspection,
+            "colLastInspection",
+            true
+        );
+        LoadData(
+            colLastInspectionSteps,
+            "colLastInspectionSteps",
+            true
+        );
+        LoadData(
+            colStepDetails,
+            "colStepDetails",
+            true
+        );
+        LoadData(
+            colStepOutcomes,
+            "colStepOutcomes",
+            true
+        );
+        LoadData(
+            colImages,
+            "colImages",
+            true
+        );
+        LoadData(
+            colSelectedLocation,
+            "colSelectedLocation",
+            true
+        );
+        //app loading
+        Set(
+            gblAppLoaded,
+            true
+        );
+    SizeBreakpoints: =[1024,1366,1920]
+

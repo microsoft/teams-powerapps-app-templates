@@ -1,0 +1,1522 @@
+"'Insights Screen' As screen":
+    Fill: =gblAppStyles.Background.Fill
+    LoadingSpinner: =LoadingSpinner.Data
+    LoadingSpinnerColor: =gblAppStyles.ButtonPrimary.Fill
+    OnHidden: |-
+        =UpdateContext({locRefreshCdsIssueReports: false})
+    OnVisible: |
+        =// Check if stats should be reset
+        If(
+            IsBlank(locRefreshCdsIssueReports),
+            UpdateContext({locRefreshCdsIssueReports: true})
+        );
+        // Check and set if user has access to configured Planner
+        If(
+            And(
+                !IsBlank(gblPlannerPlanId),
+                gblUserCanAccessPlanner
+            ),
+            ClearCollect(
+                colPlannerTasks,
+                Planner.ListTasksV3(
+                    gblPlannerPlanId,
+                    gblPlannerGroupId
+                ).value
+            );
+            If(
+                locRefreshCdsIssueReports,
+                ClearCollect(
+                    colCdsIssueReports,
+                    AddColumns(
+                        Filter(
+                            'Issue Reports',
+                            'Issue Reports (Views)'.'My Issue Reports'
+                        ),
+                        "appIcon",
+                        Category.Icon,
+                        "appFields",
+                        'Created On'
+                    )
+                )
+            );
+            ClearCollect(
+                colStats,
+                AddColumns(
+                    GroupBy(
+                        AddColumns(
+                            colCdsIssueReports,
+                            "appPercentComplete",
+                            LookUp(
+                                colPlannerTasks,
+                                colCdsIssueReports[@'Planner Task Id'] = colPlannerTasks[@id],
+                                percentComplete
+                            )
+                        ),
+                        "appPercentComplete",
+                        "groupCompletion"
+                    ),
+                    "appCount",
+                    CountRows(groupCompletion)
+                )
+            )
+        );
+
+    conWeekAtGlance As groupContainer:
+        Height: =If(gblAppSetting_inputMobileOnWeb,460,380)
+        Width: |+
+            =Switch(
+                'Insights Screen'.Size,
+                ScreenSize.ExtraLarge,
+                Parent.Width * 0.5,
+                ScreenSize.Large,
+                Parent.Width * 0.5,
+                ScreenSize.Medium,
+                Parent.Width,
+                ScreenSize.Small,
+                Parent.Width,
+                Parent.Width
+            )
+            
+        X: |-
+            =Switch(
+                'Insights Screen'.Size,
+                ScreenSize.ExtraLarge,
+                conIssuesReportByUser.X + conIssuesReportByUser.Width,
+                ScreenSize.Large,
+                conIssuesReportByUser.X + conIssuesReportByUser.Width,
+                ScreenSize.Medium,
+                0,
+                ScreenSize.Small,
+                0,
+                0
+            )
+        Y: |-
+            =Switch(
+                'Insights Screen'.Size,
+                ScreenSize.ExtraLarge,
+                conIssuesReportByUser.Y,
+                ScreenSize.Large,
+                conIssuesReportByUser.Y,
+                ScreenSize.Medium,
+                conIssuesReportByUser.Y + conIssuesReportByUser.Height,
+                ScreenSize.Small,
+                conIssuesReportByUser.Y + conIssuesReportByUser.Height,
+                conIssuesReportByUser.Y + conIssuesReportByUser.Height
+            )
+        ZIndex: =7
+
+        btnBackground_WeekAtGlance As button:
+            BorderColor: =gblAppStyles.ButtonBackground.BorderColor
+            BorderThickness: =gblAppStyles.ButtonBackground.BorderThickness
+            Color: =gblAppStyles.ButtonBackground.Color
+            DisabledBorderColor: =gblAppStyles.ButtonBackground.DisabledBorderColor
+            DisabledColor: =gblAppStyles.ButtonBackground.DisabledFill
+            DisabledFill: =gblAppStyles.ButtonBackground.DisabledFill
+            DisplayMode: =DisplayMode.Disabled
+            Fill: =gblAppStyles.ButtonBackground.Fill
+            FocusedBorderColor: =gblAppStyles.ButtonBackground.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.ButtonBackground.FocusedBorderThickness
+            Height: =galWeekAtGlance.Height
+            HoverBorderColor: =gblAppStyles.ButtonBackground.HoverBorderColor
+            HoverColor: =gblAppStyles.ButtonBackground.HoverColor
+            HoverFill: =gblAppStyles.ButtonBackground.HoverFill
+            OnSelect: =
+            PressedBorderColor: =gblAppStyles.ButtonBackground.PressedBorderColor
+            PressedColor: =gblAppStyles.ButtonBackground.PressedColor
+            PressedFill: =gblAppStyles.ButtonBackground.PressedFill
+            RadiusBottomLeft: =gblAppStyles.ButtonBackground.RadiusBottomLeft
+            RadiusBottomRight: =gblAppStyles.ButtonBackground.RadiusBottomRight
+            RadiusTopLeft: =gblAppStyles.ButtonBackground.RadiusTopLeft
+            RadiusTopRight: =gblAppStyles.ButtonBackground.RadiusTopRight
+            Size: =gblAppStyles.ButtonBackground.Size
+            Text: =lblInsights_WeekAtGlance.Text
+            Width: =Parent.Width - Self.X - gblPadding.Page
+            X: =gblPadding.Page
+            Y: =lblInsights_WeekAtGlance.Y + lblInsights_WeekAtGlance.Height + gblPadding.Page
+            ZIndex: =1
+
+        lblInsights_WeekAtGlance As label:
+            BorderColor: =gblAppStyles.Label.BorderColor
+            BorderThickness: =gblAppStyles.Label.BorderThickness
+            Color: =gblAppStyles.Label.Color
+            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+            DisabledColor: =gblAppStyles.Label.DisabledColor
+            DisabledFill: =gblAppStyles.Label.DisabledFill
+            DisplayMode: =DisplayMode.View
+            Fill: =gblAppStyles.Label.Fill
+            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+            Font: ='Segoe UI'
+            Height: =48*1
+            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+            HoverColor: =gblAppStyles.Label.HoverColor
+            HoverFill: =gblAppStyles.Label.HoverFill
+            PaddingBottom: =4
+            PaddingLeft: =8
+            PaddingRight: =8
+            PaddingTop: =4
+            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+            PressedColor: =gblAppStyles.Label.PressedColor
+            PressedFill: =gblAppStyles.Label.PressedFill
+            Size: =gblAppStyles.Label.Size.Large
+            Text: |-
+                =With(
+                    {
+                        varDefault: "Last 7 days",
+                        varOOBTextId: "lblInsights_WeekAtGlance__locText",
+                        varParam0: Blank(),
+                        varParam1: Blank(),
+                        varParam2: Blank()
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                staticLocalizations,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        If(
+                            IsBlankOrError(varParam0),
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            ),
+                            Coalesce(
+                                Substitute(
+                                    Substitute(
+                                        Substitute(
+                                            varLocalizedText,
+                                            "{0}",
+                                            Text(varParam0)
+                                        ),
+                                        "{1}",
+                                        Text(varParam1)
+                                    ),
+                                    "{2}",
+                                    Text(varParam2)
+                                ),
+                                varDefault
+                            )
+                        )
+                    )
+                )
+            Width: =lblGreetingName.Width
+            Wrap: =false
+            X: =lblGreetingName.X
+            Y: =gblPadding.Page
+            ZIndex: =2
+
+        galWeekAtGlance As gallery.galleryVertical:
+            AccessibleLabel: |-
+                =With(
+                    {
+                        varDefault: "Gallery of issue statistics, for issues submitted in the last seven days",
+                        varOOBTextId: "galWeekAtGlance__locAccessibleLabel",
+                        varParam0: Blank(),
+                        varParam1: Blank(),
+                        varParam2: Blank()
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                staticLocalizations,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        If(
+                            IsBlankOrError(varParam0),
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            ),
+                            Coalesce(
+                                Substitute(
+                                    Substitute(
+                                        Substitute(
+                                            varLocalizedText,
+                                            "{0}",
+                                            Text(varParam0)
+                                        ),
+                                        "{1}",
+                                        Text(varParam1)
+                                    ),
+                                    "{2}",
+                                    Text(varParam2)
+                                ),
+                                varDefault
+                            )
+                        )
+                    )
+                )
+            DisplayMode: =DisplayMode.View
+            Height: =Parent.Height - Self.Y - gblPadding.Page
+            Items: |-
+                =With(
+                    {
+                        varTasksLast7Days: AddColumns(
+                            Filter(
+                                Ungroup(
+                                    Filter(
+                                        colStats,
+                                        !IsBlank(appPercentComplete)
+                                    ),
+                                    "groupCompletion"
+                                ),
+                                DateDiff(
+                                    createdon,
+                                    gblToday,
+                                    Days
+                                ) <= 7
+                            ),
+                            "appTaskRecord",
+                            LookUp(
+                                colPlannerTasks,
+                                id = msft_planner_taskid
+                            )
+                        )
+                    },
+                    Table(
+                        {
+                            tblIcon: With(
+                                {
+                                    varImageRecord: LookUp(
+                                        staticIcons,
+                                        staticIconName = "Badge"
+                                    ),
+                                    varColor: gblAppStyles.Icons.Color
+                                },
+                                With(
+                                    {
+                                        varImageData: Concatenate(
+                                            "data:image/svg+xml;utf8, ",
+                                            EncodeUrl(
+                                                Concatenate(
+                                                    "<svg viewBox='",
+                                                    varImageRecord.staticIconViewbox,
+                                                    "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                    varImageRecord.staticIconPath,
+                                                    "' fill='#",
+                                                    varColor,
+                                                    "'/></svg>"
+                                                )
+                                            )
+                                        )
+                                    },
+                                    varImageData
+                                )
+                            ),
+                            tblHtml: With(
+                                {
+                                    varResolved: CountRows(
+                                        Filter(
+                                            varTasksLast7Days,
+                                            appPercentComplete = 100
+                                        )
+                                    )
+                                },
+                                With(
+                                    {
+                                        varDefault: Concatenate(
+                                            "The team has completed <span style='font-weight:800;'>",
+                                            Text(varResolved),
+                                            "</span>",
+                                            If(
+                                                varResolved = 1,
+                                                " issue",
+                                                " issues"
+                                            )
+                                        ),
+                                        varOOBTextId: If(
+                                            varResolved = 1,
+                                            "_translateVariable__WeeklyStatsIssuesCompleted_Single",
+                                            "_translateVariable__WeeklyStatsIssuesCompleted_ZeroMultiple"
+                                        ),
+                                        varParam0: varResolved,
+                                        varParam1: Blank(),
+                                        varParam2: Blank()
+                                    },
+                                    With(
+                                        {
+                                            varLocalizedText: LookUp(
+                                                staticLocalizations,
+                                                OOBTextId = varOOBTextId,
+                                                LocalizedText
+                                            )
+                                        },
+                                        If(
+                                            IsBlankOrError(varParam0),
+                                            Coalesce(
+                                                varLocalizedText,
+                                                varDefault
+                                            ),
+                                            Coalesce(
+                                                Substitute(
+                                                    Substitute(
+                                                        Substitute(
+                                                            varLocalizedText,
+                                                            "{0}",
+                                                            Text(varParam0)
+                                                        ),
+                                                        "{1}",
+                                                        Text(varParam1)
+                                                    ),
+                                                    "{2}",
+                                                    Text(varParam2)
+                                                ),
+                                                varDefault
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        },
+                        {
+                            tblIcon: With(
+                                {
+                                    varImageRecord: LookUp(
+                                        staticIcons,
+                                        staticIconName = "Clock"
+                                    ),
+                                    varColor: If(
+                                        Self.DisplayMode = DisplayMode.Disabled,
+                                        gblAppStyles.Icons.DisabledColor,
+                                        gblAppStyles.Icons.Color
+                                    )
+                                },
+                                With(
+                                    {
+                                        varImageData: Concatenate(
+                                            "data:image/svg+xml;utf8, ",
+                                            EncodeUrl(
+                                                Concatenate(
+                                                    "<svg viewBox='",
+                                                    varImageRecord.staticIconViewbox,
+                                                    "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                    varImageRecord.staticIconPath,
+                                                    "' fill='#",
+                                                    varColor,
+                                                    "'/></svg>"
+                                                )
+                                            )
+                                        )
+                                    },
+                                    varImageData
+                                )
+                            ),
+                            tblHtml: With(
+                                {
+                                    varCompletionTimeAverage: Round(
+                                        Average(
+                                            Filter(
+                                                varTasksLast7Days,
+                                                appPercentComplete = 100
+                                            ),
+                                            DateDiff(
+                                                appTaskRecord.createdDateTime,
+                                                appTaskRecord.completedDateTime,
+                                                Days
+                                            )
+                                        ),
+                                        0
+                                    )
+                                },
+                                With(
+                                    {
+                                        varDefault: Concatenate(
+                                            "The average completion time was ",
+                                            "<span style='font-weight:800;'>",
+                                            Text(varCompletionTimeAverage),
+                                            "</span>",
+                                            If(
+                                                varCompletionTimeAverage = 1,
+                                                " day",
+                                                " days"
+                                            )
+                                        ),
+                                        varOOBTextId: If(
+                                            varCompletionTimeAverage = 1,
+                                            "_translateVariable__WeeklyStatsCompletionTime_Single",
+                                            "_translateVariable__WeeklyStatsCompletionTime_ZeroMultiple"
+                                        ),
+                                        varParam0: varCompletionTimeAverage,
+                                        varParam1: Blank(),
+                                        varParam2: Blank()
+                                    },
+                                    With(
+                                        {
+                                            varLocalizedText: LookUp(
+                                                staticLocalizations,
+                                                OOBTextId = varOOBTextId,
+                                                LocalizedText
+                                            )
+                                        },
+                                        If(
+                                            IsBlankOrError(varParam0),
+                                            Coalesce(
+                                                varLocalizedText,
+                                                varDefault
+                                            ),
+                                            Coalesce(
+                                                Substitute(
+                                                    Substitute(
+                                                        Substitute(
+                                                            varLocalizedText,
+                                                            "{0}",
+                                                            Text(varParam0)
+                                                        ),
+                                                        "{1}",
+                                                        Text(varParam1)
+                                                    ),
+                                                    "{2}",
+                                                    Text(varParam2)
+                                                ),
+                                                varDefault
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        },
+                        {
+                            tblIcon: With(
+                                {
+                                    varImageRecord: LookUp(
+                                        staticIcons,
+                                        staticIconName = "Inbox"
+                                    ),
+                                    varColor: If(
+                                        Self.DisplayMode = DisplayMode.Disabled,
+                                        gblAppStyles.Icons.DisabledColor,
+                                        gblAppStyles.Icons.Color
+                                    )
+                                },
+                                With(
+                                    {
+                                        varImageData: Concatenate(
+                                            "data:image/svg+xml;utf8, ",
+                                            EncodeUrl(
+                                                Concatenate(
+                                                    "<svg viewBox='",
+                                                    varImageRecord.staticIconViewbox,
+                                                    "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                    varImageRecord.staticIconPath,
+                                                    "' fill='#",
+                                                    varColor,
+                                                    "'/></svg>"
+                                                )
+                                            )
+                                        )
+                                    },
+                                    varImageData
+                                )
+                            ),
+                            tblHtml: With(
+                                {varCreated: CountRows(varTasksLast7Days)},
+                                With(
+                                    {
+                                        varDefault: Concatenate(
+                                            "There ",
+                                            If(
+                                                varCreated = 1,
+                                                " has been ",
+                                                " have been "
+                                            ),
+                                            "<span style='font-weight:800;'>",
+                                            Text(varCreated),
+                                            "</span>",
+                                            " new ",
+                                            If(
+                                                varCreated = 1,
+                                                " issue ",
+                                                " issues "
+                                            ),
+                                            "reported"
+                                        ),
+                                        varOOBTextId: If(
+                                            varCreated = 1,
+                                            "_translateVariable__WeeklyStatsIssuesReported_Single",
+                                            "_translateVariable__WeeklyStatsIssuesReported_ZeroMultiple"
+                                        ),
+                                        varParam0: varCreated,
+                                        varParam1: Blank(),
+                                        varParam2: Blank()
+                                    },
+                                    With(
+                                        {
+                                            varLocalizedText: LookUp(
+                                                staticLocalizations,
+                                                OOBTextId = varOOBTextId,
+                                                LocalizedText
+                                            )
+                                        },
+                                        If(
+                                            IsBlankOrError(varParam0),
+                                            Coalesce(
+                                                varLocalizedText,
+                                                varDefault
+                                            ),
+                                            Coalesce(
+                                                Substitute(
+                                                    Substitute(
+                                                        Substitute(
+                                                            varLocalizedText,
+                                                            "{0}",
+                                                            Text(varParam0)
+                                                        ),
+                                                        "{1}",
+                                                        Text(varParam1)
+                                                    ),
+                                                    "{2}",
+                                                    Text(varParam2)
+                                                ),
+                                                varDefault
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        }
+                    )
+                )
+            Layout: =Layout.Vertical
+            TabIndex: |-
+                =If(
+                    true,
+                    -1
+                )
+            TemplatePadding: =0
+            TemplateSize: =Self.Height / 3
+            Width: =Parent.Width - Self.X - gblPadding.Page
+            X: =gblPadding.Page
+            Y: =lblInsights_WeekAtGlance.Y + lblInsights_WeekAtGlance.Height + gblPadding.Page
+            ZIndex: =4
+
+            htmWeekAtGlance_Stat As htmlViewer:
+                BorderColor: =gblAppStyles.HTML.BorderColor
+                BorderThickness: =gblAppStyles.HTML.BorderThickness
+                Color: =gblAppStyles.HTML.Color
+                DisabledBorderColor: =gblAppStyles.HTML.DisabledBorderColor
+                DisabledFill: =gblAppStyles.HTML.DisabledFill
+                DisplayMode: =DisplayMode.View
+                Fill: =gblAppStyles.HTML.Fill
+                Font: =Font.'Segoe UI'
+                HoverBorderColor: =gblAppStyles.HTML.HoverBorderColor
+                HtmlText: =ThisItem.tblHtml
+                PaddingBottom: =0
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Size: =gblAppStyles.HTML.Size.Large
+                Width: =Parent.TemplateWidth - Self.X
+                X: =imgWeekAtGlance_Icon.X + imgWeekAtGlance_Icon.Width + gblPadding.Page
+                Y: =imgWeekAtGlance_Icon.Y + 2
+                ZIndex: =2
+
+            imgWeekAtGlance_Icon As image:
+                Height: =Self.Width
+                Image: =ThisItem.tblIcon
+                OnSelect: =Select(Parent)
+                PaddingLeft: =4
+                PaddingRight: =4
+                Width: =If(gblAppSetting_inputMobileOnWeb,48,40)
+                X: =gblPadding.Page
+                Y: =(Parent.TemplateHeight - Self.Height) / 2
+                ZIndex: =3
+
+    conIssuesReportByUser As groupContainer:
+        Height: =If(gblAppSetting_inputMobileOnWeb,460,380)
+        Width: |+
+            =Switch(
+                'Insights Screen'.Size,
+                ScreenSize.ExtraLarge,
+                Parent.Width * 0.5,
+                ScreenSize.Large,
+                Parent.Width * 0.5,
+                ScreenSize.Medium,
+                Parent.Width,
+                ScreenSize.Small,
+                Parent.Width,
+                Parent.Width
+            )
+            
+        X: =0*0
+        Y: =btnReportIssue.Y + btnReportIssue.Height + gblPadding.Page
+        ZIndex: =8
+
+        btnBackground_IssuesReported As button:
+            BorderColor: =gblAppStyles.ButtonBackground.BorderColor
+            BorderThickness: =gblAppStyles.ButtonBackground.BorderThickness
+            Color: =gblAppStyles.ButtonBackground.Color
+            DisabledBorderColor: =gblAppStyles.ButtonBackground.DisabledBorderColor
+            DisabledColor: =gblAppStyles.ButtonBackground.DisabledFill
+            DisabledFill: =gblAppStyles.ButtonBackground.DisabledFill
+            DisplayMode: =DisplayMode.Disabled
+            Fill: =gblAppStyles.ButtonBackground.Fill
+            FocusedBorderColor: =gblAppStyles.ButtonBackground.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.ButtonBackground.FocusedBorderThickness
+            Height: =Parent.Height - Self.Y - gblPadding.Page
+            HoverBorderColor: =gblAppStyles.ButtonBackground.HoverBorderColor
+            HoverColor: =gblAppStyles.ButtonBackground.HoverColor
+            HoverFill: =gblAppStyles.ButtonBackground.HoverFill
+            OnSelect: =
+            PressedBorderColor: =gblAppStyles.ButtonBackground.PressedBorderColor
+            PressedColor: =gblAppStyles.ButtonBackground.PressedColor
+            PressedFill: =gblAppStyles.ButtonBackground.PressedFill
+            RadiusBottomLeft: =gblAppStyles.ButtonBackground.RadiusBottomLeft
+            RadiusBottomRight: =gblAppStyles.ButtonBackground.RadiusBottomRight
+            RadiusTopLeft: =gblAppStyles.ButtonBackground.RadiusTopLeft
+            RadiusTopRight: =gblAppStyles.ButtonBackground.RadiusTopRight
+            Size: =gblAppStyles.ButtonBackground.Size
+            TabIndex: |-
+                =If(
+                    true,
+                    -1
+                )
+            Text: =lblInsights_IssuesReportedByUser.Text
+            Width: =Parent.Width - Self.X - gblPadding.Page
+            X: =gblPadding.Page
+            Y: =lblInsights_IssuesReportedByUser.Y + lblInsights_IssuesReportedByUser.Height + gblPadding.Page
+            ZIndex: =1
+
+        lblInsights_IssuesReportedByUser As label:
+            BorderColor: =gblAppStyles.Label.BorderColor
+            BorderStyle: |
+                =BorderStyle.Solid
+            BorderThickness: =gblAppStyles.Label.BorderThickness
+            Color: =gblAppStyles.Label.Color
+            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+            DisabledColor: =gblAppStyles.Label.DisabledColor
+            DisabledFill: =gblAppStyles.Label.DisabledFill
+            DisplayMode: =DisplayMode.View
+            Fill: =gblAppStyles.Label.Fill
+            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+            Font: ='Segoe UI'
+            FontWeight: |
+                =FontWeight.Normal
+            Height: =48*1
+            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+            HoverColor: =gblAppStyles.Label.HoverColor
+            HoverFill: =gblAppStyles.Label.HoverFill
+            Overflow: |
+                =Overflow.Hidden
+            PaddingBottom: =4
+            PaddingLeft: =8
+            PaddingRight: =8
+            PaddingTop: =4
+            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+            PressedColor: =gblAppStyles.Label.PressedColor
+            PressedFill: =gblAppStyles.Label.PressedFill
+            Size: =gblAppStyles.Label.Size.Large
+            Text: |-
+                =With(
+                    {
+                        varDefault: "Issues reported by you",
+                        varOOBTextId: "lblInsights_IssuesReportedByUser__locText",
+                        varParam0: Blank(),
+                        varParam1: Blank(),
+                        varParam2: Blank()
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                staticLocalizations,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        If(
+                            IsBlankOrError(varParam0),
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            ),
+                            Coalesce(
+                                Substitute(
+                                    Substitute(
+                                        Substitute(
+                                            varLocalizedText,
+                                            "{0}",
+                                            Text(varParam0)
+                                        ),
+                                        "{1}",
+                                        Text(varParam1)
+                                    ),
+                                    "{2}",
+                                    Text(varParam2)
+                                ),
+                                varDefault
+                            )
+                        )
+                    )
+                )
+            Width: =lblGreetingName.Width
+            Wrap: =false
+            X: =lblGreetingName.X
+            Y: =gblPadding.Page
+            ZIndex: =2
+
+        galIssuesReported As gallery.galleryHorizontal:
+            AccessibleLabel: |-
+                =With(
+                    {
+                        varDefault: "Gallery of issue status counts, for issues you have submitted",
+                        varOOBTextId: "galIssuesReported__locAccessibleLabel",
+                        varParam0: Blank(),
+                        varParam1: Blank(),
+                        varParam2: Blank()
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                staticLocalizations,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        If(
+                            IsBlankOrError(varParam0),
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            ),
+                            Coalesce(
+                                Substitute(
+                                    Substitute(
+                                        Substitute(
+                                            varLocalizedText,
+                                            "{0}",
+                                            Text(varParam0)
+                                        ),
+                                        "{1}",
+                                        Text(varParam1)
+                                    ),
+                                    "{2}",
+                                    Text(varParam2)
+                                ),
+                                varDefault
+                            )
+                        )
+                    )
+                )
+            DisplayMode: =DisplayMode.View
+            Height: =btnViewIssues.Y - Self.Y
+            Items: |-
+                =Table(
+                    {
+                        tblIcon: With(
+                            {
+                                varImageRecord: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Completed"
+                                ),
+                                varColor: If(
+                                    Self.DisplayMode = DisplayMode.Disabled,
+                                    gblAppStyles.Icons.DisabledColor,
+                                    gblAppStyles.Icons.Color
+                                )
+                            },
+                            With(
+                                {
+                                    varImageData: Concatenate(
+                                        "data:image/svg+xml;utf8, ",
+                                        EncodeUrl(
+                                            Concatenate(
+                                                "<svg viewBox='",
+                                                varImageRecord.staticIconViewbox,
+                                                "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                varImageRecord.staticIconPath,
+                                                "' fill='#",
+                                                varColor,
+                                                "'/></svg>"
+                                            )
+                                        )
+                                    )
+                                },
+                                varImageData
+                            )
+                        ),
+                        tblCount: LookUp(
+                            colStats,
+                            appPercentComplete = 100,
+                            appCount
+                        ),
+                        tblLabel: With(
+                            {
+                                varDefault: "Completed",
+                                varOOBTextId: "lblCompleted_Header__locText",
+                                varParam0: Blank(),
+                                varParam1: Blank(),
+                                varParam2: Blank()
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        staticLocalizations,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                If(
+                                    IsBlankOrError(varParam0),
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    ),
+                                    Coalesce(
+                                        Substitute(
+                                            Substitute(
+                                                Substitute(
+                                                    varLocalizedText,
+                                                    "{0}",
+                                                    Text(varParam0)
+                                                ),
+                                                "{1}",
+                                                Text(varParam1)
+                                            ),
+                                            "{2}",
+                                            Text(varParam2)
+                                        ),
+                                        varDefault
+                                    )
+                                )
+                            )
+                        )
+                    },
+                    {
+                        tblIcon: With(
+                            {
+                                varImageRecord: LookUp(
+                                    staticIcons,
+                                    staticIconName = "In progress"
+                                ),
+                                varColor: If(
+                                    Self.DisplayMode = DisplayMode.Disabled,
+                                    gblAppStyles.Icons.DisabledColor,
+                                    gblAppStyles.Icons.Color
+                                )
+                            },
+                            With(
+                                {
+                                    varImageData: Concatenate(
+                                        "data:image/svg+xml;utf8, ",
+                                        EncodeUrl(
+                                            Concatenate(
+                                                "<svg viewBox='",
+                                                varImageRecord.staticIconViewbox,
+                                                "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                varImageRecord.staticIconPath,
+                                                "' fill='#",
+                                                varColor,
+                                                "'/></svg>"
+                                            )
+                                        )
+                                    )
+                                },
+                                varImageData
+                            )
+                        ),
+                        tblCount: LookUp(
+                            colStats,
+                            appPercentComplete = 50,
+                            appCount
+                        ),
+                        tblLabel: With(
+                            {
+                                varDefault: "In progress",
+                                varOOBTextId: "lblInProgress_Header__locText",
+                                varParam0: Blank(),
+                                varParam1: Blank(),
+                                varParam2: Blank()
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        staticLocalizations,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                If(
+                                    IsBlankOrError(varParam0),
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    ),
+                                    Coalesce(
+                                        Substitute(
+                                            Substitute(
+                                                Substitute(
+                                                    varLocalizedText,
+                                                    "{0}",
+                                                    Text(varParam0)
+                                                ),
+                                                "{1}",
+                                                Text(varParam1)
+                                            ),
+                                            "{2}",
+                                            Text(varParam2)
+                                        ),
+                                        varDefault
+                                    )
+                                )
+                            )
+                        )
+                    },
+                    {
+                        tblIcon: With(
+                            {
+                                varImageRecord: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Not started"
+                                ),
+                                varColor: If(
+                                    Self.DisplayMode = DisplayMode.Disabled,
+                                    gblAppStyles.Icons.DisabledColor,
+                                    gblAppStyles.Icons.Color
+                                )
+                            },
+                            With(
+                                {
+                                    varImageData: Concatenate(
+                                        "data:image/svg+xml;utf8, ",
+                                        EncodeUrl(
+                                            Concatenate(
+                                                "<svg viewBox='",
+                                                varImageRecord.staticIconViewbox,
+                                                "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                varImageRecord.staticIconPath,
+                                                "' fill='#",
+                                                varColor,
+                                                "'/></svg>"
+                                            )
+                                        )
+                                    )
+                                },
+                                varImageData
+                            )
+                        ),
+                        tblCount: LookUp(
+                            colStats,
+                            appPercentComplete = 0,
+                            appCount
+                        ),
+                        tblLabel: With(
+                            {
+                                varDefault: "Not started",
+                                varOOBTextId: "lblNotStarted_Header__locText",
+                                varParam0: Blank(),
+                                varParam1: Blank(),
+                                varParam2: Blank()
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        staticLocalizations,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                If(
+                                    IsBlankOrError(varParam0),
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    ),
+                                    Coalesce(
+                                        Substitute(
+                                            Substitute(
+                                                Substitute(
+                                                    varLocalizedText,
+                                                    "{0}",
+                                                    Text(varParam0)
+                                                ),
+                                                "{1}",
+                                                Text(varParam1)
+                                            ),
+                                            "{2}",
+                                            Text(varParam2)
+                                        ),
+                                        varDefault
+                                    )
+                                )
+                            )
+                        )
+                    }
+                )
+            TabIndex: |-
+                =If(
+                    true,
+                    -1
+                )
+            TemplatePadding: =0
+            TemplateSize: =Self.Width / 3
+            Width: =Parent.Width - Self.X - gblPadding.Page
+            X: =gblPadding.Page
+            Y: =btnBackground_IssuesReported.Y
+            ZIndex: =3
+
+            imgIssuesReported_Status As image:
+                Height: =Self.Width
+                Image: =ThisItem.tblIcon
+                PaddingLeft: =4
+                PaddingRight: =4
+                Width: =If(gblAppSetting_inputMobileOnWeb,48,40)
+                X: =gblPadding.Page * 2
+                Y: =gblPadding.Page
+                ZIndex: =1
+
+            lblIssuesReported_Count As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Bold
+                Height: =If(gblAppSetting_inputMobileOnWeb,72,48)
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                OnSelect: =Select(Parent)
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =If(gblAppSetting_inputMobileOnWeb,gblAppStyles.Label.Size.ExtraLarge,gblAppStyles.Label.Size.Large)
+                Text: =If(IsBlankOrError(ThisItem.tblCount),0,ThisItem.tblCount)
+                Width: =65
+                X: =imgIssuesReported_Status.X
+                Y: =imgIssuesReported_Status.Y + imgIssuesReported_Status.Height
+                ZIndex: =2
+
+            lblIssuesReported_Status As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =If(gblAppSetting_inputMobileOnWeb,56,42)
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                OnSelect: =Select(Parent)
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: =ThisItem.tblLabel
+                Width: =Parent.TemplateWidth - Self.X
+                X: =39
+                Y: =lblIssuesReported_Count.Y + lblIssuesReported_Count.Height
+                ZIndex: =3
+
+        btnViewIssues As button:
+            BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+            BorderThickness: =2//gblAppStyles.ButtonSecondary.BorderThickness
+            Color: =gblAppStyles.ButtonSecondary.Color
+            DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+            DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+            DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+            Fill: =gblAppStyles.ButtonSecondary.Fill
+            FocusedBorderColor: =gblAppStyles.ButtonPrimary.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+            Font: ='Segoe UI'
+            FontWeight: =FontWeight.Normal
+            Height: =60
+            HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+            HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+            HoverFill: =ColorFade(gblAppStyles.ButtonSecondary.HoverFill,15%)
+            OnSelect: |-
+                =Navigate(
+                    'Issue Stats Screen',
+                    ScreenTransition.Fade
+                )
+            PaddingBottom: =4
+            PaddingLeft: =8
+            PaddingRight: =8
+            PaddingTop: =4
+            PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+            PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+            PressedFill: =ColorFade(gblAppStyles.ButtonSecondary.HoverFill,30%)
+            RadiusBottomLeft: =gblAppStyles.ButtonSecondary.RadiusBottomLeft
+            RadiusBottomRight: =gblAppStyles.ButtonSecondary.RadiusBottomRight
+            RadiusTopLeft: =gblAppStyles.ButtonSecondary.RadiusTopLeft
+            RadiusTopRight: =gblAppStyles.ButtonSecondary.RadiusTopRight
+            Size: =gblAppStyles.ButtonSecondary.Size
+            Text: |-
+                =With(
+                    {
+                        varDefault: "View issues",
+                        varOOBTextId: "btnViewIssues__locText",
+                        varParam0: Blank(),
+                        varParam1: Blank(),
+                        varParam2: Blank()
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                staticLocalizations,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        If(
+                            IsBlankOrError(varParam0),
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            ),
+                            Coalesce(
+                                Substitute(
+                                    Substitute(
+                                        Substitute(
+                                            varLocalizedText,
+                                            "{0}",
+                                            Text(varParam0)
+                                        ),
+                                        "{1}",
+                                        Text(varParam1)
+                                    ),
+                                    "{2}",
+                                    Text(varParam2)
+                                ),
+                                varDefault
+                            )
+                        )
+                    )
+                )
+            Tooltip: =Self.Text
+            Width: =btnBackground_IssuesReported.Width - Self.X
+            X: =btnBackground_IssuesReported.X + gblPadding.Page
+            Y: =btnBackground_IssuesReported.Y + btnBackground_IssuesReported.Height - Self.Height -gblPadding.Page
+            ZIndex: =4
+
+    btnReportIssue As button:
+        BorderColor: |
+            =gblAppStyles.ButtonPrimary.BorderColor
+        BorderThickness: =gblAppStyles.ButtonPrimary.BorderThickness
+        Color: =gblAppStyles.ButtonPrimary.Color
+        DisabledBorderColor: =gblAppStyles.ButtonPrimary.DisabledBorderColor
+        DisabledColor: =gblAppStyles.ButtonPrimary.DisabledColor
+        DisabledFill: =gblAppStyles.ButtonPrimary.DisabledFill
+        Fill: =gblAppStyles.ButtonPrimary.Fill
+        FocusedBorderColor: =gblAppStyles.ButtonPrimary.FocusedBorderColor
+        FocusedBorderThickness: =gblAppStyles.ButtonPrimary.FocusedBorderThickness
+        Font: ='Segoe UI'
+        FontWeight: =FontWeight.Normal
+        Height: =80
+        HoverBorderColor: =gblAppStyles.ButtonPrimary.HoverBorderColor
+        HoverColor: =gblAppStyles.ButtonPrimary.HoverColor
+        HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+        OnSelect: =Navigate('Issue Report Screen', ScreenTransition.Fade)
+        PaddingBottom: =4
+        PaddingLeft: =8
+        PaddingRight: =8
+        PaddingTop: =4
+        PressedBorderColor: =gblAppStyles.ButtonPrimary.PressedBorderColor
+        PressedColor: =gblAppStyles.ButtonPrimary.PressedColor
+        PressedFill: =gblAppStyles.ButtonPrimary.PressedFill
+        RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+        RadiusBottomRight: =gblAppStyles.ButtonPrimary.RadiusBottomRight
+        RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+        RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+        Size: =gblAppStyles.ButtonPrimary.Size
+        Text: |-
+            =With(
+                {
+                    varDefault: "Report an issue",
+                    varOOBTextId: "btnReportIssue__locText",
+                    varParam0: Blank(),
+                    varParam1: Blank(),
+                    varParam2: Blank()
+                },
+                With(
+                    {
+                        varLocalizedText: LookUp(
+                            staticLocalizations,
+                            OOBTextId = varOOBTextId,
+                            LocalizedText
+                        )
+                    },
+                    If(
+                        IsBlankOrError(varParam0),
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        ),
+                        Coalesce(
+                            Substitute(
+                                Substitute(
+                                    Substitute(
+                                        varLocalizedText,
+                                        "{0}",
+                                        Text(varParam0)
+                                    ),
+                                    "{1}",
+                                    Text(varParam1)
+                                ),
+                                "{2}",
+                                Text(varParam2)
+                            ),
+                            varDefault
+                        )
+                    )
+                )
+            )
+        Tooltip: =Self.Text
+        Width: |-
+            =Switch(
+                'Insights Screen'.Size,
+                ScreenSize.ExtraLarge,
+                Max(
+                    Parent.Width * .2,
+                    400
+                ),
+                ScreenSize.Large,
+                Max(
+                    Parent.Width * .2,
+                    350
+                ),
+                ScreenSize.Medium,
+                Max(
+                    Parent.Width * .2,
+                    300
+                ),
+                ScreenSize.Small,
+                Parent.Width - (2*gblPadding.Page),
+                Parent.Width - (2*gblPadding.Page)
+            )
+        X: |-
+            =Switch(
+                'Insights Screen'.Size,
+                ScreenSize.ExtraLarge,
+                Parent.Width - Self.Width - gblPadding.Page,
+                ScreenSize.Large,
+                Parent.Width - Self.Width - gblPadding.Page,
+                ScreenSize.Medium,
+                Parent.Width - Self.Width - gblPadding.Page,
+                ScreenSize.Small,
+                gblPadding.Page,
+                gblPadding.Page
+            )
+        Y: |-
+            =Switch(
+                'Insights Screen'.Size,
+                ScreenSize.ExtraLarge,
+                lblGreetingInstructions.Y,
+                ScreenSize.Large,
+                lblGreetingInstructions.Y,
+                ScreenSize.Medium,
+                lblGreetingInstructions.Y,
+                ScreenSize.Small,
+                lblGreetingInstructions.Y + lblGreetingInstructions.Height + gblPadding.Page,
+                lblGreetingInstructions.Y + lblGreetingInstructions.Height + gblPadding.Page
+            )
+        ZIndex: =9
+
+    lblGreetingInstructions As label:
+        BorderColor: =gblAppStyles.Label.BorderColor
+        BorderThickness: =gblAppStyles.Label.BorderThickness
+        Color: =gblAppStyles.Label.Color
+        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+        DisabledColor: =gblAppStyles.Label.DisabledColor
+        DisabledFill: =gblAppStyles.Label.DisabledFill
+        DisplayMode: =DisplayMode.View
+        Fill: =gblAppStyles.Label.Fill
+        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+        Font: ='Segoe UI'
+        Height: =60
+        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+        HoverColor: =gblAppStyles.Label.HoverColor
+        HoverFill: =gblAppStyles.Label.HoverFill
+        PaddingBottom: =4
+        PaddingLeft: =0
+        PaddingRight: =0
+        PaddingTop: =4
+        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+        PressedColor: =gblAppStyles.Label.PressedColor
+        PressedFill: =gblAppStyles.Label.PressedFill
+        Size: =gblAppStyles.Label.Size.Medium
+        Text: |-
+            =With(
+                {
+                    varDefault: "Glad to have you here, we are ready to help you report an issue.",
+                    varOOBTextId: "lblGreetingInstructions__locText",
+                    varParam0: Blank(),
+                    varParam1: Blank(),
+                    varParam2: Blank()
+                },
+                With(
+                    {
+                        varLocalizedText: LookUp(
+                            staticLocalizations,
+                            OOBTextId = varOOBTextId,
+                            LocalizedText
+                        )
+                    },
+                    If(
+                        IsBlankOrError(varParam0),
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        ),
+                        Coalesce(
+                            Substitute(
+                                Substitute(
+                                    Substitute(
+                                        varLocalizedText,
+                                        "{0}",
+                                        Text(varParam0)
+                                    ),
+                                    "{1}",
+                                    Text(varParam1)
+                                ),
+                                "{2}",
+                                Text(varParam2)
+                            ),
+                            varDefault
+                        )
+                    )
+                )
+            )
+        Width: =lblGreetingName.Width
+        X: =lblGreetingName.X
+        Y: =lblGreetingName.Y + lblGreetingName.Height
+        ZIndex: =10
+
+    lblGreetingName As label:
+        BorderColor: =gblAppStyles.Label.BorderColor
+        BorderThickness: =gblAppStyles.Label.BorderThickness
+        Color: =gblAppStyles.Label.Color
+        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+        DisabledColor: =gblAppStyles.Label.DisabledColor
+        DisabledFill: =gblAppStyles.Label.DisabledFill
+        DisplayMode: =DisplayMode.View
+        Fill: =gblAppStyles.Label.Fill
+        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+        Font: =Font.'Segoe UI'
+        FontWeight: =FontWeight.Bold
+        Height: =80
+        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+        HoverColor: =gblAppStyles.Label.HoverColor
+        HoverFill: =gblAppStyles.Label.HoverFill
+        PaddingBottom: =0
+        PaddingLeft: =0
+        PaddingRight: =0
+        PaddingTop: =0
+        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+        PressedColor: =gblAppStyles.Label.PressedColor
+        PressedFill: =gblAppStyles.Label.PressedFill
+        Size: =gblAppStyles.Label.Size.ExtraLarge
+        Text: |-
+            =With(
+                {
+                    varDefault: With(
+                        {
+                            varTimeValueNow: Hour(Now()),
+                            varTimeValueMorning: 5,
+                            varTimeValueAfternoon: 12,
+                            varTimeValueEvening: 20
+                        },
+                        With(
+                            {
+                                varGreeting: If(
+                                    varTimeValueNow >= varTimeValueMorning And varTimeValueNow < varTimeValueAfternoon,
+                                    "morning",
+                                    varTimeValueNow >= varTimeValueAfternoon And varTimeValueNow < varTimeValueEvening,
+                                    "afternoon",
+                                    "evening"
+                                )
+                            },
+                            Concatenate(
+                                "Good ",
+                                varGreeting,
+                                ", ",
+                                gblUserFirstName,
+                                "."
+                            )
+                        )
+                    ),
+                    varOOBTextId: With(
+                        {
+                            varTimeValueNow: Hour(Now()),
+                            varTimeValueMorning: 5,
+                            varTimeValueAfternoon: 12,
+                            varTimeValueEvening: 20
+                        },
+                        If(
+                            varTimeValueNow >= varTimeValueMorning And varTimeValueNow < varTimeValueAfternoon,
+                            "_translateVariable__GreetingMorning",
+                            varTimeValueNow >= varTimeValueAfternoon And varTimeValueNow < varTimeValueEvening,
+                            "_translateVariable__GreetingAfternoon",
+                            "_translateVariable__GreetingEvening"
+                        )
+                    ),
+                    varParam0: gblUserFirstName,
+                    varParam1: Blank(),
+                    varParam2: Blank()
+                },
+                With(
+                    {
+                        varLocalizedText: LookUp(
+                            staticLocalizations,
+                            OOBTextId = varOOBTextId,
+                            LocalizedText
+                        )
+                    },
+                    If(
+                        IsBlankOrError(varParam0),
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        ),
+                        Coalesce(
+                            Substitute(
+                                Substitute(
+                                    Substitute(
+                                        varLocalizedText,
+                                        "{0}",
+                                        Text(varParam0)
+                                    ),
+                                    "{1}",
+                                    Text(varParam1)
+                                ),
+                                "{2}",
+                                Text(varParam2)
+                            ),
+                            varDefault
+                        )
+                    )
+                )
+            )
+        Width: |
+            =Switch(
+                'Insights Screen'.Size,
+                ScreenSize.ExtraLarge,
+                btnReportIssue.X - Self.X,
+                ScreenSize.Large,
+                btnReportIssue.X - Self.X,
+                ScreenSize.Medium,
+                btnReportIssue.X - Self.X,
+                ScreenSize.Small,
+                Parent.Width - Self.X - gblPadding.Page,
+                Parent.Width - Self.X - gblPadding.Page
+            )
+        Wrap: =false
+        X: =gblPadding.Page
+        Y: =gblPadding.Page
+        ZIndex: =11
+
