@@ -1,0 +1,2950 @@
+"'Overview Screen' As screen.'tabletAutoLayout_HeaderMainFooter_ver1.0'":
+    Fill: =gblAppStyles.Background.Fill
+    OnVisible: |-
+        =UpdateContext(
+            {
+                locUserAppStage: LookUp(
+                    'Item Checkout App Stages',
+                    'Created By'.'User Name' = gblCurrUserEmail
+                )
+            }
+        );
+        If(
+            IsBlank(locUserAppStage),
+            If(
+                IsError(
+                    Patch(
+                        'Item Checkout App Stages',
+                        Defaults('Item Checkout App Stages'),
+                        {Sequence: 0}
+                    )
+                ),
+                Notify(
+                    "Item Checkout App Stage record not created",
+                    NotificationType.Error
+                )
+            )
+        );
+        SetFocus(btnPreviewApp_Overview)
+
+    conOverview As groupContainer:
+        DisplayMode: =DisplayMode.Edit
+        Height: =Parent.Height
+        LayoutAlignItems: =LayoutAlignItems.Start
+        LayoutDirection: =LayoutDirection.Horizontal
+        LayoutJustifyContent: =LayoutJustifyContent.Start
+        LayoutMode: =LayoutMode.Manual
+        LayoutOverflowX: =LayoutOverflow.Hide
+        LayoutOverflowY: =LayoutOverflow.Hide
+        Width: =Parent.Width
+        X: =0*1
+        Y: =0*1
+        ZIndex: =7
+
+        cnvOverview As fluidGrid.fluidGridWithBlankCard:
+            BorderThickness: =0
+            Height: =Parent.Height - Self.Y
+            Width: =Parent.Width
+            X: =0*1
+            Y: =0*1
+            ZIndex: =1
+
+            dtcOverview As dataCard:
+                BorderColor: =RGBA(0, 0, 0, 1)
+                BorderStyle: =BorderStyle.Solid
+                BorderThickness: =0
+                DisplayMode: =DisplayMode.Edit
+                Fill: =RGBA(0, 0, 0, 0)
+                Height: =Parent.Height - 100
+                Width: =Parent.Width
+                X: =0
+                Y: =0
+                ZIndex: =1
+
+                btnOverviewBackground As button:
+                    BorderThickness: =1
+                    Color: =Transparent
+                    DisabledBorderColor: =Self.BorderColor
+                    DisabledColor: =Self.Color
+                    DisabledFill: =Self.Fill
+                    Fill: |-
+                        =If(
+                            gblThemeDark,
+                            gblAppColors.NeutralWebGray220,
+                            gblThemeHiCo,
+                            Black,
+                            White
+                        )
+                    FocusedBorderThickness: =1
+                    Font: =Font.'Segoe UI'
+                    Height: =HtmlText1_11.Y + HtmlText1_11.Height + 10
+                    HoverBorderColor: =Self.BorderColor
+                    HoverColor: =Self.Color
+                    HoverFill: =Self.Fill
+                    PressedBorderColor: =Self.BorderColor
+                    PressedColor: =Self.Color
+                    PressedFill: =Self.Fill
+                    RadiusBottomLeft: =8
+                    RadiusBottomRight: =8
+                    RadiusTopLeft: =8
+                    RadiusTopRight: =8
+                    Size: =gblAppStyles.ButtonTransparent.Size
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Background button for the topic",
+                                varOOBTextId: "btnTopicBackground__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Tooltip: =Self.Text
+                    Width: =Parent.Width - Self.X*2 - 300 - 20
+                    X: =20*1
+                    Y: =20*1
+                    ZIndex: =1
+
+                lblOverviewDesc As label:
+                    AutoHeight: =true
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: ="With Power Apps, you can quickly build apps to make work in Teams easier and more productive. Learn to create your first app with our guided, interactive lessons."
+                    Tooltip: =Self.Text
+                    Width: =lblOverviewHeader.Width
+                    X: =lblOverviewHeader.X
+                    Y: =lblOverviewHeader.Y + lblOverviewHeader.Height
+                    ZIndex: =2
+
+                lblOverviewHeader As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Large
+                    Text: ="Hi, let’s create your first app!"
+                    Tooltip: =Self.Text
+                    Width: =Parent.Width - Self.X*2 - imgOverview.Width - 400
+                    Wrap: =false
+                    X: =btnOverviewBackground.X + 20
+                    Y: =btnOverviewBackground.Y + 20
+                    ZIndex: =3
+
+                imgOverview As image:
+                    Height: =btnOverviewBackground.Height - 20
+                    Image: =CorpLearning
+                    Width: =200
+                    X: =Parent.Width - Self.Width - 380
+                    Y: =btnOverviewBackground.Y + 10
+                    ZIndex: =4
+
+                grpOverviewApp_Overview As group:
+                    Height: =5
+                    Width: =5
+                    X: =60
+                    Y: =58
+                    ZIndex: =8
+
+                    btnOverviewApp_Overview As button:
+                        BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+                        BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+                        Color: =gblAppStyles.ButtonSecondary.Color
+                        DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+                        DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+                        Fill: =gblAppStyles.ButtonSecondary.Fill
+                        FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        Height: =32*1
+                        HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+                        HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+                        HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+                        OnSelect: |-
+                            =Navigate(
+                                'Demo Items Screen',
+                                ScreenTransition.Fade
+                            )
+                        PaddingLeft: =25
+                        PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+                        PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+                        PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+                        RadiusBottomLeft: =gblAppStyles.ButtonSecondary.RadiusBottomLeft
+                        RadiusBottomRight: =gblAppStyles.ButtonSecondary.RadiusBottomRight
+                        RadiusTopLeft: =gblAppStyles.ButtonSecondary.RadiusTopLeft
+                        RadiusTopRight: =gblAppStyles.ButtonSecondary.RadiusTopRight
+                        Size: =gblAppStyles.ButtonSecondary.Size
+                        Text: ="Watch overview"
+                        Tooltip: =Self.Text
+                        Visible: =false
+                        Width: =165
+                        X: =btnPreviewApp_Overview.X + btnPreviewApp_Overview.Width + 20
+                        Y: =lblOverviewDesc.Y + lblOverviewDesc.Height + 20
+                        ZIndex: =5
+
+                    imgOverviewApp_Overview As image:
+                        AccessibleLabel: ="Overview"
+                        Height: =32
+                        Image: |-
+                            =If(
+                                gblThemeDark || gblThemeHiCo,
+                                VideoClip_Dark,
+                                VideoClip_Default
+                            )
+                        OnSelect: |-
+                            =Navigate(
+                                'Demo Items Screen',
+                                ScreenTransition.Fade
+                            )
+                        PaddingBottom: =5
+                        PaddingLeft: =4
+                        PaddingRight: =4
+                        PaddingTop: =5
+                        TabIndex: |-
+                            =If(
+                                true,
+                                -1,
+                                0
+                            )
+                        Visible: =false
+                        Width: =32
+                        X: =btnOverviewApp_Overview.X+ 6
+                        Y: =btnOverviewApp_Overview.Y
+                        ZIndex: =6
+
+                lblLevel1Header As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        ="Level 1: Understand the basics"
+                    Tooltip: =Self.Text
+                    Width: =Parent.Width - Self.X*2
+                    Wrap: =false
+                    X: =btnOverviewBackground.X 
+                    Y: =btnOverviewBackground.Y + btnOverviewBackground.Height + 20
+                    ZIndex: =9
+
+                galLevel1 As gallery.galleryVertical:
+                    AccessibleLabel: ="Gallery of connection options"
+                    BorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                    FocusedBorderThickness: =1
+                    Height: |-
+                        =If(
+                            200 * 3 < Parent.Width - Self.X - 20,
+                            210 * 1,
+                            If(
+                                200 * 2 < Parent.Width - Self.X - 20,
+                                210 * 2,
+                                210 * 3
+                            )
+                        )
+                    Items: |-
+                        =Table(
+                            {
+                                Image: Seq1,
+                                Stage: "Data model",
+                                Description: "Learn to work with a data model. Add or delete items. You can update the data anytime.",
+                                Sequence: 1
+                            },
+                            {
+                                Image: Seq2,
+                                Stage: "Add data",
+                                Description: "Work with data. Add or delete items and item types. You can update the data anytime.",
+                                Sequence: 2
+                            },
+                            {
+                                Image: Seq3,
+                                Stage: "UI components",
+                                Description: "Learn about about the pre-built controls, such as buttons, for building this and other apps.",
+                                Sequence: 3
+                            }
+                        )
+                    Layout: =Layout.Vertical
+                    TabIndex: |-
+                        =If(
+                            Self.Visible,
+                            0,
+                            -1
+                        )
+                    TemplateSize: =200*1
+                    Width: |-
+                        =If(
+                            420 * 3 < Parent.Width - Self.X - 20,
+                            420 * 3,
+                            If(
+                                420 * 2 < Parent.Width - Self.X - 20,
+                                420 * 2,
+                                420 * 1
+                            )
+                        )
+                    WrapCount: |-
+                        =If(
+                            340 * 3 < Parent.Width - Self.X - 20,
+                            3,
+                            If(
+                                340 * 2 < Parent.Width - Self.X - 20,
+                                2,
+                                1
+                            )
+                        )
+                    X: =lblLevel1Header.X - 5
+                    Y: =lblLevel1Header.Y + lblLevel1Header.Height + 10
+                    ZIndex: =10
+
+                    btnLevel1StepBackground As button:
+                        BorderThickness: =1
+                        Color: =Transparent
+                        DisabledBorderColor: =Self.BorderColor
+                        DisabledColor: =Self.Color
+                        DisabledFill: =Self.Fill
+                        Fill: |-
+                            =If(
+                                gblThemeDark,
+                                gblAppColors.NeutralWebGray220,
+                                gblThemeHiCo,
+                                Black,
+                                White
+                            )
+                        FocusedBorderThickness: =1
+                        Font: =Font.'Segoe UI'
+                        Height: =180*1
+                        HoverBorderColor: =Self.BorderColor
+                        HoverColor: =Self.Color
+                        HoverFill: =Self.Fill
+                        OnSelect: =Select(Parent)
+                        PressedBorderColor: =Self.BorderColor
+                        PressedColor: =Self.Color
+                        PressedFill: =Self.Fill
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                        Size: =gblAppStyles.ButtonTransparent.Size
+                        Text: |-
+                            =With(
+                                {
+                                    varDefault: "Background button for the topic",
+                                    varOOBTextId: "btnTopicBackground__locText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        Tooltip: =Self.Text
+                        Width: =400*1
+                        X: =5*1
+                        Y: =5*1
+                        ZIndex: =1
+
+                    imgLevel1StepStatus As image:
+                        Height: =32*1
+                        Image: |-
+                            =If(
+                                ThisItem.Sequence - 1 = Value(locUserAppStage.Sequence) && ThisItem.Sequence = 1,
+                                Start_Default,
+                                If(
+                                    ThisItem.Sequence = Value(locUserAppStage.Sequence) && ThisItem.Sequence >= 1 && locUserAppStage.'Step State' = 'Step States'.'In Progress',
+                                    InProgress_Default,
+                                    If(
+                                        ThisItem.Sequence = Value(locUserAppStage.Sequence) && ThisItem.Sequence >= 1 && locUserAppStage.'Step State' = 'Step States'.Finished,
+                                        Finished_Default,
+                                        If(
+                                            ThisItem.Sequence = Value(locUserAppStage.Sequence) + 1 && locUserAppStage.'Step State' = 'Step States'.Finished,
+                                            Start_Default,
+                                            If(
+                                                ThisItem.Sequence > Value(locUserAppStage.Sequence) && ThisItem.Sequence > 1,
+                                                Lock_Default,
+                                                If(
+                                                    ThisItem.Sequence < Value(locUserAppStage.Sequence),
+                                                    Finished_Default
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        OnSelect: =Select(Parent)
+                        PaddingBottom: =4
+                        PaddingLeft: =4
+                        PaddingRight: =4
+                        PaddingTop: =4
+                        RadiusBottomLeft: =5
+                        RadiusBottomRight: =5
+                        RadiusTopLeft: =5
+                        RadiusTopRight: =5
+                        Width: =32*1
+                        X: =20*1
+                        Y: =20*1
+                        ZIndex: =2
+
+                    lblLevel1StepName As label:
+                        BorderColor: =gblAppStyles.Label.BorderColor
+                        BorderThickness: =gblAppStyles.Label.BorderThickness
+                        Color: =gblAppStyles.Label.Color
+                        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.Label.DisabledColor
+                        DisabledFill: =gblAppStyles.Label.DisabledFill
+                        Fill: =gblAppStyles.Label.Fill
+                        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        FontWeight: =FontWeight.Semibold
+                        Height: =32*1
+                        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                        HoverFill: =gblAppStyles.Label.HoverFill
+                        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                        PressedColor: =gblAppStyles.Label.PressedColor
+                        PressedFill: =gblAppStyles.Label.PressedFill
+                        Size: =gblAppStyles.Label.Size.Large
+                        Text: =ThisItem.Stage
+                        Tooltip: =Self.Text
+                        Width: =Parent.TemplateWidth - Self.X - imgLevel1StepIllustration.Width - 20
+                        Wrap: =false
+                        X: =20*1 + 32*1
+                        Y: =20*1
+                        ZIndex: =3
+
+                    lblLevel1StepDesc As label:
+                        AutoHeight: =true
+                        BorderColor: =gblAppStyles.Label.BorderColor
+                        BorderThickness: =gblAppStyles.Label.BorderThickness
+                        Color: =gblAppStyles.Label.Color
+                        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.Label.DisabledColor
+                        DisabledFill: =gblAppStyles.Label.DisabledFill
+                        Fill: =gblAppStyles.Label.Fill
+                        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        Height: =32*1
+                        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                        HoverFill: =gblAppStyles.Label.HoverFill
+                        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                        PressedColor: =gblAppStyles.Label.PressedColor
+                        PressedFill: =gblAppStyles.Label.PressedFill
+                        Size: =gblAppStyles.Label.Size.Medium
+                        Text: =ThisItem.Description
+                        Tooltip: =Self.Text
+                        Width: =Parent.TemplateWidth - Self.X - imgLevel1StepIllustration.Width - 20
+                        X: =imgLevel1StepStatus.X
+                        Y: =lblLevel1StepName.Y + lblLevel1StepName.Height
+                        ZIndex: =4
+
+                    btnLevel1StepActions As button:
+                        BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+                        BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+                        Color: =gblAppStyles.ButtonSecondary.Color
+                        DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+                        DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+                        DisplayMode: |-
+                            =If(
+                                Self.Text = "Done",
+                                DisplayMode.Edit,
+                                DisplayMode.Edit
+                            )
+                        Fill: =gblAppStyles.ButtonSecondary.Fill
+                        FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        Height: =32*1
+                        HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+                        HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+                        HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+                        OnSelect: |-
+                            =If(
+                                Self.Text = "Done",
+                                Switch(
+                                    ThisItem.Sequence,
+                                    1,
+                                    Navigate('Level 1 Step 1: Data Model'),
+                                    2,
+                                    Navigate('Level 1 Step 2: Add Data'),
+                                    3,
+                                    Navigate('Level 1 Step 3: UI Components')
+                                ),
+                                If(
+                                    Value(locUserAppStage.Sequence) = ThisItem.Sequence - 1,
+                                    If(
+                                        IsError(
+                                            Patch(
+                                                'Item Checkout App Stages',
+                                                locUserAppStage,
+                                                {
+                                                    Sequence: ThisItem.Sequence,
+                                                    'Step State': 'Step States'.'In Progress'
+                                                }
+                                            )
+                                        ),
+                                        Notify(
+                                            "Item Checkout App Stage record not updated",
+                                            NotificationType.Error
+                                        )
+                                    );
+                                    Switch(
+                                        ThisItem.Sequence,
+                                        1,
+                                        Navigate('Level 1 Step 1: Data Model'),
+                                        2,
+                                        Navigate('Level 1 Step 2: Add Data'),
+                                        3,
+                                        Navigate('Level 1 Step 3: UI Components')
+                                    ),
+                                    If(
+                                        Value(locUserAppStage.Sequence) = ThisItem.Sequence,
+                                        If(
+                                            IsError(
+                                                Patch(
+                                                    'Item Checkout App Stages',
+                                                    locUserAppStage,
+                                                    {
+                                                        Sequence: ThisItem.Sequence,
+                                                        'Step State': 'Step States'.Finished
+                                                    }
+                                                )
+                                            ),
+                                            Notify(
+                                                "Item Checkout App Stage record not updated",
+                                                NotificationType.Error
+                                            )
+                                        )
+                                    )
+                                );
+                                UpdateContext(
+                                    {
+                                        locUserAppStage: LookUp(
+                                            'Item Checkout App Stages',
+                                            'Created By'.'User Name' = gblCurrUserEmail
+                                        )
+                                    }
+                                )
+                            )
+                        PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+                        PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+                        PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+                        RadiusBottomLeft: =gblAppStyles.ButtonSecondary.RadiusBottomLeft
+                        RadiusBottomRight: =gblAppStyles.ButtonSecondary.RadiusBottomRight
+                        RadiusTopLeft: =gblAppStyles.ButtonSecondary.RadiusTopLeft
+                        RadiusTopRight: =gblAppStyles.ButtonSecondary.RadiusTopRight
+                        Size: =gblAppStyles.ButtonSecondary.Size
+                        Text: |-
+                            =If(
+                                (ThisItem.Sequence = 1 && Value(locUserAppStage.Sequence) = 0) || ThisItem.Sequence = Value(locUserAppStage.Sequence) + 1,
+                                "Start",
+                                If(
+                                    ThisItem.Sequence = Value(locUserAppStage.Sequence) && locUserAppStage.'Step State' = 'Step States'.'In Progress',
+                                    "Continue",
+                                    If(
+                                        ThisItem.Sequence = Value(locUserAppStage.Sequence) && locUserAppStage.'Step State' = 'Step States'.Finished,
+                                        "Done",
+                                        "Done"
+                                    )
+                                )
+                            )
+                        Tooltip: =Self.Text
+                        Visible: =(ThisItem.Sequence = Value(locUserAppStage.Sequence) || ThisItem.Sequence = 1) || (ThisItem.Sequence = Value(locUserAppStage.Sequence) + 1 && locUserAppStage.'Step State' = 'Step States'.Finished) || (ThisItem.Sequence < Value(locUserAppStage.Sequence))
+                        Width: =120*1
+                        X: =imgLevel1StepStatus.X
+                        Y: =btnLevel1StepBackground.Y + btnLevel1StepBackground.Height - Self.Height - 20
+                        ZIndex: =5
+
+                    imgLevel1StepChecked As image:
+                        Height: =32*1
+                        Image: =Checkmark_Default
+                        OnSelect: =Select(Parent)
+                        PaddingBottom: |-
+                            =If(
+                                ThisItem.Sequence > 1,
+                                6,
+                                6
+                            )
+                        PaddingLeft: |-
+                            =If(
+                                ThisItem.Sequence > 1,
+                                6,
+                                6
+                            )
+                        PaddingRight: |-
+                            =If(
+                                ThisItem.Sequence > 1,
+                                6,
+                                6
+                            )
+                        PaddingTop: |-
+                            =If(
+                                ThisItem.Sequence > 1,
+                                6,
+                                6
+                            )
+                        RadiusBottomLeft: =5
+                        RadiusBottomRight: =5
+                        RadiusTopLeft: =5
+                        RadiusTopRight: =5
+                        Visible: =btnLevel1StepActions.Text = "Done" && btnLevel1StepActions.Visible
+                        Width: =32*1
+                        X: =btnLevel1StepActions.X
+                        Y: =btnLevel1StepActions.Y
+                        ZIndex: =6
+
+                    imgLevel1StepIllustration As image:
+                        Height: =btnLevel1StepBackground.Height
+                        Image: |-
+                            =Switch(
+                                ThisItem.Sequence,
+                                1,
+                                Seq1,
+                                2,
+                                Seq2,
+                                3,
+                                Seq3,
+                                4,
+                                Seq4,
+                                6,
+                                Seq6
+                            )
+                        ImagePosition: =ImagePosition.Fill
+                        OnSelect: =Select(Parent)
+                        PaddingBottom: |-
+                            =If(
+                                ThisItem.Sequence > 1,
+                                2,
+                                6
+                            )
+                        PaddingLeft: |-
+                            =If(
+                                ThisItem.Sequence > 1,
+                                2,
+                                6
+                            )
+                        PaddingRight: |-
+                            =If(
+                                ThisItem.Sequence > 1,
+                                2,
+                                6
+                            )
+                        PaddingTop: |-
+                            =If(
+                                ThisItem.Sequence > 1,
+                                2,
+                                6
+                            )
+                        RadiusBottomLeft: =5
+                        RadiusBottomRight: =5
+                        RadiusTopLeft: =5
+                        RadiusTopRight: =5
+                        Width: =100*1
+                        X: =btnLevel1StepBackground.Width - Self.Width + 5
+                        Y: =btnLevel1StepBackground.Y
+                        ZIndex: =7
+
+                    btnLevel1StepForeground As button:
+                        BorderThickness: =1
+                        Color: =Transparent
+                        DisabledBorderColor: =Self.BorderColor
+                        DisabledColor: =Self.Color
+                        DisabledFill: =Self.Fill
+                        Fill: |-
+                            =If(
+                                gblThemeDark,
+                                RGBA(0, 0, 0, 0.7),
+                                gblThemeHiCo,
+                                RGBA(0, 0, 0, 0.7),
+                                RGBA(255, 255, 255, 0.7)
+                            )
+                        FocusedBorderThickness: =1
+                        Font: =Font.'Segoe UI'
+                        Height: =180*1
+                        HoverBorderColor: =Self.BorderColor
+                        HoverColor: =Self.Color
+                        HoverFill: =Self.Fill
+                        OnSelect: =Select(Parent)
+                        PressedBorderColor: =Self.BorderColor
+                        PressedColor: =Self.Color
+                        PressedFill: =Self.Fill
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                        Size: =gblAppStyles.ButtonTransparent.Size
+                        Text: |-
+                            =With(
+                                {
+                                    varDefault: "Background button for the topic",
+                                    varOOBTextId: "btnTopicBackground__locText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        Tooltip: =Self.Text
+                        Visible: =ThisItem.Sequence <> 1 && ThisItem.Sequence <> Value(locUserAppStage.Sequence)&& ThisItem.Sequence > Value(locUserAppStage.Sequence) && !(ThisItem.Sequence = Value(locUserAppStage.Sequence) + 1 && locUserAppStage.'Step State' = 'Step States'.Finished)
+                        Width: =400*1
+                        X: =5*1
+                        Y: =5*1
+                        ZIndex: =8
+
+                grpPreviewApp_Overview As group:
+                    Height: =5
+                    Width: =5
+                    X: =78
+                    Y: =78
+                    ZIndex: =10
+
+                    btnPreviewApp_Overview As button:
+                        BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+                        BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+                        Color: =gblAppStyles.ButtonSecondary.Color
+                        DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+                        DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+                        Fill: =gblAppStyles.ButtonSecondary.Fill
+                        FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        Height: =32*1
+                        HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+                        HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+                        HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+                        OnSelect: |-
+                            =Navigate(
+                                'Demo Items Screen',
+                                ScreenTransition.Fade
+                            )
+                        PaddingLeft: =25
+                        PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+                        PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+                        PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+                        RadiusBottomLeft: =gblAppStyles.ButtonSecondary.RadiusBottomLeft
+                        RadiusBottomRight: =gblAppStyles.ButtonSecondary.RadiusBottomRight
+                        RadiusTopLeft: =gblAppStyles.ButtonSecondary.RadiusTopLeft
+                        RadiusTopRight: =gblAppStyles.ButtonSecondary.RadiusTopRight
+                        Size: =gblAppStyles.ButtonSecondary.Size
+                        Text: ="Preview"
+                        Tooltip: =Self.Text
+                        Width: =110
+                        X: =lblOverviewHeader.X
+                        Y: =lblOverviewDesc.Y + lblOverviewDesc.Height + 20
+                        ZIndex: =7
+
+                    imgPreviewApp_Overview As image:
+                        AccessibleLabel: |-
+                            =With(
+                                {
+                                    varDefault: "Preview icon",
+                                    varOOBTextId: "_translatecommon_imgPreviewApp__locAccessibleText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        Height: =32
+                        Image: |-
+                            =If(
+                                gblThemeDark || gblThemeHiCo,
+                                Welcome_PreviewDark,
+                                Welcome_Preview
+                            )
+                        OnSelect: |-
+                            =Navigate(
+                                'Demo Items Screen',
+                                ScreenTransition.Fade
+                            )
+                        PaddingBottom: =8
+                        PaddingLeft: =8
+                        PaddingRight: =8
+                        PaddingTop: =8
+                        TabIndex: |-
+                            =If(
+                                true,
+                                -1,
+                                0
+                            )
+                        Tooltip: =Self.AccessibleLabel
+                        Width: =32
+                        X: =btnPreviewApp_Overview.X+ 6
+                        Y: =btnPreviewApp_Overview.Y
+                        ZIndex: =8
+
+                lblLevel2Header As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        ="Level 2: Design your app"
+                    Tooltip: =Self.Text
+                    Width: =Parent.Width - Self.X*2
+                    Wrap: =false
+                    X: =btnOverviewBackground.X 
+                    Y: =galLevel1.Y + galLevel1.Height + 10
+                    ZIndex: =11
+
+                galLevel2 As gallery.galleryVertical:
+                    AccessibleLabel: ="Gallery of connection options"
+                    BorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                    FocusedBorderThickness: =1
+                    Height: |-
+                        =If(
+                            200 * 3 < Parent.Width - Self.X - 20,
+                            210 * 1,
+                            If(
+                                210 * 2 < Parent.Width - Self.X - 20,
+                                210 * 2,
+                                210 * 3
+                            )
+                        )
+                    Items: |-
+                        =Table(
+                            {
+                                Image: Seq4,
+                                Stage: "Screen: All items",
+                                Description: "Create your first screen that displays all items.",
+                                Sequence: 4
+                            },
+                            {
+                                Image: Blank(),
+                                Stage: "Screen: Checkout",
+                                Description: "Design how you want users to check out items.",
+                                Sequence: 5
+                            },
+                            {
+                                Image: Seq6,
+                                Stage: "Screen: Confirmation",
+                                Description: "Design what users see when they check out an item.",
+                                Sequence: 6
+                            }
+                        )
+                    Layout: =Layout.Vertical
+                    TabIndex: |-
+                        =If(
+                            Self.Visible,
+                            0,
+                            -1
+                        )
+                    TemplateSize: =200*1
+                    Width: |-
+                        =If(
+                            420 * 3 < Parent.Width - Self.X - 20,
+                            420 * 3,
+                            If(
+                                420 * 2 < Parent.Width - Self.X - 20,
+                                420 * 2,
+                                420 * 1
+                            )
+                        )
+                    WrapCount: |-
+                        =If(
+                            340 * 3 < Parent.Width - Self.X - 20,
+                            3,
+                            If(
+                                340 * 2 < Parent.Width - Self.X - 20,
+                                2,
+                                1
+                            )
+                        )
+                    X: =lblLevel2Header.X - 5
+                    Y: =lblLevel2Header.Y + lblLevel2Header.Height + 10
+                    ZIndex: =12
+
+                    btnLevel2StepBackground As button:
+                        BorderThickness: =1
+                        Color: =Transparent
+                        DisabledBorderColor: =Self.BorderColor
+                        DisabledColor: =Self.Color
+                        DisabledFill: =Self.Fill
+                        Fill: |-
+                            =If(
+                                gblThemeDark,
+                                gblAppColors.NeutralWebGray220,
+                                gblThemeHiCo,
+                                Black,
+                                White
+                            )
+                        FocusedBorderThickness: =1
+                        Font: =Font.'Segoe UI'
+                        Height: =180*1
+                        HoverBorderColor: =Self.BorderColor
+                        HoverColor: =Self.Color
+                        HoverFill: =Self.Fill
+                        OnSelect: =Select(Parent)
+                        PressedBorderColor: =Self.BorderColor
+                        PressedColor: =Self.Color
+                        PressedFill: =Self.Fill
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                        Size: =gblAppStyles.ButtonTransparent.Size
+                        Text: |-
+                            =With(
+                                {
+                                    varDefault: "Background button for the topic",
+                                    varOOBTextId: "btnTopicBackground__locText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        Tooltip: =Self.Text
+                        Width: =400*1
+                        X: =5*1
+                        Y: =5*1
+                        ZIndex: =1
+
+                    imgLevel2StepStatus As image:
+                        Height: =32*1
+                        Image: |-
+                            =If(
+                                ThisItem.Sequence - 1 = Value(locUserAppStage.Sequence) && ThisItem.Sequence = 1,
+                                Start_Default,
+                                If(
+                                    ThisItem.Sequence = Value(locUserAppStage.Sequence) && ThisItem.Sequence >= 1 && locUserAppStage.'Step State' = 'Step States'.'In Progress',
+                                    InProgress_Default,
+                                    If(
+                                        ThisItem.Sequence = Value(locUserAppStage.Sequence) && ThisItem.Sequence >= 1 && locUserAppStage.'Step State' = 'Step States'.Finished,
+                                        Finished_Default,
+                                        If(
+                                            ThisItem.Sequence = Value(locUserAppStage.Sequence) + 1 && locUserAppStage.'Step State' = 'Step States'.Finished,
+                                            Start_Default,
+                                            If(
+                                                ThisItem.Sequence > Value(locUserAppStage.Sequence) && ThisItem.Sequence > 1,
+                                                Lock_Default,
+                                                If(
+                                                    ThisItem.Sequence < Value(locUserAppStage.Sequence),
+                                                    Finished_Default
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        OnSelect: =Select(Parent)
+                        PaddingBottom: =4
+                        PaddingLeft: =4
+                        PaddingRight: =4
+                        PaddingTop: =4
+                        RadiusBottomLeft: =5
+                        RadiusBottomRight: =5
+                        RadiusTopLeft: =5
+                        RadiusTopRight: =5
+                        Width: =32*1
+                        X: =20*1
+                        Y: =20*1
+                        ZIndex: =2
+
+                    lblLevel2StepName As label:
+                        BorderColor: =gblAppStyles.Label.BorderColor
+                        BorderThickness: =gblAppStyles.Label.BorderThickness
+                        Color: =gblAppStyles.Label.Color
+                        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.Label.DisabledColor
+                        DisabledFill: =gblAppStyles.Label.DisabledFill
+                        Fill: =gblAppStyles.Label.Fill
+                        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        FontWeight: =FontWeight.Semibold
+                        Height: =32*1
+                        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                        HoverFill: =gblAppStyles.Label.HoverFill
+                        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                        PressedColor: =gblAppStyles.Label.PressedColor
+                        PressedFill: =gblAppStyles.Label.PressedFill
+                        Size: =gblAppStyles.Label.Size.Large
+                        Text: =ThisItem.Stage
+                        Tooltip: =Self.Text
+                        Width: =Parent.TemplateWidth - Self.X - 20
+                        Wrap: =false
+                        X: =20*1 + 32*1
+                        Y: =20*1
+                        ZIndex: =3
+
+                    lblLevel2StepDesc As label:
+                        AutoHeight: =true
+                        BorderColor: =gblAppStyles.Label.BorderColor
+                        BorderThickness: =gblAppStyles.Label.BorderThickness
+                        Color: =gblAppStyles.Label.Color
+                        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.Label.DisabledColor
+                        DisabledFill: =gblAppStyles.Label.DisabledFill
+                        Fill: =gblAppStyles.Label.Fill
+                        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        Height: =32*1
+                        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                        HoverFill: =gblAppStyles.Label.HoverFill
+                        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                        PressedColor: =gblAppStyles.Label.PressedColor
+                        PressedFill: =gblAppStyles.Label.PressedFill
+                        Size: =gblAppStyles.Label.Size.Medium
+                        Text: =ThisItem.Description
+                        Tooltip: =Self.Text
+                        Width: =Parent.TemplateWidth - Self.X - 20
+                        X: =imgLevel2StepStatus.X
+                        Y: =lblLevel2StepName.Y + lblLevel2StepName.Height
+                        ZIndex: =4
+
+                    btnLevel2StepActions As button:
+                        BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+                        BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+                        Color: =gblAppStyles.ButtonSecondary.Color
+                        DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+                        DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+                        DisplayMode: |-
+                            =If(
+                                Self.Text = "Done",
+                                DisplayMode.Edit,
+                                DisplayMode.Edit
+                            )
+                        Fill: =gblAppStyles.ButtonSecondary.Fill
+                        FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        Height: =32*1
+                        HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+                        HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+                        HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+                        OnSelect: |-
+                            =If(
+                                Self.Text = "Done",
+                                Switch(
+                                    ThisItem.Sequence,
+                                    4,
+                                    Navigate('Level 2 Step 1: Items Screen'),
+                                    5,
+                                    Navigate('Level 2 Step 2: My Checkouts Screen'),
+                                    6,
+                                    Navigate('Level 2 Step 3: Checkout Screen')
+                                ),
+                                If(
+                                    Value(locUserAppStage.Sequence) = ThisItem.Sequence - 1,
+                                    If(
+                                        IsError(
+                                            Patch(
+                                                'Item Checkout App Stages',
+                                                locUserAppStage,
+                                                {
+                                                    Sequence: ThisItem.Sequence,
+                                                    'Step State': 'Step States'.'In Progress'
+                                                }
+                                            )
+                                        ),
+                                        Notify(
+                                            "Item Checkout App Stage record not updated",
+                                            NotificationType.Error
+                                        )
+                                    );
+                                    Switch(
+                                        ThisItem.Sequence,
+                                        4,
+                                        Navigate('Level 2 Step 1: Items Screen'),
+                                        5,
+                                        Navigate('Level 2 Step 2: My Checkouts Screen'),
+                                        6,
+                                        Navigate('Level 2 Step 3: Checkout Screen')
+                                    ),
+                                    If(
+                                        Value(locUserAppStage.Sequence) = ThisItem.Sequence,
+                                        If(
+                                            IsError(
+                                                Patch(
+                                                    'Item Checkout App Stages',
+                                                    locUserAppStage,
+                                                    {
+                                                        Sequence: ThisItem.Sequence,
+                                                        'Step State': 'Step States'.Finished
+                                                    }
+                                                )
+                                            ),
+                                            Notify(
+                                                "Item Checkout App Stage record not updated",
+                                                NotificationType.Error
+                                            )
+                                        )
+                                    )
+                                );
+                                UpdateContext(
+                                    {
+                                        locUserAppStage: LookUp(
+                                            'Item Checkout App Stages',
+                                            'Created By'.'User Name' = gblCurrUserEmail
+                                        )
+                                    }
+                                );
+                                
+                            )
+                        PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+                        PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+                        PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+                        RadiusBottomLeft: =gblAppStyles.ButtonSecondary.RadiusBottomLeft
+                        RadiusBottomRight: =gblAppStyles.ButtonSecondary.RadiusBottomRight
+                        RadiusTopLeft: =gblAppStyles.ButtonSecondary.RadiusTopLeft
+                        RadiusTopRight: =gblAppStyles.ButtonSecondary.RadiusTopRight
+                        Size: =gblAppStyles.ButtonSecondary.Size
+                        Text: |-
+                            =If(
+                                (ThisItem.Sequence = 1 && Value(locUserAppStage.Sequence) = 0) || ThisItem.Sequence = Value(locUserAppStage.Sequence) + 1,
+                                "Start",
+                                If(
+                                    ThisItem.Sequence = Value(locUserAppStage.Sequence) && locUserAppStage.'Step State' = 'Step States'.'In Progress',
+                                    "Continue",
+                                    If(
+                                        ThisItem.Sequence = Value(locUserAppStage.Sequence) && locUserAppStage.'Step State' = 'Step States'.Finished,
+                                        "Done",
+                                        "Done"
+                                    )
+                                )
+                            )
+                        Tooltip: =Self.Text
+                        Visible: =(ThisItem.Sequence = Value(locUserAppStage.Sequence) || ThisItem.Sequence = 1) || (ThisItem.Sequence = Value(locUserAppStage.Sequence) + 1 && locUserAppStage.'Step State' = 'Step States'.Finished) || (ThisItem.Sequence < Value(locUserAppStage.Sequence))
+                        Width: =120*1
+                        X: =imgLevel2StepStatus.X
+                        Y: =btnLevel2StepBackground.Y + btnLevel2StepBackground.Height - Self.Height - 20
+                        ZIndex: =5
+
+                    imgLevel2StepChecked As image:
+                        Height: =32*1
+                        Image: =Checkmark_Default
+                        OnSelect: =Select(Parent)
+                        PaddingBottom: |-
+                            =If(
+                                ThisItem.Sequence > 1,
+                                6,
+                                6
+                            )
+                        PaddingLeft: |-
+                            =If(
+                                ThisItem.Sequence > 1,
+                                6,
+                                6
+                            )
+                        PaddingRight: |-
+                            =If(
+                                ThisItem.Sequence > 1,
+                                6,
+                                6
+                            )
+                        PaddingTop: |-
+                            =If(
+                                ThisItem.Sequence > 1,
+                                6,
+                                6
+                            )
+                        RadiusBottomLeft: =5
+                        RadiusBottomRight: =5
+                        RadiusTopLeft: =5
+                        RadiusTopRight: =5
+                        Visible: =btnLevel2StepActions.Text = "Done" && btnLevel2StepActions.Visible
+                        Width: =32*1
+                        X: =btnLevel1StepActions.X
+                        Y: =btnLevel1StepActions.Y
+                        ZIndex: =6
+
+                    imgLevel2StepIllustration As image:
+                        Height: =If(ThisItem.Sequence = 6, 100*1, btnLevel1StepBackground.Height)
+                        Image: |-
+                            =Switch(
+                                ThisItem.Sequence,
+                                1,
+                                Seq1,
+                                2,
+                                Seq2,
+                                3,
+                                Seq3,
+                                4,
+                                Seq4,
+                                6,
+                                Seq6
+                            )
+                        ImagePosition: =If(ThisItem.Sequence = 6, ImagePosition.Fit, ImagePosition.Fill)
+                        OnSelect: =Select(Parent)
+                        PaddingBottom: |-
+                            =If(
+                                ThisItem.Sequence > 1,
+                                2,
+                                6
+                            )
+                        PaddingLeft: |-
+                            =If(
+                                ThisItem.Sequence > 1,
+                                2,
+                                6
+                            )
+                        PaddingRight: |-
+                            =If(
+                                ThisItem.Sequence > 1,
+                                2,
+                                6
+                            )
+                        PaddingTop: |-
+                            =If(
+                                ThisItem.Sequence > 1,
+                                2,
+                                6
+                            )
+                        RadiusBottomLeft: =5
+                        RadiusBottomRight: =5
+                        RadiusTopLeft: =5
+                        RadiusTopRight: =5
+                        Width: =If(ThisItem.Sequence = 6, 150*1, 100*1)
+                        X: =btnLevel1StepBackground.Width - Self.Width + 5
+                        Y: =If(ThisItem.Sequence = 6, btnLevel1StepBackground.Y + btnLevel1StepBackground.Height - Self.Height - 10, btnLevel1StepBackground.Y)
+                        ZIndex: =7
+
+                    btnLevel2StepForeground As button:
+                        BorderThickness: =1
+                        Color: =Transparent
+                        DisabledBorderColor: =Self.BorderColor
+                        DisabledColor: =Self.Color
+                        DisabledFill: =Self.Fill
+                        Fill: |-
+                            =If(
+                                gblThemeDark,
+                                RGBA(0, 0, 0, 0.7),
+                                gblThemeHiCo,
+                                RGBA(0, 0, 0, 0.7),
+                                RGBA(255, 255, 255, 0.7)
+                            )
+                        FocusedBorderThickness: =1
+                        Font: =Font.'Segoe UI'
+                        Height: =180*1
+                        HoverBorderColor: =Self.BorderColor
+                        HoverColor: =Self.Color
+                        HoverFill: =Self.Fill
+                        OnSelect: =Select(Parent)
+                        PressedBorderColor: =Self.BorderColor
+                        PressedColor: =Self.Color
+                        PressedFill: =Self.Fill
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                        Size: =gblAppStyles.ButtonTransparent.Size
+                        Text: |-
+                            =With(
+                                {
+                                    varDefault: "Background button for the topic",
+                                    varOOBTextId: "btnTopicBackground__locText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        Tooltip: =Self.Text
+                        Visible: =ThisItem.Sequence <> 1 && ThisItem.Sequence <> Value(locUserAppStage.Sequence)&& ThisItem.Sequence > Value(locUserAppStage.Sequence) && !(ThisItem.Sequence = Value(locUserAppStage.Sequence) + 1 && locUserAppStage.'Step State' = 'Step States'.Finished)
+                        Width: =400*1
+                        X: =5*1
+                        Y: =5*1
+                        ZIndex: =8
+
+                lblLevel3Header As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        ="Level 3: Publish your app"
+                    Tooltip: =Self.Text
+                    Width: =Parent.Width - Self.X*2
+                    Wrap: =false
+                    X: =btnOverviewBackground.X 
+                    Y: =galLevel2.Y + galLevel2.Height + 10
+                    ZIndex: =13
+
+                galLevel3 As gallery.galleryVertical:
+                    AccessibleLabel: ="Gallery of connection options"
+                    BorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                    FocusedBorderThickness: =1
+                    Height: |-
+                        =If(
+                            200 * 3 < Parent.Width - Self.X - 20,
+                            210 * 1,
+                            If(
+                                210 * 2 < Parent.Width - Self.X - 20,
+                                210 * 2,
+                                210 * 3
+                            )
+                        )
+                    Items: |-
+                        =Table(
+                            {
+                                Image: Blank(),
+                                Stage: "Connect screens",
+                                Description: "Organize the screens you designed for your app.",
+                                Sequence: 7
+                            },
+                            {
+                                Image: Blank(),
+                                Stage: "Publish to Teams",
+                                Description: "Design how do you want users to checkout an asset.",
+                                Sequence: 8
+                            },
+                            {
+                                Image: Blank(),
+                                Stage: "Share your app with colleagues",
+                                Description: "Set permissions so you can share the app with your colleagues.",
+                                Sequence: 9
+                            }
+                        )
+                    Layout: =Layout.Vertical
+                    TabIndex: |-
+                        =If(
+                            Self.Visible,
+                            0,
+                            -1
+                        )
+                    TemplateSize: =200*1
+                    Width: |-
+                        =If(
+                            420 * 3 < Parent.Width - Self.X - 20,
+                            420 * 3,
+                            If(
+                                420 * 2 < Parent.Width - Self.X - 20,
+                                420 * 2,
+                                420 * 1
+                            )
+                        )
+                    WrapCount: |-
+                        =If(
+                            340 * 3 < Parent.Width - Self.X - 20,
+                            3,
+                            If(
+                                340 * 2 < Parent.Width - Self.X - 20,
+                                2,
+                                1
+                            )
+                        )
+                    X: =lblLevel3Header.X - 5
+                    Y: =lblLevel3Header.Y + lblLevel3Header.Height + 10
+                    ZIndex: =14
+
+                    btnLevel3StepBackground As button:
+                        BorderThickness: =1
+                        Color: =Transparent
+                        DisabledBorderColor: =Self.BorderColor
+                        DisabledColor: =Self.Color
+                        DisabledFill: =Self.Fill
+                        Fill: |-
+                            =If(
+                                gblThemeDark,
+                                gblAppColors.NeutralWebGray220,
+                                gblThemeHiCo,
+                                Black,
+                                White
+                            )
+                        FocusedBorderThickness: =1
+                        Font: =Font.'Segoe UI'
+                        Height: =180*1
+                        HoverBorderColor: =Self.BorderColor
+                        HoverColor: =Self.Color
+                        HoverFill: =Self.Fill
+                        OnSelect: =Select(Parent)
+                        PressedBorderColor: =Self.BorderColor
+                        PressedColor: =Self.Color
+                        PressedFill: =Self.Fill
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                        Size: =gblAppStyles.ButtonTransparent.Size
+                        Text: |-
+                            =With(
+                                {
+                                    varDefault: "Background button for the topic",
+                                    varOOBTextId: "btnTopicBackground__locText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        Tooltip: =Self.Text
+                        Width: =400*1
+                        X: =5*1
+                        Y: =5*1
+                        ZIndex: =1
+
+                    imgLevel3StepStatus As image:
+                        Height: =32*1
+                        Image: |-
+                            =If(
+                                ThisItem.Sequence - 1 = Value(locUserAppStage.Sequence) && ThisItem.Sequence = 1,
+                                Start_Default,
+                                If(
+                                    ThisItem.Sequence = Value(locUserAppStage.Sequence) && ThisItem.Sequence >= 1 && locUserAppStage.'Step State' = 'Step States'.'In Progress',
+                                    InProgress_Default,
+                                    If(
+                                        ThisItem.Sequence = Value(locUserAppStage.Sequence) && ThisItem.Sequence >= 1 && locUserAppStage.'Step State' = 'Step States'.Finished,
+                                        Finished_Default,
+                                        If(
+                                            ThisItem.Sequence = Value(locUserAppStage.Sequence) + 1 && locUserAppStage.'Step State' = 'Step States'.Finished,
+                                            Start_Default,
+                                            If(
+                                                ThisItem.Sequence > Value(locUserAppStage.Sequence) && ThisItem.Sequence > 1,
+                                                Lock_Default,
+                                                If(
+                                                    ThisItem.Sequence < Value(locUserAppStage.Sequence),
+                                                    Finished_Default
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        OnSelect: =Select(Parent)
+                        PaddingBottom: =4
+                        PaddingLeft: =4
+                        PaddingRight: =4
+                        PaddingTop: =4
+                        RadiusBottomLeft: =5
+                        RadiusBottomRight: =5
+                        RadiusTopLeft: =5
+                        RadiusTopRight: =5
+                        Width: =32*1
+                        X: =20*1
+                        Y: =20*1
+                        ZIndex: =2
+
+                    lblLevel3StepName As label:
+                        BorderColor: =gblAppStyles.Label.BorderColor
+                        BorderThickness: =gblAppStyles.Label.BorderThickness
+                        Color: =gblAppStyles.Label.Color
+                        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.Label.DisabledColor
+                        DisabledFill: =gblAppStyles.Label.DisabledFill
+                        Fill: =gblAppStyles.Label.Fill
+                        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        FontWeight: =FontWeight.Semibold
+                        Height: =32*1
+                        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                        HoverFill: =gblAppStyles.Label.HoverFill
+                        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                        PressedColor: =gblAppStyles.Label.PressedColor
+                        PressedFill: =gblAppStyles.Label.PressedFill
+                        Size: =gblAppStyles.Label.Size.Large
+                        Text: =ThisItem.Stage
+                        Tooltip: =Self.Text
+                        Width: =Parent.TemplateWidth - Self.X - 20
+                        Wrap: =false
+                        X: =20*1 + 32*1
+                        Y: =20*1
+                        ZIndex: =3
+
+                    lblLevel3StepDesc As label:
+                        AutoHeight: =true
+                        BorderColor: =gblAppStyles.Label.BorderColor
+                        BorderThickness: =gblAppStyles.Label.BorderThickness
+                        Color: =gblAppStyles.Label.Color
+                        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.Label.DisabledColor
+                        DisabledFill: =gblAppStyles.Label.DisabledFill
+                        Fill: =gblAppStyles.Label.Fill
+                        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        Height: =32*1
+                        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                        HoverFill: =gblAppStyles.Label.HoverFill
+                        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                        PressedColor: =gblAppStyles.Label.PressedColor
+                        PressedFill: =gblAppStyles.Label.PressedFill
+                        Size: =gblAppStyles.Label.Size.Medium
+                        Text: =ThisItem.Description
+                        Tooltip: =Self.Text
+                        Width: =Parent.TemplateWidth - Self.X - 20
+                        X: =imgLevel3StepStatus.X
+                        Y: =lblLevel3StepName.Y + lblLevel3StepName.Height
+                        ZIndex: =4
+
+                    btnLevel3StepActions As button:
+                        BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+                        BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+                        Color: =gblAppStyles.ButtonSecondary.Color
+                        DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+                        DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+                        DisplayMode: |-
+                            =If(
+                                Self.Text = "Done",
+                                DisplayMode.Edit,
+                                DisplayMode.Edit
+                            )
+                        Fill: =gblAppStyles.ButtonSecondary.Fill
+                        FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        Height: =32*1
+                        HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+                        HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+                        HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+                        OnSelect: |-
+                            =If(
+                                Self.Text = "Done",
+                                Switch(
+                                    ThisItem.Sequence,
+                                    7,
+                                    Navigate('Level 3 Step 1: Connect Screens'),
+                                    8,
+                                    Navigate('Level 3 Step 2: Publish To Teams'),
+                                    9,
+                                    Navigate('Level 3 Step 3: Share App')
+                                ),
+                                If(
+                                    Value(locUserAppStage.Sequence) = ThisItem.Sequence - 1,
+                                    If(
+                                        IsError(
+                                            Patch(
+                                                'Item Checkout App Stages',
+                                                locUserAppStage,
+                                                {
+                                                    Sequence: ThisItem.Sequence,
+                                                    'Step State': 'Step States'.'In Progress'
+                                                }
+                                            )
+                                        ),
+                                        Notify(
+                                            "Item Checkout App Stage record not updated",
+                                            NotificationType.Error
+                                        )
+                                    );
+                                    Switch(
+                                        ThisItem.Sequence,
+                                        7,
+                                        Navigate('Level 3 Step 1: Connect Screens'),
+                                        8,
+                                        Navigate('Level 3 Step 2: Publish To Teams'),
+                                        9,
+                                        Navigate('Level 3 Step 3: Share App')
+                                    ),
+                                    If(
+                                        Value(locUserAppStage.Sequence) = ThisItem.Sequence,
+                                        If(
+                                            IsError(
+                                                Patch(
+                                                    'Item Checkout App Stages',
+                                                    locUserAppStage,
+                                                    {
+                                                        Sequence: ThisItem.Sequence,
+                                                        'Step State': 'Step States'.Finished
+                                                    }
+                                                )
+                                            ),
+                                            Notify(
+                                                "Item Checkout App Stage record not updated",
+                                                NotificationType.Error
+                                            )
+                                        )
+                                    )
+                                );
+                                UpdateContext(
+                                    {
+                                        locUserAppStage: LookUp(
+                                            'Item Checkout App Stages',
+                                            'Created By'.'User Name' = gblCurrUserEmail
+                                        )
+                                    }
+                                )
+                            )
+                        PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+                        PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+                        PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+                        RadiusBottomLeft: =gblAppStyles.ButtonSecondary.RadiusBottomLeft
+                        RadiusBottomRight: =gblAppStyles.ButtonSecondary.RadiusBottomRight
+                        RadiusTopLeft: =gblAppStyles.ButtonSecondary.RadiusTopLeft
+                        RadiusTopRight: =gblAppStyles.ButtonSecondary.RadiusTopRight
+                        Size: =gblAppStyles.ButtonSecondary.Size
+                        Text: |-
+                            =If(
+                                (ThisItem.Sequence = 1 && Value(locUserAppStage.Sequence) = 0) || ThisItem.Sequence = Value(locUserAppStage.Sequence) + 1,
+                                "Start",
+                                If(
+                                    ThisItem.Sequence = Value(locUserAppStage.Sequence) && locUserAppStage.'Step State' = 'Step States'.'In Progress',
+                                    "Continue",
+                                    If(
+                                        ThisItem.Sequence = Value(locUserAppStage.Sequence) && locUserAppStage.'Step State' = 'Step States'.Finished,
+                                        "Done",
+                                        "Done"
+                                    )
+                                )
+                            )
+                        Tooltip: =Self.Text
+                        Visible: =(ThisItem.Sequence = Value(locUserAppStage.Sequence) || ThisItem.Sequence = 1) || (ThisItem.Sequence = Value(locUserAppStage.Sequence) + 1 && locUserAppStage.'Step State' = 'Step States'.Finished) || (ThisItem.Sequence < Value(locUserAppStage.Sequence))
+                        Width: =120*1
+                        X: =imgLevel3StepStatus.X
+                        Y: =btnLevel3StepBackground.Y + btnLevel3StepBackground.Height - Self.Height - 20
+                        ZIndex: =5
+
+                    imgLevel3StepChecked As image:
+                        Height: =32*1
+                        Image: =Checkmark_Default
+                        OnSelect: =Select(Parent)
+                        PaddingBottom: |-
+                            =If(
+                                ThisItem.Sequence > 1,
+                                6,
+                                6
+                            )
+                        PaddingLeft: |-
+                            =If(
+                                ThisItem.Sequence > 1,
+                                6,
+                                6
+                            )
+                        PaddingRight: |-
+                            =If(
+                                ThisItem.Sequence > 1,
+                                6,
+                                6
+                            )
+                        PaddingTop: |-
+                            =If(
+                                ThisItem.Sequence > 1,
+                                6,
+                                6
+                            )
+                        RadiusBottomLeft: =5
+                        RadiusBottomRight: =5
+                        RadiusTopLeft: =5
+                        RadiusTopRight: =5
+                        Visible: =btnLevel3StepActions.Text = "Done" && btnLevel3StepActions.Visible
+                        Width: =32*1
+                        X: =btnLevel1StepActions.X
+                        Y: =btnLevel1StepActions.Y
+                        ZIndex: =6
+
+                    btnLevel3StepForeground As button:
+                        BorderThickness: =1
+                        Color: =Transparent
+                        DisabledBorderColor: =Self.BorderColor
+                        DisabledColor: =Self.Color
+                        DisabledFill: =Self.Fill
+                        Fill: |-
+                            =If(
+                                gblThemeDark,
+                                RGBA(0, 0, 0, 0.7),
+                                gblThemeHiCo,
+                                RGBA(0, 0, 0, 0.7),
+                                RGBA(255, 255, 255, 0.7)
+                            )
+                        FocusedBorderThickness: =1
+                        Font: =Font.'Segoe UI'
+                        Height: =180*1
+                        HoverBorderColor: =Self.BorderColor
+                        HoverColor: =Self.Color
+                        HoverFill: =Self.Fill
+                        OnSelect: =Select(Parent)
+                        PressedBorderColor: =Self.BorderColor
+                        PressedColor: =Self.Color
+                        PressedFill: =Self.Fill
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                        Size: =gblAppStyles.ButtonTransparent.Size
+                        Text: |-
+                            =With(
+                                {
+                                    varDefault: "Background button for the topic",
+                                    varOOBTextId: "btnTopicBackground__locText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        Tooltip: =Self.Text
+                        Visible: =ThisItem.Sequence <> 1 && ThisItem.Sequence <> Value(locUserAppStage.Sequence)&& ThisItem.Sequence > Value(locUserAppStage.Sequence) && !(ThisItem.Sequence = Value(locUserAppStage.Sequence) + 1 && locUserAppStage.'Step State' = 'Step States'.Finished)
+                        Width: =400*1
+                        X: =5*1
+                        Y: =5*1
+                        ZIndex: =7
+
+                lblBonusLevel1Header As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: ="Bonus levels"
+                    Tooltip: =Self.Text
+                    Visible: =false
+                    Width: =Parent.Width - Self.X*2
+                    Wrap: =false
+                    X: =btnOverviewBackground.X 
+                    Y: =galLevel3.Y + galLevel3.Height + 10
+                    ZIndex: =15
+
+                galBonusLevel1 As gallery.galleryVertical:
+                    AccessibleLabel: ="Gallery of connection options"
+                    BorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                    FocusedBorderThickness: =1
+                    Height: |-
+                        =If(
+                            200 * 3 < Parent.Width - Self.X - 20,
+                            210 * 1,
+                            If(
+                                210 * 2 < Parent.Width - Self.X - 20,
+                                210 * 2,
+                                210 * 3
+                            )
+                        )
+                    Items: |-
+                        =Table(
+                            {
+                                Image: Blank(),
+                                Stage: "Mobile-friendly screens",
+                                Description: "Learn how to make apps responsive to any device.",
+                                Sequence: 10
+                            },
+                            {
+                                Image: Blank(),
+                                Stage: "Localization",
+                                Description: "Enable your app to support multiple languages.",
+                                Sequence: 11
+                            },
+                            {
+                                Image: Blank(),
+                                Stage: "Accessibility",
+                                Description: "Add app features to help users with vision, hearing, and other impairments.",
+                                Sequence: 12
+                            }
+                        )
+                    Layout: =Layout.Vertical
+                    TabIndex: |-
+                        =If(
+                            Self.Visible,
+                            0,
+                            -1
+                        )
+                    TemplateSize: =200*1
+                    Visible: =false
+                    Width: |-
+                        =If(
+                            420 * 3 < Parent.Width - Self.X - 20,
+                            420 * 3,
+                            If(
+                                420 * 2 < Parent.Width - Self.X - 20,
+                                420 * 2,
+                                420 * 1
+                            )
+                        )
+                    WrapCount: |-
+                        =If(
+                            340 * 3 < Parent.Width - Self.X - 20,
+                            3,
+                            If(
+                                340 * 2 < Parent.Width - Self.X - 20,
+                                2,
+                                1
+                            )
+                        )
+                    X: =lblBonusLevel1Header.X - 5
+                    Y: =lblBonusLevel1Header.Y + lblBonusLevel1Header.Height + 10
+                    ZIndex: =16
+
+                    btnBonusLevel1StepBackground As button:
+                        BorderThickness: =1
+                        Color: =Transparent
+                        DisabledBorderColor: =Self.BorderColor
+                        DisabledColor: =Self.Color
+                        DisabledFill: =Self.Fill
+                        Fill: |-
+                            =If(
+                                gblThemeDark,
+                                gblAppColors.NeutralWebGray220,
+                                gblThemeHiCo,
+                                Black,
+                                White
+                            )
+                        FocusedBorderThickness: =1
+                        Font: =Font.'Segoe UI'
+                        Height: =180*1
+                        HoverBorderColor: =Self.BorderColor
+                        HoverColor: =Self.Color
+                        HoverFill: =Self.Fill
+                        OnSelect: =Select(Parent)
+                        PressedBorderColor: =Self.BorderColor
+                        PressedColor: =Self.Color
+                        PressedFill: =Self.Fill
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                        Size: =gblAppStyles.ButtonTransparent.Size
+                        Text: |-
+                            =With(
+                                {
+                                    varDefault: "Background button for the topic",
+                                    varOOBTextId: "btnTopicBackground__locText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        Tooltip: =Self.Text
+                        Width: =400*1
+                        X: =5*1
+                        Y: =5*1
+                        ZIndex: =1
+
+                    imgBonusLevel1StepStatus As image:
+                        Height: =32*1
+                        Image: |-
+                            =If(
+                                ThisItem.Sequence > 10,
+                                Lock_Default,
+                                If(
+                                    ThisItem.Sequence - 1 = Value(locUserAppStage.Sequence) && ThisItem.Sequence = 1,
+                                    Start_Default,
+                                    If(
+                                        ThisItem.Sequence = Value(locUserAppStage.Sequence) && ThisItem.Sequence >= 1 && locUserAppStage.'Step State' = 'Step States'.'In Progress',
+                                        InProgress_Default,
+                                        If(
+                                            ThisItem.Sequence = Value(locUserAppStage.Sequence) && ThisItem.Sequence >= 1 && locUserAppStage.'Step State' = 'Step States'.Finished,
+                                            Finished_Default,
+                                            If(
+                                                ThisItem.Sequence = Value(locUserAppStage.Sequence) + 1 && locUserAppStage.'Step State' = 'Step States'.Finished,
+                                                Start_Default,
+                                                If(
+                                                    ThisItem.Sequence > Value(locUserAppStage.Sequence) && ThisItem.Sequence > 1,
+                                                    Lock_Default,
+                                                    If(
+                                                        ThisItem.Sequence < Value(locUserAppStage.Sequence),
+                                                        Finished_Default
+                                                    )
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        OnSelect: =Select(Parent)
+                        PaddingBottom: =4
+                        PaddingLeft: =4
+                        PaddingRight: =4
+                        PaddingTop: =4
+                        RadiusBottomLeft: =5
+                        RadiusBottomRight: =5
+                        RadiusTopLeft: =5
+                        RadiusTopRight: =5
+                        Width: =32*1
+                        X: =20*1
+                        Y: =20*1
+                        ZIndex: =2
+
+                    lblBonusLevel1StepName As label:
+                        BorderColor: =gblAppStyles.Label.BorderColor
+                        BorderThickness: =gblAppStyles.Label.BorderThickness
+                        Color: =gblAppStyles.Label.Color
+                        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.Label.DisabledColor
+                        DisabledFill: =gblAppStyles.Label.DisabledFill
+                        Fill: =gblAppStyles.Label.Fill
+                        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        FontWeight: =FontWeight.Semibold
+                        Height: =32*1
+                        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                        HoverFill: =gblAppStyles.Label.HoverFill
+                        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                        PressedColor: =gblAppStyles.Label.PressedColor
+                        PressedFill: =gblAppStyles.Label.PressedFill
+                        Size: =gblAppStyles.Label.Size.Large
+                        Text: =ThisItem.Stage
+                        Tooltip: =Self.Text
+                        Width: =Parent.TemplateWidth - Self.X - 20
+                        Wrap: =false
+                        X: =20*1 + 32*1
+                        Y: =20*1
+                        ZIndex: =3
+
+                    lblBonusLevel1StepDesc As label:
+                        AutoHeight: =true
+                        BorderColor: =gblAppStyles.Label.BorderColor
+                        BorderThickness: =gblAppStyles.Label.BorderThickness
+                        Color: =gblAppStyles.Label.Color
+                        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.Label.DisabledColor
+                        DisabledFill: =gblAppStyles.Label.DisabledFill
+                        Fill: =gblAppStyles.Label.Fill
+                        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        Height: =32*1
+                        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                        HoverFill: =gblAppStyles.Label.HoverFill
+                        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                        PressedColor: =gblAppStyles.Label.PressedColor
+                        PressedFill: =gblAppStyles.Label.PressedFill
+                        Size: =gblAppStyles.Label.Size.Medium
+                        Text: =ThisItem.Description
+                        Tooltip: =Self.Text
+                        Width: =Parent.TemplateWidth - Self.X - 20
+                        X: =imgBonusLevel1StepStatus.X
+                        Y: =lblBonusLevel1StepName.Y + lblBonusLevel1StepName.Height
+                        ZIndex: =4
+
+                    btnBonusLevel1StepActions As button:
+                        BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+                        BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+                        Color: =gblAppStyles.ButtonSecondary.Color
+                        DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+                        DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+                        DisplayMode: |-
+                            =If(
+                                Self.Text = "Done",
+                                DisplayMode.View,
+                                DisplayMode.Edit
+                            )
+                        Fill: =gblAppStyles.ButtonSecondary.Fill
+                        FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        Height: =32*1
+                        HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+                        HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+                        HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+                        OnSelect: |-
+                            =If(
+                                Value(locUserAppStage.Sequence) = ThisItem.Sequence - 1,
+                                If(
+                                    IsError(
+                                        Patch(
+                                            'Item Checkout App Stages',
+                                            locUserAppStage,
+                                            {
+                                                Sequence: ThisItem.Sequence,
+                                                'Step State': 'Step States'.'In Progress'
+                                            }
+                                        )
+                                    ),
+                                    Notify(
+                                        "Item Checkout App Stage record not updated",
+                                        NotificationType.Error
+                                    )
+                                ),
+                                If(
+                                    Value(locUserAppStage.Sequence) = ThisItem.Sequence,
+                                    If(
+                                        IsError(
+                                            Patch(
+                                                'Item Checkout App Stages',
+                                                locUserAppStage,
+                                                {
+                                                    Sequence: ThisItem.Sequence,
+                                                    'Step State': 'Step States'.Finished
+                                                }
+                                            )
+                                        ),
+                                        Notify(
+                                            "Item Checkout App Stage record not updated",
+                                            NotificationType.Error
+                                        )
+                                    )
+                                )
+                            );
+                            UpdateContext(
+                                {
+                                    locUserAppStage: LookUp(
+                                        'Item Checkout App Stages',
+                                        'Created By'.'User Name' = gblCurrUserEmail
+                                    )
+                                }
+                            )
+                        PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+                        PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+                        PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+                        RadiusBottomLeft: =gblAppStyles.ButtonSecondary.RadiusBottomLeft
+                        RadiusBottomRight: =gblAppStyles.ButtonSecondary.RadiusBottomRight
+                        RadiusTopLeft: =gblAppStyles.ButtonSecondary.RadiusTopLeft
+                        RadiusTopRight: =gblAppStyles.ButtonSecondary.RadiusTopRight
+                        Size: =gblAppStyles.ButtonSecondary.Size
+                        Text: |-
+                            =If(
+                                (ThisItem.Sequence = 1 && Value(locUserAppStage.Sequence) = 0) || ThisItem.Sequence = Value(locUserAppStage.Sequence) + 1,
+                                "Start",
+                                If(
+                                    ThisItem.Sequence = Value(locUserAppStage.Sequence) && locUserAppStage.'Step State' = 'Step States'.'In Progress',
+                                    "Continue",
+                                    If(
+                                        ThisItem.Sequence = Value(locUserAppStage.Sequence) && locUserAppStage.'Step State' = 'Step States'.Finished,
+                                        "Done",
+                                        "Done"
+                                    )
+                                )
+                            )
+                        Tooltip: =Self.Text
+                        Visible: =((ThisItem.Sequence = Value(locUserAppStage.Sequence) || ThisItem.Sequence = 1) || (ThisItem.Sequence = Value(locUserAppStage.Sequence) + 1 && locUserAppStage.'Step State' = 'Step States'.Finished) || (ThisItem.Sequence < Value(locUserAppStage.Sequence))) && ThisItem.Sequence = 10 && false
+                        Width: =120*1
+                        X: =imgBonusLevel1StepStatus.X
+                        Y: =btnBonusLevel1StepBackground.Y + btnBonusLevel1StepBackground.Height - Self.Height - 20
+                        ZIndex: =5
+
+                    imgBonusLevel1StepChecked As image:
+                        Height: =32*1
+                        Image: =Checkmark_Default
+                        OnSelect: =Select(Parent)
+                        PaddingBottom: |-
+                            =If(
+                                ThisItem.Sequence > 1,
+                                2,
+                                6
+                            )
+                        PaddingLeft: |-
+                            =If(
+                                ThisItem.Sequence > 1,
+                                2,
+                                6
+                            )
+                        PaddingRight: |-
+                            =If(
+                                ThisItem.Sequence > 1,
+                                2,
+                                6
+                            )
+                        PaddingTop: |-
+                            =If(
+                                ThisItem.Sequence > 1,
+                                2,
+                                6
+                            )
+                        RadiusBottomLeft: =5
+                        RadiusBottomRight: =5
+                        RadiusTopLeft: =5
+                        RadiusTopRight: =5
+                        Visible: =btnBonusLevel1StepActions.Text = "Done" && ThisItem.Sequence = 10  && btnBonusLevel1StepActions.Visible
+                        Width: =32*1
+                        X: =btnLevel1StepActions.X
+                        Y: =btnLevel1StepActions.Y
+                        ZIndex: =6
+
+                    lblBonusLevel1ComingSoon As label:
+                        AutoHeight: =true
+                        BorderColor: =gblAppStyles.Label.BorderColor
+                        BorderThickness: =gblAppStyles.Label.BorderThickness
+                        Color: =gblAppStyles.Label.Color
+                        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.Label.DisabledColor
+                        DisabledFill: =gblAppStyles.Label.DisabledFill
+                        Fill: =gblAppStyles.Label.Fill
+                        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        Height: =32*1
+                        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                        HoverFill: =gblAppStyles.Label.HoverFill
+                        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                        PressedColor: =gblAppStyles.Label.PressedColor
+                        PressedFill: =gblAppStyles.Label.PressedFill
+                        Size: =gblAppStyles.Label.Size.Medium
+                        Text: |-
+                            =If(
+                                ThisItem.Sequence = 9,
+                                ThisItem.Description,
+                                "Coming soon"
+                            )
+                        Tooltip: =Self.Text
+                        Visible: =ThisItem.Sequence <> 10 || true
+                        Width: =Parent.TemplateWidth - Self.X - 20
+                        X: =imgBonusLevel1StepStatus.X
+                        Y: =btnBonusLevel1StepActions.Y
+                        ZIndex: =7
+
+                    btnBonusLevel1StepForeground As button:
+                        BorderThickness: =1
+                        Color: =Transparent
+                        DisabledBorderColor: =Self.BorderColor
+                        DisabledColor: =Self.Color
+                        DisabledFill: =Self.Fill
+                        Fill: |-
+                            =If(
+                                gblThemeDark,
+                                RGBA(0, 0, 0, 0.7),
+                                gblThemeHiCo,
+                                RGBA(0, 0, 0, 0.7),
+                                RGBA(255, 255, 255, 0.7)
+                            )
+                        FocusedBorderThickness: =1
+                        Font: =Font.'Segoe UI'
+                        Height: =180*1
+                        HoverBorderColor: =Self.BorderColor
+                        HoverColor: =Self.Color
+                        HoverFill: =Self.Fill
+                        OnSelect: =Select(Parent)
+                        PressedBorderColor: =Self.BorderColor
+                        PressedColor: =Self.Color
+                        PressedFill: =Self.Fill
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                        Size: =gblAppStyles.ButtonTransparent.Size
+                        Text: |-
+                            =With(
+                                {
+                                    varDefault: "Background button for the topic",
+                                    varOOBTextId: "btnTopicBackground__locText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        Tooltip: =Self.Text
+                        Visible: =ThisItem.Sequence <> 1 && ThisItem.Sequence <> Value(locUserAppStage.Sequence)&& ThisItem.Sequence > Value(locUserAppStage.Sequence) && !(ThisItem.Sequence = Value(locUserAppStage.Sequence) + 1 && locUserAppStage.'Step State' = 'Step States'.Finished) ||  ThisItem.Sequence > 10 || true
+                        Width: =400*1
+                        X: =5*1
+                        Y: =5*1
+                        ZIndex: =8
+
+                lblBonusLevel2Header As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: ="Bonus level - Teams integration, edit other apps"
+                    Tooltip: =Self.Text
+                    Visible: =false
+                    Width: =Parent.Width - Self.X*2
+                    Wrap: =false
+                    X: =btnOverviewBackground.X 
+                    Y: =galBonusLevel1.Y + galBonusLevel1.Height + 10
+                    ZIndex: =17
+
+                galBonusLevel2 As gallery.galleryVertical:
+                    AccessibleLabel: ="Gallery of connection options"
+                    BorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                    FocusedBorderThickness: =1
+                    Height: |-
+                        =If(
+                            200 * 3 < Parent.Width - Self.X - 20,
+                            210 * 1,
+                            If(
+                                210 * 2 < Parent.Width - Self.X - 20,
+                                210 * 2,
+                                210 * 3
+                            )
+                        )
+                    Items: |-
+                        =Table(
+                            {
+                                Image: Blank(),
+                                Stage: "Send a message",
+                                Description: "Set permission and share apps with colleagues.",
+                                Sequence: 13
+                            },
+                            {
+                                Image: Blank(),
+                                Stage: "Integrate with Tasks",
+                                Description: "Integrate with Tasks by Planner and To Do to track items and get notified when something needs to be returned.",
+                                Sequence: 14
+                            },
+                            {
+                                Image: Blank(),
+                                Stage: "Customize another app",
+                                Description: "Customize the Employee ideas Power Apps template. ",
+                                Sequence: 15
+                            }
+                        )
+                    Layout: =Layout.Vertical
+                    TabIndex: |-
+                        =If(
+                            Self.Visible,
+                            0,
+                            -1
+                        )
+                    TemplateSize: =200*1
+                    Visible: =false
+                    Width: |-
+                        =If(
+                            420 * 3 < Parent.Width - Self.X - 20,
+                            420 * 3,
+                            If(
+                                420 * 2 < Parent.Width - Self.X - 20,
+                                420 * 2,
+                                420 * 1
+                            )
+                        )
+                    WrapCount: |-
+                        =If(
+                            340 * 3 < Parent.Width - Self.X - 20,
+                            3,
+                            If(
+                                340 * 2 < Parent.Width - Self.X - 20,
+                                2,
+                                1
+                            )
+                        )
+                    X: =lblBonusLevel2Header.X - 5
+                    Y: =lblBonusLevel2Header.Y + lblBonusLevel2Header.Height + 10
+                    ZIndex: =18
+
+                    btnBonusLevel2StepBackground As button:
+                        BorderThickness: =1
+                        Color: =Transparent
+                        DisabledBorderColor: =Self.BorderColor
+                        DisabledColor: =Self.Color
+                        DisabledFill: =Self.Fill
+                        Fill: |-
+                            =If(
+                                gblThemeDark,
+                                gblAppColors.NeutralWebGray220,
+                                gblThemeHiCo,
+                                Black,
+                                White
+                            )
+                        FocusedBorderThickness: =1
+                        Font: =Font.'Segoe UI'
+                        Height: =180*1
+                        HoverBorderColor: =Self.BorderColor
+                        HoverColor: =Self.Color
+                        HoverFill: =Self.Fill
+                        OnSelect: =Select(Parent)
+                        PressedBorderColor: =Self.BorderColor
+                        PressedColor: =Self.Color
+                        PressedFill: =Self.Fill
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                        Size: =gblAppStyles.ButtonTransparent.Size
+                        Text: |-
+                            =With(
+                                {
+                                    varDefault: "Background button for the topic",
+                                    varOOBTextId: "btnTopicBackground__locText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        Tooltip: =Self.Text
+                        Width: =400*1
+                        X: =5*1
+                        Y: =5*1
+                        ZIndex: =1
+
+                    imgBonusLevel2StepStatus As image:
+                        Height: =32*1
+                        Image: |-
+                            =If(
+                                ThisItem.Sequence > 1,
+                                Lock_Default,
+                                Start_Default
+                            )
+                        OnSelect: =Select(Parent)
+                        PaddingBottom: |-
+                            =If(
+                                ThisItem.Sequence > 1,
+                                2,
+                                6
+                            )
+                        PaddingLeft: |-
+                            =If(
+                                ThisItem.Sequence > 1,
+                                2,
+                                6
+                            )
+                        PaddingRight: |-
+                            =If(
+                                ThisItem.Sequence > 1,
+                                2,
+                                6
+                            )
+                        PaddingTop: |-
+                            =If(
+                                ThisItem.Sequence > 1,
+                                2,
+                                6
+                            )
+                        RadiusBottomLeft: =5
+                        RadiusBottomRight: =5
+                        RadiusTopLeft: =5
+                        RadiusTopRight: =5
+                        Width: =32*1
+                        X: =20*1
+                        Y: =20*1
+                        ZIndex: =2
+
+                    lblBonusLevel2StepName As label:
+                        BorderColor: =gblAppStyles.Label.BorderColor
+                        BorderThickness: =gblAppStyles.Label.BorderThickness
+                        Color: =gblAppStyles.Label.Color
+                        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.Label.DisabledColor
+                        DisabledFill: =gblAppStyles.Label.DisabledFill
+                        Fill: =gblAppStyles.Label.Fill
+                        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        FontWeight: =FontWeight.Semibold
+                        Height: =32*1
+                        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                        HoverFill: =gblAppStyles.Label.HoverFill
+                        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                        PressedColor: =gblAppStyles.Label.PressedColor
+                        PressedFill: =gblAppStyles.Label.PressedFill
+                        Size: =gblAppStyles.Label.Size.Large
+                        Text: =ThisItem.Stage
+                        Tooltip: =Self.Text
+                        Width: =Parent.TemplateWidth - Self.X - 20
+                        Wrap: =false
+                        X: =20*1 + 32*1
+                        Y: =20*1
+                        ZIndex: =3
+
+                    lblBonusLevel2StepDesc As label:
+                        AutoHeight: =true
+                        BorderColor: =gblAppStyles.Label.BorderColor
+                        BorderThickness: =gblAppStyles.Label.BorderThickness
+                        Color: =gblAppStyles.Label.Color
+                        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.Label.DisabledColor
+                        DisabledFill: =gblAppStyles.Label.DisabledFill
+                        Fill: =gblAppStyles.Label.Fill
+                        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        Height: =32*1
+                        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                        HoverFill: =gblAppStyles.Label.HoverFill
+                        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                        PressedColor: =gblAppStyles.Label.PressedColor
+                        PressedFill: =gblAppStyles.Label.PressedFill
+                        Size: =gblAppStyles.Label.Size.Medium
+                        Text: =ThisItem.Description
+                        Tooltip: =Self.Text
+                        Width: =Parent.TemplateWidth - Self.X - 20
+                        X: =imgBonusLevel2StepStatus.X
+                        Y: =lblBonusLevel2StepName.Y + lblBonusLevel2StepName.Height
+                        ZIndex: =4
+
+                    btnBonusLevel2StepActions As button:
+                        BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+                        BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+                        Color: =gblAppStyles.ButtonSecondary.Color
+                        DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+                        DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+                        Fill: =gblAppStyles.ButtonSecondary.Fill
+                        FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        Height: =32*1
+                        HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+                        HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+                        HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+                        OnSelect: |-
+                            =If(
+                                Value(locUserAppStage.Sequence) = ThisItem.Sequence - 1,
+                                If(
+                                    IsError(
+                                        Patch(
+                                            'Item Checkout App Stages',
+                                            locUserAppStage,
+                                            {
+                                                Sequence: ThisItem.Sequence,
+                                                'Step State': 'Step States'.'In Progress'
+                                            }
+                                        )
+                                    ),
+                                    Notify(
+                                        "Item Checkout App Stage record not updated",
+                                        NotificationType.Error
+                                    )
+                                ),
+                                If(
+                                    IsError(
+                                        Patch(
+                                            'Item Checkout App Stages',
+                                            locUserAppStage,
+                                            {
+                                                Sequence: ThisItem.Sequence,
+                                                'Step State': 'Step States'.Finished
+                                            }
+                                        )
+                                    ),
+                                    Notify(
+                                        "Item Checkout App Stage record not updated",
+                                        NotificationType.Error
+                                    )
+                                )
+                            )
+                        PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+                        PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+                        PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+                        RadiusBottomLeft: =gblAppStyles.ButtonSecondary.RadiusBottomLeft
+                        RadiusBottomRight: =gblAppStyles.ButtonSecondary.RadiusBottomRight
+                        RadiusTopLeft: =gblAppStyles.ButtonSecondary.RadiusTopLeft
+                        RadiusTopRight: =gblAppStyles.ButtonSecondary.RadiusTopRight
+                        Size: =gblAppStyles.ButtonSecondary.Size
+                        Text: |-
+                            =If(
+                                ThisItem.Sequence = 1 && Value(locUserAppStage.Sequence) = 0,
+                                "Start",
+                                If(
+                                    ThisItem.Sequence = Value(locUserAppStage.Sequence),
+                                    "Continue"
+                                )
+                            )
+                        Tooltip: =Self.Text
+                        Visible: =ThisItem.Sequence = Value(locUserAppStage.Sequence) || ThisItem.Sequence = 1
+                        Width: =120*1
+                        X: =imgBonusLevel2StepStatus.X
+                        Y: =btnBonusLevel2StepBackground.Y + btnBonusLevel2StepBackground.Height - Self.Height - 20
+                        ZIndex: =5
+
+                    imgBonusLevel2StepChecked As label:
+                        AutoHeight: =true
+                        BorderColor: =gblAppStyles.Label.BorderColor
+                        BorderThickness: =gblAppStyles.Label.BorderThickness
+                        Color: =gblAppStyles.Label.Color
+                        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.Label.DisabledColor
+                        DisabledFill: =gblAppStyles.Label.DisabledFill
+                        Fill: =gblAppStyles.Label.Fill
+                        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        Height: =32*1
+                        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                        HoverFill: =gblAppStyles.Label.HoverFill
+                        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                        PressedColor: =gblAppStyles.Label.PressedColor
+                        PressedFill: =gblAppStyles.Label.PressedFill
+                        Size: =gblAppStyles.Label.Size.Medium
+                        Text: |-
+                            =If(
+                                ThisItem.Sequence = 9,
+                                ThisItem.Description,
+                                "Coming soon"
+                            )
+                        Tooltip: =Self.Text
+                        Width: =Parent.TemplateWidth - Self.X - 20
+                        X: =imgBonusLevel1StepStatus.X
+                        Y: =btnBonusLevel1StepActions.Y
+                        ZIndex: =6
+
+                    btnBonusLevel2StepForeground As button:
+                        BorderThickness: =1
+                        Color: =Transparent
+                        DisabledBorderColor: =Self.BorderColor
+                        DisabledColor: =Self.Color
+                        DisabledFill: =Self.Fill
+                        Fill: |-
+                            =If(
+                                gblThemeDark,
+                                RGBA(0, 0, 0, 0.7),
+                                gblThemeHiCo,
+                                RGBA(0, 0, 0, 0.7),
+                                RGBA(255, 255, 255, 0.7)
+                            )
+                        FocusedBorderThickness: =1
+                        Font: =Font.'Segoe UI'
+                        Height: =180*1
+                        HoverBorderColor: =Self.BorderColor
+                        HoverColor: =Self.Color
+                        HoverFill: =Self.Fill
+                        OnSelect: =Select(Parent)
+                        PressedBorderColor: =Self.BorderColor
+                        PressedColor: =Self.Color
+                        PressedFill: =Self.Fill
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                        Size: =gblAppStyles.ButtonTransparent.Size
+                        Text: |-
+                            =With(
+                                {
+                                    varDefault: "Background button for the topic",
+                                    varOOBTextId: "btnTopicBackground__locText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        Tooltip: =Self.Text
+                        Visible: =ThisItem.Sequence <> 1
+                        Width: =400*1
+                        X: =5*1
+                        Y: =5*1
+                        ZIndex: =7
+
+                lblAchievementsHeader As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: ="Achievements"
+                    Tooltip: =Self.Text
+                    Width: =300
+                    Wrap: =false
+                    X: =Parent.Width - Self.Width - 20
+                    Y: =btnOverviewBackground.Y + 10
+                    ZIndex: =20
+
+                galBadges As gallery.galleryVertical:
+                    AccessibleLabel: ="Gallery of badges"
+                    Height: =161
+                    Items: |-
+                        =Table(
+                            {Level: "Beginner - Completed Level 1", Sequence: 1},
+                            {Level: "Advanced - Completed Level 2", Sequence: 2},
+                            {Level: "Expert - Completed Level 3", Sequence: 3}
+                        )
+                    Layout: =Layout.Vertical
+                    TemplateSize: =43
+                    Width: =Parent.Width - Self.X - 30
+                    X: =lblAchievementsHeader.X
+                    Y: =lblAchievementsHeader.Y + lblAchievementsHeader.Height
+                    ZIndex: =21
+
+                    btnBadgeBackground As button:
+                        BorderThickness: =1
+                        Color: =Transparent
+                        DisabledBorderColor: =Self.BorderColor
+                        DisabledColor: =Self.Color
+                        DisabledFill: =Self.Fill
+                        Fill: |-
+                            =If(
+                                gblThemeDark,
+                                gblAppColors.NeutralWebGray220,
+                                gblThemeHiCo,
+                                Black,
+                                White
+                            )
+                        FocusedBorderThickness: =1
+                        Font: =Font.'Segoe UI'
+                        Height: =43
+                        HoverBorderColor: =Self.BorderColor
+                        HoverColor: =Self.Color
+                        HoverFill: =Self.Fill
+                        OnSelect: =Select(Parent)
+                        PressedBorderColor: =Self.BorderColor
+                        PressedColor: =Self.Color
+                        PressedFill: =Self.Fill
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                        Size: =gblAppStyles.ButtonTransparent.Size
+                        Text: |-
+                            =With(
+                                {
+                                    varDefault: "Background button for the topic",
+                                    varOOBTextId: "btnTopicBackground__locText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        Tooltip: =Self.Text
+                        Width: =Parent.TemplateWidth - Self.X*2
+                        ZIndex: =1
+
+                    lblBadgeName As label:
+                        BorderColor: =gblAppStyles.Label.BorderColor
+                        BorderThickness: =gblAppStyles.Label.BorderThickness
+                        Color: =gblAppStyles.Label.Color
+                        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.Label.DisabledColor
+                        DisabledFill: =gblAppStyles.Label.DisabledFill
+                        Fill: =gblAppStyles.Label.Fill
+                        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        Height: =31
+                        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                        HoverColor: =gblAppStyles.Label.HoverColor
+                        HoverFill: =gblAppStyles.Label.HoverFill
+                        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                        PressedColor: =gblAppStyles.Label.PressedColor
+                        PressedFill: =gblAppStyles.Label.PressedFill
+                        Size: =gblAppStyles.Label.Size.Medium
+                        Text: =ThisItem.Level
+                        Tooltip: =Self.Text
+                        Width: =Parent.TemplateWidth - Self.X - 20
+                        X: =40*1
+                        Y: =btnBadgeBackground.Y + (btnBadgeBackground.Height - Self.Height) / 2
+                        ZIndex: =2
+
+                    imgBadgeIcon As image:
+                        Height: =32
+                        Image: |-
+                            =If(
+                                ThisItem.Sequence = 1 && ((Value(locUserAppStage.Sequence) = 3 && locUserAppStage.'Step State' = 'Step States'.Finished) || Value(locUserAppStage.Sequence) > 3),
+                                Reward_Default,
+                                If(
+                                    ThisItem.Sequence = 2 && ((Value(locUserAppStage.Sequence) = 6 && locUserAppStage.'Step State' = 'Step States'.Finished) || Value(locUserAppStage.Sequence) > 6),
+                                    Reward_Default,
+                                    If(
+                                        ThisItem.Sequence = 3 && ((Value(locUserAppStage.Sequence) = 9 && locUserAppStage.'Step State' = 'Step States'.Finished) || Value(locUserAppStage.Sequence) > 9),
+                                        Reward_Default,
+                                        Lock_Default
+                                    )
+                                )
+                            )
+                        OnSelect: =Select(Parent)
+                        PaddingBottom: =2
+                        PaddingLeft: =2
+                        PaddingRight: =2
+                        PaddingTop: =2
+                        Width: =32
+                        X: =10*1
+                        Y: =btnBadgeBackground.Y + (btnBadgeBackground.Height - Self.Height) / 2
+                        ZIndex: =3
+
+                    btnBadgeForeground As button:
+                        BorderThickness: =1
+                        Color: =Transparent
+                        DisabledBorderColor: =Self.BorderColor
+                        DisabledColor: =Self.Color
+                        DisabledFill: =Self.Fill
+                        Fill: |-
+                            =If(
+                                gblThemeDark,
+                                RGBA(0, 0, 0, 0.7),
+                                gblThemeHiCo,
+                                RGBA(0, 0, 0, 0.7),
+                                RGBA(255, 255, 255, 0.7)
+                            )
+                        FocusedBorderThickness: =1
+                        Font: =Font.'Segoe UI'
+                        Height: =43
+                        HoverBorderColor: =Self.BorderColor
+                        HoverColor: =Self.Color
+                        HoverFill: =Self.Fill
+                        OnSelect: =Select(Parent)
+                        PressedBorderColor: =Self.BorderColor
+                        PressedColor: =Self.Color
+                        PressedFill: =Self.Fill
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                        Size: =gblAppStyles.ButtonTransparent.Size
+                        Text: |-
+                            =With(
+                                {
+                                    varDefault: "Background button for the topic",
+                                    varOOBTextId: "btnTopicBackground__locText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        Tooltip: =Self.Text
+                        Visible: |-
+                            =If(
+                                ThisItem.Sequence = 1 && ((Value(locUserAppStage.Sequence) = 3 && locUserAppStage.'Step State' = 'Step States'.Finished) || Value(locUserAppStage.Sequence) > 3),
+                                false,
+                                If(
+                                    ThisItem.Sequence = 2 && ((Value(locUserAppStage.Sequence) = 6 && locUserAppStage.'Step State' = 'Step States'.Finished) || Value(locUserAppStage.Sequence) > 6),
+                                    false,
+                                    If(
+                                        ThisItem.Sequence = 3 && ((Value(locUserAppStage.Sequence) = 9 && locUserAppStage.'Step State' = 'Step States'.Finished) || Value(locUserAppStage.Sequence) > 9),
+                                        false,
+                                        true
+                                    )
+                                )
+                            )
+                        Width: =btnBadgeBackground.Width
+                        ZIndex: =4
+
+                HtmlText1_11 As htmlViewer:
+                    AutoHeight: =true
+                    BorderColor: =gblAppStyles.HTML.BorderColor
+                    BorderThickness: =gblAppStyles.HTML.BorderThickness
+                    Color: =gblAppStyles.ButtonPrimary.Color
+                    DisabledBorderColor: =gblAppStyles.HTML.DisabledBorderColor
+                    DisabledFill: =gblAppStyles.HTML.DisabledFill
+                    Fill: =gblAppStyles.ButtonPrimary.Fill
+                    Font: =Font.'Segoe UI'
+                    HoverBorderColor: =gblAppStyles.HTML.HoverBorderColor
+                    HtmlText: |-
+                        ="
+                        <div style='width: 100%; overflow: hidden;'>
+                         
+                            
+                            <div style='float: left; padding-left: 1em'>
+                                Play this app with <strong>&lt;F5&gt;</strong> or the play button in the top right corner to interact with the screen
+                            </div>
+                            <div style='clear: both'></div>
+                          
+                            
+                        
+                        </div>
+                          "
+                    PaddingLeft: =0
+                    Size: =gblAppStyles.HTML.Size.Medium
+                    Visible: =IsBlank(Param("tenantId"))
+                    Width: =lblOverviewDesc.Width
+                    X: =btnPreviewApp_Overview.X
+                    Y: =btnPreviewApp_Overview.Y + btnPreviewApp_Overview.Height + 20
+                    ZIndex: =22
+

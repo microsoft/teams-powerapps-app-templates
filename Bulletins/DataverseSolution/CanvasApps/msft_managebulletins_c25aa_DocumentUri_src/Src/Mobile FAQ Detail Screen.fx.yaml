@@ -1,0 +1,1864 @@
+"'Mobile FAQ Detail Screen' As screen":
+    Fill: =gblAppStyles.Background.Fill
+
+    conMobileFAQDetail_Footer As groupContainer:
+        Height: =btnMobileFAQDetail_Save.Height + (2*gblPadding.Page)
+        Width: =Parent.Width
+        X: =0*0
+        Y: =Parent.Height - Self.Height
+        ZIndex: =1
+
+        btnMobileFAQDetail_Save As button:
+            BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+            BorderThickness: |-
+                =If(
+                    Self.DisplayMode = DisplayMode.Disabled,
+                    1.5,
+                    gblAppStyles.ButtonSecondary.BorderThickness
+                )
+            Color: =gblAppStyles.ButtonSecondary.Color
+            DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+            DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+            DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+            DisplayMode: |-
+                =If(
+                    And(
+                        !IsBlankOrError(txtMobileFAQDetail_Question.Text),
+                        !IsBlankOrError(locValue_Category),
+                        !IsBlankOrError(txtMobileFAQDetail_Answer.Text)
+                    ),
+                    DisplayMode.Edit,
+                    DisplayMode.Disabled
+                )
+            Fill: =gblAppStyles.ButtonSecondary.Fill
+            FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            Height: =44
+            HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+            HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+            HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+            OnSelect: |
+                =// Block User Input
+                UpdateContext({locBlockUserInput: true});
+                // Patch record
+                Set(
+                    gblRecordBulletinFAQ,
+                    Patch(
+                        'Bulletin FAQs',
+                        {
+                            'Bulletin FAQ': gblRecordBulletinFAQ.'Bulletin FAQ',
+                            Category: locValue_Category,
+                            Question: txtMobileFAQDetail_Question.Text,
+                            Answer: txtMobileFAQDetail_Answer.Text,
+                            'Featured?': If(
+                                tglMobileFAQDetail_Featured.Value,
+                                'Featured? (Bulletin FAQs)'.Yes,
+                                'Featured? (Bulletin FAQs)'.No
+                            ),
+                            'Ready for review?': If(
+                                tglMobileFAQDetail_ReadyForReview.Value,
+                                'Ready for review? (Bulletin FAQs)'.Yes,
+                                'Ready for review? (Bulletin FAQs)'.No
+                            ),
+                            'Approval Status': If(
+                                tglMobileFAQDetail_ReadyForReview.Value,
+                                'Bulletin FAQ Approval Status'.Pending,
+                                'Bulletin FAQ Approval Status'.Draft
+                            )
+                        }
+                    )
+                );
+                // Navigate Back
+                Navigate(
+                    'Mobile FAQs Screen',
+                    ScreenTransition.None
+                );
+                // Reset Controls and Variables
+                Reset(tglMobileFAQDetail_ReadyForReview);
+                Reset(txtMobileFAQDetail_Question);
+                Reset(txtMobileFAQDetail_Answer);
+                Reset(tglMobileFAQDetail_Featured);
+                UpdateContext({locValue_Category: Blank()});
+                // Unblock User Input
+                UpdateContext({locBlockUserInput: false});
+            PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+            PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+            PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+            RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+            RadiusBottomRight: =gblAppStyles.ButtonPrimary.RadiusBottomRight
+            RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+            RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+            Size: =gblAppStyles.ButtonPrimary.Size
+            Text: |-
+                =With(
+                {
+                varDefault: "Save",
+                varOOBTextId: "btnMobileFAQDetail_Save__Text"
+                },
+                With(
+                {
+                varLocalizedText: LookUp(
+                colLocalization,
+                OOBTextId = varOOBTextId,
+                LocalizedText
+                )
+                },
+                Coalesce(
+                varLocalizedText,
+                varDefault
+                )
+                )
+                )
+            Tooltip: |-
+                =With(
+                {
+                varDefault: "Click to save this FAQ",
+                varOOBTextId: "btnMobileFAQDetail_Save__Tooltip"
+                },
+                With(
+                {
+                varLocalizedText: LookUp(
+                colLocalization,
+                OOBTextId = varOOBTextId,
+                LocalizedText
+                )
+                },
+                Coalesce(
+                varLocalizedText,
+                varDefault
+                )
+                )
+                )
+            Width: |-
+                =If(
+                    gblUserIsTeamOwner,
+                    (Parent.Width * .5) - Self.X - (gblPadding.Page / 2),
+                    Parent.Width - Self.X - gblPadding.Page
+                )
+            X: =gblPadding.Page
+            Y: =Parent.Height - Self.Height -gblPadding.Page
+            ZIndex: =1
+
+        btnMobileFAQDetail_Approve As button:
+            BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+            BorderThickness: |-
+                =If(
+                    Self.DisplayMode = DisplayMode.Disabled,
+                    1.5,
+                    gblAppStyles.ButtonPrimary.BorderThickness
+                )
+            Color: =gblAppStyles.ButtonPrimary.Color
+            DisabledBorderColor: =gblAppStyles.ButtonPrimary.DisabledBorderColor
+            DisabledColor: =gblAppStyles.ButtonPrimary.DisabledColor
+            DisabledFill: =gblAppStyles.ButtonPrimary.DisabledFill
+            DisplayMode: |-
+                =If(
+                    And(
+                        !IsBlankOrError(txtMobileFAQDetail_Question.Text),
+                        !IsBlankOrError(locValue_Category),
+                        !IsBlankOrError(txtMobileFAQDetail_Answer.Text)
+                    ),
+                    DisplayMode.Edit,
+                    DisplayMode.Disabled
+                )
+            Fill: =gblAppStyles.ButtonPrimary.Fill
+            FocusedBorderColor: =gblAppStyles.ButtonPrimary.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.ButtonPrimary.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            Height: =44
+            HoverBorderColor: =gblAppStyles.ButtonPrimary.HoverBorderColor
+            HoverColor: =gblAppStyles.ButtonPrimary.HoverColor
+            HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+            OnSelect: |
+                =// Block User Input
+                UpdateContext({locBlockUserInput: true});
+                // Patch record, and update variable
+                Set(
+                    gblRecordBulletinFAQ,
+                    Patch(
+                        'Bulletin FAQs',
+                        {
+                            'Bulletin FAQ': gblRecordBulletinFAQ.'Bulletin FAQ',
+                            Category: locValue_Category,
+                            Question: txtMobileFAQDetail_Question.Text,
+                            Answer: txtMobileFAQDetail_Answer.Text,
+                            'Featured?': If(
+                                tglMobileFAQDetail_Featured.Value,
+                                'Featured? (Bulletin FAQs)'.Yes,
+                                'Featured? (Bulletin FAQs)'.No
+                            ),
+                            'Ready for review?': 'Ready for review? (Bulletin FAQs)'.Yes,
+                            'Approval Status': 'Bulletin FAQ Approval Status'.Approved
+                        }
+                    )
+                );
+                // Unblock User Input
+                UpdateContext({locBlockUserInput: false});
+            PressedBorderColor: =gblAppStyles.ButtonPrimary.PressedBorderColor
+            PressedColor: =gblAppStyles.ButtonPrimary.PressedColor
+            PressedFill: =gblAppStyles.ButtonPrimary.PressedFill
+            RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+            RadiusBottomRight: =gblAppStyles.ButtonPrimary.RadiusBottomRight
+            RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+            RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+            Size: =gblAppStyles.ButtonPrimary.Size
+            Text: |
+                =With(
+                {
+                varDefault: "Approve",
+                varOOBTextId: "btnMobileFAQDetail_Approve__Text"
+                },
+                With(
+                {
+                varLocalizedText: LookUp(
+                colLocalization,
+                OOBTextId = varOOBTextId,
+                LocalizedText
+                )
+                },
+                Coalesce(
+                varLocalizedText,
+                varDefault
+                )
+                )
+                )
+            Tooltip: |-
+                =With(
+                {
+                varDefault: "Click to approve this FAQ",
+                varOOBTextId: "btnMobileFAQDetail_Approve__Tooltip"
+                },
+                With(
+                {
+                varLocalizedText: LookUp(
+                colLocalization,
+                OOBTextId = varOOBTextId,
+                LocalizedText
+                )
+                },
+                Coalesce(
+                varLocalizedText,
+                varDefault
+                )
+                )
+                )
+            Visible: =gblUserIsTeamOwner
+            Width: =Parent.Width - Self.X - gblPadding.Page
+            X: =(Parent.Width * .5) + (gblPadding.Page / 2)
+            Y: =Parent.Height - Self.Height -gblPadding.Page
+            ZIndex: =2
+
+    cnvMobileFAQDetail As fluidGrid.fluidGridWithBlankCard:
+        BorderThickness: =0
+        Height: =conMobileFAQDetail_Footer.Y - Self.Y
+        Width: =Parent.Width // 320
+        Y: =conMobileFAQDetail_Header.Y + conMobileFAQDetail_Header.Height
+        ZIndex: =2
+
+        dtcMobileFAQDetail_Category As dataCard:
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            BorderThickness: =0
+            DisplayMode: =DisplayMode.Edit
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =shpMobileFAQDetail_Category_Divider.Height + shpMobileFAQDetail_Category_Divider.Y
+            Width: =Parent.Width
+            X: =0
+            Y: =0
+            ZIndex: =1
+
+            shpMobileFAQDetail_Category_Divider As rectangle:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                DisabledFill: =gblAppStyles.Dividers.Elements
+                DisplayMode: =DisplayMode.Disabled
+                Fill: =RGBA(0, 0, 0, 0)
+                Height: =1
+                Width: =Parent.Width - Self.X
+                X: =imgMobileFAQDetail_Category_Icon.Width
+                Y: =imgMobileFAQDetail_Category_Icon.Height + imgMobileFAQDetail_Category_Icon.Y -Self.Height
+                ZIndex: =1
+
+            lblMobileFAQDetail_Category_Label As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: |
+                    =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                DisplayMode: =DisplayMode.View
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Semibold
+                Height: =imgMobileFAQDetail_Category_Icon.Height
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                OnSelect: =
+                PaddingBottom: =4
+                PaddingLeft: =4
+                PaddingRight: =4
+                PaddingTop: =4
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: |-
+                    =With(
+                    {
+                    varDefault: "Category",
+                    varOOBTextId: "lblMobileFAQDetail_Category_Label__Text"
+                    },
+                    With(
+                    {
+                    varLocalizedText: LookUp(
+                    colLocalization,
+                    OOBTextId = varOOBTextId,
+                    LocalizedText
+                    )
+                    },
+                    Coalesce(
+                    varLocalizedText,
+                    varDefault
+                    )
+                    )
+                    )
+                Width: =imgMobileFAQDetail_Category_Edit.X - Self.X
+                Wrap: =false
+                X: =imgMobileFAQDetail_Category_Icon.X + imgMobileFAQDetail_Category_Icon.Width
+                Y: =imgMobileFAQDetail_Category_Icon.Y
+                ZIndex: =2
+
+            lblMobileFAQDetail_Category_Value As label:
+                Align: =Align.Right
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: |
+                    =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Lighter
+                Height: =imgMobileFAQDetail_Category_Icon.Height
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                OnSelect: =Select(imgMobileFAQDetail_Category_Edit)
+                PaddingBottom: =4
+                PaddingLeft: =20
+                PaddingRight: =imgMobileFAQDetail_Category_Edit.Width
+                PaddingTop: =4
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: =locValue_Category.Name
+                Width: =imgMobileFAQDetail_Category_Edit.X - Self.X
+                Wrap: =false
+                X: =imgMobileFAQDetail_Category_Icon.X + imgMobileFAQDetail_Category_Icon.Width
+                Y: =imgMobileFAQDetail_Category_Icon.Y
+                ZIndex: =3
+
+            imgMobileFAQDetail_Category_Edit As image:
+                AccessibleLabel: |
+                    =//With({varDefault:"Click to navigate back to home screen",varOOBTextId:"imgBulletinDetail_Actions_Back__AccessibleLabel__AccessibleLabel"},With({varLocalizedText:LookUp(colLocalization,OOBTextId=varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    With(
+                        {
+                            varDefault: "Click to edit FAQ's category",
+                            varOOBTextId: "imgMobileFAQDetail_Category_Edit__AccessibleLabel"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                Fill: =gblAppStyles.ButtonTransparent.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                Height: =44
+                HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+                Image: |-
+                    =With(
+                        {
+                            varImageRecord: LookUp(
+                                staticIcons,
+                                staticIconName = "Back"
+                            ),
+                            varColor: gblAppStyles.Icons.Color
+                        },
+                        With(
+                            {
+                                varImageData: Concatenate(
+                                    "data:image/svg+xml;utf8, ",
+                                    EncodeUrl(
+                                        Concatenate(
+                                            "<svg viewBox='",
+                                            varImageRecord.staticIconViewbox,
+                                            "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                            varImageRecord.staticIconPath,
+                                            "' fill='#",
+                                            varColor,
+                                            "'/></svg>"
+                                        )
+                                    )
+                                )
+                            },
+                            varImageData
+                        )
+                    )
+                ImageRotation: =ImageRotation.Rotate180
+                OnSelect: |-
+                    =// Show Modal Dialog for data input
+                    UpdateContext(
+                        {
+                            locVisibleDialog: true,
+                            locVisibleEdit_Category: true
+                        }
+                    )
+                PaddingBottom: =12
+                PaddingLeft: =8
+                PaddingRight: =8
+                PaddingTop: =12
+                PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+                TabIndex: =0
+                Tooltip: =Self.AccessibleLabel
+                Width: =44
+                X: =Parent.Width - Self.Width - 2
+                Y: =2*1
+                ZIndex: =4
+
+            imgMobileFAQDetail_Category_Icon As image:
+                AccessibleLabel: |-
+                    =//With({varDefault:"Click to navigate back to home screen",varOOBTextId:"imgBulletinDetail_Actions_Back__AccessibleLabel__AccessibleLabel"},With({varLocalizedText:LookUp(colLocalization,OOBTextId=varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    
+                    With(
+                        {
+                            varDefault: "Image icon for FAQ's category",
+                            varOOBTextId: "imgMobileFAQDetail_Category_Icon__AccessibleLabel"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                Fill: =gblAppStyles.ButtonTransparent.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                Height: =44*1
+                HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+                Image: |-
+                    =With(
+                        {
+                            varImageRecord: LookUp(
+                                staticIcons,
+                                staticIconName = "Folder"
+                            ),
+                            varColor: gblAppStyles.Icons.Color
+                        },
+                        With(
+                            {
+                                varImageData: Concatenate(
+                                    "data:image/svg+xml;utf8, ",
+                                    EncodeUrl(
+                                        Concatenate(
+                                            "<svg viewBox='",
+                                            varImageRecord.staticIconViewbox,
+                                            "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                            varImageRecord.staticIconPath,
+                                            "' fill='#",
+                                            varColor,
+                                            "'/></svg>"
+                                        )
+                                    )
+                                )
+                            },
+                            varImageData
+                        )
+                    )
+                OnSelect: =
+                PaddingBottom: =12
+                PaddingLeft: =8
+                PaddingRight: =8
+                PaddingTop: =12
+                PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+                Tooltip: =Self.AccessibleLabel
+                Width: =44*1
+                X: =2*1
+                Y: =2*1
+                ZIndex: =5
+
+        dtcMobileFAQDetail_Featured As dataCard.blankCard:
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            DisplayMode: =DisplayMode.Edit
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =shpMobileFAQDetail_Featured_Divider.Y + shpMobileFAQDetail_Featured_Divider.Height
+            Width: =Parent.Width
+            X: =0
+            Y: =1
+            ZIndex: =2
+
+            shpMobileFAQDetail_Featured_Divider As rectangle:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                DisabledFill: =gblAppStyles.Dividers.Elements
+                DisplayMode: =DisplayMode.Disabled
+                Fill: =RGBA(0, 0, 0, 0)
+                Height: =1
+                Width: =Parent.Width - Self.X
+                X: =imgMobileFAQDetail_Featured_Icon.Width
+                Y: =imgMobileFAQDetail_Featured_Icon.Height + imgMobileFAQDetail_Featured_Icon.Y -Self.Height
+                ZIndex: =1
+
+            tglMobileFAQDetail_Featured As toggleSwitch:
+                AccessibleLabel: |
+                    =With(
+                        {
+                            varDefault: "Toggle indicating that FAQ is featured",
+                            varOOBTextId: "tglMobileFAQDetail_Featured__AccessibleLabel"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                BorderColor: =gblAppStyles.Toggle.BorderColor
+                BorderThickness: =gblAppStyles.Toggle.BorderThickness
+                Color: =gblAppStyles.Toggle.Color
+                Default: =gblRecordBulletinFAQ.'Featured?' = 'Featured? (Bulletin FAQs)'.Yes
+                DisabledBorderColor: =gblAppStyles.Toggle.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Toggle.DisabledColor
+                FalseFill: =gblAppStyles.Toggle.FalseFill
+                FalseHoverFill: =gblAppStyles.Toggle.FalseHoverFill
+                FocusedBorderColor: =gblAppStyles.Toggle.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Toggle.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Semibold
+                HandleFill: =If(Self.Value,gblAppStyles.Toggle.HandleFillTrue,gblAppStyles.Toggle.HandleFillFalse)
+                Height: =24
+                HoverBorderColor: =gblAppStyles.Toggle.HoverBorderColor
+                OnCheck: |-
+                    =// [Screen Reader Start]
+                    UpdateContext(
+                        {
+                            locScreenReaderAnnouncedText: With(
+                                {
+                                    varAnnouncedText: With(
+                                        {
+                                            varDefault: "Bulletin is ready to review", // Default Text to use
+                                            varOOBTextId: "tglBulletinDetail_Actions_ReadyForReview__Announcement-True" // Localized version
+                                        },
+                                        With(
+                                            {
+                                                varLocalizedText: LookUp(
+                                                    colLocalization,
+                                                    OOBTextId = varOOBTextId,
+                                                    LocalizedText
+                                                )
+                                            },
+                                            Coalesce(
+                                                varLocalizedText,
+                                                varDefault
+                                            )
+                                        )
+                                    )
+                                },
+                                If(
+                                    locScreenReaderAnnouncedText = varAnnouncedText,
+                                    Concatenate(
+                                        varAnnouncedText,
+                                        " "
+                                    ),
+                                    varAnnouncedText // If clicked twice, will append blank space to update variable
+                                )
+                            )
+                        }
+                    );
+                    // [Screen Reader End]
+                OnSelect: |-
+                    =false;
+                    //screen reader start
+                    UpdateContext(
+                        {
+                            locScreenReaderAnnouncedText: With(
+                                {
+                                    varAnnouncedText: With(
+                                        {
+                                            varDefault: "FAQ is marked as featured",
+                                            varOOBTextId: "tglMobileFAQDetail_Featured__Announced_true"
+                                        },
+                                        With(
+                                            {
+                                                varLocalizedText: LookUp(
+                                                    colLocalization,
+                                                    OOBTextId = varOOBTextId,
+                                                    LocalizedText
+                                                )
+                                            },
+                                            Coalesce(
+                                                varLocalizedText,
+                                                varDefault
+                                            )
+                                        )
+                                    )
+                                },
+                                If(
+                                    locScreenReaderAnnouncedText = varAnnouncedText,
+                                    Concatenate(
+                                        varAnnouncedText,
+                                        " "
+                                    ),
+                                    varAnnouncedText
+                                )
+                            )
+                        }
+                    );
+                    //screen reader end
+                OnUncheck: |-
+                    =// [Screen Reader Start]
+                    UpdateContext(
+                        {
+                            locScreenReaderAnnouncedText: With(
+                                {
+                                    varAnnouncedText: With(
+                                        {
+                                            varDefault: "FAQ is not marked as featured", // Default Text to use
+                                            varOOBTextId: "tglMobileFAQDetail_Featured__Announced_false" // Localized version
+                                        },
+                                        With(
+                                            {
+                                                varLocalizedText: LookUp(
+                                                    colLocalization,
+                                                    OOBTextId = varOOBTextId,
+                                                    LocalizedText
+                                                )
+                                            },
+                                            Coalesce(
+                                                varLocalizedText,
+                                                varDefault
+                                            )
+                                        )
+                                    )
+                                },
+                                If(
+                                    locScreenReaderAnnouncedText = varAnnouncedText,
+                                    Concatenate(
+                                        varAnnouncedText,
+                                        " "
+                                    ),
+                                    varAnnouncedText // If clicked twice, will append blank space to update variable
+                                )
+                            )
+                        }
+                    );
+                    // [Screen Reader End]
+                PressedBorderColor: =gblAppStyles.Toggle.PressedBorderColor
+                ShowLabel: =false
+                Size: =gblAppStyles.Toggle.Size
+                Tooltip: =Self.AccessibleLabel
+                TrueFill: =gblAppStyles.Toggle.TrueFill
+                TrueHoverFill: =gblAppStyles.Toggle.TrueHoverFill
+                Width: =46
+                X: =Parent.Width - Self.Width - gblPadding.Page
+                Y: =(Parent.Height -Self.Height) / 2
+                ZIndex: =2
+
+            lblMobileFAQDetail_Featured_Label As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: |
+                    =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                DisplayMode: =DisplayMode.View
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Semibold
+                Height: =imgMobileFAQDetail_Featured_Icon.Height
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                OnSelect: =
+                PaddingBottom: =4
+                PaddingLeft: =4
+                PaddingRight: =4
+                PaddingTop: =4
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: |-
+                    =With(
+                    {
+                    varDefault: "Make it featured",
+                    varOOBTextId: "lblMobileFAQDetail_Question_Label__Text"
+                    },
+                    With(
+                    {
+                    varLocalizedText: LookUp(
+                    colLocalization,
+                    OOBTextId = varOOBTextId,
+                    LocalizedText
+                    )
+                    },
+                    Coalesce(
+                    varLocalizedText,
+                    varDefault
+                    )
+                    )
+                    )
+                Width: =tglMobileFAQDetail_Featured.X - Self.X
+                Wrap: =false
+                X: =imgMobileFAQDetail_Featured_Icon.X + imgMobileFAQDetail_Featured_Icon.Width
+                Y: =imgMobileFAQDetail_Featured_Icon.Y
+                ZIndex: =3
+
+            imgMobileFAQDetail_Featured_Icon As image:
+                AccessibleLabel: |-
+                    =//With({varDefault:"Click to navigate back to home screen",varOOBTextId:"imgBulletinDetail_Actions_Back__AccessibleLabel__AccessibleLabel"},With({varLocalizedText:LookUp(colLocalization,OOBTextId=varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    
+                    With(
+                        {
+                            varDefault: "Image icon for FAQ's featured setting",
+                            varOOBTextId: "imgMobileFAQDetail_Featured_Icon__AccessibleLabel"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                DisplayMode: =DisplayMode.View
+                Fill: =gblAppStyles.ButtonTransparent.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                Height: =44*1
+                HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+                Image: |-
+                    =With(
+                        {
+                            varImageRecord: LookUp(
+                                staticIcons,
+                                staticIconName = "Important"
+                            ),
+                            varColor: gblAppStyles.Icons.Color
+                        },
+                        With(
+                            {
+                                varImageData: Concatenate(
+                                    "data:image/svg+xml;utf8, ",
+                                    EncodeUrl(
+                                        Concatenate(
+                                            "<svg viewBox='",
+                                            varImageRecord.staticIconViewbox,
+                                            "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                            varImageRecord.staticIconPath,
+                                            "' fill='#",
+                                            varColor,
+                                            "'/></svg>"
+                                        )
+                                    )
+                                )
+                            },
+                            varImageData
+                        )
+                    )
+                OnSelect: =
+                PaddingBottom: =12
+                PaddingLeft: =8
+                PaddingRight: =8
+                PaddingTop: =12
+                PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+                Tooltip: =Self.AccessibleLabel
+                Width: =44*1
+                X: =2*1
+                Y: =2*1
+                ZIndex: =4
+
+        dtcMobileFAQDetail_Question As dataCard.blankCard:
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            DisplayMode: =DisplayMode.Edit
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =93//lblMobileBulletinDetail_Content_Value.Y + lblMobileBulletinDetail_Content_Value.Height + gblPadding.Page
+            Width: =Parent.Width
+            X: =0
+            Y: =3
+            ZIndex: =4
+
+            shpMobileFAQDetail_Question_Divider As rectangle:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                DisabledFill: =gblAppStyles.Dividers.Elements
+                DisplayMode: =DisplayMode.Disabled
+                Fill: =RGBA(0, 0, 0, 0)
+                Height: =1
+                Width: =Parent.Width - Self.X
+                X: =imgMobileFAQDetail_Question_Icon.Width
+                Y: =Parent.Height -Self.Height
+                ZIndex: =1
+
+            txtMobileFAQDetail_Question As text:
+                AccessibleLabel: |-
+                    =//With({varDefault:"Text input to add description",varOOBTextId:"txtContactDetail_Content_Description__AccessibleLabel"},With({varLocalizedText:LookUp(colLocalization,OOBTextId=varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    
+                    With(
+                        {
+                            varDefault: "Text input to enter FAQ's question",
+                            varOOBTextId: "txtMobileFAQDetail_Question__AccessibleLabel"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                BorderColor: =gblAppStyles.TextInput.BorderColor
+                BorderThickness: =gblAppStyles.TextInput.BorderThickness
+                Color: =gblAppStyles.TextInput.Color
+                Default: =gblRecordBulletinFAQ.Question
+                DelayOutput: =true
+                DisabledBorderColor: =gblAppStyles.TextInput.DisabledBorderColor
+                DisabledColor: =gblAppStyles.TextInput.DisabledColor
+                DisabledFill: =gblAppStyles.TextInput.DisabledFill
+                EnableSpellCheck: =true
+                Fill: =gblAppStyles.TextInput.Fill
+                FocusedBorderColor: =gblAppStyles.TextInput.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.TextInput.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =32
+                HintText: |-
+                    =With(
+                        {
+                            varDefault: "Type question here",
+                            varOOBTextId: "txtMobileFAQDetail_Question__HintText"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                HoverBorderColor: =gblAppStyles.TextInput.HoverBorderColor
+                HoverColor: =gblAppStyles.TextInput.HoverColor
+                HoverFill: =gblAppStyles.TextInput.HoverFill
+                MaxLength: =100
+                PaddingLeft: =5
+                PaddingRight: =8
+                PressedBorderColor: =gblAppStyles.TextInput.PressedBorderColor
+                PressedColor: =gblAppStyles.TextInput.PressedColor
+                PressedFill: =gblAppStyles.TextInput.PressedFill
+                RadiusBottomLeft: =gblAppStyles.TextInput.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.TextInput.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.TextInput.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.TextInput.RadiusTopRight
+                Size: =gblAppStyles.TextInput.Size
+                Tooltip: =Self.HintText
+                Width: =Parent.Width - Self.X -gblPadding.Page
+                X: =lblMobileFAQDetail_Question_Label.X
+                Y: =lblMobileFAQDetail_Answer_Label.Y + lblMobileFAQDetail_Answer_Label.Height
+                ZIndex: =2
+
+            lblMobileFAQDetail_Question_Label As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: |
+                    =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                DisplayMode: =DisplayMode.View
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Semibold
+                Height: =imgMobileFAQDetail_Question_Icon.Height
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                OnSelect: =
+                PaddingBottom: =4
+                PaddingLeft: =4
+                PaddingRight: =4
+                PaddingTop: =4
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: |-
+                    =With(
+                    {
+                    varDefault: "Question",
+                    varOOBTextId: "lblMobileFAQDetail_Question_Label__Text"
+                    },
+                    With(
+                    {
+                    varLocalizedText: LookUp(
+                    colLocalization,
+                    OOBTextId = varOOBTextId,
+                    LocalizedText
+                    )
+                    },
+                    Coalesce(
+                    varLocalizedText,
+                    varDefault
+                    )
+                    )
+                    )
+                Width: =Parent.Width - Self.X
+                Wrap: =false
+                X: =imgMobileFAQDetail_Question_Icon.X + imgMobileFAQDetail_Question_Icon.Width
+                Y: =imgMobileFAQDetail_Question_Icon.Y
+                ZIndex: =3
+
+            imgMobileFAQDetail_Question_Icon As image:
+                AccessibleLabel: |-
+                    =//With({varDefault:"Click to navigate back to home screen",varOOBTextId:"imgBulletinDetail_Actions_Back__AccessibleLabel__AccessibleLabel"},With({varLocalizedText:LookUp(colLocalization,OOBTextId=varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    
+                    With(
+                        {
+                            varDefault: "Image icon for FAQ's question",
+                            varOOBTextId: "imgMobileFAQDetail_Question_Icon__AccessibleLabel"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                Fill: =gblAppStyles.ButtonTransparent.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                Height: =44*1
+                HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+                Image: |-
+                    =With(
+                        {
+                            varImageRecord: LookUp(
+                                staticIcons,
+                                staticIconName = "Title"
+                            ),
+                            varColor: gblAppStyles.Icons.Color
+                        },
+                        With(
+                            {
+                                varImageData: Concatenate(
+                                    "data:image/svg+xml;utf8, ",
+                                    EncodeUrl(
+                                        Concatenate(
+                                            "<svg viewBox='",
+                                            varImageRecord.staticIconViewbox,
+                                            "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                            varImageRecord.staticIconPath,
+                                            "' fill='#",
+                                            varColor,
+                                            "'/></svg>"
+                                        )
+                                    )
+                                )
+                            },
+                            varImageData
+                        )
+                    )
+                OnSelect: =
+                PaddingBottom: =12
+                PaddingLeft: =8
+                PaddingRight: =8
+                PaddingTop: =12
+                PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+                Tooltip: =Self.AccessibleLabel
+                Width: =44*1
+                X: =2*1
+                Y: =2*1
+                ZIndex: =4
+
+        dtcMobileFAQDetail_Answer As dataCard.blankCard:
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            DisplayMode: =DisplayMode.Edit
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =txtMobileFAQDetail_Answer.Y + txtMobileFAQDetail_Answer.Height + 4
+            Visible: =true
+            Width: =Parent.Width
+            X: =0
+            Y: =6
+            ZIndex: =7
+
+            shpMobileFAQDetail_Answer_Divider As rectangle:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                DisabledFill: =gblAppStyles.Dividers.Elements
+                DisplayMode: =DisplayMode.Disabled
+                Fill: =RGBA(0, 0, 0, 0)
+                Height: =1
+                Width: =Parent.Width - Self.X
+                X: =imgMobileFAQDetail_Question_Icon.Width
+                Y: =Parent.Height -Self.Height
+                ZIndex: =1
+
+            txtMobileFAQDetail_Answer As text:
+                AccessibleLabel: |-
+                    =//With({varDefault:"Text input to add description",varOOBTextId:"txtContactDetail_Content_Description__AccessibleLabel"},With({varLocalizedText:LookUp(colLocalization,OOBTextId=varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    
+                    With(
+                        {
+                            varDefault: "Text input to enter FAQ's answer",
+                            varOOBTextId: "txtMobileFAQDetail_Answer__AccessibleLabel"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                BorderColor: =gblAppStyles.TextInput.BorderColor
+                BorderThickness: =gblAppStyles.TextInput.BorderThickness
+                Color: =gblAppStyles.TextInput.Color
+                Default: =gblRecordBulletinFAQ.Answer
+                DelayOutput: =true
+                DisabledBorderColor: =gblAppStyles.TextInput.DisabledBorderColor
+                DisabledColor: =gblAppStyles.TextInput.DisabledColor
+                DisabledFill: =gblAppStyles.TextInput.DisabledFill
+                EnableSpellCheck: =true
+                Fill: =gblAppStyles.TextInput.Fill
+                FocusedBorderColor: =gblAppStyles.TextInput.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.TextInput.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =96
+                HintText: |-
+                    =With(
+                        {
+                            varDefault: "Type answer here",
+                            varOOBTextId: "txtMobileFAQDetail_Answer__HintText"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                HoverBorderColor: =gblAppStyles.TextInput.HoverBorderColor
+                HoverColor: =gblAppStyles.TextInput.HoverColor
+                HoverFill: =gblAppStyles.TextInput.HoverFill
+                MaxLength: =2000
+                Mode: =TextMode.MultiLine
+                PaddingLeft: =5
+                PressedBorderColor: =gblAppStyles.TextInput.PressedBorderColor
+                PressedColor: =gblAppStyles.TextInput.PressedColor
+                PressedFill: =gblAppStyles.TextInput.PressedFill
+                RadiusBottomLeft: =gblAppStyles.TextInput.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.TextInput.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.TextInput.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.TextInput.RadiusTopRight
+                Size: =gblAppStyles.TextInput.Size
+                Tooltip: =Self.HintText
+                Width: =Parent.Width - Self.X -gblPadding.Page
+                X: =lblMobileFAQDetail_Answer_Label.X
+                Y: =lblMobileFAQDetail_Answer_Label.Y + lblMobileFAQDetail_Answer_Label.Height
+                ZIndex: =2
+
+            lblMobileFAQDetail_Answer_Label As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: |
+                    =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                DisplayMode: =DisplayMode.View
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Semibold
+                Height: =imgMobileFAQDetail_Answer_Icon.Height
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                OnSelect: =
+                PaddingBottom: =4
+                PaddingLeft: =4
+                PaddingRight: =4
+                PaddingTop: =4
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: |-
+                    =With(
+                    {
+                    varDefault: "Answer",
+                    varOOBTextId: "lblMobileFAQDetail_Answer_Label__Text"
+                    },
+                    With(
+                    {
+                    varLocalizedText: LookUp(
+                    colLocalization,
+                    OOBTextId = varOOBTextId,
+                    LocalizedText
+                    )
+                    },
+                    Coalesce(
+                    varLocalizedText,
+                    varDefault
+                    )
+                    )
+                    )
+                Width: =Parent.Width - Self.X
+                Wrap: =false
+                X: =imgMobileFAQDetail_Answer_Icon.X + imgMobileFAQDetail_Answer_Icon.Width
+                Y: =imgMobileFAQDetail_Answer_Icon.Y
+                ZIndex: =3
+
+            imgMobileFAQDetail_Answer_Icon As image:
+                AccessibleLabel: |-
+                    =//With({varDefault:"Click to navigate back to home screen",varOOBTextId:"imgBulletinDetail_Actions_Back__AccessibleLabel__AccessibleLabel"},With({varLocalizedText:LookUp(colLocalization,OOBTextId=varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    
+                    With(
+                        {
+                            varDefault: "Image icon for FAQ's answer",
+                            varOOBTextId: "imgMobileFAQDetail_Answer_Icon__AccessibleLabel"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                Fill: =gblAppStyles.ButtonTransparent.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                Height: =44*1
+                HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+                Image: |-
+                    =With(
+                        {
+                            varImageRecord: LookUp(
+                                staticIcons,
+                                staticIconName = "Long text"
+                            ),
+                            varColor: gblAppStyles.Icons.Color
+                        },
+                        With(
+                            {
+                                varImageData: Concatenate(
+                                    "data:image/svg+xml;utf8, ",
+                                    EncodeUrl(
+                                        Concatenate(
+                                            "<svg viewBox='",
+                                            varImageRecord.staticIconViewbox,
+                                            "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                            varImageRecord.staticIconPath,
+                                            "' fill='#",
+                                            varColor,
+                                            "'/></svg>"
+                                        )
+                                    )
+                                )
+                            },
+                            varImageData
+                        )
+                    )
+                OnSelect: =
+                PaddingBottom: =12
+                PaddingLeft: =8
+                PaddingRight: =8
+                PaddingTop: =12
+                PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+                Tooltip: =Self.AccessibleLabel
+                Width: =44*1
+                X: =2*1
+                Y: =2*1
+                ZIndex: =4
+
+    conMobileFAQDetail_Header As groupContainer:
+        Height: =lblMobileFAQDetail_Header.Y + lblMobileFAQDetail_Header.Height
+        Width: =Parent.Width // 320
+        ZIndex: =3
+
+        btnMobileFAQDetail_Back As button:
+            Align: =Align.Left
+            BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+            BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+            Color: =gblAppStyles.ButtonTransparent.HoverColor
+            DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+            DisabledColor: =gblAppStyles.ButtonTransparent.DisabledColor
+            DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+            Fill: =gblAppStyles.ButtonTransparent.Fill
+            FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            Height: =32
+            HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+            HoverColor: =gblAppStyles.ButtonTransparent.Color
+            HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+            OnSelect: |
+                =// Block User Input
+                UpdateContext({locBlockUserInput: true});
+                // Navigate Back
+                Navigate(
+                    'Mobile FAQs Screen',
+                    ScreenTransition.None
+                );
+                // Reset Controls and Variables
+                Reset(tglMobileFAQDetail_ReadyForReview);
+                Reset(txtMobileFAQDetail_Question);
+                Reset(txtMobileFAQDetail_Answer);
+                Reset(tglMobileFAQDetail_Featured);
+                UpdateContext({locValue_Category: Blank()});
+                // Unblock User Input
+                UpdateContext({locBlockUserInput: false});
+            PaddingLeft: =8*1
+            PaddingRight: =0
+            PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+            PressedColor: =gblAppStyles.ButtonTransparent.PressedColor
+            PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+            RadiusBottomLeft: =gblAppStyles.ButtonTransparent.RadiusBottomLeft
+            RadiusBottomRight: =gblAppStyles.ButtonTransparent.RadiusBottomRight
+            RadiusTopLeft: =gblAppStyles.ButtonTransparent.RadiusTopLeft
+            RadiusTopRight: =gblAppStyles.ButtonTransparent.RadiusTopRight
+            Size: =gblAppStyles.ButtonTransparent.Size
+            Text: |-
+                =With(
+                {
+                varDefault: "Back to home",
+                varOOBTextId: "btnMobileFAQDetail_Back__Text"
+                },
+                With(
+                {
+                varLocalizedText: LookUp(
+                colLocalization,
+                OOBTextId = varOOBTextId,
+                LocalizedText
+                )
+                },
+                Coalesce(
+                varLocalizedText,
+                varDefault
+                )
+                )
+                )
+            Tooltip: |
+                =With(
+                {
+                varDefault: "Click to return back to FAQs",
+                varOOBTextId: "btnMobileFAQDetail_Back__Tooltip"
+                },
+                With(
+                {
+                varLocalizedText: LookUp(
+                colLocalization,
+                OOBTextId = varOOBTextId,
+                LocalizedText
+                )
+                },
+                Coalesce(
+                varLocalizedText,
+                varDefault
+                )
+                )
+                )
+            Width: =112
+            X: =8*1
+            Y: =8*1
+            ZIndex: =1
+
+        tglMobileFAQDetail_ReadyForReview As toggleSwitch:
+            AccessibleLabel: |-
+                =With(
+                    {
+                        varDefault: "Toggle indicating FAQ is ready for review",
+                        varOOBTextId: "tglMobileFAQDetail_ReadyForReview__AccessibleLabel"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            BorderColor: =gblAppStyles.Toggle.BorderColor
+            BorderThickness: =gblAppStyles.Toggle.BorderThickness
+            Color: =gblAppStyles.Toggle.Color
+            Default: =gblRecordBulletin.'Ready for Review?' = 'Ready for Review? (Bulletins)'.Yes
+            DisabledBorderColor: =gblAppStyles.Toggle.DisabledBorderColor
+            DisabledColor: =gblAppStyles.Toggle.DisabledColor
+            FalseFill: =gblAppStyles.Toggle.FalseFill
+            FalseHoverFill: =gblAppStyles.Toggle.FalseHoverFill
+            FocusedBorderColor: =gblAppStyles.Toggle.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Toggle.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            FontWeight: =FontWeight.Semibold
+            HandleFill: =If(Self.Value,gblAppStyles.Toggle.HandleFillTrue,gblAppStyles.Toggle.HandleFillFalse)
+            Height: =24
+            HoverBorderColor: =gblAppStyles.Toggle.HoverBorderColor
+            OnCheck: |-
+                =// [Screen Reader Start]
+                UpdateContext(
+                    {
+                        locScreenReaderAnnouncedText: With(
+                            {
+                                varAnnouncedText: With(
+                                    {
+                                        varDefault: "Bulletin is ready to review", // Default Text to use
+                                        varOOBTextId: "tglBulletinDetail_Actions_ReadyForReview__Announcement-True" // Localized version
+                                    },
+                                    With(
+                                        {
+                                            varLocalizedText: LookUp(
+                                                colLocalization,
+                                                OOBTextId = varOOBTextId,
+                                                LocalizedText
+                                            )
+                                        },
+                                        Coalesce(
+                                            varLocalizedText,
+                                            varDefault
+                                        )
+                                    )
+                                )
+                            },
+                            If(
+                                locScreenReaderAnnouncedText = varAnnouncedText,
+                                Concatenate(
+                                    varAnnouncedText,
+                                    " "
+                                ),
+                                varAnnouncedText // If clicked twice, will append blank space to update variable
+                            )
+                        )
+                    }
+                );
+                // [Screen Reader End]
+            OnSelect: |-
+                =false;
+                //screen reader start
+                UpdateContext(
+                    {
+                        locScreenReaderAnnouncedText: With(
+                            {
+                                varAnnouncedText: With(
+                                    {
+                                        varDefault: "FAQ is ready for review",
+                                        varOOBTextId: "tglMobileFAQDetail_ReadyForReview__Announced_true"
+                                    },
+                                    With(
+                                        {
+                                            varLocalizedText: LookUp(
+                                                colLocalization,
+                                                OOBTextId = varOOBTextId,
+                                                LocalizedText
+                                            )
+                                        },
+                                        Coalesce(
+                                            varLocalizedText,
+                                            varDefault
+                                        )
+                                    )
+                                )
+                            },
+                            If(
+                                locScreenReaderAnnouncedText = varAnnouncedText,
+                                Concatenate(
+                                    varAnnouncedText,
+                                    " "
+                                ),
+                                varAnnouncedText
+                            )
+                        )
+                    }
+                );
+                //screen reader end
+            OnUncheck: |-
+                =// [Screen Reader Start]
+                UpdateContext(
+                    {
+                        locScreenReaderAnnouncedText: With(
+                            {
+                                varAnnouncedText: With(
+                                    {
+                                        varDefault: "FAQ is not ready for review", // Default Text to use
+                                        varOOBTextId: "tglMobileFAQDetail_ReadyForReview__Announced_false" // Localized version
+                                    },
+                                    With(
+                                        {
+                                            varLocalizedText: LookUp(
+                                                colLocalization,
+                                                OOBTextId = varOOBTextId,
+                                                LocalizedText
+                                            )
+                                        },
+                                        Coalesce(
+                                            varLocalizedText,
+                                            varDefault
+                                        )
+                                    )
+                                )
+                            },
+                            If(
+                                locScreenReaderAnnouncedText = varAnnouncedText,
+                                Concatenate(
+                                    varAnnouncedText,
+                                    " "
+                                ),
+                                varAnnouncedText // If clicked twice, will append blank space to update variable
+                            )
+                        )
+                    }
+                );
+                // [Screen Reader End]
+            PressedBorderColor: =gblAppStyles.Toggle.PressedBorderColor
+            ShowLabel: =false
+            Size: =gblAppStyles.Toggle.Size
+            Tooltip: =Self.AccessibleLabel
+            TrueFill: =gblAppStyles.Toggle.TrueFill
+            TrueHoverFill: =gblAppStyles.Toggle.TrueHoverFill
+            Visible: =!gblUserIsTeamOwner
+            Width: =46
+            X: =Parent.Width - Self.Width - gblPadding.Page
+            Y: =42
+            ZIndex: =2
+
+        lblMobileFAQDetail_ReadForReview As label:
+            Align: =Align.Right
+            BorderColor: =gblAppStyles.Label.BorderColor
+            BorderThickness: =gblAppStyles.Label.BorderThickness
+            Color: =gblAppStyles.Label.Color
+            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+            DisabledColor: |
+                =gblAppStyles.Label.DisabledColor
+            DisabledFill: =gblAppStyles.Label.DisabledFill
+            Fill: =gblAppStyles.Label.Fill
+            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            Height: =44
+            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+            HoverColor: =gblAppStyles.Label.HoverColor
+            HoverFill: =gblAppStyles.Label.HoverFill
+            OnSelect: =
+            PaddingBottom: =4
+            PaddingLeft: =4
+            PaddingRight: =10
+            PaddingTop: =4
+            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+            PressedColor: =gblAppStyles.Label.PressedColor
+            PressedFill: =gblAppStyles.Label.PressedFill
+            Size: =gblAppStyles.Label.Size.Small
+            Text: |-
+                =With(
+                {
+                varDefault: "Ready for review",
+                varOOBTextId: "lblMobileFAQDetail_ReadForReview__Text"
+                },
+                With(
+                {
+                varLocalizedText: LookUp(
+                colLocalization,
+                OOBTextId = varOOBTextId,
+                LocalizedText
+                )
+                },
+                Coalesce(
+                varLocalizedText,
+                varDefault
+                )
+                )
+                )
+            Visible: =!gblUserIsTeamOwner
+            Width: =160
+            Wrap: =false
+            X: =tglMobileFAQDetail_ReadyForReview.X -Self.Width
+            Y: =32
+            ZIndex: =3
+
+        lblMobileFAQDetail_Header As label:
+            BorderColor: =gblAppStyles.Label.BorderColor
+            BorderThickness: =gblAppStyles.Label.BorderThickness
+            Color: =gblAppStyles.Label.Color
+            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+            DisabledColor: |
+                =gblAppStyles.Label.DisabledColor
+            DisabledFill: =gblAppStyles.Label.DisabledFill
+            DisplayMode: =DisplayMode.View
+            Fill: =gblAppStyles.Label.Fill
+            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            FontWeight: =FontWeight.Bold
+            Height: =44
+            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+            HoverColor: =gblAppStyles.Label.HoverColor
+            HoverFill: =gblAppStyles.Label.HoverFill
+            OnSelect: =
+            PaddingBottom: =4
+            PaddingLeft: =16
+            PaddingRight: =4
+            PaddingTop: =4
+            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+            PressedColor: =gblAppStyles.Label.PressedColor
+            PressedFill: =gblAppStyles.Label.PressedFill
+            Size: =gblAppStyles.Label.Size.Large
+            Text: |-
+                =If(
+                    IsBlank(gblRecordBulletinFAQ),
+                    With(
+                    {
+                        varDefault: "New FAQ",
+                        varOOBTextId: "lblMobileFAQDetail_Header__Text_new"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                ),
+                    With(
+                    {
+                        varDefault: "Edit FAQ",
+                        varOOBTextId: "lblMobileFAQDetail_Header__Text_edit"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+                )
+            Width: =192
+            Wrap: =false
+            X: =0*0
+            Y: =btnMobileFAQDetail_Back.Y + btnMobileFAQDetail_Back.Height
+            ZIndex: =4
+
+    conModalDialog_MobileFAQDetail As groupContainer:
+        Fill: =gblAppStyles.Dialogs.Fill
+        Height: =Parent.Height
+        Visible: =locVisibleDialog
+        Width: =Parent.Width // 320
+        X: =0*0
+        Y: =0*0
+        ZIndex: =4
+
+        lblModalDialog_MobileFAQDetail_Cancel As label:
+            BorderColor: =RGBA(0, 0, 0, 0)
+            Color: =RGBA(0, 0, 0, 0)
+            FocusedBorderThickness: =0.25
+            Height: =Parent.Height
+            OnSelect: |-
+                =UpdateContext(
+                    {
+                        locVisibleDialog: false,
+                        locVisibleEdit_Category: false
+                    }
+                )
+            Text: |-
+                =With(
+                {
+                varDefault: "Question",
+                varOOBTextId: "lblModalDialog_MobileFAQDetail_Cancel__Text"
+                },
+                With(
+                {
+                varLocalizedText: LookUp(
+                colLocalization,
+                OOBTextId = varOOBTextId,
+                LocalizedText
+                )
+                },
+                Coalesce(
+                varLocalizedText,
+                varDefault
+                )
+                )
+                )
+            Tooltip: |-
+                =With(
+                {
+                varDefault: "Click to close the dialog window",
+                varOOBTextId: "lblModalDialog_MobileFAQDetail_Cancel__Tooltip"
+                },
+                With(
+                {
+                varLocalizedText: LookUp(
+                colLocalization,
+                OOBTextId = varOOBTextId,
+                LocalizedText
+                )
+                },
+                Coalesce(
+                varLocalizedText,
+                varDefault
+                )
+                )
+                )
+            Width: =Parent.Width
+            X: =0*0
+            Y: =0*0
+            ZIndex: =1
+
+        galMobileFAQDetail_Category As gallery.galleryVertical:
+            AccessibleLabel: |-
+                =With(
+                {
+                varDefault: "FAQ categories",
+                varOOBTextId: "galMobileFAQDetail_Category__AccessibleLabel"
+                },
+                With(
+                {
+                varLocalizedText: LookUp(
+                colLocalization,
+                OOBTextId = varOOBTextId,
+                LocalizedText
+                )
+                },
+                Coalesce(
+                varLocalizedText,
+                varDefault
+                )
+                )
+                )
+            Fill: =gblAppStyles.Background.Fill
+            Height: |-
+                =Min(
+                    App.Height - (2*gblPadding.Page),
+                    (CountRows(Self.AllItems) * (Self.TemplateHeight + Self.TemplatePadding)) + Self.TemplatePadding
+                )
+            ItemAccessibleLabel: |-
+                =If(
+                ThisItem.IsSelected = true,
+                With(
+                    {
+                        varDefault: "Selected",
+                        varOOBTextId: "galMobileFAQDetail_Category_SelectedItems__AccessibleLabel_selected"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                ),
+                With(
+                    {
+                        varDefault: "Not selected",
+                        varOOBTextId: "galMobileFAQDetail_Category_SelectedItems__AccessibleLabel_notselected"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+                
+                )
+            Items: ='Bulletin FAQ Categories'
+            Layout: =Layout.Vertical
+            OnSelect: |-
+                =// Set Local Variable
+                UpdateContext({locValue_Category: ThisItem});
+                // Select Cancel Label to close; avoids duplicating code
+                Select(lblModalDialog_MobileFAQDetail_Cancel);
+            TemplatePadding: =8
+            TemplateSize: =44
+            Visible: =locVisibleEdit_Category
+            Width: =Parent.Width - (2* Self.X)
+            X: =gblPadding.Page
+            Y: =(Parent.Height - Self.Height) / 2
+            ZIndex: =2
+
+            btnGalMobileFAQDetail_Category_Select As button:
+                Align: =Align.Left
+                AutoDisableOnSelect: =false
+                BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+                Color: =gblAppStyles.ButtonTransparent.Color
+                DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+                DisabledColor: =gblAppStyles.ButtonTransparent.DisabledColor
+                DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                Fill: =gblAppStyles.ButtonTransparent.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Normal
+                Height: =Parent.TemplateHeight
+                HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                HoverColor: =gblAppStyles.ButtonTransparent.HoverColor
+                HoverFill: =gblAppStyles.Gallery.HoverFill
+                OnSelect: =Select(Parent)
+                PaddingLeft: =12
+                PaddingRight: =12
+                PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                PressedColor: =gblAppStyles.ButtonTransparent.PressedColor
+                PressedFill: =gblAppStyles.Gallery.PressedFill
+                RadiusBottomLeft: =gblAppStyles.ButtonTransparent.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.ButtonTransparent.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.ButtonTransparent.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.ButtonTransparent.RadiusTopRight
+                Size: =gblAppStyles.ButtonTransparent.Size
+                Text: =ThisItem.Name
+                Tooltip: =ThisItem.Name
+                Width: =Parent.TemplateWidth
+                ZIndex: =2
+
+    lblBlockUserInput_MobileFAQDetail As label:
+        DisabledFill: =RGBA(0, 0, 0, 0.05)
+        DisplayMode: =DisplayMode.Disabled
+        Font: =Font.'Segoe UI'
+        Height: =Parent.Height
+        Text: =""
+        Visible: =locBlockUserInput
+        Width: =Parent.Width
+        X: =0*0
+        Y: =0*0
+        ZIndex: =5
+

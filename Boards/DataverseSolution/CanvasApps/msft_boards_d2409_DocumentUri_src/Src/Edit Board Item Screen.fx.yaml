@@ -1,0 +1,2181 @@
+"'Edit Board Item Screen' As screen":
+    Fill: =gblAppStyles.Background.Fill
+    OnVisible: |-
+        =UpdateContext({locPreloadBoardItem: true});
+        Reset(rdoItemType_EditBoardItem)
+
+    lblAnnounce_EditBoardItem As label:
+        Height: =0
+        Live: =Live.Assertive
+        Text: =locScreenReaderAnnouncedText 
+        Width: =0
+        X: =Parent.Width - Self.Width
+        Y: =Parent.Height - Self.Height
+        ZIndex: =1
+
+    tmrSetFocus_EditBoardItem As timer:
+        AutoStart: =locSetFocusTimerStart
+        Duration: =100
+        Height: =0
+        OnTimerEnd: |-
+            =Switch(
+                locSetFocusControlTarget,
+                "imgCancelWarning_BoardItem",
+               SetFocus(imgCancelWarning_BoardItem),"btnDeleteBoardItem",SetFocus(btnDeleteBoardItem)
+                
+            );
+        OnTimerStart: =
+        TabIndex: =-1
+        Width: =0
+        X: =Parent.Width - Self.Width
+        Y: =Parent.Height - Self.Height
+        ZIndex: =2
+
+    conEditBoardItem As groupContainer:
+        DisplayMode: =DisplayMode.Edit
+        Height: =Parent.Height
+        LayoutAlignItems: =LayoutAlignItems.Start
+        LayoutDirection: =LayoutDirection.Horizontal
+        LayoutJustifyContent: =LayoutJustifyContent.Start
+        LayoutMode: =LayoutMode.Manual
+        LayoutOverflowX: =LayoutOverflow.Hide
+        LayoutOverflowY: =LayoutOverflow.Hide
+        Width: =Parent.Width
+        X: =0*1
+        Y: =0*1
+        ZIndex: =3
+
+        cnvEditBoardItem As fluidGrid.fluidGridWithBlankCard:
+            BorderThickness: =0
+            Height: =Parent.Height - Self.Y
+            Width: =Parent.Width
+            Y: =0*0
+            ZIndex: =1
+
+            dtcEditBoardItem As dataCard:
+                BorderColor: =RGBA(0, 0, 0, 1)
+                BorderStyle: =BorderStyle.Solid
+                BorderThickness: =0
+                DisplayMode: =DisplayMode.Edit
+                Fill: =RGBA(0, 0, 0, 0)
+                Height: |-
+                    =If(
+                        'Edit Board Item Screen'.Size = ScreenSize.ExtraLarge || 'Edit Board Item Screen'.Size = ScreenSize.Large,
+                        galPreview_EditBoardItem.Y + galPreview_EditBoardItem.Height + 20,
+                        galPreview_EditBoardItem.Y + galPreview_EditBoardItem.Height + 20 + btnSave_EditBoardItem.Height + 60
+                    )
+                Width: =Parent.Width
+                X: =0
+                Y: =0
+                ZIndex: =1
+
+                imgBack_EditBoardItem As image:
+                    AccessibleLabel: |-
+                        =With({varDefault: "Click to go back",varOOBTextId: "imgBack_EditBoardItem__locAccessibleText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    BorderColor: =gblAppStyles.ButtonPrimary.Fill
+                    DisabledFill: |-
+                        =With(
+                            {
+                                varImageIsCategory: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Back"
+                                ).staticIconIsCategory
+                            },
+                            If(
+                                varImageIsCategory,
+                                gblAppStyles.Icons.DisabledFill_Category,
+                                Transparent
+                            )
+                        )
+                    Fill: |-
+                        =With(
+                            {
+                                varImageIsCategory: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Back"
+                                ).staticIconIsCategory
+                            },
+                            If(
+                                varImageIsCategory,
+                                gblAppStyles.Icons.Fill_Category,
+                                Transparent
+                            )
+                        )
+                    Height: =22*1
+                    Image: |
+                        =With(
+                            {
+                                varImageRecord: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Back"
+                                ),
+                                varColor: If(
+                                    Self.DisplayMode = DisplayMode.Disabled,
+                                    gblAppStyles.Icons.DisabledColor,
+                                    gblAppStyles.Icons.Color
+                                )
+                            },
+                            With(
+                                {
+                                    varImageData: Concatenate(
+                                        "data:image/svg+xml;utf8, ",
+                                        EncodeUrl(
+                                            Concatenate(
+                                                "<svg viewBox='",
+                                                varImageRecord.staticIconViewbox,
+                                                "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                varImageRecord.staticIconPath,
+                                                "' fill='#",
+                                                varColor,
+                                                "'/></svg>"
+                                            )
+                                        )
+                                    )
+                                },
+                                varImageData
+                            )
+                        )
+                    OnSelect: |-
+                        =//screen reader start
+                            UpdateContext(
+                                {
+                                    locScreenReaderAnnouncedText: With(
+                                        {
+                                            varAnnouncedText: With(
+                                                {
+                                                    varDefault: "Navigating back to Board items screen",
+                                                    varOOBTextId: "lblBack_AddBoarditem_Announcement"
+                                                },
+                                                With(
+                                                    {
+                                                        varLocalizedText: LookUp(
+                                                            colLocalization,
+                                                            OOBTextID = varOOBTextId,
+                                                            LocalizedText
+                                                        )
+                                                    },
+                                                    Coalesce(
+                                                        varLocalizedText,
+                                                        varDefault
+                                                    )
+                                                )
+                                            )
+                                        },
+                                        If(
+                                            locScreenReaderAnnouncedText = varAnnouncedText,
+                                            Concatenate(
+                                                varAnnouncedText,
+                                                " "
+                                            ),
+                                            varAnnouncedText
+                                        )
+                                    )
+                                }
+                            );
+                            
+                        //screen reader end
+                        Navigate(
+                            'Board Items Screen',
+                            ScreenTransition.Fade
+                        )
+                    RadiusBottomLeft: =5
+                    RadiusBottomRight: =5
+                    RadiusTopLeft: =5
+                    RadiusTopRight: =5
+                    TabIndex: =0
+                    Tooltip: |-
+                        =With({varDefault: "Click to go back",varOOBTextId: "imgBack_EditBoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Width: =22*1
+                    X: |-
+                        =If(
+                            'Edit Board Item Screen'.Size = ScreenSize.ExtraLarge || 'Edit Board Item Screen'.Size = ScreenSize.Large,
+                            20 * 1,
+                            ('Edit Board Item Screen'.Width - If(
+                                'Edit Board Item Screen'.Size = ScreenSize.ExtraLarge || 'Edit Board Item Screen'.Size = ScreenSize.Large,
+                                400,
+                                'Edit Board Item Screen'.Width - 20
+                            )) / 2
+                        )
+                    Y: =lblBack_EditBoardItem.Y + (lblBack_EditBoardItem.Height - Self.Height) / 2 + 1
+                    ZIndex: =1
+
+                lblBack_EditBoardItem As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =40*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: |-
+                        =//screen reader start
+                            UpdateContext(
+                                {
+                                    locScreenReaderAnnouncedText: With(
+                                        {
+                                            varAnnouncedText: With(
+                                                {
+                                                    varDefault: "Navigating back to Board items screen",
+                                                    varOOBTextId: "lblBack_AddBoarditem_Announcement"
+                                                },
+                                                With(
+                                                    {
+                                                        varLocalizedText: LookUp(
+                                                            colLocalization,
+                                                            OOBTextID = varOOBTextId,
+                                                            LocalizedText
+                                                        )
+                                                    },
+                                                    Coalesce(
+                                                        varLocalizedText,
+                                                        varDefault
+                                                    )
+                                                )
+                                            )
+                                        },
+                                        If(
+                                            locScreenReaderAnnouncedText = varAnnouncedText,
+                                            Concatenate(
+                                                varAnnouncedText,
+                                                " "
+                                            ),
+                                            varAnnouncedText
+                                        )
+                                    )
+                                }
+                            );
+                            
+                        //screen reader end
+                        Navigate(
+                            'Board Items Screen',
+                            ScreenTransition.Fade
+                        )
+                    PaddingBottom: =0
+                    PaddingTop: =0
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Role: =TextRole.Heading1
+                    Size: =gblAppStyles.Label.Size.Medium
+                    TabIndex: |-
+                        =If(
+                            true,
+                            -1,
+                            0
+                        )
+                    Text: |-
+                        =With({varDefault: "Back",varOOBTextId: "lblBack_EditBoardItem__locText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Tooltip: |-
+                        =With({varDefault: "Back",varOOBTextId: "lblBack_EditBoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Width: =150*1
+                    X: =imgBack_EditBoardItem.X + imgBack_EditBoardItem.Width
+                    Y: =20*1
+                    ZIndex: =2
+
+                lblHeader_EditBoardItem As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Bold
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Role: =TextRole.Heading1
+                    Size: =gblAppStyles.Label.Size.Large
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Edit board item",
+                                varOOBTextId: "lblHeader_EditBoardItem__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Tooltip: |-
+                        =With({varDefault: "Edit board item",varOOBTextId: "lblHeader_EditBoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Width: |-
+                        =If(
+                            'Edit Board Item Screen'.Size = ScreenSize.ExtraLarge || 'Edit Board Item Screen'.Size = ScreenSize.Large,
+                            Parent.Width/2,
+                            Parent.Width - Self.X*2
+                        )
+                    Wrap: =false
+                    X: =20*1
+                    Y: =lblBack_EditBoardItem.Y + lblBack_EditBoardItem.Height + 20
+                    ZIndex: =3
+
+                lblLink_BoardItem As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With({varDefault: "Link *",varOOBTextId: "lblLink_BoardItem__locText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Tooltip: |-
+                        =With({varDefault: "Link *",varOOBTextId: "lblLink_BoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Width: =lblHeader_EditBoardItem.Width
+                    Wrap: =false
+                    X: =20*1
+                    Y: =rdoItemType_EditBoardItem.Y + rdoItemType_EditBoardItem.Height + 10
+                    ZIndex: =4
+
+                txtLink_EditBoardItem As text:
+                    AccessibleLabel: |-
+                        =With({varDefault: "Add a destination link",varOOBTextId: "txtLink_EditBoardItem__locAccessibleText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    BorderColor: =gblAppStyles.TextInput.BorderColor
+                    BorderThickness: =gblAppStyles.TextInput.BorderThickness
+                    Color: =gblAppStyles.TextInput.Color
+                    Default: |-
+                        =If(
+                            locPreloadBoardItem,
+                            locSelectedBoardItem.Link,
+                            locNewBoardItemLink
+                        )
+                    DisabledBorderColor: =gblAppStyles.TextInput.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.TextInput.DisabledColor
+                    DisabledFill: =gblAppStyles.TextInput.DisabledFill
+                    Fill: =gblAppStyles.TextInput.Fill
+                    FocusedBorderColor: =gblAppStyles.TextInput.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.TextInput.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HintText: |-
+                        =With({varDefault: "Add a destination link",varOOBTextId: "txtLink_EditBoardItem__locHintText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    HoverBorderColor: =gblAppStyles.TextInput.HoverBorderColor
+                    HoverColor: =gblAppStyles.TextInput.HoverColor
+                    HoverFill: =gblAppStyles.TextInput.HoverFill
+                    OnChange: |-
+                        =UpdateContext({locNewBoardItemLink: txtLink_EditBoardItem.Text});
+                        UpdateContext(
+                            {
+                                locBoardItemTeam: If(
+                                    rdoItemType_EditBoardItem.Selected.Value = "Teams team",
+                                    MicrosoftTeams.GetTeam(
+                                        GUID(
+                                            Left(
+                                                Right(
+                                                    Self.Text,
+                                                    Len(Self.Text) - Find(
+                                                        "groupId",
+                                                        Self.Text
+                                                    ) - 7
+                                                ),
+                                                Find(
+                                                    "tenantId",
+                                                    Right(
+                                                        Self.Text,
+                                                        Len(Self.Text) - Find(
+                                                            "groupId",
+                                                            Self.Text
+                                                        ) - 7
+                                                    )
+                                                ) - 2
+                                            )
+                                        )
+                                    )
+                                )
+                            }
+                        );
+                        UpdateContext(
+                            {
+                                locBoardItemChannel: If(
+                                    rdoItemType_EditBoardItem.Selected.Value = "Teams channel",
+                                    LookUp(
+                                    //First(
+                                        //Filter(
+                                        MicrosoftTeams.GetChannelsForGroup(
+                                            GUID(
+                                                Left(
+                                                    Right(
+                                                        Self.Text,
+                                                        Len(Self.Text) - Find(
+                                                            "groupId",
+                                                            Self.Text
+                                                        ) - 7
+                                                    ),
+                                                    Find(
+                                                        "tenantId",
+                                                        Right(
+                                                            Self.Text,
+                                                            Len(Self.Text) - Find(
+                                                                "groupId",
+                                                                Self.Text
+                                                            ) - 7
+                                                        )
+                                                    ) - 2
+                                                )
+                                            )
+                                        ).value,
+                                        id = Substitute(
+                                            Substitute(
+                                                Left(
+                                                    Right(
+                                                        Self.Text,
+                                                        Len(Self.Text) - Find(
+                                                            "channel/",
+                                                            Self.Text
+                                                        ) - 7
+                                                    ),
+                                                    Find(
+                                                        "tacv2/",
+                                                        Right(
+                                                            Self.Text,
+                                                            Len(Self.Text) - Find(
+                                                                "channel/",
+                                                                Self.Text
+                                                            ) - 7
+                                                        )
+                                                    ) - 2 + 6
+                                                ),
+                                                "%3A",
+                                                ":"
+                                            ),
+                                            "%40",
+                                            "@"
+                                        )
+                                    )
+                                )
+                                //)
+                            }
+                        );
+                        //
+                        UpdateContext(
+                            {
+                                locBoardItemConversation: If(
+                                    rdoItemType_EditBoardItem.Selected.Value = "Conversation",
+                                    LookUp(
+                                    //First(
+                                        //Filter(
+                                        MicrosoftTeams.GetMessagesFromChannel(
+                                            GUID(
+                                                Left(
+                                                    Right(
+                                                        Self.Text,
+                                                        Len(Self.Text) - Find(
+                                                            "groupId",
+                                                            Self.Text
+                                                        ) - 7
+                                                    ),
+                                                    Find(
+                                                        "parent",
+                                                        Right(
+                                                            Self.Text,
+                                                            Len(Self.Text) - Find(
+                                                                "groupId",
+                                                                Self.Text
+                                                            ) - 7
+                                                        )
+                                                    ) - 2
+                                                )
+                                            ),
+                                            Substitute(
+                                                Substitute(
+                                                    Left(
+                                                        Right(
+                                                            Self.Text,
+                                                            Len(Self.Text) - Find(
+                                                                "message/",
+                                                                Self.Text
+                                                            ) - 7
+                                                        ),
+                                                        Find(
+                                                            "tacv2/",
+                                                            Right(
+                                                                Self.Text,
+                                                                Len(Self.Text) - Find(
+                                                                    "message/",
+                                                                    Self.Text
+                                                                ) - 7
+                                                            )
+                                                        ) - 2 + 6
+                                                    ),
+                                                    "%3A",
+                                                    ":"
+                                                ),
+                                                "%40",
+                                                "@"
+                                            )
+                                        ).value,
+                                        etag = Left(
+                                            Right(
+                                                Self.Text,
+                                                Len(Self.Text) - Find(
+                                                    "tacv2/",
+                                                    Self.Text
+                                                ) - 5
+                                            ),
+                                            Find(
+                                                "?tenant",
+                                                Right(
+                                                    Self.Text,
+                                                    Len(Self.Text) - Find(
+                                                        "tacv2/",
+                                                        Self.Text
+                                                    ) - 7
+                                                )
+                                            ) + 1
+                                        )
+                                    )
+                                )
+                                //)
+                            }
+                        );
+                        UpdateContext({locPreloadBoardItem: false})
+                    PressedBorderColor: =gblAppStyles.TextInput.PressedBorderColor
+                    PressedColor: =gblAppStyles.TextInput.PressedColor
+                    PressedFill: =gblAppStyles.TextInput.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.TextInput.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.TextInput.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.TextInput.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.TextInput.RadiusTopRight
+                    Size: =gblAppStyles.TextInput.Size
+                    TabIndex: =If(locDeleteBoardItemWarning,-1,1)
+                    Tooltip: |-
+                        =With({varDefault: "Add a destination link",varOOBTextId: "txtLink_EditBoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Width: =lblHeader_EditBoardItem.Width
+                    X: =lblLink_BoardItem.X
+                    Y: =lblLink_BoardItem.Y + lblLink_BoardItem.Height
+                    ZIndex: =5
+
+                lblDesc_EditBoardItem As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Description * (" & 2000 - Len(txtDesc_EditBoardItem.Text) & " characters remaining)",
+                                varOOBTextId: "lblDesc_EditBoardItem__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Tooltip: |-
+                        =With({varDefault: "Description *",varOOBTextId: "lblDesc_EditBoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Width: =lblHeader_EditBoardItem.Width
+                    Wrap: =false
+                    X: =20*1
+                    Y: =txtTitle_EditBoardItem.Y + txtTitle_EditBoardItem.Height + 20
+                    ZIndex: =6
+
+                txtDesc_EditBoardItem As text:
+                    AccessibleLabel: |-
+                        =With({varDefault: "Tell everyone what this item is about",varOOBTextId: "txtDesc_EditBoardItem__locAccessibleText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    BorderColor: =gblAppStyles.TextInput.BorderColor
+                    BorderThickness: =gblAppStyles.TextInput.BorderThickness
+                    Color: =gblAppStyles.TextInput.Color
+                    Default: |-
+                        =If(
+                            locPreloadBoardItem,
+                            locSelectedBoardItem.Description,
+                            Switch(
+                                rdoItemType_EditBoardItem.Selected.Value,
+                                "Teams team",
+                                locBoardItemTeam.description,
+                                "Teams channel",
+                                locBoardItemChannel.description,
+                                "Conversation",
+                                locBoardItemConversation.body.content,
+                                ""
+                            )
+                        )
+                    DisabledBorderColor: =gblAppStyles.TextInput.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.TextInput.DisabledColor
+                    DisabledFill: =gblAppStyles.TextInput.DisabledFill
+                    Fill: =gblAppStyles.TextInput.Fill
+                    FocusedBorderColor: =gblAppStyles.TextInput.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.TextInput.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*4
+                    HintText: |-
+                        =With({varDefault: "Tell everyone what this item is about",varOOBTextId: "txtDesc_EditBoardItem__locHintText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    HoverBorderColor: =gblAppStyles.TextInput.HoverBorderColor
+                    HoverColor: =gblAppStyles.TextInput.HoverColor
+                    HoverFill: =gblAppStyles.TextInput.HoverFill
+                    MaxLength: =2000
+                    Mode: =TextMode.MultiLine
+                    PressedBorderColor: =gblAppStyles.TextInput.PressedBorderColor
+                    PressedColor: =gblAppStyles.TextInput.PressedColor
+                    PressedFill: =gblAppStyles.TextInput.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.TextInput.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.TextInput.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.TextInput.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.TextInput.RadiusTopRight
+                    Size: =gblAppStyles.TextInput.Size
+                    TabIndex: =If(locDeleteBoardItemWarning,-1,1)
+                    Tooltip: |-
+                        =With({varDefault: "Tell everyone what this item is about",varOOBTextId: "txtDesc_EditBoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Width: =lblHeader_EditBoardItem.Width
+                    X: =lblDesc_EditBoardItem.X
+                    Y: =lblDesc_EditBoardItem.Y + lblDesc_EditBoardItem.Height
+                    ZIndex: =7
+
+                lblItemType_EditBoardItem As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Pick an item type",
+                                varOOBTextId: "lblItemType_EditBoardItem__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Tooltip: |-
+                        =With({varDefault: "Pick an item type",varOOBTextId: "lblItemType_EditBoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Width: =lblHeader_EditBoardItem.Width
+                    Wrap: =false
+                    X: =20*1
+                    Y: =lblHeader_EditBoardItem.Y + lblHeader_EditBoardItem.Height + 20
+                    ZIndex: =8
+
+                rdoItemType_EditBoardItem As radio:
+                    AccessibleLabel: |-
+                        =With({varDefault: "Select an Item type",varOOBTextId: "rdoItemType_EditBoardItem__locAccessibleText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    BorderColor: =gblAppStyles.Radio.BorderColor
+                    BorderThickness: =gblAppStyles.Radio.BorderThickness
+                    Color: =gblAppStyles.Radio.Color
+                    Default: |-
+                        =Switch(
+                            locSelectedBoardItem.Category,
+                            'Board Item Categories'.Website,
+                            "Website",
+                            'Board Item Categories'.'Teams channel',
+                            "Teams channel",
+                            'Board Item Categories'.'Teams team',
+                            "Teams team",
+                            'Board Item Categories'.'Channel tab',
+                            "Channel tab",
+                            'Board Item Categories'.Conversation,
+                            "Conversation",
+                            'Board Item Categories'.File,
+                            "File",
+                            'Board Item Categories'.App,
+                            "Apps"
+                        )
+                    DisabledBorderColor: =gblAppStyles.Radio.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Radio.DisabledColor
+                    DisabledFill: =gblAppStyles.Radio.DisabledFill
+                    Fill: =gblAppStyles.Radio.Fill
+                    FocusedBorderColor: =gblAppStyles.Radio.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Radio.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: |-
+                        =If(
+                            'Edit Board Item Screen'.Width > 1610,
+                            32+12,
+                            'Edit Board Item Screen'.Width > 860,
+                            64+12,
+                            'Edit Board Item Screen'.Width > 600,
+                            128,
+                            128
+                        )
+                    HoverColor: =gblAppStyles.Radio.HoverColor
+                    HoverFill: =gblAppStyles.Radio.HoverFill
+                    Items: |-
+                        =[
+                            "Website",
+                            "Teams team",
+                            "Teams channel",
+                            "Channel tab",
+                            "Conversation",
+                            "Apps",
+                            "File",
+                            "Yammer"
+                        ]
+                    Layout: =Layout.Horizontal
+                    OnSelect: =
+                    PaddingBottom: =0
+                    PaddingTop: =0
+                    PressedColor: =gblAppStyles.Radio.PressedColor
+                    PressedFill: =gblAppStyles.Radio.PressedFill
+                    RadioBackgroundFill: =gblAppStyles.Radio.RadioBackgroundFill
+                    RadioBorderColor: =gblAppStyles.Radio.RadioBorderSelectionColor
+                    RadioSelectionFill: =gblAppStyles.Radio.RadioSelectionFill
+                    RadioSize: =25
+                    Size: =gblAppStyles.Radio.Size
+                    TabIndex: =If(locDeleteBoardItemWarning,-1,2)
+                    Tooltip: |-
+                        =With({varDefault: "Select an Item type",varOOBTextId: "rdoItemType_EditBoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Width: |-
+                        =Max(
+                            Parent.Width / 2,
+                            300
+                        )
+                    X: =lblHeader_EditBoardItem.X - 10
+                    Y: =lblItemType_EditBoardItem.Y + lblItemType_EditBoardItem.Height
+                    ZIndex: =10
+
+                lblTitle_EditBoardItem As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Title * (" & 100 - Len(txtTitle_EditBoardItem.Text) & " characters remaining)",
+                                varOOBTextId: "lblTitle_EditBoardItem__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Tooltip: |-
+                        =With({varDefault: "Title *",varOOBTextId: "lblTitle_EditBoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Width: =lblHeader_EditBoardItem.Width
+                    Wrap: =false
+                    X: =20*1
+                    Y: =txtLink_EditBoardItem.Y + txtLink_EditBoardItem.Height + 20
+                    ZIndex: =12
+
+                txtTitle_EditBoardItem As text:
+                    AccessibleLabel: |-
+                        =With({varDefault: "Add item title",varOOBTextId: "txtTitle_EditBoardItem__locAccessibleText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    BorderColor: =gblAppStyles.TextInput.BorderColor
+                    BorderThickness: =gblAppStyles.TextInput.BorderThickness
+                    Color: =gblAppStyles.TextInput.Color
+                    Default: |-
+                        =If(
+                            locPreloadBoardItem,
+                            locSelectedBoardItem.Name,
+                            Switch(
+                                rdoItemType_EditBoardItem.Selected.Value,
+                                "Teams team",
+                                locBoardItemTeam.displayName,
+                                "Teams channel",
+                                locBoardItemChannel.displayName,
+                                "Conversation",
+                                locBoardItemConversation.subject,
+                                ""
+                            )
+                        )
+                    DisabledBorderColor: =gblAppStyles.TextInput.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.TextInput.DisabledColor
+                    DisabledFill: =gblAppStyles.TextInput.DisabledFill
+                    Fill: =gblAppStyles.TextInput.Fill
+                    FocusedBorderColor: =gblAppStyles.TextInput.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.TextInput.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HintText: |-
+                        =With({varDefault: "Add item title",varOOBTextId: "txtTitle_EditBoardItem__locHintText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    HoverBorderColor: =gblAppStyles.TextInput.HoverBorderColor
+                    HoverColor: =gblAppStyles.TextInput.HoverColor
+                    HoverFill: =gblAppStyles.TextInput.HoverFill
+                    MaxLength: =100
+                    PressedBorderColor: =gblAppStyles.TextInput.PressedBorderColor
+                    PressedColor: =gblAppStyles.TextInput.PressedColor
+                    PressedFill: =gblAppStyles.TextInput.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.TextInput.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.TextInput.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.TextInput.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.TextInput.RadiusTopRight
+                    Size: =gblAppStyles.TextInput.Size
+                    TabIndex: =If(locDeleteBoardItemWarning,-1,1)
+                    Tooltip: |-
+                        =With({varDefault: "Add item title",varOOBTextId: "txtTitle_EditBoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Width: =lblHeader_EditBoardItem.Width
+                    X: =lblTitle_EditBoardItem.X
+                    Y: =lblTitle_EditBoardItem.Y + lblTitle_EditBoardItem.Height
+                    ZIndex: =13
+
+                shpSeparator_EditBoardItem As rectangle:
+                    Fill: =gblAppStyles.Dividers.Elements
+                    Height: =1
+                    Width: =lblHeader_EditBoardItem.Width
+                    X: =lblHeader_EditBoardItem.X
+                    Y: =txtDesc_EditBoardItem.Y + txtDesc_EditBoardItem.Height + 20
+                    ZIndex: =14
+
+                lblPreviewHeader_EditBoardItem As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Preview",
+                                varOOBTextId: "lblPreviewHeader_EditBoardItem__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Tooltip: |-
+                        =With({varDefault: "Preview",varOOBTextId: "lblPreviewHeader_EditBoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Width: =lblHeader_EditBoardItem.Width
+                    Wrap: =false
+                    X: =20*1
+                    Y: =shpSeparator_EditBoardItem.Y + shpSeparator_EditBoardItem.Height + 20
+                    ZIndex: =15
+
+                galPreview_EditBoardItem As gallery.variableTemplateHeightGallery:
+                    AccessibleLabel: ="Gallery to preview board item"
+                    BorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                    FocusedBorderThickness: =1
+                    Height: =Value(lblCardHeight_EditBoardItem.Text)
+                    Items: =Sequence(1)
+                    Layout: =Layout.Vertical
+                    TabIndex: |-
+                        =If(
+                            true,
+                            -1,
+                            0
+                        )
+                    TemplatePadding: =0
+                    TemplateSize: =280
+                    Width: =350*1
+                    X: =lblHeader_EditBoardItem.X
+                    Y: =lblPreviewHeader_EditBoardItem.Y + lblPreviewHeader_EditBoardItem.Height + 10
+                    ZIndex: =16
+
+                    lblBackgroundPreview_EditBoardItem As label:
+                        Fill: |-
+                            =If(
+                                gblThemeDark,
+                                gblAppColors.NeutralWebGray220,
+                                gblThemeHiCo,
+                                Black,
+                                White
+                            )
+                        Height: |-
+                            =Max(
+                                shpFlexHeightPreview_EditBoardItem.Y + shpFlexHeightPreview_EditBoardItem.Height,
+                                imgCreatedByPreview_EditBoardItem.Y + imgCreatedByPreview_EditBoardItem.Height
+                            )
+                        OnSelect: =Select(Parent)
+                        Text: =
+                        Width: =Parent.Width - Self.X
+                        ZIndex: =1
+
+                    btnItemTypePreview_EditBoardItem As button:
+                        BorderThickness: =0
+                        DisabledFill: |-
+                            =If(
+                                gblThemeDark || gblThemeHiCo,
+                                ColorValue("#6264A7"),
+                                ColorValue("#FCF2FA")
+                            )
+                        DisplayMode: =DisplayMode.Disabled
+                        Height: =48
+                        OnSelect: =Select(Parent)
+                        RadiusBottomLeft: =5
+                        RadiusBottomRight: =5
+                        RadiusTopLeft: =5
+                        RadiusTopRight: =5
+                        Text: =""
+                        Width: =48
+                        X: =10
+                        Y: =10
+                        ZIndex: =2
+
+                    shpItemTypePreview_EditBoardItem As rectangle:
+                        AccessibleLabel: |-
+                            =With({varDefault: "Board Item Type",varOOBTextId: "shpItemTypePreview_EditBoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                        Height: =48
+                        OnSelect: =Select(Parent)
+                        Tooltip: |-
+                            =With({varDefault: "Board Item Type",varOOBTextId: "btnItemTypePreview_EditBoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                        Visible: =false
+                        Width: =48
+                        X: =10
+                        Y: =10
+                        ZIndex: =3
+
+                    imgItemTypePreview_EditBoardItem As image:
+                        AccessibleLabel: |-
+                            =With({varDefault: "Board Item Type",varOOBTextId: "imgItemTypePreview_EditBoardItem__locAccessibleText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                        Height: =32
+                        Image: |-
+                            =Switch(
+                                rdoItemType_EditBoardItem.Selected.Value,
+                                "Apps",
+                                If(
+                                    gblThemeDark || gblThemeHiCo,
+                                    App_Dark,
+                                    App_Default
+                                ),
+                                "Channel tab",
+                                If(
+                                    gblThemeDark || gblThemeHiCo,
+                                    Tab_Dark,
+                                    Tab_Default
+                                ),
+                               "Conversation",
+                                If(
+                                    gblThemeDark || gblThemeHiCo,
+                                    Chat_Dark,
+                                    Chat_Default
+                                ),
+                                "File",
+                                If(
+                                    gblThemeDark || gblThemeHiCo,
+                                    File_Dark,
+                                    File_Default
+                                ),
+                                "Teams channel",
+                                If(
+                                    gblThemeDark || gblThemeHiCo,
+                                    Channel_Dark,
+                                    Channel_Default
+                                ),
+                                "Teams team",
+                                If(
+                                    gblThemeDark || gblThemeHiCo,
+                                    Team_Dark,
+                                    Team_Default
+                                ),
+                                "Website",
+                                If(
+                                    gblThemeDark || gblThemeHiCo,
+                                    Website_Dark,
+                                    Website_Default
+                                )
+                            )
+                        OnSelect: =Select(Parent)
+                        Tooltip: |-
+                            =With({varDefault: "Board Item Type",varOOBTextId: "imgItemTypePreview_EditBoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                        Width: =32
+                        X: =shpItemTypePreview_EditBoardItem.X + (shpItemTypePreview_EditBoardItem.Width - Self.Width)/2
+                        Y: =shpItemTypePreview_EditBoardItem.Y + (shpItemTypePreview_EditBoardItem.Height - Self.Height)/2
+                        ZIndex: =4
+
+                    lblTitlePreview_EditBoardItem As label:
+                        Color: =gblAppStyles.Label.Color
+                        Font: =Font.'Segoe UI'
+                        FontWeight: =FontWeight.Bold
+                        Height: =Self.Size * 1.8
+                        OnSelect: =Select(Parent)
+                        PaddingBottom: =0
+                        PaddingLeft: =0
+                        PaddingRight: =0
+                        PaddingTop: =0
+                        Size: =gblAppStyles.Label.Size.Medium
+                        Text: =txtTitle_EditBoardItem.Text
+                        Tooltip: |-
+                            =With({varDefault: "Title",varOOBTextId: "lblTitlePreview_EditBoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                        VerticalAlign: =VerticalAlign.Top
+                        Width: =Parent.TemplateWidth - 112
+                        X: =imgItemTypePreview_EditBoardItem.X + imgItemTypePreview_EditBoardItem.Width + 20
+                        Y: =10*1
+                        ZIndex: =5
+
+                    lblDescPreview_EditBoardItem As label:
+                        AutoHeight: =true
+                        Color: =gblAppStyles.Label.Color
+                        Font: =Font.'Segoe UI'
+                        Height: =
+                        OnSelect: =Select(Parent)
+                        PaddingBottom: =0
+                        PaddingLeft: =0
+                        PaddingRight: =0
+                        PaddingTop: =0
+                        Size: =10.5
+                        Text: =txtDesc_EditBoardItem.Text
+                        Tooltip: |-
+                            =With({varDefault: "Description",varOOBTextId: "lblDescPreview_EditBoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                        VerticalAlign: =VerticalAlign.Top
+                        Width: =Parent.TemplateWidth - Self.X - 20
+                        X: =imgItemTypePreview_EditBoardItem.X + imgItemTypePreview_EditBoardItem.Width + 20
+                        Y: =lblTitlePreview_EditBoardItem.Y + lblTitlePreview_EditBoardItem.Height
+                        ZIndex: =6
+
+                    shpFlexHeightPreview_EditBoardItem As rectangle:
+                        Height: =1
+                        OnSelect: =Select(Parent)
+                        Tooltip: =lblBackgroundPreview_EditBoardItem.Y + lblBackgroundPreview_EditBoardItem.Height
+                        Visible: =false
+                        Width: =321
+                        Y: =imgCreatedByPreview_EditBoardItem.Y + imgCreatedByPreview_EditBoardItem.Height + 12
+                        ZIndex: =7
+
+                    lblCardHeight_EditBoardItem As label:
+                        Color: =RGBA(255, 255, 255, 1)
+                        Font: =Font.'Segoe UI'
+                        OnSelect: =Select(Parent)
+                        Size: =10
+                        Text: =lblFlexHeightPreview_EditBoardItem.Y + lblFlexHeightPreview_EditBoardItem.Height
+                        Visible: =false
+                        Width: =50
+                        X: =300
+                        Y: =40
+                        ZIndex: =8
+
+                    lblCreatedByPreview_EditBoardItem As label:
+                        Color: =gblAppStyles.Label.Color
+                        Font: =Font.'Segoe UI'
+                        Height: =26
+                        OnSelect: =Select(Parent)
+                        PaddingLeft: =0
+                        Size: =gblAppStyles.Label.Size.Medium
+                        Text: |-
+                            =gblCurrUser.'Full Name'
+                            //LookUp(Users, 'Primary Email' = gblCurrUserEmail).'Full Name'
+                        Tooltip: |-
+                            =With(
+                                {
+                                    varDefault: gblCurrUser.'Full Name',
+                                    /*
+                                    LookUp(
+                                        Users,
+                                        'Primary Email' = gblCurrUserEmail
+                                    ).'Full Name', */
+                                    varOOBTextId: "lblCreatedByPreview_EditBoardItem__locTooltipText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        Width: =Parent.Width - Self.X*2
+                        X: =imgCreatedByPreview_EditBoardItem.X + imgCreatedByPreview_EditBoardItem.Width + 10
+                        Y: =Max(lblDescPreview_EditBoardItem.Y + lblDescPreview_EditBoardItem.Height, 70) + 10
+                        ZIndex: =9
+
+                    imgCreatedByPreview_EditBoardItem As image:
+                        AccessibleLabel: |-
+                            =With({varDefault: "Created By Picture",varOOBTextId: "imgCreatedByPreview_EditBoardItem__locAccessibleText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                        Height: =22
+                        Image: |-
+                            =If(
+                                !IsBlank(gblCurrUserEmail),
+                                Office365Users.UserPhotoV2(gblCurrUserEmail)
+                            )
+                        OnSelect: =Select(Parent)
+                        RadiusBottomLeft: =22
+                        RadiusBottomRight: =22
+                        RadiusTopLeft: =22
+                        RadiusTopRight: =22
+                        Tooltip: |-
+                            =With({varDefault: "Created By Picture",varOOBTextId: "imgCreatedByPreview_EditBoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                        Width: =22
+                        X: =16
+                        Y: =lblCreatedByPreview_EditBoardItem.Y + (lblCreatedByPreview_EditBoardItem.Height - Self.Height)/2
+                        ZIndex: =10
+
+                    lblFlexHeightPreview_EditBoardItem As label:
+                        Color: =RGBA(0, 0, 0, 0)
+                        Font: =Font.'Segoe UI'
+                        Height: =10
+                        OnSelect: =Select(Parent)
+                        Text: =gblCurrUserEmail
+                        Tooltip: |-
+                            =With({varDefault: "Current User Email Address",varOOBTextId: "lblFlexHeightPreview_EditBoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                        X: =171
+                        Y: =lblBackgroundPreview_EditBoardItem.Y + lblBackgroundPreview_EditBoardItem.Height
+                        ZIndex: =11
+
+                    imgOpenLinkPreview_EditBoardItem As image:
+                        AccessibleLabel: |-
+                            =With({varDefault: "Open Link",varOOBTextId: "imgOpenLinkPreview_EditBoardItem__locAccessibleText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                        Height: =imgCreatedByPreview_EditBoardItem.Height
+                        Image: |-
+                            =If(
+                                gblThemeDark || gblThemeHiCo,
+                                Open_Dark,
+                                Open_Default
+                            )
+                        PaddingBottom: =2
+                        PaddingLeft: =2
+                        PaddingRight: =2
+                        PaddingTop: =2
+                        TabIndex: |-
+                            =If(
+                                true,
+                                -1,
+                                0
+                            )
+                        Tooltip: |-
+                            =With({varDefault: "Open Link",varOOBTextId: "imgOpenLinkPreview_EditBoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                        Visible: =rdoItemType_EditBoardItem.Selected.Value = "Website"
+                        Width: =imgCreatedByPreview_EditBoardItem.Width
+                        X: =Parent.Width - Self.Width - 20
+                        Y: =imgCreatedByPreview_EditBoardItem.Y
+                        ZIndex: =12
+
+                btnSave_EditBoardItem As button:
+                    BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+                    BorderThickness: =gblAppStyles.ButtonPrimary.BorderThickness
+                    Color: =gblAppStyles.ButtonPrimary.Color
+                    DisabledBorderColor: =gblAppStyles.ButtonPrimary.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.ButtonPrimary.DisabledColor
+                    DisabledFill: =gblAppStyles.ButtonPrimary.DisabledFill
+                    DisplayMode: |-
+                        =If(
+                            IsBlank(txtLink_EditBoardItem.Text) || IsBlank(txtTitle_EditBoardItem.Text) || IsBlank(txtDesc_EditBoardItem.Text),
+                            DisplayMode.Disabled,
+                            DisplayMode.Edit
+                        )
+                    Fill: =gblAppStyles.ButtonPrimary.Fill
+                    FocusedBorderColor: =gblAppStyles.ButtonPrimary.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.ButtonPrimary.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Bold
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.ButtonPrimary.HoverBorderColor
+                    HoverColor: =gblAppStyles.ButtonPrimary.HoverColor
+                    HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+                    OnSelect: |
+                        =If(
+                            IsError(
+                                Patch(
+                                    'Board Items',
+                                    locSelectedBoardItem,
+                                    {
+                                        Name: txtTitle_EditBoardItem.Text,
+                                        Link: txtLink_EditBoardItem.Text,
+                                        Description: txtDesc_EditBoardItem.Text,
+                                        Category: Switch(
+                                            rdoItemType_EditBoardItem.Selected.Value,
+                                            "Website",
+                                            'Board Item Categories'.Website,
+                                            "Teams team",
+                                            'Board Item Categories'.'Teams team',
+                                            "Teams channel",
+                                            'Board Item Categories'.'Teams channel',
+                                            "Channel tab",
+                                            'Board Item Categories'.'Channel tab',
+                                            "Conversation",
+                                            'Board Item Categories'.Conversation,
+                                            "Apps",
+                                            'Board Item Categories'.App,
+                                            "File",
+                                            'Board Item Categories'.File,
+                                            "Yammer",
+                                            'Board Item Categories'.Yammer
+                                        )
+                                    }
+                                )
+                            ),
+                            Notify(
+                                "Error saving record",
+                                NotificationType.Error
+                            )
+                        );
+                        //screen reader start
+                        UpdateContext(
+                            {
+                                locScreenReaderAnnouncedText: With(
+                                    {
+                                        varAnnouncedText: With(
+                                            {
+                                                varDefault: "Saved successfully and navigating to the Board items Screen",
+                                                varOOBTextId: "btnSave_AddBoarditem__locAnnouncement"
+                                            },
+                                            With(
+                                                {
+                                                    varLocalizedText: LookUp(
+                                                        colLocalization,
+                                                        OOBTextID = varOOBTextId,
+                                                        LocalizedText
+                                                    )
+                                                },
+                                                Coalesce(
+                                                    varLocalizedText,
+                                                    varDefault
+                                                )
+                                            )
+                                        )
+                                    },
+                                    If(
+                                        locScreenReaderAnnouncedText = varAnnouncedText,
+                                        Concatenate(
+                                            varAnnouncedText,
+                                            " "
+                                        ),
+                                        varAnnouncedText
+                                    )
+                                )
+                            }
+                        );
+                        //screen reader end
+                        Navigate(
+                            'Board Items Screen',
+                            ScreenTransition.Fade
+                        );
+                    PressedBorderColor: =gblAppStyles.ButtonPrimary.PressedBorderColor
+                    PressedColor: =gblAppStyles.ButtonPrimary.PressedColor
+                    PressedFill: =gblAppStyles.ButtonPrimary.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.ButtonPrimary.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+                    Size: =gblAppStyles.ButtonPrimary.Size
+                    TabIndex: =If(locDeleteBoardItemWarning,-1,0)
+                    Text: |-
+                        =With({varDefault: "Save",varOOBTextId: "btnSave_EditBoardItem__locText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Tooltip: |-
+                        =With({varDefault: "Save",varOOBTextId: "btnSave_EditBoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Width: =100*1
+                    X: |-
+                        =If(
+                            'Edit Board Item Screen'.Size = ScreenSize.ExtraLarge || 'Edit Board Item Screen'.Size = ScreenSize.Large,
+                            Parent.Width - Self.Width - 20,
+                            Parent.Width - Self.Width - 20
+                        )
+                    Y: |-
+                        =If(
+                            'Edit Board Item Screen'.Size = ScreenSize.ExtraLarge || 'Edit Board Item Screen'.Size = ScreenSize.Large,
+                            lblBack_EditBoardItem.Y,
+                            Parent.Height - Self.Height - 20
+                        )
+                    ZIndex: =17
+
+                btnCancel_EditBoardItem As button:
+                    BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+                    BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+                    Color: =gblAppStyles.ButtonSecondary.Color
+                    DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+                    DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+                    Fill: =gblAppStyles.ButtonSecondary.Fill
+                    FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+                    HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+                    HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+                    OnSelect: |-
+                        =//screen reader start
+                            UpdateContext(
+                                {
+                                    locScreenReaderAnnouncedText: With(
+                                        {
+                                            varAnnouncedText: With(
+                                                {
+                                                    varDefault: "Cancelled and navigating to Board items screen",
+                                                    varOOBTextId: "btnCancel_AddBoarditem__locAnnouncement"
+                                                },
+                                                With(
+                                                    {
+                                                        varLocalizedText: LookUp(
+                                                            colLocalization,
+                                                            OOBTextID = varOOBTextId,
+                                                            LocalizedText
+                                                        )
+                                                    },
+                                                    Coalesce(
+                                                        varLocalizedText,
+                                                        varDefault
+                                                    )
+                                                )
+                                            )
+                                        },
+                                        If(
+                                            locScreenReaderAnnouncedText = varAnnouncedText,
+                                            Concatenate(
+                                                varAnnouncedText,
+                                                " "
+                                            ),
+                                            varAnnouncedText
+                                        )
+                                    )
+                                }
+                            );
+                            
+                        //screen reader end
+                        Navigate(
+                            'Board Items Screen',
+                            ScreenTransition.Fade
+                        )
+                    PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+                    PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+                    PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.ButtonSecondary.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.ButtonSecondary.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.ButtonSecondary.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.ButtonSecondary.RadiusTopRight
+                    Size: =gblAppStyles.ButtonSecondary.Size
+                    TabIndex: =If(locDeleteBoardItemWarning,-1,0)
+                    Text: |-
+                        =With({varDefault: "Cancel",varOOBTextId: "btnCancel_EditBoardItem__locText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Tooltip: |-
+                        =With({varDefault: "Cancel",varOOBTextId: "btnCancel_EditBoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Width: =100*1
+                    X: =Parent.Width - btnSave_EditBoardItem.Width - Self.Width - 20*2
+                    Y: =btnSave_EditBoardItem.Y
+                    ZIndex: =18
+
+                btnDeleteBoardItem As button:
+                    BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                    BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+                    Color: =gblAppStyles.ButtonTransparent.Color
+                    DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.ButtonTransparent.DisabledColor
+                    DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                    Fill: =gblAppStyles.ButtonTransparent.Fill
+                    FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                    HoverColor: =gblAppStyles.ButtonTransparent.HoverColor
+                    HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+                    OnSelect: |-
+                        =UpdateContext({locDeleteBoardItemWarning: true});
+                        Reset(chkConfirmDelete_BoardItem);
+                        //set focus start
+                        UpdateContext({locSetFocusTimerStart: false});
+                        UpdateContext({locSetFocusControlTarget: "imgCancelWarning_BoardItem"});
+                        UpdateContext({locSetFocusTimerStart: true});
+                        //set focus end
+                        //screen reader start
+                        UpdateContext(
+                            {
+                                locScreenReaderAnnouncedText: With(
+                                    {
+                                        varAnnouncedText: With(
+                                            {
+                                                varDefault: "Opening a delete dialog",
+                                                varOOBTextId: "btnDeleteBoardItem__locAnnouncement"
+                                            },
+                                            With(
+                                                {
+                                                    varLocalizedText: LookUp(
+                                                        colLocalization,
+                                                        OOBTextID = varOOBTextId,
+                                                        LocalizedText
+                                                    )
+                                                },
+                                                Coalesce(
+                                                    varLocalizedText,
+                                                    varDefault
+                                                )
+                                            )
+                                        )
+                                    },
+                                    If(
+                                        locScreenReaderAnnouncedText = varAnnouncedText,
+                                        Concatenate(
+                                            varAnnouncedText,
+                                            " "
+                                        ),
+                                        varAnnouncedText
+                                    )
+                                )
+                            }
+                        );
+                        //screen reader end
+                    PaddingLeft: =25
+                    PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                    PressedColor: =gblAppStyles.ButtonTransparent.PressedColor
+                    PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.ButtonTransparent.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.ButtonTransparent.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.ButtonTransparent.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.ButtonTransparent.RadiusTopRight
+                    Size: =gblAppStyles.ButtonTransparent.Size
+                    TabIndex: =If(locDeleteBoardItemWarning,-1,0)
+                    Text: |-
+                        =With({varDefault: "Delete board item",varOOBTextId: "btnDeleteBoardItem__locText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Tooltip: |-
+                        =With({varDefault: "Delete board item",varOOBTextId: "btnDeleteBoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Visible: =('Edit Board Item Screen'.Size = ScreenSize.ExtraLarge || 'Edit Board Item Screen'.Size = ScreenSize.Large) && locSelectedBoardItem.'Created By'.'Primary Email' = User().Email || locSelectedBoardItem.'Created By'.'User Name' = User().Email || (gblTeamsTabContext && gblIsAdmin)
+                    Width: =180*1
+                    X: =Parent.Width - btnSave_EditBoardItem.Width - btnCancel_EditBoardItem.Width - Self.Width - 20*3
+                    Y: =btnCancel_EditBoardItem.Y
+                    ZIndex: =19
+
+                imgDeleteBoardItem As image:
+                    AccessibleLabel: |-
+                        =With({varDefault: "Delete",varOOBTextId: "imgDeleteBoardItem__locAccessibleText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Height: =22*1
+                    Image: |-
+                        =With(
+                            {
+                                varImageRecord: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Delete"
+                                ),
+                                varColor: If(
+                                    Self.DisplayMode = DisplayMode.Disabled,
+                                    gblAppStyles.Icons.DisabledColor,
+                                    gblAppStyles.Icons.Color_Red
+                                )
+                            },
+                            With(
+                                {
+                                    varImageData: Concatenate(
+                                        "data:image/svg+xml;utf8, ",
+                                        EncodeUrl(
+                                            Concatenate(
+                                                "<svg viewBox='",
+                                                varImageRecord.staticIconViewbox,
+                                                "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                varImageRecord.staticIconPath,
+                                                "' fill='#",
+                                                varColor,
+                                                "'/></svg>"
+                                            )
+                                        )
+                                    )
+                                },
+                                varImageData
+                            )
+                        )
+                    OnSelect: |-
+                        =UpdateContext({locDeleteBoardItemWarning: true});
+                        //set focus start
+                        UpdateContext({locSetFocusTimerStart: false});
+                        UpdateContext({locSetFocusControlTarget: "imgCancelWarning_BoardItem"});
+                        UpdateContext({locSetFocusTimerStart: true});
+                        //set focus end
+                        //screen reader start
+                        UpdateContext(
+                            {
+                                locScreenReaderAnnouncedText: With(
+                                    {
+                                        varAnnouncedText: With(
+                                            {
+                                                varDefault: "Opening a delete dialog",
+                                                varOOBTextId: "btnDeleteBoardItem__locAnnouncement"
+                                            },
+                                            With(
+                                                {
+                                                    varLocalizedText: LookUp(
+                                                        colLocalization,
+                                                        OOBTextID = varOOBTextId,
+                                                        LocalizedText
+                                                    )
+                                                },
+                                                Coalesce(
+                                                    varLocalizedText,
+                                                    varDefault
+                                                )
+                                            )
+                                        )
+                                    },
+                                    If(
+                                        locScreenReaderAnnouncedText = varAnnouncedText,
+                                        Concatenate(
+                                            varAnnouncedText,
+                                            " "
+                                        ),
+                                        varAnnouncedText
+                                    )
+                                )
+                            }
+                        );
+                        //screen reader end
+                    TabIndex: |-
+                        =If(
+                            'Edit Board Item Screen'.Size = ScreenSize.ExtraLarge || 'Edit Board Item Screen'.Size = ScreenSize.Large,
+                            -1,
+                            0
+                        )
+                    Tooltip: |-
+                        =With({varDefault: "Delete",varOOBTextId: "imgDeleteBoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    Visible: =locSelectedBoardItem.'Created By'.'Primary Email' = User().Email || locSelectedBoardItem.'Created By'.'User Name' = User().Email || (gblTeamsTabContext && gblIsAdmin)
+                    Width: =22*1
+                    X: |-
+                        =If(
+                            'Edit Board Item Screen'.Size = ScreenSize.ExtraLarge || 'Edit Board Item Screen'.Size = ScreenSize.Large,
+                            btnDeleteBoardItem.X + 5,
+                            Parent.Width - Self.Width - 20
+                        )
+                    Y: |-
+                        =If(
+                            'Edit Board Item Screen'.Size = ScreenSize.ExtraLarge || 'Edit Board Item Screen'.Size = ScreenSize.Large,
+                            btnDeleteBoardItem.Y + (btnDeleteBoardItem.Height - Self.Height) / 2,
+                            lblBack_EditBoardItem.Y + (lblBack_EditBoardItem.Height - Self.Height)/2
+                        )
+                    ZIndex: =20
+
+                lblBoardItemLink As label:
+                    Font: =Font.'Segoe UI'
+                    Height: =1
+                    Text: =locNewBoardItemLink
+                    Width: =1
+                    X: =1
+                    Y: =1
+                    ZIndex: =21
+
+    conWarning_EditBoardItem As groupContainer:
+        DisplayMode: =DisplayMode.Edit
+        Height: =Parent.Height-Self.Y
+        Visible: =locDeleteBoardItemWarning
+        Width: =Parent.Width 
+        Y: =0 //conAreasHeader.Y+conAreasHeader.Height+1
+        ZIndex: =4
+
+        lblWarningBackground_BoardItem As label:
+            Color: =RGBA(0, 0, 0, 0)
+            DisabledColor: =RGBA(0, 0, 0, 0)
+            Fill: |-
+                =If(
+                    gblThemeDark Or gblThemeHiCo,
+                    gblAppColors.OverlayLight,
+                    gblAppColors.OverlayDark
+                )
+            FocusedBorderThickness: =1
+            Height: =Parent.Height
+            OnSelect: |-
+                =UpdateContext({locDeleteBoardItemWarning: false})
+            Size: =15.15
+            TabIndex: |-
+                =If(
+                    true,
+                    -1,
+                    0
+                )
+            Text: |-
+                =With({varDefault: "App background when the warning message pop ups",varOOBTextId: "lblWarningBackground_BoardItem__locText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+            Tooltip: |-
+                =With({varDefault: "App background when the warning message pop ups",varOOBTextId: "lblWarningBackground_BoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+            Width: =Parent.Width
+            ZIndex: =1
+
+        lblWarningContainer_BoardItem As label:
+            BorderColor: =gblAppStyles.TextInput.Color
+            BorderThickness: |-
+                =If(
+                    gblThemeHiCo,
+                    1,
+                    0
+                )
+            Color: =RGBA(0, 0, 0, 0)
+            Fill: =gblAppStyles.TextInput.Fill
+            Height: |-
+                =If(
+                    'Edit Board Item Screen'.Size = ScreenSize.ExtraLarge || 'Edit Board Item Screen'.Size = ScreenSize.Large,
+                    250,
+                    250
+                )
+            PaddingRight: =5.83
+            PaddingTop: =5.83
+            Size: =15.15
+            Text: |-
+                =With({varDefault: "Background for Warning message",varOOBTextId: "lblWarningContainer_BoardItem__locText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+            Tooltip: |-
+                =With({varDefault: "Background for Warning message",varOOBTextId: "lblWarningContainer_BoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+            Width: |-
+                =If(
+                    'Edit Board Item Screen'.Size = ScreenSize.ExtraLarge || 'Edit Board Item Screen'.Size = ScreenSize.Large,
+                    450,
+                    Parent.Width
+                )
+            X: =(Parent.Width - Self.Width)/2  
+            Y: |-
+                =If(
+                    'Edit Board Item Screen'.Size = ScreenSize.ExtraLarge || 'Edit Board Item Screen'.Size = ScreenSize.Large,
+                    (Parent.Height - Self.Height) / 2,
+                    Parent.Height - Self.Height
+                )
+            ZIndex: =2
+
+        lblWarningHeader_BoardItem As label:
+            BorderColor: =gblAppStyles.Label.BorderColor
+            BorderThickness: =gblAppStyles.Label.BorderThickness
+            Color: =gblAppStyles.Label.Color
+            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+            DisabledColor: =gblAppStyles.Label.DisabledColor
+            DisabledFill: =gblAppStyles.Label.DisabledFill
+            Fill: =gblAppStyles.Label.Fill
+            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            FontWeight: =FontWeight.Bold
+            Height: =56
+            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+            HoverColor: =gblAppStyles.Label.HoverColor
+            HoverFill: =gblAppStyles.Label.HoverFill
+            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+            PressedColor: =gblAppStyles.Label.PressedColor
+            PressedFill: =gblAppStyles.Label.PressedFill
+            Size: =gblAppStyles.Label.Size.Large
+            Text: |-
+                =Substitute(With(
+                    {
+                        varDefault: "Delete this board item",
+                        varOOBTextId: "lblWarningHeader_BoardItem__locText",
+                        varParam0: Blank()
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        If(
+                            IsBlankOrError(varParam0),
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            ),
+                            Coalesce(
+                                Substitute(
+                                    varLocalizedText,
+                                    "{0}",
+                                    Text(varParam0)
+                                ),
+                                varDefault
+                            )
+                        )
+                    )
+                ),"{0}",If(
+                    locPreloadBoardItem,
+                    locSelectedBoardItem.Name,
+                    Switch(
+                        rdoItemType_EditBoardItem.Selected.Value,
+                        "Teams team",
+                        locBoardItemTeam.displayName,
+                        "Teams channel",
+                        locBoardItemChannel.displayName,
+                        "Conversation",
+                        locBoardItemConversation.subject,
+                        ""
+                    )
+                ))
+            Tooltip: |-
+                =With({varDefault:"Delete """ & locSelectedBoardItem.Name & """ board item",varOOBTextId:"lblWarningHeader_BoardItem__locTooltipText",varParam0:Blank()},With({varLocalizedText:LookUp(colLocalization,OOBTextID=varOOBTextId,LocalizedText)},If(IsBlankOrError(varParam0),Coalesce(varLocalizedText,varDefault),Coalesce(Substitute(varLocalizedText,"{0}",Text(varParam0)),varDefault))))
+            Width: =lblWarningContainer_BoardItem.X + lblWarningContainer_BoardItem.Width - Self.X - 20
+            X: =lblWarningContainer_BoardItem.X + 20
+            Y: =lblWarningContainer_BoardItem.Y+20 
+            ZIndex: =3
+
+        lblWarningMessage_BoardItem As label:
+            BorderColor: =gblAppStyles.Label.BorderColor
+            BorderThickness: =gblAppStyles.Label.BorderThickness
+            Color: =gblAppStyles.Label.Color
+            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+            DisabledColor: =gblAppStyles.Label.DisabledColor
+            DisabledFill: =gblAppStyles.Label.DisabledFill
+            Fill: =gblAppStyles.Label.Fill
+            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            Height: =63
+            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+            HoverColor: =gblAppStyles.Label.HoverColor
+            HoverFill: =gblAppStyles.Label.HoverFill
+            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+            PressedColor: =gblAppStyles.Label.PressedColor
+            PressedFill: =gblAppStyles.Label.PressedFill
+            Size: =gblAppStyles.Label.Size.Medium
+            Text: |-
+                =With(
+                    {
+                        varDefault: "Are you sure you want to delete this board item? This will permanently delete this board item ",
+                        varOOBTextId: "lblWarningMessage_BoardItem__locText"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            Tooltip: |-
+                =With({varDefault: "Are you sure you want to delete this board item? This will delete this board item ",varOOBTextId: "lblWarningMessage_BoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+            VerticalAlign: =VerticalAlign.Top
+            Width: =lblWarningHeader_BoardItem.Width
+            X: =lblWarningHeader_BoardItem.X
+            Y: =lblWarningHeader_BoardItem.Y+lblWarningHeader_BoardItem.Height 
+            ZIndex: =4
+
+        btnCancelWarning_BoardItem As button:
+            BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+            BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+            Color: =gblAppStyles.ButtonSecondary.Color
+            DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+            DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+            DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+            Fill: =gblAppStyles.ButtonSecondary.Fill
+            FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            Height: =32
+            HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+            HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+            HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+            OnSelect: |-
+                =UpdateContext({locDeleteBoardItemWarning: false});
+                //screen reader start
+                UpdateContext(
+                    {
+                        locScreenReaderAnnouncedText: With(
+                            {
+                                varAnnouncedText: With(
+                                    {
+                                        varDefault: "Cancelling the deletion and closing the dialog",
+                                        varOOBTextId: "btnCancelWarning_Board_Announcement"
+                                    },
+                                    With(
+                                        {
+                                            varLocalizedText: LookUp(
+                                                colLocalization,
+                                                OOBTextID = varOOBTextId,
+                                                LocalizedText
+                                            )
+                                        },
+                                        Coalesce(
+                                            varLocalizedText,
+                                            varDefault
+                                        )
+                                    )
+                                )
+                            },
+                            If(
+                                locScreenReaderAnnouncedText = varAnnouncedText,
+                                Concatenate(
+                                    varAnnouncedText,
+                                    " "
+                                ),
+                                varAnnouncedText
+                            )
+                        )
+                    }
+                );
+                //screen reader end
+                //set focus start
+                UpdateContext({locSetFocusTimerStart: false});
+                UpdateContext({locSetFocusControlTarget: "btnDeleteBoardItem"});
+                UpdateContext({locSetFocusTimerStart: true});
+                //set focus end
+            PaddingBottom: =6
+            PaddingLeft: =0
+            PaddingRight: =0.00
+            PaddingTop: =6.99
+            PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+            PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+            PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+            RadiusBottomLeft: =gblAppStyles.ButtonSecondary.RadiusBottomLeft
+            RadiusBottomRight: =gblAppStyles.ButtonSecondary.RadiusBottomRight
+            RadiusTopLeft: =gblAppStyles.ButtonSecondary.RadiusTopLeft
+            RadiusTopRight: =gblAppStyles.ButtonSecondary.RadiusTopRight
+            Size: =gblAppStyles.ButtonSecondary.Size
+            TabIndex: |-
+                =/*If(gblDisplayWarning && (gblWarningType = "locationtypedelete" || gblWarningType = "locationdelete" || gblWarningType = "inspectiondelete" || gblWarningType = "locationgroupdelete" || gblWarningType = "areatypechange"),0,-1)*/
+                If(locDeleteBoardItemWarning,0,-1)
+            Text: |-
+                =With({varDefault: "Cancel",varOOBTextId: "btnCancelWarning_BoardItem__locText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+            Tooltip: |-
+                =With({varDefault: "Cancel",varOOBTextId: "btnCancelWarning_BoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+            Width: =97.90
+            X: =lblWarningContainer_BoardItem.X+lblWarningContainer_BoardItem.Width - Self.Width - Self.Width - 50 
+            Y: =lblWarningContainer_BoardItem.Y+lblWarningContainer_BoardItem.Height - Self.Height - 30 
+            ZIndex: =6
+
+        chkConfirmDelete_BoardItem As checkbox:
+            BorderColor: =gblAppStyles.Checkbox.BorderColor
+            BorderThickness: =gblAppStyles.Checkbox.BorderThickness
+            CheckboxBackgroundFill: =gblAppStyles.Checkbox.CheckboxBackgroundFill
+            CheckboxBorderColor: =gblAppStyles.Checkbox.CheckboxBorderColor
+            CheckboxSize: =25
+            CheckmarkFill: =gblAppStyles.Checkbox.CheckmarkFill
+            Color: =gblAppStyles.Checkbox.Color
+            FocusedBorderColor: =gblAppStyles.Checkbox.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Checkbox.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            HoverBorderColor: =gblAppStyles.Checkbox.HoverBorderColor
+            HoverColor: =gblAppStyles.Checkbox.HoverColor
+            HoverFill: =gblAppStyles.Checkbox.HoverFill
+            PaddingRight: =0.00
+            PaddingTop: =0.00
+            PressedBorderColor: =gblAppStyles.Checkbox.PressedBorderColor
+            PressedColor: =gblAppStyles.Checkbox.PressedColor
+            PressedFill: =gblAppStyles.Checkbox.PressedFill
+            Size: =gblAppStyles.Checkbox.Size
+            TabIndex: =If(locDeleteBoardItemWarning,0,-1)
+            Text: |-
+                =With({varDefault: "I understand.",varOOBTextId: "chkConfirmDelete_BoardItem__locText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+            Tooltip: |-
+                =With({varDefault: "I understand.",varOOBTextId: "chkConfirmDelete_BoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+            Width: =174.83
+            X: =lblWarningMessage_BoardItem.X 
+            Y: =lblWarningMessage_BoardItem.Y+lblWarningMessage_BoardItem.Height
+            ZIndex: =7
+
+        btnDeleteWarning_BoardItem As button:
+            BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+            BorderThickness: =gblAppStyles.ButtonPrimary.BorderThickness
+            Color: =gblAppStyles.ButtonPrimary.Color
+            DisabledBorderColor: =gblAppStyles.ButtonPrimary.DisabledBorderColor
+            DisabledColor: =gblAppStyles.ButtonPrimary.DisabledColor
+            DisabledFill: =gblAppStyles.ButtonPrimary.DisabledFill
+            DisplayMode: |-
+                =If(
+                    chkConfirmDelete_BoardItem.Value,
+                    DisplayMode.Edit,
+                    DisplayMode.Disabled
+                )
+            Fill: =gblAppStyles.ButtonPrimary.Fill
+            FocusedBorderColor: =gblAppStyles.ButtonPrimary.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.ButtonPrimary.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            Height: =32
+            HoverBorderColor: =gblAppStyles.ButtonPrimary.HoverBorderColor
+            HoverColor: =gblAppStyles.ButtonPrimary.HoverColor
+            HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+            OnSelect: |-
+                =Remove(
+                    'Board Items',
+                    locSelectedBoardItem
+                );
+                //screen reader start
+                UpdateContext(
+                    {
+                        locScreenReaderAnnouncedText: With(
+                            {
+                                varAnnouncedText: With(
+                                    {
+                                        varDefault: "Board item has been deleted and navigating to Board items screen",
+                                        varOOBTextId: "btnDeleteWarning_BoardItem__locAnnouncement"
+                                    },
+                                    With(
+                                        {
+                                            varLocalizedText: LookUp(
+                                                colLocalization,
+                                                OOBTextID = varOOBTextId,
+                                                LocalizedText
+                                            )
+                                        },
+                                        Coalesce(
+                                            varLocalizedText,
+                                            varDefault
+                                        )
+                                    )
+                                )
+                            },
+                            If(
+                                locScreenReaderAnnouncedText = varAnnouncedText,
+                                Concatenate(
+                                    varAnnouncedText,
+                                    " "
+                                ),
+                                varAnnouncedText
+                            )
+                        )
+                    }
+                );
+                //screen reader end
+                Navigate(
+                    'Board Items Screen',
+                    ScreenTransition.Fade
+                )
+            PaddingBottom: =6
+            PaddingLeft: =0
+            PaddingRight: =0.00
+            PaddingTop: =6.99
+            PressedBorderColor: =gblAppStyles.ButtonPrimary.PressedBorderColor
+            PressedColor: =gblAppStyles.ButtonPrimary.PressedColor
+            PressedFill: =gblAppStyles.ButtonPrimary.PressedFill
+            RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+            RadiusBottomRight: =gblAppStyles.ButtonPrimary.RadiusBottomRight
+            RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+            RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+            Size: =gblAppStyles.ButtonSecondary.Size
+            TabIndex: |-
+                =/*If(gblDisplayWarning && (gblWarningType = "locationtypedelete" || gblWarningType = "locationdelete" || gblWarningType = "inspectiondelete" || gblWarningType = "locationgroupdelete" || gblWarningType = "areatypechange"),0,-1)*/
+                If(locDeleteBoardItemWarning,0,-1)
+            Text: |-
+                =//If(gblWarningType="areatypechange",With({varDefault:"Update",varOOBTextId:"btnDeleteWarning__locText"},With({varLocalizedText:LookUp(colLocalization,OOBTextID=varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault))),With({varDefault:"Delete",varOOBTextId:"_translateCommon_Delete"},With({varLocalizedText:LookUp(colLocalization,OOBTextID=varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault))))
+                
+                With({varDefault: "Delete",varOOBTextId: "btnDeleteWarning_BoardItem__locText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+            Tooltip: |-
+                =With({varDefault: "Delete",varOOBTextId: "btnDeleteWarning_BoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+            Width: =97.90
+            X: =lblWarningContainer_BoardItem.X+lblWarningContainer_BoardItem.Width - Self.Width - 40 
+            Y: =lblWarningContainer_BoardItem.Y+lblWarningContainer_BoardItem.Height - Self.Height - 30 
+            ZIndex: =8
+
+        imgCancelWarning_BoardItem As image:
+            AccessibleLabel: |-
+                =With({varDefault: "Cancel",varOOBTextId: "imgCancelWarning_BoardItem__locAccessibleText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+            AutoDisableOnSelect: =false
+            BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+            BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+            DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+            DisabledFill: |-
+                =With(
+                    {
+                        varImageIsCategory: LookUp(
+                            staticIcons,
+                            staticIconName = "Sort"
+                        ).staticIconIsCategory
+                    },
+                    If(
+                        varImageIsCategory,
+                        gblAppStyles.Icons.DisabledFill_Category,
+                        Transparent
+                    )
+                )
+            Fill: |-
+                =With(
+                    {
+                        varImageIsCategory: LookUp(
+                            staticIcons,
+                            staticIconName = "Sort"
+                        ).staticIconIsCategory
+                    },
+                    If(
+                        varImageIsCategory,
+                        gblAppStyles.Icons.Fill_Category,
+                        Transparent
+                    )
+                )
+            FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+            Height: =28*1
+            HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+            HoverFill: =gblAppColors.OverlayLight
+            Image: |-
+                =With(
+                    {
+                        varImageRecord: LookUp(
+                            staticIcons,
+                            staticIconName = "Dismiss"
+                        ),
+                        varColor: If(
+                            Self.DisplayMode = DisplayMode.Disabled,
+                            gblAppStyles.Icons.DisabledColor,
+                            gblAppStyles.Icons.Color
+                        )
+                    },
+                    With(
+                        {
+                            varImageData: Concatenate(
+                                "data:image/svg+xml;utf8, ",
+                                EncodeUrl(
+                                    Concatenate(
+                                        "<svg viewBox='",
+                                        varImageRecord.staticIconViewbox,
+                                        "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                        varImageRecord.staticIconPath,
+                                        "' fill='#",
+                                        varColor,
+                                        "'/></svg>"
+                                    )
+                                )
+                            )
+                        },
+                        varImageData
+                    )
+                )
+            OnSelect: |-
+                =UpdateContext({locDeleteBoardItemWarning: false});
+                //screen reader start
+                UpdateContext(
+                    {
+                        locScreenReaderAnnouncedText: With(
+                            {
+                                varAnnouncedText: With(
+                                    {
+                                        varDefault: "Cancelling the deletion and closing the dialog",
+                                        varOOBTextId: "btnCancelWarning_Board_Announcement"
+                                    },
+                                    With(
+                                        {
+                                            varLocalizedText: LookUp(
+                                                colLocalization,
+                                                OOBTextID = varOOBTextId,
+                                                LocalizedText
+                                            )
+                                        },
+                                        Coalesce(
+                                            varLocalizedText,
+                                            varDefault
+                                        )
+                                    )
+                                )
+                            },
+                            If(
+                                locScreenReaderAnnouncedText = varAnnouncedText,
+                                Concatenate(
+                                    varAnnouncedText,
+                                    " "
+                                ),
+                                varAnnouncedText
+                            )
+                        )
+                    }
+                );
+                //screen reader end
+                //set focus start
+                UpdateContext({locSetFocusTimerStart: false});
+                UpdateContext({locSetFocusControlTarget: "btnDeleteBoardItem"});
+                UpdateContext({locSetFocusTimerStart: true});
+                //set focus end
+            PaddingBottom: =(Self.Width - 20) / 2
+            PaddingLeft: =(Self.Width - 20) / 2
+            PaddingRight: =(Self.Width - 20) / 2
+            PaddingTop: =(Self.Width - 20) / 2
+            PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+            TabIndex: =If(locDeleteBoardItemWarning,0,-1)
+            Tooltip: |-
+                =With({varDefault: "Cancel",varOOBTextId: "imgCancelWarning_BoardItem__locTooltipText"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+            Transparency: =If(Self.DisplayMode = DisplayMode.Disabled,0.75,0)
+            Width: =Self.Height
+            X: =lblWarningContainer_BoardItem.X + lblWarningContainer_BoardItem.Width - Self.Width - 8
+            Y: =lblWarningContainer_BoardItem.Y+10
+            ZIndex: =9
+

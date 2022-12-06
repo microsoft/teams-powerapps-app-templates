@@ -1,0 +1,2262 @@
+"'Mobile Projects Screen' As screen":
+    Fill: =gblAppStyles.Background.Fill
+    LoadingSpinner: =LoadingSpinner.Data
+    LoadingSpinnerColor: |-
+        =If(
+            gblThemeHiCo,
+            gblAppColors.HighContrastHyperlinks,
+            gblThemeDark,
+            gblAppColors.TeamsDarkPrimary,
+            gblAppColors.TeamsDefaultPrimary
+        )
+    OnVisible: |-
+        =UpdateContext({locMobileProjectSortOrder: true});
+        Reset(txtMobileFindProjects);
+        //project cover colors
+        ClearCollect(
+            colMobileProjectCoverColors,
+            {
+                Color: "#F4B9B9",
+                Theme: "default",
+                Base: "Color1"
+            },
+            {
+                Color: "#94BFFF",
+                Theme: "default",
+                Base: "Color2"
+            },
+            {
+                Color: "#E6F0FF",
+                Theme: "default",
+                Base: "Color3"
+            },
+            {
+                Color: "#5AC6CC",
+                Theme: "default",
+                Base: "Color4"
+            },
+            {
+                Color: "#C5E9EA",
+                Theme: "default",
+                Base: "Color5"
+            },
+            {
+                Color: "#F0F9FA",
+                Theme: "default",
+                Base: "Color6"
+            },
+            {
+                Color: "#EE6F99",
+                Theme: "default",
+                Base: "Color7"
+            },
+            {
+                Color: "#F495BF",
+                Theme: "default",
+                Base: "Color8"
+            },
+            {
+                Color: "#F4D2DC",
+                Theme: "default",
+                Base: "Color9"
+            },
+            {
+                Color: "#CEF0CD",
+                Theme: "default",
+                Base: "Color10"
+            },
+            {
+                Color: "#BDBDE6",
+                Theme: "default",
+                Base: "Color11"
+            },
+            {
+                Color: "#E2E2F6",
+                Theme: "default",
+                Base: "Color12"
+            },
+            {
+                Color: "#F4F4FC",
+                Theme: "default",
+                Base: "Color13"
+            },
+            {
+                Color: "#FBF6D9",
+                Theme: "default",
+                Base: "Color14"
+            },
+            {
+                Color: "#791818",
+                Theme: "dark",
+                Base: "Color1"
+            },
+            {
+                Color: "#053385",
+                Theme: "dark",
+                Base: "Color2"
+            },
+            {
+                Color: "#6264A7",
+                Theme: "dark",
+                Base: "Color3"
+            },
+            {
+                Color: "#002F31",
+                Theme: "dark",
+                Base: "Color4"
+            },
+            {
+                Color: "#025C5F",
+                Theme: "dark",
+                Base: "Color5"
+            },
+            {
+                Color: "#03787C",
+                Theme: "dark",
+                Base: "Color6"
+            },
+            {
+                Color: "#461525",
+                Theme: "dark",
+                Base: "Color7"
+            },
+            {
+                Color: "#CC3D6D",
+                Theme: "dark",
+                Base: "Color8"
+            },
+            {
+                Color: "#EA5788",
+                Theme: "dark",
+                Base: "Color9"
+            },
+            {
+                Color: "#043615",
+                Theme: "dark",
+                Base: "Color10"
+            },
+            {
+                Color: "#33344A",
+                Theme: "dark",
+                Base: "Color11"
+            },
+            {
+                Color: "#6264A7",
+                Theme: "dark",
+                Base: "Color12"
+            },
+            {
+                Color: "#464775",
+                Theme: "dark",
+                Base: "Color13"
+            },
+            {
+                Color: "#FFAA44",
+                Theme: "dark",
+                Base: "Color14"
+            }
+        );
+        //local table of character widths, used for auto width labels
+        ClearCollect(
+            colMobileCharsWidth,
+            staticCharWidths
+        );
+        //stock project cover images
+        ClearCollect(
+            colMobileStockImages,
+            {appStockImage: Blank()},
+            {appStockImage: ProjectCover_Future},
+            {appStockImage: ProjectCover_Work},
+            {appStockImage: ProjectCover_Shapes},
+            {appStockImage: ProjectCover_Design},
+            {appStockImage: ProjectCover_Flow},
+            {appStockImage: ProjectCover_Abstract},
+            {appStockImage: ProjectCover_Mountain},
+            {appStockImage: ProjectCover_Vision},
+            {appStockImage: ProjectCover_DarkShapes},
+            {appStockImage: ProjectCover_Morning},
+            {appStockImage: ProjectCover_Sublime},
+            {appStockImage: ProjectCover_Tech},
+            {appStockImage: ProjectCover_Neon},
+            {appStockImage: ProjectCover_City}
+        );
+
+    conMobileIncorrectContext As groupContainer:
+        Fill: =gblAppStyles.Background.Fill
+        Height: =App.Height
+        Visible: =false
+        Width: =App.Width
+        X: =(Parent.Width - Self.Width) / 2
+        Y: =(Parent.Height - Self.Height) / 2
+        ZIndex: =2
+
+        btnMobileIncorrectContext_Exit As button:
+            BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+            BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+            Color: =gblAppStyles.ButtonSecondary.Color
+            DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+            DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+            DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+            Fill: =gblAppStyles.ButtonSecondary.Fill
+            FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+            HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+            HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+            OnSelect: =Exit()
+            PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+            PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+            PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+            RadiusBottomLeft: =gblAppStyles.ButtonSecondary.RadiusBottomLeft
+            RadiusBottomRight: =gblAppStyles.ButtonSecondary.RadiusBottomRight
+            RadiusTopLeft: =gblAppStyles.ButtonSecondary.RadiusTopLeft
+            RadiusTopRight: =gblAppStyles.ButtonSecondary.RadiusTopRight
+            Size: =gblAppStyles.ButtonSecondary.Size
+            TabIndex: |-
+                =If(
+                    locMobileShowAddProject,
+                    -1,
+                    If(
+                        Self.Visible,
+                        0,
+                        -1
+                    )
+                )
+            Text: |-
+                =With(
+                    {
+                        varDefault: "Close app",
+                        varOOBTextId: "_translateCommon__IncorrectContext_CloseApp"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            X: =(Parent.Width - Self.Width) / 2
+            Y: =lblMobileIncorrectContext_Explanation.Y + lblMobileIncorrectContext_Explanation.Height + 24
+            ZIndex: =1
+
+        imgMobileIncorrectContext As image:
+            AccessibleLabel: =lblMobileIncorrectContext_Explanation.Text
+            Height: =200
+            Image: =Image_SomethingWentWrong
+            Width: =200
+            X: =(Parent.Width - Self.Width) / 2
+            Y: =(Parent.Height - Self.Height) / 2
+            ZIndex: =4
+
+        lblMobileIncorrectContext_Explanation As label:
+            Align: =Align.Center
+            BorderColor: =gblAppStyles.Label.BorderColor
+            BorderThickness: =gblAppStyles.Label.BorderThickness
+            Color: |
+                =Switch(
+                    Param("theme"),
+                    "contrast",
+                    White,
+                    "dark",
+                    White,
+                    ColorValue("#252423")
+                )
+            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+            DisabledColor: =gblAppStyles.Label.DisabledColor
+            DisabledFill: =gblAppStyles.Label.DisabledFill
+            Fill: =Transparent
+            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            Height: =48
+            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+            HoverColor: =gblAppStyles.Label.HoverColor
+            HoverFill: =gblAppStyles.Label.HoverFill
+            PaddingLeft: =60
+            PaddingRight: =60
+            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+            PressedColor: =gblAppStyles.Label.PressedColor
+            PressedFill: =gblAppStyles.Label.PressedFill
+            Size: =gblAppStyles.Label.Size.Medium
+            Text: |-
+                =With(
+                    {
+                        varDefault: "Please run this app within Teams on your desktop or web browser to complete setup.",
+                        varOOBTextId: "_translateCommon__NotSetup_UseTeamsFirst"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            Width: =Parent.Width
+            X: =0*0
+            Y: =imgMobileIncorrectContext.Y + imgMobileIncorrectContext.Height
+            ZIndex: =5
+
+        btnMobileIncorrectContext_Hidden_StyleErrorFallback As button:
+            Fill: =RGBA(166, 166, 166, 1)
+            Font: =Font.'Segoe UI'
+            Height: =btnMobileIncorrectContext_Exit.Height
+            HoverFill: =ColorFade(Self.Fill, -20%)
+            OnSelect: =Select(btnMobileIncorrectContext_Exit)
+            Size: =btnMobileIncorrectContext_Exit.Size
+            TabIndex: |-
+                =If(
+                    locMobileShowAddProject,
+                    -1,
+                    If(
+                        Self.Visible,
+                        0,
+                        -1
+                    )
+                )
+            Text: =btnMobileIncorrectContext_Exit.Text
+            Visible: =IsBlankOrError(gblAppStyles)
+            Width: =btnMobileIncorrectContext_Exit.Width
+            X: =btnMobileIncorrectContext_Exit.X
+            Y: =btnMobileIncorrectContext_Exit.Y
+            ZIndex: =7
+
+    conMobileProjectList As groupContainer:
+        Fill: =gblAppStyles.Background.Fill
+        Height: =Parent.Height - Self.Y
+        Width: =Parent.Width
+        Y: =1*0
+        ZIndex: =3
+
+        "galMobileProjects As gallery.'BrowseLayout_Vertical_OneTextVariant_ver4.0'":
+            AccessibleLabel: |-
+                =With(
+                    {
+                        varDefault: "List of projects",
+                        varOOBTextId: "galProjects__locAccessibleText"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            BorderColor: =Transparent
+            Default: ={}
+            Fill: =Transparent
+            FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+            FocusedBorderThickness: =2
+            Height: =Parent.Height - Self.Y 
+            ItemAccessibleLabel: |-
+                =If(
+                    ThisItem.IsSelected,
+                    With(
+                        {
+                            varDefault: "Selected",
+                            varOOBTextId: "galSelected_Announcement"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    ),
+                    With(
+                        {
+                            varDefault: "Not selected",
+                            varOOBTextId: "galNotSelected_Announcement"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                )
+            Items: |-
+                =SortByColumns(
+                    Search(
+                        Projects,
+                        txtMobileFindProjects.Text,
+                        "msft_name"
+                    ),
+                    "msft_name",
+                    If(
+                        locMobileProjectSortOrder,
+                        Ascending,
+                        Descending
+                    )
+                )
+            Layout: =Layout.Vertical
+            LoadingSpinner: =App.ActiveScreen.LoadingSpinner
+            OnSelect: |-
+                =Set(
+                    gblMobileProject,
+                    ThisItem
+                );
+                ClearCollect(
+                    colMobileWorkItems,
+                    Filter(
+                        'Project Work Items',
+                        Project.Project = gblMobileProject.Project
+                    )
+                );
+                Navigate(
+                    'Mobile Project Details Screen',
+                    ScreenTransition.Fade,
+                    {
+                        locMobileNavToDetailFromAbout: false//,
+                        //locMobileProjectSortOrder: locMobileProjectSortOrder
+                    }
+                )
+            TabIndex: |-
+                =If(
+                    locMobileShowAddProject,
+                    -1,
+                    If(
+                        Self.Visible,
+                        0,
+                        -1
+                    )
+                )
+            TemplateFill: =Transparent
+            TemplatePadding: =0
+            TemplateSize: =55
+            Width: =Parent.Width
+            X: =0*0
+            Y: =btnMobileNewProject.Y + btnMobileNewProject.Height + 20 
+            ZIndex: =4
+
+            btnMobileProjects_Background As button:
+                BorderColor: =Transparent
+                BorderThickness: =0
+                Color: =Transparent
+                DisabledColor: =RGBA(0, 0, 0, 0)
+                DisabledFill: |-
+                    =If(
+                        ThisItem.Project = gblMobileProject.Project,
+                        gblAppStyles.Gallery.SelectedItemDisabled,
+                        RGBA(
+                            0,
+                            0,
+                            0,
+                            0
+                        )
+                    )
+                DisplayMode: =Parent.DisplayMode
+                Fill: =RGBA(0, 0, 0, 0)
+                FocusedBorderThickness: =1
+                Font: =Font.'Segoe UI'
+                Height: =55*1
+                HoverColor: =RGBA(0, 0, 0, 0)
+                HoverFill: =Self.Fill
+                OnSelect: =Select(Parent)
+                PaddingRight: =5.83
+                PaddingTop: =5.83
+                PressedColor: =Transparent
+                PressedFill: =Self.Fill
+                RadiusBottomLeft: =0
+                RadiusBottomRight: =0
+                RadiusTopLeft: =0
+                RadiusTopRight: =0
+                Size: =gblAppStyles.ButtonTransparent.Size
+                TabIndex: |-
+                    =If(
+                        true,
+                        -1,
+                        0
+                    )
+                Text: |-
+                    =With(
+                        {
+                            varDefault: "Background button for projects",
+                            varOOBTextId: "btnProjects_Background__locText"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                Width: =Parent.Width
+                X: =1*0
+                Y: =0*0
+                ZIndex: =1
+
+            "galMobileProjectWorkItems As gallery.'BrowseLayout_Vertical_OneTextVariant_ver4.0'":
+                AccessibleLabel: |-
+                    =With(
+                        {
+                            varDefault: "Hidden work items list",
+                            varOOBTextId: "galProjectWorkItems__locAccessibleText"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                BorderColor: =Transparent
+                Height: =55*1
+                Items: |-
+                    =/*Filter(
+                        'Project Work Items',
+                        Project.Project = ThisItem.Project
+                    ))*/
+                    
+                    ThisItem.'Project Work Items'
+                Layout: =Layout.Vertical
+                TabIndex: |-
+                    =If(
+                        true,
+                        -1,
+                        0
+                    )
+                TemplatePadding: =0
+                TemplateSize: =Min(96, Self.Height - 60)
+                Visible: =false
+                Width: =Parent.Width
+                X: =0*0
+                Y: =0*0
+                ZIndex: =2
+
+                lblMobileProjectWorkItemName As label:
+                    Height: =1*1
+                    OnSelect: =Select(Parent)
+                    PaddingBottom: =0
+                    PaddingLeft: =0
+                    PaddingRight: =0
+                    PaddingTop: =0
+                    Text: =ThisItem.'Work Item Status'.Name
+                    Tooltip: =Self.Text
+                    VerticalAlign: =VerticalAlign.Top
+                    Width: =Parent.TemplateWidth - 104
+                    X: =32*1
+                    Y: =0*0
+                    ZIndex: =1
+
+            lblMobileProjects_ProjectName As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: |-
+                    =If(
+                        gblThemeHiCo,
+                        gblAppStyles.Label.Color,
+                        gblAppStyles.Label.DisabledColor
+                    )
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                DisplayMode: =Parent.DisplayMode
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Normal
+                Height: =25*1
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                OnSelect: =Select(Parent)
+                PaddingBottom: =0
+                PaddingLeft: =0
+                PaddingRight: =0.00
+                PaddingTop: =0.00
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: =ThisItem.Name
+                Tooltip: =Self.Text
+                Width: =Parent.Width - Self.X - imgMobileProjectSelect.Width - 40
+                Wrap: =false
+                X: =1*20
+                Y: =6*1
+                ZIndex: =3
+
+            lblMobileProjects_WorkItemCount As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: |-
+                    =If(
+                        gblThemeHiCo,
+                        gblAppStyles.Label.Color,
+                        gblAppStyles.Label.DisabledColor
+                    )
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                DisplayMode: =Parent.DisplayMode
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Normal
+                Height: =16*1
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                OnSelect: =Select(Parent)
+                PaddingBottom: =0
+                PaddingLeft: =0
+                PaddingRight: =0.00
+                PaddingTop: =0.00
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Small
+                Text: |-
+                    =With(
+                        {
+                            varDefault: CountRows(galMobileProjectWorkItems.AllItems) & " work items",
+                            varOOBTextId: "lblProjcets_WorkItemCount__locText",
+                            varParam0: CountRows(galMobileProjectWorkItems.AllItems)
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            If(
+                                IsBlankOrError(varParam0),
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                ),
+                                Coalesce(
+                                    Substitute(
+                                        varLocalizedText,
+                                        "{0}",
+                                        Text(varParam0)
+                                    ),
+                                    varDefault
+                                )
+                            )
+                        )
+                    )
+                Tooltip: =Self.Text
+                Width: =Parent.Width - Self.X - imgMobileProjectSelect.Width - 40
+                Wrap: =false
+                X: =1*20
+                Y: =31*1
+                ZIndex: =4
+
+            shpMobileProjecteSeparator As rectangle:
+                Fill: =gblAppStyles.Dividers.Background     
+                Height: =1
+                OnSelect: =Select(Parent)
+                Width: =Parent.TemplateWidth - Self.X
+                X: =1*20
+                Y: =Parent.TemplateHeight - 1
+                ZIndex: =6
+
+            imgMobileProjectSelect As image:
+                Height: =55
+                Image: |-
+                    =With(
+                        {
+                            varImageRecord: LookUp(
+                                staticIcons,
+                                staticIconName = "Back"
+                            ),
+                            varColor: If(
+                                Self.DisplayMode = DisplayMode.Disabled,
+                                gblAppStyles.Icons.DisabledColor,
+                                gblAppStyles.Icons.Color
+                            )
+                        },
+                        With(
+                            {
+                                varImageData: Concatenate(
+                                    "data:image/svg+xml;utf8, ",
+                                    EncodeUrl(
+                                        Concatenate(
+                                            "<svg viewBox='",
+                                            varImageRecord.staticIconViewbox,
+                                            "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                            varImageRecord.staticIconPath,
+                                            "' fill='#",
+                                            varColor,
+                                            "'/></svg>"
+                                        )
+                                    )
+                                )
+                            },
+                            varImageData
+                        )
+                    )
+                ImageRotation: =ImageRotation.Rotate180
+                OnSelect: =Select(Parent)
+                PaddingBottom: =16
+                PaddingLeft: =16
+                PaddingRight: =16
+                PaddingTop: =16
+                Tooltip: =Self.AccessibleLabel
+                Width: =60
+                X: =Parent.Width-Self.Width
+                ZIndex: =7
+
+            btnMobileProjects_Foreground As button:
+                BorderThickness: =0
+                Color: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(0, 0, 0, 0)
+                DisabledFill: =Self.Fill
+                Fill: =gblAppStyles.ButtonTransparent.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                FocusedBorderThickness: =2
+                Font: =Font.'Segoe UI'
+                Height: =55*1 - 2
+                HoverColor: =RGBA(0, 0, 0, 0)
+                HoverFill: =gblAppStyles.Gallery.HoverFill
+                OnSelect: =Select(Parent)
+                PaddingRight: =5.83
+                PaddingTop: =5.83
+                PressedColor: =Transparent
+                PressedFill: =gblAppStyles.Gallery.PressedFill
+                RadiusBottomLeft: =0
+                RadiusBottomRight: =0
+                RadiusTopLeft: =0
+                RadiusTopRight: =0
+                Size: =17.48
+                TabIndex: |-
+                    =If(
+                        locMobileShowAddProject,
+                        -1,
+                        If(
+                            Self.Visible,
+                            0,
+                            -1
+                        )
+                    )
+                Text: |-
+                    =With(
+                        {
+                            varDefault: "Click to select the project",
+                            varOOBTextId: "btnProjects_Foreground__locText"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                Tooltip: |-
+                    =With(
+                        {
+                            varDefault: ThisItem.Name & " has " & CountRows(
+                                Filter(
+                                    galMobileProjectWorkItems.AllItems,
+                                    'Work Item Status'.Name = "Blocked"
+                                )
+                            ) & "  blocked work items",
+                            varOOBTextId: "btnProjects_BlockedWorkItemCount__locTooltip",
+                            varParam0: ThisItem.Name,
+                            varParam1: CountRows(
+                                Filter(
+                                    galMobileProjectWorkItems.AllItems,
+                                    'Work Item Status'.Name = "Blocked"
+                                )
+                            ),
+                            varParam2: Blank()
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            If(
+                                IsBlankOrError(varParam0),
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                ),
+                                Coalesce(
+                                    Substitute(
+                                        Substitute(
+                                            Substitute(
+                                                varLocalizedText,
+                                                "{0}",
+                                                Text(varParam0)
+                                            ),
+                                            "{1}",
+                                            Text(varParam1)
+                                        ),
+                                        "{2}",
+                                        Text(varParam2)
+                                    ),
+                                    varDefault
+                                )
+                            )
+                        )
+                    )
+                Width: =Parent.Width - 2
+                X: =0*0 + 1
+                Y: =0*0 + 1
+                ZIndex: =8
+
+        lblMobileAllProjects As label:
+            BorderColor: =gblAppStyles.Label.BorderColor
+            BorderThickness: =gblAppStyles.Label.BorderThickness
+            Color: =gblAppStyles.Label.Color
+            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+            DisabledColor: =gblAppStyles.Label.DisabledColor
+            DisabledFill: =gblAppStyles.Label.DisabledFill
+            Fill: =gblAppStyles.Label.Fill
+            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            FontWeight: =FontWeight.Bold
+            Height: =40*1
+            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+            HoverColor: =gblAppStyles.Label.HoverColor
+            HoverFill: =gblAppStyles.Label.HoverFill
+            PaddingBottom: =0
+            PaddingTop: =0
+            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+            PressedColor: =gblAppStyles.Label.PressedColor
+            PressedFill: =gblAppStyles.Label.PressedFill
+            Role: =TextRole.Heading1
+            Size: =gblAppStyles.Label.Size.Large
+            Text: |-
+                =With(
+                    {
+                        varDefault: "All projects",
+                        varOOBTextId: "lblAllProjects__locText"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            Tooltip: =Self.Text
+            Width: =Parent.Width - Self.X - galMobileLinks_Projects.Width - 10
+            X: =1*20
+            Y: =20*1
+            ZIndex: =7
+
+        imgMobileSortProjects As image:
+            AccessibleLabel: |-
+                =With(
+                    {
+                        varDefault: "Click to sort projects",
+                        varOOBTextId: "imgSortProjects__locAccessibleText"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            DisabledFill: |-
+                =With(
+                    {
+                        varImageIsCategory: LookUp(
+                            staticIcons,
+                            staticIconName = "Sort"
+                        ).staticIconIsCategory
+                    },
+                    If(
+                        varImageIsCategory,
+                        gblAppStyles.Icons.DisabledFill_Category,
+                        Transparent
+                    )
+                )
+            Fill: |-
+                =With(
+                    {
+                        varImageIsCategory: LookUp(
+                            staticIcons,
+                            staticIconName = "Sort"
+                        ).staticIconIsCategory
+                    },
+                    If(
+                        varImageIsCategory,
+                        gblAppStyles.Icons.Fill_Category,
+                        Transparent
+                    )
+                )
+            Height: =22*1
+            Image: |-
+                =With(
+                    {
+                        varImageRecord: LookUp(
+                            staticIcons,
+                            staticIconName = "Sort"
+                        ),
+                        varColor: If(
+                            Self.DisplayMode = DisplayMode.Disabled,
+                            gblAppStyles.Icons.DisabledColor,
+                            gblAppStyles.Icons.Color
+                        )
+                    },
+                    With(
+                        {
+                            varImageData: Concatenate(
+                                "data:image/svg+xml;utf8, ",
+                                EncodeUrl(
+                                    Concatenate(
+                                        "<svg viewBox='",
+                                        varImageRecord.staticIconViewbox,
+                                        "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                        varImageRecord.staticIconPath,
+                                        "' fill='#",
+                                        varColor,
+                                        "'/></svg>"
+                                    )
+                                )
+                            )
+                        },
+                        varImageData
+                    )
+                )
+            OnSelect: |-
+                =UpdateContext({locMobileProjectSortOrder: !locMobileProjectSortOrder});
+                //screen reader start
+                If(locMobileProjectSortOrder,
+                UpdateContext(
+                    {
+                        locScreenReaderAnnouncedText: With(
+                            {
+                                varAnnouncedText: With(
+                                    {
+                                        varDefault: "Projects list sorted by name in ascending order",
+                                        varOOBTextId: "imgSortProjectsAscending_Announcement"
+                                    },
+                                    With(
+                                        {
+                                            varLocalizedText: LookUp(
+                                                colLocalization,
+                                                OOBTextID = varOOBTextId,
+                                                LocalizedText
+                                            )
+                                        },
+                                        Coalesce(
+                                            varLocalizedText,
+                                            varDefault
+                                        )
+                                    )
+                                )
+                            },
+                            If(
+                                locScreenReaderAnnouncedText = varAnnouncedText,
+                                Concatenate(
+                                    varAnnouncedText,
+                                    " "
+                                ),
+                                varAnnouncedText
+                            )
+                        )
+                    }
+                ),
+                UpdateContext(
+                    {
+                        locScreenReaderAnnouncedText: With(
+                            {
+                                varAnnouncedText: With(
+                                    {
+                                        varDefault: "Projects list sorted by name in descending order",
+                                        varOOBTextId: "imgSortProjectsDescending_Announcement"
+                                    },
+                                    With(
+                                        {
+                                            varLocalizedText: LookUp(
+                                                colLocalization,
+                                                OOBTextID = varOOBTextId,
+                                                LocalizedText
+                                            )
+                                        },
+                                        Coalesce(
+                                            varLocalizedText,
+                                            varDefault
+                                        )
+                                    )
+                                )
+                            },
+                            If(
+                                locScreenReaderAnnouncedText = varAnnouncedText,
+                                Concatenate(
+                                    varAnnouncedText,
+                                    " "
+                                ),
+                                varAnnouncedText
+                            )
+                        )
+                    }
+                )
+                )
+                //screen reader end
+            PaddingRight: =0.00
+            PaddingTop: =0.00
+            RadiusBottomLeft: =5
+            RadiusBottomRight: =5
+            RadiusTopLeft: =5
+            RadiusTopRight: =5
+            TabIndex: |-
+                =If(
+                    locMobileShowAddProject,
+                    -1,
+                    If(
+                        Self.Visible,
+                        0,
+                        -1
+                    )
+                )
+            Width: =22*1
+            X: =Parent.Width - Self.Width - 18 
+            Y: =txtMobileFindProjects.Y + (txtMobileFindProjects.Height - Self.Height) / 2  
+            ZIndex: =8
+
+        grpMobileNewProject As group:
+            Height: =5
+            Width: =5
+            X: =40
+            Y: =40
+            ZIndex: =10
+
+            imgMobileNewProject As image:
+                AccessibleLabel: |-
+                    =With(
+                        {
+                            varDefault: "Click to create a new project",
+                            varOOBTextId: "imgNewProject__locAccessibleText"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                DisabledFill: |-
+                    =With(
+                        {
+                            varImageIsCategory: LookUp(
+                                staticIcons,
+                                staticIconName = "Add"
+                            ).staticIconIsCategory
+                        },
+                        If(
+                            varImageIsCategory,
+                            gblAppStyles.Icons.DisabledFill_Category,
+                            Transparent
+                        )
+                    )
+                Fill: |-
+                    =With(
+                        {
+                            varImageIsCategory: LookUp(
+                                staticIcons,
+                                staticIconName = "Add"
+                            ).staticIconIsCategory
+                        },
+                        If(
+                            varImageIsCategory,
+                            gblAppStyles.Icons.Fill_Category,
+                            Transparent
+                        )
+                    )
+                Height: =22*1
+                Image: |
+                    =With(
+                        {
+                            varImageRecord: LookUp(
+                                staticIcons,
+                                staticIconName = "Add"
+                            ),
+                            varColor: If(
+                                Self.DisplayMode = DisplayMode.Disabled,
+                                gblAppStyles.Icons.DisabledColor,
+                                gblAppStyles.Icons.Color
+                            )
+                        },
+                        With(
+                            {
+                                varImageData: Concatenate(
+                                    "data:image/svg+xml;utf8, ",
+                                    EncodeUrl(
+                                        Concatenate(
+                                            "<svg viewBox='",
+                                            varImageRecord.staticIconViewbox,
+                                            "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                            varImageRecord.staticIconPath,
+                                            "' fill='#",
+                                            varColor,
+                                            "'/></svg>"
+                                        )
+                                    )
+                                )
+                            },
+                            varImageData
+                        )
+                    )
+                PaddingBottom: =2
+                PaddingLeft: =2
+                PaddingRight: =2
+                PaddingTop: =2
+                RadiusBottomLeft: =5
+                RadiusBottomRight: =5
+                RadiusTopLeft: =5
+                RadiusTopRight: =5
+                TabIndex: |-
+                    =If(
+                        true,
+                        -1,
+                        0
+                    )
+                Tooltip: =Self.AccessibleLabel
+                Width: =22*1
+                X: =18*1
+                Y: =btnMobileNewProject.Y + (btnMobileNewProject.Height - Self.Height) / 2
+                ZIndex: =1
+
+            btnMobileNewProject As button:
+                Align: =Align.Left
+                BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+                Color: =gblAppStyles.ButtonTransparent.Color
+                DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+                DisabledColor: =gblAppStyles.ButtonTransparent.DisabledColor
+                DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                Fill: =gblAppStyles.ButtonTransparent.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Normal
+                Height: =26*1
+                HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                HoverColor: =gblAppStyles.ButtonTransparent.HoverColor
+                HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+                OnSelect: |-
+                    =Reset(txtMobileNewProjectName);
+                    ClearCollect(
+                        colMobileNewProjectMilestones,
+                        {
+                            Name: With(
+                                {
+                                    varDefault: "Milestone1",
+                                    varOOBTextId: "_translateCommon__MilestoneNumber1"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            ),
+                            Color: "#5AC6CC",
+                            DarkColor: "002F31",
+                            ETA: Today(),
+                            Order: 1
+                        },
+                        {
+                            Name: With(
+                                {
+                                    varDefault: "Milestone2",
+                                    varOOBTextId: "_translateCommon__MilestoneNumber2"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            ),
+                            Color: "#C5E9EA",
+                            DarkColor: "#025C5F",
+                            ETA: Today(),
+                            Order: 2
+                        },
+                        {
+                            Name: With(
+                                {
+                                    varDefault: "Milestone3",
+                                    varOOBTextId: "_translateCommon__MilestoneNumber3"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            ),
+                            Color: "#F0F9FA",
+                            DarkColor: "#03787C",
+                            ETA: Today(),
+                            Order: 3
+                        }
+                    );
+                    Clear(colMobileNewProjectTeamMembers);
+                    Collect(
+                        colMobileNewProjectTeamMembers,
+                        {
+                            appEmailAddress: User().Email,
+                            appDisplayName: Office365Users.UserProfileV2(User().Email).displayName
+                        }
+                    );
+                    Reset(txtMobileAssignmentSearchUser);
+                    UpdateContext({locMobileShowAddProject: true});
+                    //screen reader start
+                    UpdateContext(
+                        {
+                            locScreenReaderAnnouncedText: With(
+                                {
+                                    varAnnouncedText: With(
+                                        {
+                                            varDefault: "Opening a dialog to add a new project",
+                                            varOOBTextId: "btnNewProject_Announcement"
+                                        },
+                                        With(
+                                            {
+                                                varLocalizedText: LookUp(
+                                                    colLocalization,
+                                                    OOBTextID = varOOBTextId,
+                                                    LocalizedText
+                                                )
+                                            },
+                                            Coalesce(
+                                                varLocalizedText,
+                                                varDefault
+                                            )
+                                        )
+                                    )
+                                },
+                                If(
+                                    locScreenReaderAnnouncedText = varAnnouncedText,
+                                    Concatenate(
+                                        varAnnouncedText,
+                                        " "
+                                    ),
+                                    varAnnouncedText
+                                )
+                            )
+                        }
+                    );
+                    //screen reader end
+                    Navigate(
+                        'Mobile Add Project Screen',
+                        ScreenTransition.Fade
+                    )
+                PaddingBottom: =0
+                PaddingLeft: =32
+                PaddingRight: =0.00
+                PaddingTop: =0.00
+                PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                PressedColor: =gblAppStyles.ButtonTransparent.PressedColor
+                PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+                RadiusBottomLeft: =gblAppStyles.ButtonTransparent.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.ButtonTransparent.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.ButtonTransparent.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.ButtonTransparent.RadiusTopRight
+                Size: =gblAppStyles.ButtonTransparent.Size
+                TabIndex: |-
+                    =If(
+                        locMobileShowAddProject,
+                        -1,
+                        If(
+                            Self.Visible,
+                            0,
+                            -1
+                        )
+                    )
+                Text: |-
+                    =With(
+                        {
+                            varDefault: "New project",
+                            varOOBTextId: "btnNewProject__locText"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                Tooltip: |-
+                    =With(
+                        {
+                            varDefault: "Click to create a new project",
+                            varOOBTextId: "btnNewProject__locTooltip"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                Width: =Parent.Width - Self.X - imgMobileSortProjects.Width - 20
+                X: =20
+                Y: =txtMobileFindProjects.Y + txtMobileFindProjects.Height + 20
+                ZIndex: =6
+
+        "galMobileLinks_Projects As gallery.'BrowseLayout_Horizontal_TwoTextOneImageVariant_ver4.0'":
+            AccessibleLabel: |-
+                =With(
+                    {
+                        varDefault: "List of links",
+                        varOOBTextId: "galLinks__locAccessibleText"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            BorderColor: =Transparent
+            Height: =40 * 1
+            Items: |-
+                =Filter(
+                    Table(
+                        {
+                            Image: With(
+                                {
+                                    varImageRecord: LookUp(
+                                        staticIcons,
+                                        staticIconName = "Photo"
+                                    ),
+                                    varColor: If(
+                                        Self.DisplayMode = DisplayMode.Disabled,
+                                        gblAppStyles.Icons.DisabledColor,
+                                        gblAppStyles.Icons.Color
+                                    )
+                                },
+                                With(
+                                    {
+                                        varImageData: Concatenate(
+                                            "data:image/svg+xml;utf8, ",
+                                            EncodeUrl(
+                                                Concatenate(
+                                                    "<svg viewBox='",
+                                                    varImageRecord.staticIconViewbox,
+                                                    "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                    varImageRecord.staticIconPath,
+                                                    "' fill='#",
+                                                    varColor,
+                                                    "'/></svg>"
+                                                )
+                                            )
+                                        )
+                                    },
+                                    varImageData
+                                )
+                            ),
+                            Name: "CoverSelector",
+                            Show: false,
+                            TooltipText: With(
+                                {
+                                    varDefault: "Click to open cover selector",
+                                    varOOBTextId: "_translateCommon__OpenCoverSelector__locText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        },
+                        {
+                            Image: With(
+                                {
+                                    varImageRecord: LookUp(
+                                        staticIcons,
+                                        staticIconName = "Info"
+                                    ),
+                                    varColor: If(
+                                        Self.DisplayMode = DisplayMode.Disabled,
+                                        gblAppStyles.Icons.DisabledColor,
+                                        gblAppStyles.Icons.Color
+                                    )
+                                },
+                                With(
+                                    {
+                                        varImageData: Concatenate(
+                                            "data:image/svg+xml;utf8, ",
+                                            EncodeUrl(
+                                                Concatenate(
+                                                    "<svg viewBox='",
+                                                    varImageRecord.staticIconViewbox,
+                                                    "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                    varImageRecord.staticIconPath,
+                                                    "' fill='#",
+                                                    varColor,
+                                                    "'/></svg>"
+                                                )
+                                            )
+                                        )
+                                    },
+                                    varImageData
+                                )
+                            ),
+                            Name: "About",
+                            Show: true,
+                            TooltipText: With(
+                                {
+                                    varDefault: "Click to navigate to about screen",
+                                    varOOBTextId: "_translateCommon__AboutScreenNav__locText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        },
+                        {
+                            Image: With(
+                                {
+                                    varImageRecord: LookUp(
+                                        staticIcons,
+                                        staticIconName = "Settings"
+                                    ),
+                                    varColor: If(
+                                        Self.DisplayMode = DisplayMode.Disabled,
+                                        gblAppStyles.Icons.DisabledColor,
+                                        gblAppStyles.Icons.Color
+                                    )
+                                },
+                                With(
+                                    {
+                                        varImageData: Concatenate(
+                                            "data:image/svg+xml;utf8, ",
+                                            EncodeUrl(
+                                                Concatenate(
+                                                    "<svg viewBox='",
+                                                    varImageRecord.staticIconViewbox,
+                                                    "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                    varImageRecord.staticIconPath,
+                                                    "' fill='#",
+                                                    varColor,
+                                                    "'/></svg>"
+                                                )
+                                            )
+                                        )
+                                    },
+                                    varImageData
+                                )
+                            ),
+                            Name: "Settings",
+                            Show: false,
+                            TooltipText: With(
+                                {
+                                    varDefault: "Click to navigate to settings screen",
+                                    varOOBTextId: "_translateCommon__SettingsScreenNav__locText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        }
+                    ),
+                    Show
+                )
+            OnSelect: |-
+                =//screen reader start
+                UpdateContext(
+                    {
+                        locScreenReaderAnnouncedText: With(
+                            {
+                                varAnnouncedText: With(
+                                    {
+                                        varDefault: "Navigating to the about screen to customize",
+                                        varOOBTextId: "lblCustomize_Announcement"
+                                    },
+                                    With(
+                                        {
+                                            varLocalizedText: LookUp(
+                                                colLocalization,
+                                                OOBTextID = varOOBTextId,
+                                                LocalizedText
+                                            )
+                                        },
+                                        Coalesce(
+                                            varLocalizedText,
+                                            varDefault
+                                        )
+                                    )
+                                )
+                            },
+                            If(
+                                locScreenReaderAnnouncedText = varAnnouncedText,
+                                Concatenate(
+                                    varAnnouncedText,
+                                    " "
+                                ),
+                                varAnnouncedText
+                            )
+                        )
+                    }
+                );
+                //screen reader end
+                If(
+                    ThisItem.Name = "About",
+                    Navigate(
+                        'Mobile About Screen',
+                        ScreenTransition.Fade,
+                        {locMobileNavToAboutFromHome: true}
+                    )
+                )
+            ShowScrollbar: =false
+            TabIndex: |-
+                =If(
+                    locMobileShowAddProject,
+                    -1,
+                    If(
+                        Self.Visible,
+                        0,
+                        -1
+                    )
+                )
+            TemplatePadding: =0
+            TemplateSize: =50
+            Width: =Self.TemplateWidth
+            X: =Parent.Width - Self.Width
+            Y: =20*1
+            ZIndex: =14
+
+            btnMobileLink_Background_Projects As button:
+                BorderColor: |-
+                    =If(
+                        gblThemeDark,
+                        ColorValue("#616161"),
+                        White
+                    )
+                BorderThickness: =0
+                Color: =Transparent
+                DisabledColor: =RGBA(0, 0, 0, 0)
+                DisabledFill: =Self.Fill
+                DisplayMode: =Parent.DisplayMode
+                Fill: =gblAppStyles.Background.Fill
+                FocusedBorderThickness: =1
+                Font: =Font.'Segoe UI'
+                Height: =36*1
+                HoverColor: =RGBA(0, 0, 0, 0)
+                HoverFill: =Self.Fill
+                OnSelect: =Select(Parent)
+                PressedColor: =Transparent
+                PressedFill: =Self.Fill
+                RadiusBottomLeft: =4
+                RadiusBottomRight: =4
+                RadiusTopLeft: =4
+                RadiusTopRight: =4
+                Size: =17.48
+                TabIndex: |-
+                    =If(
+                        true,
+                        -1,
+                        0
+                    )
+                Text: |-
+                    =With(
+                        {
+                            varDefault: "Background button for links",
+                            varOOBTextId: "btnLink_Background__locText"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                Tooltip: =Self.Text
+                Width: =36*1
+                X: =2*1
+                Y: =2*1
+                ZIndex: =1
+
+            imgMobileLink_Projects As image:
+                AccessibleLabel: |-
+                    =With(
+                        {
+                            varDefault: "Click to select the link",
+                            varOOBTextId: "btnLink_Foreground__locText"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                DisabledFill: |-
+                    =With(
+                        {
+                            varImageIsCategory: LookUp(
+                                staticIcons,
+                                staticIconName = "Add"
+                            ).staticIconIsCategory
+                        },
+                        If(
+                            varImageIsCategory,
+                            gblAppStyles.Icons.DisabledFill_Category,
+                            Transparent
+                        )
+                    )
+                Fill: =Transparent
+                Height: =22*1
+                Image: =ThisItem.Image
+                OnSelect: =Select(Parent)
+                PaddingBottom: =2
+                PaddingLeft: =2
+                PaddingRight: =2
+                PaddingTop: =2
+                Tooltip: =Self.AccessibleLabel
+                Width: =22*1
+                X: =9*1
+                Y: =(btnMobileLink_Background_Projects.Height - Self.Height) / 2 + 2
+                ZIndex: =2
+
+            btnMobileLink_Foreground_Projects As button:
+                BorderThickness: =0
+                Color: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(0, 0, 0, 0)
+                DisabledFill: =Self.Fill
+                Fill: =Transparent
+                FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                FocusedBorderThickness: =2
+                Font: =Font.'Segoe UI'
+                Height: =btnMobileLink_Background_Projects.Height
+                HoverColor: =RGBA(0, 0, 0, 0)
+                HoverFill: =Transparent
+                OnSelect: =Select(Parent)
+                PressedColor: =Transparent
+                PressedFill: =Transparent
+                RadiusBottomLeft: =0
+                RadiusBottomRight: =0
+                RadiusTopLeft: =0
+                RadiusTopRight: =0
+                Size: =17.48
+                TabIndex: |-
+                    =If(
+                        locMobileShowAddProject,
+                        -1,
+                        If(
+                            Self.Visible,
+                            0,
+                            -1
+                        )
+                    )
+                Text: =ThisItem.TooltipText
+                Tooltip: =Self.Text
+                Width: =btnMobileLink_Background_Projects.Width
+                X: =btnMobileLink_Background_Projects.X
+                Y: =btnMobileLink_Background_Projects.Y
+                ZIndex: =3
+
+        grpMobileFindProject As group:
+            Height: =5
+            Width: =5
+            X: =40
+            Y: =40
+            ZIndex: =14
+
+            txtMobileFindProjects As text:
+                AccessibleLabel: |-
+                    =With(
+                        {
+                            varDefault: "Enter text here to find projects",
+                            varOOBTextId: "txtFindProjects__locTooltip"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                BorderColor: =gblAppStyles.TextInput.BorderColor
+                BorderThickness: =gblAppStyles.TextInput.BorderThickness
+                Color: =gblAppStyles.TextInput.Color
+                Default: =""
+                DisabledBorderColor: =gblAppStyles.TextInput.DisabledBorderColor
+                DisabledColor: =gblAppStyles.TextInput.DisabledColor
+                DisabledFill: =gblAppStyles.TextInput.DisabledFill
+                Fill: =gblAppStyles.TextInput.Fill
+                FocusedBorderColor: =gblAppStyles.TextInput.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.TextInput.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =32*1
+                HintText: |-
+                    =With(
+                        {
+                            varDefault: "Find projects",
+                            varOOBTextId: "txtFindProjects__locHintText"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                HoverBorderColor: =gblAppStyles.TextInput.HoverBorderColor
+                HoverColor: =gblAppStyles.TextInput.HoverColor
+                HoverFill: =gblAppStyles.TextInput.HoverFill
+                PaddingTop: =5.00
+                PressedBorderColor: =gblAppStyles.TextInput.PressedBorderColor
+                PressedColor: =gblAppStyles.TextInput.PressedColor
+                PressedFill: =gblAppStyles.TextInput.PressedFill
+                RadiusBottomLeft: =gblAppStyles.TextInput.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.TextInput.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.TextInput.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.TextInput.RadiusTopRight
+                Size: =gblAppStyles.TextInput.Size
+                TabIndex: |-
+                    =If(
+                        locMobileShowAddProject,
+                        -1,
+                        If(
+                            Self.Visible,
+                            0,
+                            -1
+                        )
+                    )
+                Width: =Parent.Width - Self.X - 20 - imgMobileSortProjects.Width - 20
+                X: =20*1
+                Y: =lblMobileAllProjects.Y + lblMobileAllProjects.Height + 20
+                ZIndex: =2
+
+            imgMobileFindProjects As image:
+                AccessibleLabel: |-
+                    =With(
+                        {
+                            varDefault: "Click to find projects",
+                            varOOBTextId: "imgFindProjects__locAccessibleText"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                DisabledFill: |-
+                    =With(
+                        {
+                            varImageIsCategory: LookUp(
+                                staticIcons,
+                                staticIconName = "Search"
+                            ).staticIconIsCategory
+                        },
+                        If(
+                            varImageIsCategory,
+                            gblAppStyles.Icons.DisabledFill_Category,
+                            Transparent
+                        )
+                    )
+                Fill: |-
+                    =With(
+                        {
+                            varImageIsCategory: LookUp(
+                                staticIcons,
+                                staticIconName = "Search"
+                            ).staticIconIsCategory
+                        },
+                        If(
+                            varImageIsCategory,
+                            gblAppStyles.Icons.Fill_Category,
+                            Transparent
+                        )
+                    )
+                Height: =22*1
+                Image: |-
+                    =With(
+                        {
+                            varImageRecord: LookUp(
+                                staticIcons,
+                                staticIconName = "Search"
+                            ),
+                            varColor: If(
+                                Self.DisplayMode = DisplayMode.Disabled,
+                                gblAppStyles.Icons.DisabledColor,
+                                gblAppStyles.Icons.Color
+                            )
+                        },
+                        With(
+                            {
+                                varImageData: Concatenate(
+                                    "data:image/svg+xml;utf8, ",
+                                    EncodeUrl(
+                                        Concatenate(
+                                            "<svg viewBox='",
+                                            varImageRecord.staticIconViewbox,
+                                            "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                            varImageRecord.staticIconPath,
+                                            "' fill='#",
+                                            varColor,
+                                            "'/></svg>"
+                                        )
+                                    )
+                                )
+                            },
+                            varImageData
+                        )
+                    )
+                PaddingBottom: =2
+                PaddingLeft: =2
+                PaddingRight: =2
+                PaddingTop: =2
+                RadiusBottomLeft: =5
+                RadiusBottomRight: =5
+                RadiusTopLeft: =5
+                RadiusTopRight: =5
+                TabIndex: |-
+                    =If(
+                        true,
+                        -1,
+                        0
+                    )
+                Tooltip: =Self.AccessibleLabel
+                Visible: =IsBlank(txtMobileFindProjects)
+                Width: =22*1
+                X: =txtMobileFindProjects.X + txtMobileFindProjects.Width - Self.Width - 8
+                Y: =txtMobileFindProjects.Y + (txtMobileFindProjects.Height - Self.Height) / 2
+                ZIndex: =5
+
+            imgMobileCloseFindProjects As image:
+                AccessibleLabel: |-
+                    =With(
+                        {
+                            varDefault: "Click to close the search",
+                            varOOBTextId: "imgCloseSearchWorkItem__locAccessibleText"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                DisabledFill: |-
+                    =With(
+                        {
+                            varImageIsCategory: LookUp(
+                                staticIcons,
+                                staticIconName = "Dismiss"
+                            ).staticIconIsCategory
+                        },
+                        If(
+                            varImageIsCategory,
+                            gblAppStyles.Icons.DisabledFill_Category,
+                            Transparent
+                        )
+                    )
+                Fill: |-
+                    =With(
+                        {
+                            varImageIsCategory: LookUp(
+                                staticIcons,
+                                staticIconName = "Dismiss"
+                            ).staticIconIsCategory
+                        },
+                        If(
+                            varImageIsCategory,
+                            gblAppStyles.Icons.Fill_Category,
+                            Transparent
+                        )
+                    )
+                Height: =22*1
+                Image: |
+                    =With(
+                        {
+                            varImageRecord: LookUp(
+                                staticIcons,
+                                staticIconName = "Dismiss"
+                            ),
+                            varColor: If(
+                                Self.DisplayMode = DisplayMode.Disabled,
+                                gblAppStyles.Icons.DisabledColor,
+                                gblAppStyles.Icons.Color
+                            )
+                        },
+                        With(
+                            {
+                                varImageData: Concatenate(
+                                    "data:image/svg+xml;utf8, ",
+                                    EncodeUrl(
+                                        Concatenate(
+                                            "<svg viewBox='",
+                                            varImageRecord.staticIconViewbox,
+                                            "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                            varImageRecord.staticIconPath,
+                                            "' fill='#",
+                                            varColor,
+                                            "'/></svg>"
+                                        )
+                                    )
+                                )
+                            },
+                            varImageData
+                        )
+                    )
+                ImageRotation: =
+                OnSelect: |-
+                    =Reset(txtMobileFindProjects);
+                    //screen reader start
+                    UpdateContext(
+                        {
+                            locScreenReaderAnnouncedText: With(
+                                {
+                                    varAnnouncedText: With(
+                                        {
+                                            varDefault: "Project search box cleared",
+                                            varOOBTextId: "imgCloseFindProjects_Announcement"
+                                        },
+                                        With(
+                                            {
+                                                varLocalizedText: LookUp(
+                                                    colLocalization,
+                                                    OOBTextID = varOOBTextId,
+                                                    LocalizedText
+                                                )
+                                            },
+                                            Coalesce(
+                                                varLocalizedText,
+                                                varDefault
+                                            )
+                                        )
+                                    )
+                                },
+                                If(
+                                    locScreenReaderAnnouncedText = varAnnouncedText,
+                                    Concatenate(
+                                        varAnnouncedText,
+                                        " "
+                                    ),
+                                    varAnnouncedText
+                                )
+                            )
+                        }
+                    );
+                    //screen reader end
+                PaddingBottom: =2
+                PaddingLeft: =2
+                PaddingRight: =2
+                PaddingTop: =2
+                RadiusBottomLeft: =5
+                RadiusBottomRight: =5
+                RadiusTopLeft: =5
+                RadiusTopRight: =5
+                TabIndex: |-
+                    =If(
+                        locMobileShowAddProject,
+                        -1,
+                        If(
+                            Self.Visible,
+                            0,
+                            -1
+                        )
+                    )
+                Visible: =!IsBlank(txtMobileFindProjects)
+                Width: =22*1
+                X: =txtMobileFindProjects.X + txtMobileFindProjects.Width - Self.Width - 8
+                Y: =txtMobileFindProjects.Y + (txtMobileFindProjects.Height - Self.Height) / 2
+                ZIndex: =13
+
+        grpMobileProjectsZeroState As group:
+            Height: =5
+            Width: =5
+            X: =40
+            Y: =40
+            ZIndex: =14
+
+            imgMobileProjectsNoResults As image:
+                AccessibleLabel: |-
+                    =With(
+                        {
+                            varDefault: "No projects found",
+                            varOOBTextId: "imgProjectsZeroState__locAccessibleText"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                Height: =Self.Width
+                Image: =Image_ZeroState_Projects
+                PaddingBottom: =8
+                PaddingLeft: =8
+                PaddingRight: =8
+                PaddingTop: =8
+                Tooltip: =Self.AccessibleLabel
+                Visible: =CountRows(galMobileProjects.AllItems) = 0 && CountRows(Projects) > 0
+                Width: =Parent.Width / 4
+                X: =(galMobileProjects.Width - Self.Width) / 2
+                Y: |-
+                    =Max(
+                        galMobileProjects.Y,
+                        (galMobileProjects.Height - Self.Height) / 2
+                    )
+                ZIndex: =9
+
+            lblMobileProjectsNoResults As label:
+                Align: =Align.Center
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: |-
+                    =With(
+                        {
+                            varDefault: "No projects found",
+                            varOOBTextId: "lblProjectsZeroState__locText"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                Tooltip: =Self.Text
+                Visible: =CountRows(galMobileProjects.AllItems) = 0 && CountRows(Projects) > 0
+                Width: =Parent.Width
+                Y: =imgMobileProjectsNoResults.Y + imgMobileProjectsNoResults.Height
+                ZIndex: =10
+
+    lblAnnounce_MobileProjects As label:
+        Font: =Font.'Segoe UI'
+        Height: =0*0
+        Live: =Live.Polite
+        PaddingBottom: =0
+        PaddingLeft: =0
+        PaddingRight: =0
+        PaddingTop: =0
+        Text: =locScreenReaderAnnouncedText //this text is announced by screen readers, when the variable is updated
+        Width: =0*0
+        X: =0 //Parent.Width - Self.Width
+        Y: =0//Parent.Height - Self.Height
+        ZIndex: =5
+

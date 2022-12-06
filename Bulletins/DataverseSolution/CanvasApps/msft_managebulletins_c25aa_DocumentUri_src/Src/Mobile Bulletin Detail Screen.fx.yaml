@@ -1,0 +1,3641 @@
+"'Mobile Bulletin Detail Screen' As screen":
+    Fill: =gblAppStyles.Background.Fill
+
+    tmrSetFocus_MobileBulletinDetail As timer:
+        AutoStart: =locSetFocusTimerStart
+        Color: =RGBA(0, 0, 0, 0)
+        DisplayMode: =DisplayMode.Disabled
+        Duration: =100
+        Fill: =RGBA(0, 0, 0, 0)
+        Height: =0
+        HoverFill: =Transparent
+        OnTimerEnd: |
+            =Switch(
+                locSetFocusControlTarget,
+                "imgMobileBulletinDetail_Schedule_Edit_Time",
+                SetFocus(imgMobileBulletinDetail_Schedule_Edit_Time)
+            );
+        PaddingBottom: =0
+        PaddingLeft: =0
+        PaddingRight: =0
+        PaddingTop: =0
+        Size: =0
+        TabIndex: =-1
+        Visible: =false
+        Width: =0
+        X: =Parent.Width - Self.Width
+        Y: =Parent.Height - Self.Height
+        ZIndex: =1
+
+    conMobileBulletinDetail_Footer As groupContainer:
+        Height: =btnMobileBulletinDetail_Save.Height + (2*gblPadding.Page)
+        Width: =Parent.Width
+        X: =0*0
+        Y: =Parent.Height - Self.Height
+        ZIndex: =2
+
+        btnMobileBulletinDetail_Save As button:
+            BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+            BorderThickness: |-
+                =If(
+                    Self.DisplayMode = DisplayMode.Disabled,
+                    1.5,
+                    gblAppStyles.ButtonSecondary.BorderThickness
+                )
+            Color: =gblAppStyles.ButtonSecondary.Color
+            DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+            DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+            DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+            DisplayMode: |-
+                =If(
+                    And(
+                        !IsBlankOrError(locValue_Body),
+                        !IsBlankOrError(locValue_Category),
+                        !IsBlankOrError(locValue_Title)
+                    ),
+                    DisplayMode.Edit,
+                    DisplayMode.Disabled
+                )
+            Fill: =gblAppStyles.ButtonSecondary.Fill
+            FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            Height: =44
+            HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+            HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+            HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+            OnSelect: |
+                =// Block User Input
+                UpdateContext({locBlockUserInput: true});
+                // Patch Bulletin
+                If(
+                    IsBlank(gblRecordBulletin),
+                    // New Records
+                    Patch(
+                        Bulletins,
+                        Defaults(Bulletins),
+                        {
+                            Title: locValue_Title,
+                            Subtitle: locValue_Subtitle,
+                            'Author(s)': txtMobileBulletinDetail_Author.Text,
+                            Body: locValue_Body,
+                            'Approval Status': 'Bulletin Approval Status'.Draft,
+                            'Button Title': txtMobileBulletinDetail_AddButton_ButtonTitle.Text,
+                            'Button URL': txtMobileBulletinDetail_AddButton_ButtonURL.Text,
+                            Category: locValue_Category,
+                            'Featured Time-frame': locValue_Featured,
+                            'Scheduled?': If(
+                                tglMobileBulletinDetail_Schedule.Value,
+                                'Scheduled? (Bulletins)'.Yes,
+                                'Scheduled? (Bulletins)'.No
+                            ),
+                            'Publish On': If(
+                                tglMobileBulletinDetail_Schedule.Value,
+                                With(
+                                    {
+                                        varPublishOnDate: If(
+                                            tglMobileBulletinDetail_Schedule.Value,
+                                            DateTimeValue(
+                                                Concatenate(
+                                                    Text(dtpHeroMobileBulletinDetail_Date.Value),
+                                                    ", ",
+                                                    locValue_Time
+                                                )
+                                            ),
+                                            Blank()
+                                        )
+                                    },
+                                    If(
+                                        IsBlankOrError(varPublishOnDate),
+                                        Blank(),
+                                        varPublishOnDate
+                                    )
+                                ),
+                                Blank()
+                            ),
+                            'Ready for Review?': If(
+                                tglMobileBulletinDetail_ReadyForReview.Value,
+                                'Ready for Review? (Bulletins)'.Yes,
+                                'Ready for Review? (Bulletins)'.No
+                            ),
+                            'Header Image': locValue_Image,
+                            'Header Image?': If(
+                                locValue_HeaderImage,
+                                'Header Image? (Bulletins)'.Yes,
+                                'Header Image? (Bulletins)'.No
+                            ),
+                            'Stock Image': locValue_StockImage,
+                            'Video URL': locValue_VideoURL
+                        }
+                    ),
+                    // Update Existing
+                    Patch(
+                        Bulletins,
+                        gblRecordBulletin,
+                        {
+                            Title: locValue_Title,
+                            Subtitle: locValue_Subtitle,
+                            'Author(s)': txtMobileBulletinDetail_Author.Text,
+                            Body: locValue_Body,
+                            'Approval Status': 'Bulletin Approval Status'.Draft,
+                            'Button Title': txtMobileBulletinDetail_AddButton_ButtonTitle.Text,
+                            'Button URL': txtMobileBulletinDetail_AddButton_ButtonURL.Text,
+                            Category: locValue_Category,
+                            'Featured Time-frame': locValue_Featured,
+                            'Scheduled?': If(
+                                tglMobileBulletinDetail_Schedule.Value,
+                                'Scheduled? (Bulletins)'.Yes,
+                                'Scheduled? (Bulletins)'.No
+                            ),
+                            'Publish On': If(
+                                tglMobileBulletinDetail_Schedule.Value,
+                                With(
+                                    {
+                                        varPublishOnDate: If(
+                                            tglMobileBulletinDetail_Schedule.Value,
+                                            DateTimeValue(
+                                                Concatenate(
+                                                    Text(dtpHeroMobileBulletinDetail_Date.Value),
+                                                    ", ",
+                                                    locValue_Time
+                                                )
+                                            ),
+                                            Blank()
+                                        )
+                                    },
+                                    If(
+                                        IsBlankOrError(varPublishOnDate),
+                                        Blank(),
+                                        varPublishOnDate
+                                    )
+                                ),
+                                Blank()
+                            ),
+                            'Ready for Review?': If(
+                                tglMobileBulletinDetail_ReadyForReview.Value,
+                                'Ready for Review? (Bulletins)'.Yes,
+                                'Ready for Review? (Bulletins)'.No
+                            ),
+                            'Header Image': locValue_Image,
+                            'Header Image?': If(
+                                locValue_HeaderImage,
+                                'Header Image? (Bulletins)'.Yes,
+                                'Header Image? (Bulletins)'.No
+                            ),
+                            'Stock Image': locValue_StockImage,
+                            'Video URL': locValue_VideoURL
+                        }
+                    )
+                );
+                // Navigate User Back; reset app
+                Navigate(
+                    'Mobile Bulletins Screen',
+                    ScreenTransition.None
+                );
+                // Reset Variables on this screen
+                UpdateContext(
+                    {
+                        locValue_Body: Blank(),
+                        locValue_Category: Blank(),
+                        locValue_Featured: Blank(),
+                        locValue_Time: Blank(),
+                        locValue_HeaderImage: Blank(),
+                        locValue_Image: Blank(),
+                        locValue_StockImage: Blank(),
+                        locValue_Subtitle: Blank(),
+                        locValue_Title: Blank(),
+                        locValue_VideoURL: Blank()
+                    }
+                );
+                // Reset entry controls on other screens
+                Reset(addMobileBulletinEntry_HeaderImage);
+                Reset(txtMobileBulletinEntry_Body);
+                Reset(txtMobileBulletinEntry_Subtitle);
+                Reset(txtMobileBulletinEntry_Title);
+                Reset(txtMobileBulletinEntry_VideoURL);
+                Reset(vidMobileBulletinEntry_VideoUrl);
+                // Reset controls on this screen
+                Reset(tglMobileBulletinDetail_ReadyForReview);
+                Reset(tglMobileBulletinDetail_Schedule);
+                Reset(txtMobileBulletinDetail_AddButton_ButtonTitle);
+                Reset(txtMobileBulletinDetail_AddButton_ButtonURL);
+                Reset(txtMobileBulletinDetail_Author);
+                // Unblock User Input
+                UpdateContext({locBlockUserInput: false});
+            PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+            PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+            PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+            RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+            RadiusBottomRight: =gblAppStyles.ButtonPrimary.RadiusBottomRight
+            RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+            RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+            Size: =gblAppStyles.ButtonPrimary.Size
+            Text: |-
+                =With(
+                {
+                varDefault: "Save",
+                varOOBTextId: "btnMobileBulletinDetail_Save__Text"
+                },
+                With(
+                {
+                varLocalizedText: LookUp(
+                colLocalization,
+                OOBTextId = varOOBTextId,
+                LocalizedText
+                )
+                },
+                Coalesce(
+                varLocalizedText,
+                varDefault
+                )
+                )
+                )
+            Tooltip: |
+                =With(
+                {
+                varDefault: "Click to save this bulletin",
+                varOOBTextId: "btnMobileBulletinDetail_Save__Tooltip"
+                },
+                With(
+                {
+                varLocalizedText: LookUp(
+                colLocalization,
+                OOBTextId = varOOBTextId,
+                LocalizedText
+                )
+                },
+                Coalesce(
+                varLocalizedText,
+                varDefault
+                )
+                )
+                )
+            Width: |-
+                =If(
+                    gblUserIsTeamOwner,
+                    (Parent.Width * .5) - Self.X - (gblPadding.Page / 2),
+                    Parent.Width - Self.X - gblPadding.Page
+                )
+            X: =gblPadding.Page
+            Y: =Parent.Height - Self.Height -gblPadding.Page
+            ZIndex: =1
+
+        btnMobileBulletinDetail_Publish As button:
+            BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+            BorderThickness: |-
+                =If(
+                    Self.DisplayMode = DisplayMode.Disabled,
+                    1.5,
+                    gblAppStyles.ButtonPrimary.BorderThickness
+                )
+            Color: =gblAppStyles.ButtonPrimary.Color
+            DisabledBorderColor: =gblAppStyles.ButtonPrimary.DisabledBorderColor
+            DisabledColor: =gblAppStyles.ButtonPrimary.DisabledColor
+            DisabledFill: =gblAppStyles.ButtonPrimary.DisabledFill
+            DisplayMode: |-
+                =If(
+                    And(
+                        !IsBlankOrError(locValue_Body),
+                        !IsBlankOrError(locValue_Category),
+                        !IsBlankOrError(locValue_Title)
+                    ),
+                    DisplayMode.Edit,
+                    DisplayMode.Disabled
+                )
+            Fill: =gblAppStyles.ButtonPrimary.Fill
+            FocusedBorderColor: =gblAppStyles.ButtonPrimary.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.ButtonPrimary.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            Height: =44
+            HoverBorderColor: =gblAppStyles.ButtonPrimary.HoverBorderColor
+            HoverColor: =gblAppStyles.ButtonPrimary.HoverColor
+            HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+            OnSelect: |
+                =// Block User Input
+                UpdateContext({locBlockUserInput: true});
+                // Patch Bulletin
+                If(
+                    IsBlank(gblRecordBulletin),
+                    // New Records
+                    Patch(
+                        Bulletins,
+                        Defaults(Bulletins),
+                        {
+                            Title: locValue_Title,
+                            Subtitle: locValue_Subtitle,
+                            'Author(s)': txtMobileBulletinDetail_Author.Text,
+                            Body: locValue_Body,
+                            'Approval Status': 'Bulletin Approval Status'.Draft,
+                            'Button Title': txtMobileBulletinDetail_AddButton_ButtonTitle.Text,
+                            'Button URL': txtMobileBulletinDetail_AddButton_ButtonURL.Text,
+                            Category: locValue_Category,
+                            'Featured Time-frame': locValue_Featured,
+                            'Scheduled?': If(
+                                tglMobileBulletinDetail_Schedule.Value,
+                                'Scheduled? (Bulletins)'.Yes,
+                                'Scheduled? (Bulletins)'.No
+                            ),
+                            'Publish On': If(
+                                tglMobileBulletinDetail_Schedule.Value,
+                                With(
+                                    {
+                                        varPublishOnDate: If(
+                                            tglMobileBulletinDetail_Schedule.Value,
+                                            DateTimeValue(
+                                                Concatenate(
+                                                    Text(dtpHeroMobileBulletinDetail_Date.Value),
+                                                    ", ",
+                                                    locValue_Time
+                                                )
+                                            ),
+                                            Blank()
+                                        )
+                                    },
+                                    If(
+                                        IsBlankOrError(varPublishOnDate),
+                                        Blank(),
+                                        varPublishOnDate
+                                    )
+                                ),
+                                Blank()
+                            ),
+                            'Ready for Review?': If(
+                                tglMobileBulletinDetail_ReadyForReview.Value,
+                                'Ready for Review? (Bulletins)'.Yes,
+                                'Ready for Review? (Bulletins)'.No
+                            ),
+                            'Header Image': locValue_Image,
+                            'Header Image?': If(
+                                locValue_HeaderImage,
+                                'Header Image? (Bulletins)'.Yes,
+                                'Header Image? (Bulletins)'.No
+                            ),
+                            'Stock Image': locValue_StockImage,
+                            'Video URL': locValue_VideoURL
+                        }
+                    ),
+                    // Update Existing
+                    Patch(
+                        Bulletins,
+                        gblRecordBulletin,
+                        {
+                            Title: locValue_Title,
+                            Subtitle: locValue_Subtitle,
+                            'Author(s)': txtMobileBulletinDetail_Author.Text,
+                            Body: locValue_Body,
+                            'Approval Status': 'Bulletin Approval Status'.Draft,
+                            'Button Title': txtMobileBulletinDetail_AddButton_ButtonTitle.Text,
+                            'Button URL': txtMobileBulletinDetail_AddButton_ButtonURL.Text,
+                            Category: locValue_Category,
+                            'Featured Time-frame': locValue_Featured,
+                            'Scheduled?': If(
+                                tglMobileBulletinDetail_Schedule.Value,
+                                'Scheduled? (Bulletins)'.Yes,
+                                'Scheduled? (Bulletins)'.No
+                            ),
+                            'Publish On': If(
+                                tglMobileBulletinDetail_Schedule.Value,
+                                With(
+                                    {
+                                        varPublishOnDate: If(
+                                            tglMobileBulletinDetail_Schedule.Value,
+                                            DateTimeValue(
+                                                Concatenate(
+                                                    Text(dtpHeroMobileBulletinDetail_Date.Value),
+                                                    ", ",
+                                                    locValue_Time
+                                                )
+                                            ),
+                                            Blank()
+                                        )
+                                    },
+                                    If(
+                                        IsBlankOrError(varPublishOnDate),
+                                        Blank(),
+                                        varPublishOnDate
+                                    )
+                                ),
+                                Blank()
+                            ),
+                            'Ready for Review?': If(
+                                tglMobileBulletinDetail_ReadyForReview.Value,
+                                'Ready for Review? (Bulletins)'.Yes,
+                                'Ready for Review? (Bulletins)'.No
+                            ),
+                            'Header Image': locValue_Image,
+                            'Header Image?': If(
+                                locValue_HeaderImage,
+                                'Header Image? (Bulletins)'.Yes,
+                                'Header Image? (Bulletins)'.No
+                            ),
+                            'Stock Image': locValue_StockImage,
+                            'Video URL': locValue_VideoURL
+                        }
+                    )
+                );
+                // Navigate User Back; reset app
+                Navigate(
+                    'Mobile Bulletins Screen',
+                    ScreenTransition.None
+                );
+                // Reset Variables on this screen
+                UpdateContext(
+                    {
+                        locValue_Body: Blank(),
+                        locValue_Category: Blank(),
+                        locValue_Featured: Blank(),
+                        locValue_Time: Blank(),
+                        locValue_HeaderImage: Blank(),
+                        locValue_Image: Blank(),
+                        locValue_StockImage: Blank(),
+                        locValue_Subtitle: Blank(),
+                        locValue_Title: Blank(),
+                        locValue_VideoURL: Blank()
+                    }
+                );
+                // Reset entry controls on other screens
+                Reset(addMobileBulletinEntry_HeaderImage);
+                Reset(txtMobileBulletinEntry_Body);
+                Reset(txtMobileBulletinEntry_Subtitle);
+                Reset(txtMobileBulletinEntry_Title);
+                Reset(txtMobileBulletinEntry_VideoURL);
+                Reset(vidMobileBulletinEntry_VideoUrl);
+                // Reset controls on this screen
+                Reset(tglMobileBulletinDetail_ReadyForReview);
+                Reset(tglMobileBulletinDetail_Schedule);
+                Reset(txtMobileBulletinDetail_AddButton_ButtonTitle);
+                Reset(txtMobileBulletinDetail_AddButton_ButtonURL);
+                Reset(txtMobileBulletinDetail_Author);
+                // Unblock User Input
+                UpdateContext({locBlockUserInput: false});
+            PressedBorderColor: =gblAppStyles.ButtonPrimary.PressedBorderColor
+            PressedColor: =gblAppStyles.ButtonPrimary.PressedColor
+            PressedFill: =gblAppStyles.ButtonPrimary.PressedFill
+            RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+            RadiusBottomRight: =gblAppStyles.ButtonPrimary.RadiusBottomRight
+            RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+            RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+            Size: =gblAppStyles.ButtonPrimary.Size
+            Text: |-
+                =With(
+                {
+                varDefault: "Publish",
+                varOOBTextId: "btnMobileBulletinDetail_Publish__Text"
+                },
+                With(
+                {
+                varLocalizedText: LookUp(
+                colLocalization,
+                OOBTextId = varOOBTextId,
+                LocalizedText
+                )
+                },
+                Coalesce(
+                varLocalizedText,
+                varDefault
+                )
+                )
+                )
+            Tooltip: |-
+                =With(
+                {
+                varDefault: "Click to publish this bulletin",
+                varOOBTextId: "btnMobileBulletinDetail_Publish__Tooltip"
+                },
+                With(
+                {
+                varLocalizedText: LookUp(
+                colLocalization,
+                OOBTextId = varOOBTextId,
+                LocalizedText
+                )
+                },
+                Coalesce(
+                varLocalizedText,
+                varDefault
+                )
+                )
+                )
+            Visible: =gblUserIsTeamOwner
+            Width: =Parent.Width - Self.X - gblPadding.Page
+            X: =(Parent.Width * .5) + (gblPadding.Page / 2)
+            Y: =Parent.Height - Self.Height -gblPadding.Page
+            ZIndex: =2
+
+    cnvMobileBulletinDetail As fluidGrid.fluidGridWithBlankCard:
+        BorderThickness: =0
+        Height: =conMobileBulletinDetail_Footer.Y - Self.Y
+        Width: =Parent.Width // 320
+        Y: =conMobileBulletinDetail_Header.Y + conMobileBulletinDetail_Header.Height
+        ZIndex: =3
+
+        dtcMobileBulletinDetail_Category As dataCard:
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            BorderThickness: =0
+            DisplayMode: =DisplayMode.Edit
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =shpMobileBulletinDetail_Category_Divider.Height + shpMobileBulletinDetail_Category_Divider.Y
+            Width: =Parent.Width
+            X: =0
+            Y: =0
+            ZIndex: =1
+
+            shpMobileBulletinDetail_Category_Divider As rectangle:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                DisabledFill: =gblAppStyles.Dividers.Elements
+                DisplayMode: =DisplayMode.Disabled
+                Fill: =RGBA(0, 0, 0, 0)
+                Height: =1
+                Width: =Parent.Width - Self.X
+                X: =imgMobileBulletinDetail_Category_Icon.Width
+                Y: =imgMobileBulletinDetail_Category_Icon.Height + imgMobileBulletinDetail_Category_Icon.Y -Self.Height
+                ZIndex: =1
+
+            lblMobileBulletinDetail_Category_Label As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: |
+                    =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                DisplayMode: =DisplayMode.View
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Semibold
+                Height: =imgMobileBulletinDetail_Category_Icon.Height
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                OnSelect: =
+                PaddingBottom: =4
+                PaddingLeft: =4
+                PaddingRight: =4
+                PaddingTop: =4
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: |
+                    =With(
+                    {
+                    varDefault: "Category",
+                    varOOBTextId: "lblMobileBulletinDetail_Category_Label__Text"
+                    },
+                    With(
+                    {
+                    varLocalizedText: LookUp(
+                    colLocalization,
+                    OOBTextId = varOOBTextId,
+                    LocalizedText
+                    )
+                    },
+                    Coalesce(
+                    varLocalizedText,
+                    varDefault
+                    )
+                    )
+                    )
+                Width: =imgMobileBulletinDetail_Category_Edit.X - Self.X
+                Wrap: =false
+                X: =imgMobileBulletinDetail_Category_Icon.X + imgMobileBulletinDetail_Category_Icon.Width
+                Y: =imgMobileBulletinDetail_Category_Icon.Y
+                ZIndex: =2
+
+            lblMobileBulletinDetail_Category_Value As label:
+                Align: =Align.Right
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: |
+                    =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Lighter
+                Height: =imgMobileBulletinDetail_Category_Icon.Height
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                OnSelect: =Select(imgMobileBulletinDetail_Category_Edit)
+                PaddingBottom: =4
+                PaddingLeft: =20
+                PaddingRight: =imgMobileBulletinDetail_Category_Edit.Width
+                PaddingTop: =4
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                TabIndex: =0
+                Text: =locValue_Category.Name
+                Tooltip: |-
+                    =If(
+                        IsBlank(gblRecordBulletin),
+                        "Click to add category",
+                        "Click to update category"
+                    )
+                Width: =imgMobileBulletinDetail_Category_Edit.X - Self.X
+                Wrap: =false
+                X: =imgMobileBulletinDetail_Category_Icon.X + imgMobileBulletinDetail_Category_Icon.Width
+                Y: =imgMobileBulletinDetail_Category_Icon.Y
+                ZIndex: =3
+
+            imgMobileBulletinDetail_Category_Edit As image:
+                AccessibleLabel: |
+                    =//With({varDefault:"Click to navigate back to home screen",varOOBTextId:"imgBulletinDetail_Actions_Back__AccessibleLabel__AccessibleLabel"},With({varLocalizedText:LookUp(colLocalization,OOBTextId=varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    
+                    With(
+                        {
+                            varDefault: "Click to edit bulletin's category",
+                            varOOBTextId: "imgMobileBulletinDetail_Category_Edit__AccessibleLabel"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                Fill: =gblAppStyles.ButtonTransparent.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                Height: =44
+                HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+                Image: |-
+                    =With(
+                        {
+                            varImageRecord: LookUp(
+                                staticIcons,
+                                staticIconName = "Back"
+                            ),
+                            varColor: gblAppStyles.Icons.Color
+                        },
+                        With(
+                            {
+                                varImageData: Concatenate(
+                                    "data:image/svg+xml;utf8, ",
+                                    EncodeUrl(
+                                        Concatenate(
+                                            "<svg viewBox='",
+                                            varImageRecord.staticIconViewbox,
+                                            "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                            varImageRecord.staticIconPath,
+                                            "' fill='#",
+                                            varColor,
+                                            "'/></svg>"
+                                        )
+                                    )
+                                )
+                            },
+                            varImageData
+                        )
+                    )
+                ImageRotation: =ImageRotation.Rotate180
+                OnSelect: |-
+                    =// Show Modal Dialog for data input
+                    UpdateContext(
+                        {
+                            locVisibleDialog: true,
+                            locVisibleEdit_Category: true,
+                            locVisibleEdit_Featured: false,
+                            //locVisibleEdit_Date: false,
+                            locVisibleEdit_Time: false
+                        }
+                    )
+                PaddingBottom: =12
+                PaddingLeft: =8
+                PaddingRight: =8
+                PaddingTop: =12
+                PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+                Tooltip: =Self.AccessibleLabel
+                Width: =44
+                X: =Parent.Width - Self.Width - 2
+                Y: =2*1
+                ZIndex: =4
+
+            imgMobileBulletinDetail_Category_Icon As image:
+                AccessibleLabel: |-
+                    =//With({varDefault:"Click to navigate back to home screen",varOOBTextId:"imgBulletinDetail_Actions_Back__AccessibleLabel__AccessibleLabel"},With({varLocalizedText:LookUp(colLocalization,OOBTextId=varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    
+                    With(
+                        {
+                            varDefault: "Image icon for bulletin's category",
+                            varOOBTextId: "imgMobileBulletinDetail_Category_Icon__AccessibleLabel"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                Fill: =gblAppStyles.ButtonTransparent.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                Height: =44*1
+                HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+                Image: |-
+                    =With(
+                        {
+                            varImageRecord: LookUp(
+                                staticIcons,
+                                staticIconName = "Folder"
+                            ),
+                            varColor: gblAppStyles.Icons.Color
+                        },
+                        With(
+                            {
+                                varImageData: Concatenate(
+                                    "data:image/svg+xml;utf8, ",
+                                    EncodeUrl(
+                                        Concatenate(
+                                            "<svg viewBox='",
+                                            varImageRecord.staticIconViewbox,
+                                            "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                            varImageRecord.staticIconPath,
+                                            "' fill='#",
+                                            varColor,
+                                            "'/></svg>"
+                                        )
+                                    )
+                                )
+                            },
+                            varImageData
+                        )
+                    )
+                OnSelect: =
+                PaddingBottom: =12
+                PaddingLeft: =8
+                PaddingRight: =8
+                PaddingTop: =12
+                PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+                Tooltip: =Self.AccessibleLabel
+                Width: =44*1
+                X: =2*1
+                Y: =2*1
+                ZIndex: =5
+
+        dtcMobileBulletinDetail_Featured As dataCard.blankCard:
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            DisplayMode: =DisplayMode.Edit
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =(2*lblMobileBulletinDetail_Featured_Value.Y + lblMobileBulletinDetail_Featured_Value.Height)
+            Width: =Parent.Width
+            X: =0
+            Y: =1
+            ZIndex: =2
+
+            shpMobileBulletinDetail_Featured_Divider As rectangle:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                DisabledFill: =gblAppStyles.Dividers.Elements
+                DisplayMode: =DisplayMode.Disabled
+                Fill: =RGBA(0, 0, 0, 0)
+                Height: =1
+                Width: =Parent.Width - Self.X
+                X: =imgMobileBulletinDetail_Featured_Icon.Width
+                Y: =Parent.Height -Self.Height
+                ZIndex: =1
+
+            lblMobileBulletinDetail_Featured_Label As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: |
+                    =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                DisplayMode: =DisplayMode.View
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Semibold
+                Height: =imgMobileBulletinDetail_Featured_Icon.Height
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                OnSelect: =
+                PaddingBottom: =4
+                PaddingLeft: =4
+                PaddingRight: =4
+                PaddingTop: =4
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: |-
+                    =With(
+                    {
+                    varDefault: "Make it featured",
+                    varOOBTextId: "lblMobileBulletinDetail_Featured_Label__Text"
+                    },
+                    With(
+                    {
+                    varLocalizedText: LookUp(
+                    colLocalization,
+                    OOBTextId = varOOBTextId,
+                    LocalizedText
+                    )
+                    },
+                    Coalesce(
+                    varLocalizedText,
+                    varDefault
+                    )
+                    )
+                    )
+                Width: =imgMobileBulletinDetail_Featured_Edit.X - Self.X
+                Wrap: =false
+                X: =imgMobileBulletinDetail_Featured_Icon.X + imgMobileBulletinDetail_Featured_Icon.Width
+                Y: =imgMobileBulletinDetail_Featured_Icon.Y
+                ZIndex: =2
+
+            lblMobileBulletinDetail_Featured_Value As label:
+                Align: =Align.Right
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: |
+                    =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Lighter
+                Height: =imgMobileBulletinDetail_Featured_Icon.Height
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                OnSelect: =Select(imgMobileBulletinDetail_Featured_Edit)
+                PaddingBottom: =4
+                PaddingLeft: =20
+                PaddingRight: =imgMobileBulletinDetail_Featured_Edit.Width
+                PaddingTop: =4
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                TabIndex: =0
+                Text: =locValue_Featured
+                Tooltip: |-
+                    =If(
+                        IsBlank(gblRecordBulletin),
+                        "Click to add Featured duration",
+                        "Click to update featurted duration"
+                    )
+                Width: =imgMobileBulletinDetail_Featured_Edit.X - Self.X
+                Wrap: =false
+                X: =imgMobileBulletinDetail_Featured_Icon.X + imgMobileBulletinDetail_Featured_Icon.Width
+                Y: =imgMobileBulletinDetail_Featured_Icon.Y
+                ZIndex: =3
+
+            imgMobileBulletinDetail_Featured_Edit As image:
+                AccessibleLabel: |-
+                    =/*With(
+                        {
+                            varDefault: "Click to navigate back to home screen",
+                            varOOBTextId: "imgBulletinDetail_Actions_Back__AccessibleLabel__AccessibleLabel"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )*/
+                    With(
+                        {
+                            varDefault: "Click to edit bulletin's featured timeframe ",
+                            varOOBTextId: "imgMobileBulletinDetail_Featured_Edit__AccessibleLabel"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                Fill: =gblAppStyles.ButtonTransparent.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                Height: =44
+                HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+                Image: |-
+                    =With(
+                        {
+                            varImageRecord: LookUp(
+                                staticIcons,
+                                staticIconName = "Back"
+                            ),
+                            varColor: gblAppStyles.Icons.Color
+                        },
+                        With(
+                            {
+                                varImageData: Concatenate(
+                                    "data:image/svg+xml;utf8, ",
+                                    EncodeUrl(
+                                        Concatenate(
+                                            "<svg viewBox='",
+                                            varImageRecord.staticIconViewbox,
+                                            "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                            varImageRecord.staticIconPath,
+                                            "' fill='#",
+                                            varColor,
+                                            "'/></svg>"
+                                        )
+                                    )
+                                )
+                            },
+                            varImageData
+                        )
+                    )
+                ImageRotation: =ImageRotation.Rotate180
+                OnSelect: |-
+                    =// Show Modal Dialog for data input
+                    UpdateContext(
+                        {
+                            locVisibleDialog: true,
+                            locVisibleEdit_Category: false,
+                            locVisibleEdit_Featured: true,
+                            //locVisibleEdit_Date: false,
+                            locVisibleEdit_Time: false
+                        }
+                    )
+                PaddingBottom: =12
+                PaddingLeft: =8
+                PaddingRight: =8
+                PaddingTop: =12
+                PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+                Tooltip: =Self.AccessibleLabel
+                Width: =44
+                X: =Parent.Width - Self.Width - 2
+                Y: =2*1
+                ZIndex: =4
+
+            imgMobileBulletinDetail_Featured_Icon As image:
+                AccessibleLabel: |
+                    =/*With(
+                        {
+                            varDefault: "Click to navigate back to home screen",
+                            varOOBTextId: "imgBulletinDetail_Actions_Back__AccessibleLabel__AccessibleLabel"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )*/
+                    
+                    With(
+                    {
+                    varDefault: "Image icon for bulletin's featured timeframe",
+                    varOOBTextId: "imgMobileBulletinDetail_Featured_Icon__AccessibleLabel"
+                    },
+                    With(
+                    {
+                    varLocalizedText: LookUp(
+                    colLocalization,
+                    OOBTextId = varOOBTextId,
+                    LocalizedText
+                    )
+                    },
+                    Coalesce(
+                    varLocalizedText,
+                    varDefault
+                    )
+                    )
+                    )
+                BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                Fill: =gblAppStyles.ButtonTransparent.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                Height: =44*1
+                HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+                Image: |-
+                    =With(
+                        {
+                            varImageRecord: LookUp(
+                                staticIcons,
+                                staticIconName = "Important"
+                            ),
+                            varColor: gblAppStyles.Icons.Color
+                        },
+                        With(
+                            {
+                                varImageData: Concatenate(
+                                    "data:image/svg+xml;utf8, ",
+                                    EncodeUrl(
+                                        Concatenate(
+                                            "<svg viewBox='",
+                                            varImageRecord.staticIconViewbox,
+                                            "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                            varImageRecord.staticIconPath,
+                                            "' fill='#",
+                                            varColor,
+                                            "'/></svg>"
+                                        )
+                                    )
+                                )
+                            },
+                            varImageData
+                        )
+                    )
+                OnSelect: =
+                PaddingBottom: =12
+                PaddingLeft: =8
+                PaddingRight: =8
+                PaddingTop: =12
+                PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+                Tooltip: =Self.AccessibleLabel
+                Width: =44*1
+                X: =2*1
+                Y: =2*1
+                ZIndex: =5
+
+        dtcMobileBulletinDetail_Schedule As dataCard.blankCard:
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            DisplayMode: =DisplayMode.Edit
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =(2 * lblMobileBulletinDetail_Schedule_Label.Y) + lblMobileBulletinDetail_Schedule_Label.Height
+            Width: =Parent.Width
+            X: =0
+            Y: =2
+            ZIndex: =3
+
+            shpMobileBulletinDetail_Schedule_Divider As rectangle:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                DisabledFill: =gblAppStyles.Dividers.Elements
+                DisplayMode: =DisplayMode.Disabled
+                Fill: =RGBA(0, 0, 0, 0)
+                Height: =1
+                Width: =Parent.Width - Self.X
+                X: =imgMobileBulletinDetail_Featured_Icon.Width
+                Y: =Parent.Height -Self.Height
+                ZIndex: =1
+
+            imgMobileBulletinDetail_Schedule_Edit_Time As image:
+                AccessibleLabel: |-
+                    =/*With(
+                        {
+                            varDefault: "Click to navigate back to home screen",
+                            varOOBTextId: "imgBulletinDetail_Actions_Back__AccessibleLabel__AccessibleLabel"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )*/
+                    
+                    With(
+                    {
+                    varDefault: "Click to edit bulletin's scheduled time",
+                    varOOBTextId: "imgMobileBulletinDetail_Schedule_Edit_Time__AccessibleLabel"
+                    },
+                    With(
+                    {
+                    varLocalizedText: LookUp(
+                    colLocalization,
+                    OOBTextId = varOOBTextId,
+                    LocalizedText
+                    )
+                    },
+                    Coalesce(
+                    varLocalizedText,
+                    varDefault
+                    )
+                    )
+                    )
+                BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                Fill: =gblAppStyles.ButtonTransparent.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                Height: =44
+                HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+                Image: |-
+                    =With(
+                        {
+                            varImageRecord: LookUp(
+                                staticIcons,
+                                staticIconName = "Back"
+                            ),
+                            varColor: gblAppStyles.Icons.Color
+                        },
+                        With(
+                            {
+                                varImageData: Concatenate(
+                                    "data:image/svg+xml;utf8, ",
+                                    EncodeUrl(
+                                        Concatenate(
+                                            "<svg viewBox='",
+                                            varImageRecord.staticIconViewbox,
+                                            "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                            varImageRecord.staticIconPath,
+                                            "' fill='#",
+                                            varColor,
+                                            "'/></svg>"
+                                        )
+                                    )
+                                )
+                            },
+                            varImageData
+                        )
+                    )
+                ImageRotation: =ImageRotation.Rotate180
+                OnSelect: |-
+                    =// Show Modal Dialog for data input
+                    UpdateContext(
+                        {
+                            locVisibleDialog: true,
+                            locVisibleEdit_Category: false,
+                            locVisibleEdit_Featured: false,
+                            //locVisibleEdit_Date: false,
+                            locVisibleEdit_Time: true
+                        }
+                    )
+                PaddingBottom: =12
+                PaddingLeft: =8
+                PaddingRight: =8
+                PaddingTop: =12
+                PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+                TabIndex: =tglMobileBulletinDetail_Schedule.Value
+                Tooltip: =Self.AccessibleLabel
+                Visible: =tglMobileBulletinDetail_Schedule.Value
+                Width: =44
+                X: =Parent.Width - Self.Width - 2
+                Y: =lblMobileBulletinDetail_Schedule_Label_Date.Y + lblMobileBulletinDetail_Schedule_Label_Date.Height
+                ZIndex: =2
+
+            lblMobileBulletinDetail_Schedule_Value_Time As label:
+                Align: =Align.Right
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: |
+                    =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                DisplayMode: =DisplayMode.View
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Lighter
+                Height: =lblMobileBulletinDetail_Schedule_Label.Height
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                OnSelect: =
+                PaddingBottom: =4
+                PaddingLeft: =20
+                PaddingRight: =0
+                PaddingTop: =4
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: =locValue_Time
+                Visible: =tglMobileBulletinDetail_Schedule.Value
+                Width: =imgMobileBulletinDetail_Schedule_Edit_Time.X - Self.X
+                Wrap: =false
+                X: =lblMobileBulletinDetail_Schedule_Label.X
+                Y: =lblMobileBulletinDetail_Schedule_Label_Date.Y + lblMobileBulletinDetail_Schedule_Label_Date.Height+1
+                ZIndex: =3
+
+            lblMobileBulletinDetail_Schedule_Label_Time As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: |
+                    =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Semibold
+                Height: =imgMobileBulletinDetail_Featured_Icon.Height
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                OnSelect: =Select(imgMobileBulletinDetail_Schedule_Edit_Time)
+                PaddingBottom: =4
+                PaddingLeft: =4
+                PaddingRight: =0
+                PaddingTop: =4
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: |-
+                    =With(
+                    {
+                    varDefault: "Time",
+                    varOOBTextId: "lblMobileBulletinDetail_Schedule_Label_Time__Text"
+                    },
+                    With(
+                    {
+                    varLocalizedText: LookUp(
+                    colLocalization,
+                    OOBTextId = varOOBTextId,
+                    LocalizedText
+                    )
+                    },
+                    Coalesce(
+                    varLocalizedText,
+                    varDefault
+                    )
+                    )
+                    )
+                Visible: =tglMobileBulletinDetail_Schedule.Value
+                Width: =imgMobileBulletinDetail_Schedule_Edit_Time.X - Self.X
+                Wrap: =false
+                X: =lblMobileBulletinDetail_Schedule_Label.X
+                Y: =lblMobileBulletinDetail_Schedule_Label_Date.Y + lblMobileBulletinDetail_Schedule_Label_Date.Height
+                ZIndex: =4
+
+            "dtpHeroMobileBulletinDetail_Date As 'Date picker'":
+                AcceptsFocus: =tglMobileBulletinDetail_Schedule.Value
+                AccessibleLabel: |-
+                    =With(
+                        {
+                            varDefault: "Date picker for the bulletin's scheduled publish date",
+                            varOOBTextId: "dtpHeroMobileBulletinDetail_Date__AccessibleLabel"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                AllowTextInput: =true
+                DisplayMode: =DisplayMode.Edit
+                FirstDayOfWeek: =1
+                FontWeight: ="normal"
+                Height: =lblMobileBulletinDetail_Schedule_Label_Date.Height - 4
+                IconSize: =16
+                InitialPickerDate: =Coalesce(gblRecordBulletin.'Publish On', Today())
+                MaxDate: =
+                MinDate: =Today()
+                PaddingBottom: =0
+                PaddingTop: =0
+                PCFTeamsTheme: =TeamsTheme.Default
+                ShowWeekNumbers: =false
+                Value: =Coalesce(gblRecordBulletin.'Publish On', Today())
+                Visible: =tglMobileBulletinDetail_Schedule.Value
+                Width: =112
+                X: =Parent.Width - Self.Width - 10
+                Y: =lblMobileBulletinDetail_Schedule_Label_Date.Y + 2
+                ZIndex: =5
+
+            lblMobileBulletinDetail_Schedule_Label_Date As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: |
+                    =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                DisplayMode: =DisplayMode.View
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Semibold
+                Height: =imgMobileBulletinDetail_Featured_Icon.Height
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                OnSelect: =
+                PaddingBottom: =4
+                PaddingLeft: =4
+                PaddingRight: =4
+                PaddingTop: =4
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: |
+                    =With(
+                    {
+                    varDefault: "Date",
+                    varOOBTextId: "lblMobileBulletinDetail_Schedule_Label_Date__Text"
+                    },
+                    With(
+                    {
+                    varLocalizedText: LookUp(
+                    colLocalization,
+                    OOBTextId = varOOBTextId,
+                    LocalizedText
+                    )
+                    },
+                    Coalesce(
+                    varLocalizedText,
+                    varDefault
+                    )
+                    )
+                    )
+                Visible: =tglMobileBulletinDetail_Schedule.Value
+                Width: =dtpHeroMobileBulletinDetail_Date.X - Self.X
+                Wrap: =false
+                X: =lblMobileBulletinDetail_Schedule_Label.X
+                Y: =lblMobileBulletinDetail_Schedule_Label.Y + lblMobileBulletinDetail_Schedule_Label.Height
+                ZIndex: =6
+
+            tglMobileBulletinDetail_Schedule As toggleSwitch:
+                AccessibleLabel: |-
+                    =With(
+                        {
+                            varDefault: "Toggle indicating that bulletin is scheduled",
+                            varOOBTextId: "tglMobileBulletinDetail_Schedule__AccessibleLabel"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                BorderColor: =gblAppStyles.Toggle.BorderColor
+                BorderThickness: =gblAppStyles.Toggle.BorderThickness
+                Color: =gblAppStyles.Toggle.Color
+                Default: =gblRecordBulletin.'Scheduled?' = 'Scheduled? (Bulletins)'.Yes
+                DisabledBorderColor: =gblAppStyles.Toggle.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Toggle.DisabledColor
+                FalseFill: =gblAppStyles.Toggle.FalseFill
+                FalseHoverFill: =gblAppStyles.Toggle.FalseHoverFill
+                FocusedBorderColor: =gblAppStyles.Toggle.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Toggle.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Semibold
+                HandleFill: =If(Self.Value,gblAppStyles.Toggle.HandleFillTrue,gblAppStyles.Toggle.HandleFillFalse)
+                Height: =24
+                HoverBorderColor: =gblAppStyles.Toggle.HoverBorderColor
+                OnCheck: |-
+                    =// [Screen Reader Start]
+                    UpdateContext(
+                        {
+                            locScreenReaderAnnouncedText: With(
+                                {
+                                    varAnnouncedText: With(
+                                        {
+                                            varDefault: "Bulletin is ready to review", // Default Text to use
+                                            varOOBTextId: "tglBulletinDetail_Actions_ReadyForReview__Announcement-True" // Localized version
+                                        },
+                                        With(
+                                            {
+                                                varLocalizedText: LookUp(
+                                                    colLocalization,
+                                                    OOBTextId = varOOBTextId,
+                                                    LocalizedText
+                                                )
+                                            },
+                                            Coalesce(
+                                                varLocalizedText,
+                                                varDefault
+                                            )
+                                        )
+                                    )
+                                },
+                                If(
+                                    locScreenReaderAnnouncedText = varAnnouncedText,
+                                    Concatenate(
+                                        varAnnouncedText,
+                                        " "
+                                    ),
+                                    varAnnouncedText // If clicked twice, will append blank space to update variable
+                                )
+                            )
+                        }
+                    );
+                    // [Screen Reader End]
+                OnSelect: |-
+                    =false;
+                    //screen reader start
+                    UpdateContext(
+                        {
+                            locScreenReaderAnnouncedText: With(
+                                {
+                                    varAnnouncedText: With(
+                                        {
+                                            varDefault: "Bulletin is scheduled for publishing",
+                                            varOOBTextId: "tglMobileBulletinDetail_Schedule__Announced_true"
+                                        },
+                                        With(
+                                            {
+                                                varLocalizedText: LookUp(
+                                                    colLocalization,
+                                                    OOBTextId = varOOBTextId,
+                                                    LocalizedText
+                                                )
+                                            },
+                                            Coalesce(
+                                                varLocalizedText,
+                                                varDefault
+                                            )
+                                        )
+                                    )
+                                },
+                                If(
+                                    locScreenReaderAnnouncedText = varAnnouncedText,
+                                    Concatenate(
+                                        varAnnouncedText,
+                                        " "
+                                    ),
+                                    varAnnouncedText
+                                )
+                            )
+                        }
+                    );
+                    //screen reader end
+                OnUncheck: |-
+                    =// [Screen Reader Start]
+                    UpdateContext(
+                        {
+                            locScreenReaderAnnouncedText: With(
+                                {
+                                    varAnnouncedText: With(
+                                        {
+                                            varDefault: "Bulletin is not scheduled for publishing", // Default Text to use
+                                            varOOBTextId: "tglMobileBulletinDetail_Schedule__Announced_false" // Localized version
+                                        },
+                                        With(
+                                            {
+                                                varLocalizedText: LookUp(
+                                                    colLocalization,
+                                                    OOBTextId = varOOBTextId,
+                                                    LocalizedText
+                                                )
+                                            },
+                                            Coalesce(
+                                                varLocalizedText,
+                                                varDefault
+                                            )
+                                        )
+                                    )
+                                },
+                                If(
+                                    locScreenReaderAnnouncedText = varAnnouncedText,
+                                    Concatenate(
+                                        varAnnouncedText,
+                                        " "
+                                    ),
+                                    varAnnouncedText // If clicked twice, will append blank space to update variable
+                                )
+                            )
+                        }
+                    );
+                    // [Screen Reader End]
+                PressedBorderColor: =gblAppStyles.Toggle.PressedBorderColor
+                ShowLabel: =false
+                Size: =gblAppStyles.Toggle.Size
+                Tooltip: =Self.AccessibleLabel
+                TrueFill: =gblAppStyles.Toggle.TrueFill
+                TrueHoverFill: =gblAppStyles.Toggle.TrueHoverFill
+                Width: =46
+                X: =Parent.Width - Self.Width - gblPadding.Page
+                Y: =12
+                ZIndex: =7
+
+            lblMobileBulletinDetail_Schedule_Label As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: |
+                    =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                DisplayMode: =DisplayMode.View
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Semibold
+                Height: =imgMobileBulletinDetail_Schedule_Icon.Height
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                OnSelect: =
+                PaddingBottom: =4
+                PaddingLeft: =4
+                PaddingRight: =4
+                PaddingTop: =4
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: |
+                    =With(
+                    {
+                    varDefault: "Schedule",
+                    varOOBTextId: "lblMobileBulletinDetail_Schedule_Label__Text"
+                    },
+                    With(
+                    {
+                    varLocalizedText: LookUp(
+                    colLocalization,
+                    OOBTextId = varOOBTextId,
+                    LocalizedText
+                    )
+                    },
+                    Coalesce(
+                    varLocalizedText,
+                    varDefault
+                    )
+                    )
+                    )
+                Width: =tglMobileBulletinDetail_Schedule.X - Self.X
+                Wrap: =false
+                X: =imgMobileBulletinDetail_Schedule_Icon.X + imgMobileBulletinDetail_Schedule_Icon.Width
+                Y: =imgMobileBulletinDetail_Schedule_Icon.Y
+                ZIndex: =8
+
+            imgMobileBulletinDetail_Schedule_Icon As image:
+                AccessibleLabel: |
+                    =/*With(
+                        {
+                            varDefault: "Click to navigate back to home screen",
+                            varOOBTextId: "imgBulletinDetail_Actions_Back__AccessibleLabel__AccessibleLabel"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )*/
+                    
+                    With(
+                    {
+                    varDefault: "Image icon for bulletin's scheduling",
+                    varOOBTextId: "imgMobileBulletinDetail_Schedule_Icon__AccessibleLabel"
+                    },
+                    With(
+                    {
+                    varLocalizedText: LookUp(
+                    colLocalization,
+                    OOBTextId = varOOBTextId,
+                    LocalizedText
+                    )
+                    },
+                    Coalesce(
+                    varLocalizedText,
+                    varDefault
+                    )
+                    )
+                    )
+                BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                Fill: =gblAppStyles.ButtonTransparent.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                Height: =44*1
+                HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+                Image: |-
+                    =With(
+                        {
+                            varImageRecord: LookUp(
+                                staticIcons,
+                                staticIconName = "Calendar"
+                            ),
+                            varColor: gblAppStyles.Icons.Color
+                        },
+                        With(
+                            {
+                                varImageData: Concatenate(
+                                    "data:image/svg+xml;utf8, ",
+                                    EncodeUrl(
+                                        Concatenate(
+                                            "<svg viewBox='",
+                                            varImageRecord.staticIconViewbox,
+                                            "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                            varImageRecord.staticIconPath,
+                                            "' fill='#",
+                                            varColor,
+                                            "'/></svg>"
+                                        )
+                                    )
+                                )
+                            },
+                            varImageData
+                        )
+                    )
+                OnSelect: =
+                PaddingBottom: =12
+                PaddingLeft: =8
+                PaddingRight: =8
+                PaddingTop: =12
+                PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+                Tooltip: =Self.AccessibleLabel
+                Width: =44*1
+                X: =2*1
+                Y: =2*1
+                ZIndex: =9
+
+        dtcMobileBulletinDetail_Content As dataCard.blankCard:
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            DisplayMode: =DisplayMode.Edit
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =93//lblMobileBulletinDetail_Content_Value.Y + lblMobileBulletinDetail_Content_Value.Height + gblPadding.Page
+            Width: =Parent.Width
+            X: =0
+            Y: =3
+            ZIndex: =4
+
+            shpMobileBulletinDetail_Content_Divider As rectangle:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                DisabledFill: =gblAppStyles.Dividers.Elements
+                DisplayMode: =DisplayMode.Disabled
+                Fill: =RGBA(0, 0, 0, 0)
+                Height: =1
+                Width: =Parent.Width - Self.X
+                X: =imgMobileBulletinDetail_Content_Icon.Width
+                Y: =Parent.Height -Self.Height
+                ZIndex: =1
+
+            lblMobileBulletinDetail_Content_Value As label:
+                AutoHeight: =true
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: |
+                    =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                DisplayMode: =DisplayMode.View
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Lighter
+                Height: =imgMobileBulletinDetail_Content_Icon.Height
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                OnSelect: =
+                PaddingBottom: =4
+                PaddingLeft: =4
+                PaddingRight: =4
+                PaddingTop: =4
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: |-
+                    =//PlainText(Coalesce(locValue_Body,"No content yet"))
+                    With(
+                    {
+                    varDefault: "No content yet",
+                    varOOBTextId: "lblMobileBulletinDetail_Content_Value__Text"
+                    },
+                    With(
+                    {
+                    varLocalizedText: LookUp(
+                    colLocalization,
+                    OOBTextId = varOOBTextId,
+                    LocalizedText
+                    )
+                    },
+                    Coalesce(
+                    varLocalizedText,
+                    varDefault
+                    )
+                    )
+                    )
+                Width: =Parent.Width - (2 * Self.X)
+                Wrap: =false
+                X: =lblMobileBulletinDetail_Content_Label.X
+                Y: =lblMobileBulletinDetail_Content_Label.Y + lblMobileBulletinDetail_Content_Label.Height
+                ZIndex: =2
+
+            imgMobileBulletinDetail_Content_Edit As image:
+                AccessibleLabel: |-
+                    =/*With(
+                        {
+                            varDefault: "Click to navigate back to home screen",
+                            varOOBTextId: "imgBulletinDetail_Actions_Back__AccessibleLabel__AccessibleLabel"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )*/
+                    
+                    With(
+                    {
+                    varDefault: "Click to edit bulletin's content",
+                    varOOBTextId: "imgMobileBulletinDetail_Content_Edit__AccessibleLabel"
+                    },
+                    With(
+                    {
+                    varLocalizedText: LookUp(
+                    colLocalization,
+                    OOBTextId = varOOBTextId,
+                    LocalizedText
+                    )
+                    },
+                    Coalesce(
+                    varLocalizedText,
+                    varDefault
+                    )
+                    )
+                    )
+                BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                Fill: =gblAppStyles.ButtonTransparent.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                Height: =44
+                HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+                Image: |-
+                    =With(
+                        {
+                            varImageRecord: LookUp(
+                                staticIcons,
+                                staticIconName = "Back"
+                            ),
+                            varColor: gblAppStyles.Icons.Color
+                        },
+                        With(
+                            {
+                                varImageData: Concatenate(
+                                    "data:image/svg+xml;utf8, ",
+                                    EncodeUrl(
+                                        Concatenate(
+                                            "<svg viewBox='",
+                                            varImageRecord.staticIconViewbox,
+                                            "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                            varImageRecord.staticIconPath,
+                                            "' fill='#",
+                                            varColor,
+                                            "'/></svg>"
+                                        )
+                                    )
+                                )
+                            },
+                            varImageData
+                        )
+                    )
+                ImageRotation: =ImageRotation.Rotate180
+                OnSelect: |-
+                    =UpdateContext({locBlockUserInput:true});
+                    Navigate('Mobile Bulletin Entry Screen',ScreenTransition.None);
+                    UpdateContext({locBlockUserInput:false});
+                PaddingBottom: =12
+                PaddingLeft: =8
+                PaddingRight: =8
+                PaddingTop: =12
+                PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+                Tooltip: =Self.AccessibleLabel
+                Width: =44
+                X: =Parent.Width - Self.Width - 2
+                Y: =2*1
+                ZIndex: =3
+
+            lblMobileBulletinDetail_Content_Label As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: |
+                    =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Semibold
+                Height: =imgMobileBulletinDetail_Content_Icon.Height
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                OnSelect: =Select(imgMobileBulletinDetail_Content_Edit)
+                PaddingBottom: =4
+                PaddingLeft: =4
+                PaddingRight: =4
+                PaddingTop: =4
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: |-
+                    =With(
+                    {
+                    varDefault: "Content",
+                    varOOBTextId: "lblMobileBulletinDetail_Content_Label__Text"
+                    },
+                    With(
+                    {
+                    varLocalizedText: LookUp(
+                    colLocalization,
+                    OOBTextId = varOOBTextId,
+                    LocalizedText
+                    )
+                    },
+                    Coalesce(
+                    varLocalizedText,
+                    varDefault
+                    )
+                    )
+                    )
+                Width: =imgMobileBulletinDetail_Content_Edit.X - Self.X
+                Wrap: =false
+                X: =imgMobileBulletinDetail_Content_Icon.X + imgMobileBulletinDetail_Content_Icon.Width
+                Y: =imgMobileBulletinDetail_Content_Icon.Y
+                ZIndex: =4
+
+            imgMobileBulletinDetail_Content_Icon As image:
+                AccessibleLabel: |
+                    =/*With(
+                        {
+                            varDefault: "Click to navigate back to home screen",
+                            varOOBTextId: "imgBulletinDetail_Actions_Back__AccessibleLabel__AccessibleLabel"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )*/
+                    
+                    With(
+                    {
+                    varDefault: "Image icon for bulletin's content",
+                    varOOBTextId: "imgMobileBulletinDetail_Content_Icon__AccessibleLabel"
+                    },
+                    With(
+                    {
+                    varLocalizedText: LookUp(
+                    colLocalization,
+                    OOBTextId = varOOBTextId,
+                    LocalizedText
+                    )
+                    },
+                    Coalesce(
+                    varLocalizedText,
+                    varDefault
+                    )
+                    )
+                    )
+                BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                Fill: =gblAppStyles.ButtonTransparent.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                Height: =44*1
+                HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+                Image: |-
+                    =With(
+                        {
+                            varImageRecord: LookUp(
+                                staticIcons,
+                                staticIconName = "Notepad"
+                            ),
+                            varColor: gblAppStyles.Icons.Color
+                        },
+                        With(
+                            {
+                                varImageData: Concatenate(
+                                    "data:image/svg+xml;utf8, ",
+                                    EncodeUrl(
+                                        Concatenate(
+                                            "<svg viewBox='",
+                                            varImageRecord.staticIconViewbox,
+                                            "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                            varImageRecord.staticIconPath,
+                                            "' fill='#",
+                                            varColor,
+                                            "'/></svg>"
+                                        )
+                                    )
+                                )
+                            },
+                            varImageData
+                        )
+                    )
+                OnSelect: =
+                PaddingBottom: =12
+                PaddingLeft: =8
+                PaddingRight: =8
+                PaddingTop: =12
+                PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+                Tooltip: =Self.AccessibleLabel
+                Width: =44*1
+                X: =2*1
+                Y: =2*1
+                ZIndex: =5
+
+        dtcMobileBulletinDetail_MoreDetails As dataCard.blankCard:
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            DisplayMode: =DisplayMode.Edit
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =(2 * btnMobileBulletinDetail_MoreDetails.Y) + btnMobileBulletinDetail_MoreDetails.Height
+            Width: =Parent.Width
+            X: =0
+            Y: =4
+            ZIndex: =5
+
+            imgMobileBulletinDetail_MoreDetails As image:
+                AccessibleLabel: |-
+                    =/*With(
+                        {
+                            varDefault: "Click to navigate back to home screen",
+                            varOOBTextId: "imgBulletinDetail_Actions_Back__AccessibleLabel__AccessibleLabel"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )*/
+                    //"More Details icon"
+                    
+                    With(
+                    {
+                    varDefault: "Click to show or hide details",
+                    varOOBTextId: "imgMobileBulletinDetail_MoreDetails__AccessibleLabel"
+                    },
+                    With(
+                    {
+                    varLocalizedText: LookUp(
+                    colLocalization,
+                    OOBTextId = varOOBTextId,
+                    LocalizedText
+                    )
+                    },
+                    Coalesce(
+                    varLocalizedText,
+                    varDefault
+                    )
+                    )
+                    )
+                BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                DisplayMode: =DisplayMode.View
+                Fill: =gblAppStyles.ButtonTransparent.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                Height: =44*1
+                HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+                Image: |-
+                    =With(
+                        {
+                            varImageRecord: LookUp(
+                                staticIcons,
+                                staticIconName = If(locDisplayMoreDetails,"Dismiss","Add")
+                            ),
+                            varColor: gblAppStyles.Icons.Color
+                        },
+                        With(
+                            {
+                                varImageData: Concatenate(
+                                    "data:image/svg+xml;utf8, ",
+                                    EncodeUrl(
+                                        Concatenate(
+                                            "<svg viewBox='",
+                                            varImageRecord.staticIconViewbox,
+                                            "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                            varImageRecord.staticIconPath,
+                                            "' fill='#",
+                                            varColor,
+                                            "'/></svg>"
+                                        )
+                                    )
+                                )
+                            },
+                            varImageData
+                        )
+                    )
+                OnSelect: |-
+                    =UpdateContext({locDisplayMoreDetails: !locDisplayMoreDetails})
+                PaddingBottom: =12
+                PaddingLeft: =8
+                PaddingRight: =8
+                PaddingTop: =12
+                PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+                Tooltip: =Self.AccessibleLabel
+                Width: =44*1
+                X: =2*1
+                Y: =2*1
+                ZIndex: =1
+
+            btnMobileBulletinDetail_MoreDetails As button:
+                Align: =Align.Left
+                BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+                Color: =gblAppStyles.ButtonTransparent.HoverColor
+                DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+                DisabledColor: =gblAppStyles.ButtonTransparent.DisabledColor
+                DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                Fill: =gblAppStyles.ButtonTransparent.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                Height: =44
+                HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                HoverColor: =gblAppStyles.ButtonTransparent.Color
+                HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+                OnSelect: |
+                    =UpdateContext({locDisplayMoreDetails: !locDisplayMoreDetails});
+                PaddingLeft: =44
+                PaddingRight: =0
+                PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                PressedColor: =gblAppStyles.ButtonTransparent.PressedColor
+                PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+                RadiusBottomLeft: =gblAppStyles.ButtonTransparent.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.ButtonTransparent.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.ButtonTransparent.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.ButtonTransparent.RadiusTopRight
+                Size: =gblAppStyles.ButtonTransparent.Size
+                Text: |-
+                    =With(
+                        {
+                            varDefault: "More details",
+                            varOOBTextId: "btnMobileBulletinDetail_MoreDetails__Text_more"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                Tooltip: |-
+                    =With(
+                    {
+                    varDefault: "Click for more details",
+                    varOOBTextId: "btnMobileBulletinDetail_MoreDetails__Tooltip_more"
+                    },
+                    With(
+                    {
+                    varLocalizedText: LookUp(
+                    colLocalization,
+                    OOBTextId = varOOBTextId,
+                    LocalizedText
+                    )
+                    },
+                    Coalesce(
+                    varLocalizedText,
+                    varDefault
+                    )
+                    )
+                    )
+                X: =4*1
+                Y: =2*1
+                ZIndex: =2
+
+        dtcMobileBulletinDetail_AddButton As dataCard.blankCard:
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            DisplayMode: =DisplayMode.Edit
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =txtMobileBulletinDetail_AddButton_ButtonURL.Y + txtMobileBulletinDetail_AddButton_ButtonURL.Height + 4
+            Visible: =locDisplayMoreDetails
+            Width: =Parent.Width
+            X: =0
+            Y: =5
+            ZIndex: =6
+
+            shpMobileBulletinDetail_AddButton_Divider As rectangle:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                DisabledFill: =gblAppStyles.Dividers.Elements
+                DisplayMode: =DisplayMode.Disabled
+                Fill: =RGBA(0, 0, 0, 0)
+                Height: =1
+                Width: =Parent.Width - Self.X
+                X: =imgMobileBulletinDetail_Content_Icon.Width
+                Y: =Parent.Height -Self.Height
+                ZIndex: =1
+
+            txtMobileBulletinDetail_AddButton_ButtonURL As text:
+                AccessibleLabel: |-
+                    =//With({varDefault:"Text input to add description",varOOBTextId:"txtContactDetail_Content_Description__AccessibleLabel"},With({varLocalizedText:LookUp(colLocalization,OOBTextId=varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    
+                    With(
+                        {
+                            varDefault: "Text input to enter bulletin's button URL",
+                            varOOBTextId: "txtMobileBulletinDetail_AddButton_ButtonURL__AccessibleLabel"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                BorderColor: =gblAppStyles.TextInput.BorderColor
+                BorderThickness: =gblAppStyles.TextInput.BorderThickness
+                Color: =gblAppStyles.TextInput.Color
+                Default: =gblRecordBulletin.'Button URL'
+                DelayOutput: =true
+                DisabledBorderColor: =gblAppStyles.TextInput.DisabledBorderColor
+                DisabledColor: =gblAppStyles.TextInput.DisabledColor
+                DisabledFill: =gblAppStyles.TextInput.DisabledFill
+                Fill: =gblAppStyles.TextInput.Fill
+                FocusedBorderColor: =gblAppStyles.TextInput.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.TextInput.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =32
+                HintText: |-
+                    =With(
+                        {
+                            varDefault: "URL",
+                            varOOBTextId: "txtMobileBulletinDetail_AddButton_ButtonURL__HintText"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                HoverBorderColor: =gblAppStyles.TextInput.HoverBorderColor
+                HoverColor: =gblAppStyles.TextInput.HoverColor
+                HoverFill: =gblAppStyles.TextInput.HoverFill
+                MaxLength: =500
+                PaddingLeft: =5
+                PaddingRight: =8
+                PressedBorderColor: =gblAppStyles.TextInput.PressedBorderColor
+                PressedColor: =gblAppStyles.TextInput.PressedColor
+                PressedFill: =gblAppStyles.TextInput.PressedFill
+                RadiusBottomLeft: =gblAppStyles.TextInput.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.TextInput.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.TextInput.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.TextInput.RadiusTopRight
+                Size: =gblAppStyles.TextInput.Size
+                TabIndex: =If(locDisplayMoreDetails,0,-1)
+                Tooltip: =Self.HintText
+                Width: =Parent.Width - Self.X -gblPadding.Page
+                X: =lblMobileBulletinDetail_AddButton_Label.X
+                Y: =txtMobileBulletinDetail_AddButton_ButtonTitle.Y + txtMobileBulletinDetail_AddButton_ButtonTitle.Height + 8
+                ZIndex: =2
+
+            txtMobileBulletinDetail_AddButton_ButtonTitle As text:
+                AccessibleLabel: |-
+                    =//With({varDefault:"Text input to add description",varOOBTextId:"txtContactDetail_Content_Description__AccessibleLabel"},With({varLocalizedText:LookUp(colLocalization,OOBTextId=varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    
+                    With(
+                        {
+                            varDefault: "Text input to enter bulletin's button title",
+                            varOOBTextId: "txtMobileBulletinDetail_AddButton_ButtonTitle__AccessibleLabel"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                BorderColor: =gblAppStyles.TextInput.BorderColor
+                BorderThickness: =gblAppStyles.TextInput.BorderThickness
+                Color: =gblAppStyles.TextInput.Color
+                Default: =gblRecordBulletin.'Button Title'
+                DelayOutput: =true
+                DisabledBorderColor: =gblAppStyles.TextInput.DisabledBorderColor
+                DisabledColor: =gblAppStyles.TextInput.DisabledColor
+                DisabledFill: =gblAppStyles.TextInput.DisabledFill
+                EnableSpellCheck: =true
+                Fill: =gblAppStyles.TextInput.Fill
+                FocusedBorderColor: =gblAppStyles.TextInput.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.TextInput.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =32
+                HintText: |
+                    =With(
+                        {
+                            varDefault: "Title",
+                            varOOBTextId: "txtMobileBulletinDetail_AddButton_ButtonTitle__HintText"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                HoverBorderColor: =gblAppStyles.TextInput.HoverBorderColor
+                HoverColor: =gblAppStyles.TextInput.HoverColor
+                HoverFill: =gblAppStyles.TextInput.HoverFill
+                MaxLength: =20
+                PaddingLeft: =5
+                PaddingRight: =8
+                PressedBorderColor: =gblAppStyles.TextInput.PressedBorderColor
+                PressedColor: =gblAppStyles.TextInput.PressedColor
+                PressedFill: =gblAppStyles.TextInput.PressedFill
+                RadiusBottomLeft: =gblAppStyles.TextInput.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.TextInput.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.TextInput.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.TextInput.RadiusTopRight
+                Size: =gblAppStyles.TextInput.Size
+                TabIndex: =If(locDisplayMoreDetails,0,-1)
+                Tooltip: =Self.HintText
+                Width: =Parent.Width - Self.X -gblPadding.Page
+                X: =lblMobileBulletinDetail_AddButton_Label.X
+                Y: =lblMobileBulletinDetail_AddButton_Label.Y + lblMobileBulletinDetail_AddButton_Label.Height
+                ZIndex: =3
+
+            lblMobileBulletinDetail_AddButton_Label As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: |
+                    =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                DisplayMode: =DisplayMode.View
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Semibold
+                Height: =imgMobileBulletinDetail_AddButton_Icon.Height
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                OnSelect: =
+                PaddingBottom: =4
+                PaddingLeft: =4
+                PaddingRight: =4
+                PaddingTop: =4
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: |-
+                    =With(
+                    {
+                    varDefault: "Add a button to bulletin",
+                    varOOBTextId: "lblMobileBulletinDetail_AddButton_Label__Text"
+                    },
+                    With(
+                    {
+                    varLocalizedText: LookUp(
+                    colLocalization,
+                    OOBTextId = varOOBTextId,
+                    LocalizedText
+                    )
+                    },
+                    Coalesce(
+                    varLocalizedText,
+                    varDefault
+                    )
+                    )
+                    )
+                Width: =Parent.Width - Self.X
+                Wrap: =false
+                X: =imgMobileBulletinDetail_AddButton_Icon.X + imgMobileBulletinDetail_AddButton_Icon.Width
+                Y: =imgMobileBulletinDetail_AddButton_Icon.Y
+                ZIndex: =4
+
+            imgMobileBulletinDetail_AddButton_Icon As image:
+                AccessibleLabel: |-
+                    =//With({varDefault:"Click to navigate back to home screen",varOOBTextId:"imgBulletinDetail_Actions_Back__AccessibleLabel__AccessibleLabel"},With({varLocalizedText:LookUp(colLocalization,OOBTextId=varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    
+                    With(
+                    {
+                    varDefault: "Image icon for bulletin's button",
+                    varOOBTextId: "imgMobileBulletinDetail_AddButton_Icon__AccessibleLabel"
+                    },
+                    With(
+                    {
+                    varLocalizedText: LookUp(
+                    colLocalization,
+                    OOBTextId = varOOBTextId,
+                    LocalizedText
+                    )
+                    },
+                    Coalesce(
+                    varLocalizedText,
+                    varDefault
+                    )
+                    )
+                    )
+                BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                Fill: =gblAppStyles.ButtonTransparent.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                Height: =44*1
+                HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+                Image: |-
+                    =With(
+                        {
+                            varImageRecord: LookUp(
+                                staticIcons,
+                                staticIconName = "Open Task"
+                            ),
+                            varColor: gblAppStyles.Icons.Color
+                        },
+                        With(
+                            {
+                                varImageData: Concatenate(
+                                    "data:image/svg+xml;utf8, ",
+                                    EncodeUrl(
+                                        Concatenate(
+                                            "<svg viewBox='",
+                                            varImageRecord.staticIconViewbox,
+                                            "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                            varImageRecord.staticIconPath,
+                                            "' fill='#",
+                                            varColor,
+                                            "'/></svg>"
+                                        )
+                                    )
+                                )
+                            },
+                            varImageData
+                        )
+                    )
+                OnSelect: =
+                PaddingBottom: =12
+                PaddingLeft: =8
+                PaddingRight: =8
+                PaddingTop: =12
+                PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+                Tooltip: =Self.AccessibleLabel
+                Width: =44*1
+                X: =2*1
+                Y: =2*1
+                ZIndex: =5
+
+        dtcMobileBulletinDetail_Author As dataCard.blankCard:
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            DisplayMode: =DisplayMode.Edit
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =txtMobileBulletinDetail_Author.Y + txtMobileBulletinDetail_Author.Height + 4
+            Visible: =locDisplayMoreDetails
+            Width: =Parent.Width
+            X: =0
+            Y: =6
+            ZIndex: =7
+
+            shpMobileBulletinDetail_Author_Divider As rectangle:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                DisabledFill: =gblAppStyles.Dividers.Elements
+                DisplayMode: =DisplayMode.Disabled
+                Fill: =RGBA(0, 0, 0, 0)
+                Height: =1
+                Width: =Parent.Width - Self.X
+                X: =imgMobileBulletinDetail_Content_Icon.Width
+                Y: =Parent.Height -Self.Height
+                ZIndex: =1
+
+            txtMobileBulletinDetail_Author As text:
+                AccessibleLabel: |
+                    =//With({varDefault:"Text input to add description",varOOBTextId:"txtContactDetail_Content_Description__AccessibleLabel"},With({varLocalizedText:LookUp(colLocalization,OOBTextId=varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    
+                    With(
+                        {
+                            varDefault: "Text input to enter bulletin's author",
+                            varOOBTextId: "txtMobileBulletinDetail_Author__AccessibleLabel"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                BorderColor: =gblAppStyles.TextInput.BorderColor
+                BorderThickness: =gblAppStyles.TextInput.BorderThickness
+                Color: =gblAppStyles.TextInput.Color
+                Default: =gblRecordBulletin.'Author(s)'
+                DelayOutput: =true
+                DisabledBorderColor: =gblAppStyles.TextInput.DisabledBorderColor
+                DisabledColor: =gblAppStyles.TextInput.DisabledColor
+                DisabledFill: =gblAppStyles.TextInput.DisabledFill
+                EnableSpellCheck: =true
+                Fill: =gblAppStyles.TextInput.Fill
+                FocusedBorderColor: =gblAppStyles.TextInput.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.TextInput.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =32
+                HintText: |
+                    =With(
+                        {
+                            varDefault: "Type author name here",
+                            varOOBTextId: "txtMobileBulletinDetail_Author__HintText"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                HoverBorderColor: =gblAppStyles.TextInput.HoverBorderColor
+                HoverColor: =gblAppStyles.TextInput.HoverColor
+                HoverFill: =gblAppStyles.TextInput.HoverFill
+                MaxLength: =100
+                PaddingLeft: =5
+                PaddingRight: =8
+                PressedBorderColor: =gblAppStyles.TextInput.PressedBorderColor
+                PressedColor: =gblAppStyles.TextInput.PressedColor
+                PressedFill: =gblAppStyles.TextInput.PressedFill
+                RadiusBottomLeft: =gblAppStyles.TextInput.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.TextInput.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.TextInput.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.TextInput.RadiusTopRight
+                Size: =gblAppStyles.TextInput.Size
+                TabIndex: =If(locDisplayMoreDetails,0,-1)
+                Tooltip: =Self.HintText
+                Width: =Parent.Width - Self.X -gblPadding.Page
+                X: =lblMobileBulletinDetail_AddButton_Label.X
+                Y: =lblMobileBulletinDetail_Author_Label.Y + lblMobileBulletinDetail_Author_Label.Height
+                ZIndex: =2
+
+            lblMobileBulletinDetail_Author_Label As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: |
+                    =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                DisplayMode: =DisplayMode.View
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Semibold
+                Height: =imgMobileBulletinDetail_Author_Icon.Height
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                OnSelect: =
+                PaddingBottom: =4
+                PaddingLeft: =4
+                PaddingRight: =4
+                PaddingTop: =4
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: |-
+                    =With(
+                    {
+                    varDefault: "Author",
+                    varOOBTextId: "lblMobileBulletinDetail_Author_Label__Text"
+                    },
+                    With(
+                    {
+                    varLocalizedText: LookUp(
+                    colLocalization,
+                    OOBTextId = varOOBTextId,
+                    LocalizedText
+                    )
+                    },
+                    Coalesce(
+                    varLocalizedText,
+                    varDefault
+                    )
+                    )
+                    )
+                Width: =Parent.Width - Self.X
+                Wrap: =false
+                X: =imgMobileBulletinDetail_Author_Icon.X + imgMobileBulletinDetail_Author_Icon.Width
+                Y: =imgMobileBulletinDetail_Author_Icon.Y
+                ZIndex: =3
+
+            imgMobileBulletinDetail_Author_Icon As image:
+                AccessibleLabel: |-
+                    =//With({varDefault:"Click to navigate back to home screen",varOOBTextId:"imgBulletinDetail_Actions_Back__AccessibleLabel__AccessibleLabel"},With({varLocalizedText:LookUp(colLocalization,OOBTextId=varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                    With(
+                        {
+                            varDefault: "Image icon for bulletin's author",
+                            varOOBTextId: "imgMobileBulletinDetail_Author_Icon__AccessibleLabel"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                Fill: =gblAppStyles.ButtonTransparent.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                Height: =44*1
+                HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+                Image: |-
+                    =With(
+                        {
+                            varImageRecord: LookUp(
+                                staticIcons,
+                                staticIconName = "AssignedTo"
+                            ),
+                            varColor: gblAppStyles.Icons.Color
+                        },
+                        With(
+                            {
+                                varImageData: Concatenate(
+                                    "data:image/svg+xml;utf8, ",
+                                    EncodeUrl(
+                                        Concatenate(
+                                            "<svg viewBox='",
+                                            varImageRecord.staticIconViewbox,
+                                            "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                            varImageRecord.staticIconPath,
+                                            "' fill='#",
+                                            varColor,
+                                            "'/></svg>"
+                                        )
+                                    )
+                                )
+                            },
+                            varImageData
+                        )
+                    )
+                OnSelect: =
+                PaddingBottom: =12
+                PaddingLeft: =8
+                PaddingRight: =8
+                PaddingTop: =12
+                PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+                Tooltip: =Self.AccessibleLabel
+                Width: =44*1
+                X: =2*1
+                Y: =2*1
+                ZIndex: =4
+
+    conMobileBulletinDetail_Header As groupContainer:
+        Height: =lblMobileBulletinDetail_Header.Y + lblMobileBulletinDetail_Header.Height
+        Width: =Parent.Width // 320
+        ZIndex: =4
+
+        btnMobileBulletinDetail_Back As button:
+            Align: =Align.Left
+            BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+            BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+            Color: =gblAppStyles.ButtonTransparent.HoverColor
+            DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+            DisabledColor: =gblAppStyles.ButtonTransparent.DisabledColor
+            DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+            Fill: =gblAppStyles.ButtonTransparent.Fill
+            FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            Height: =32
+            HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+            HoverColor: =gblAppStyles.ButtonTransparent.Color
+            HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+            OnSelect: |
+                =// Block User Input
+                UpdateContext({locBlockUserInput: true});
+                // Navigate Back
+                Navigate(
+                    'Mobile Bulletins Screen',
+                    ScreenTransition.None
+                );
+                // Reset Variables on this screen
+                UpdateContext(
+                    {
+                        locValue_Body: Blank(),
+                        locValue_Category: Blank(),
+                        locValue_Featured: Blank(),
+                        locValue_Time: Blank(),
+                        locValue_HeaderImage: Blank(),
+                        locValue_Image: Blank(),
+                        locValue_StockImage: Blank(),
+                        locValue_Subtitle: Blank(),
+                        locValue_Title: Blank(),
+                        locValue_VideoURL: Blank()
+                    }
+                );
+                // Reset entry controls on other screens
+                Reset(addMobileBulletinEntry_HeaderImage);
+                Reset(txtMobileBulletinEntry_Body);
+                Reset(txtMobileBulletinEntry_Subtitle);
+                Reset(txtMobileBulletinEntry_Title);
+                Reset(txtMobileBulletinEntry_VideoURL);
+                Reset(vidMobileBulletinEntry_VideoUrl);
+                // Reset controls on this screen
+                Reset(tglMobileBulletinDetail_ReadyForReview);
+                Reset(tglMobileBulletinDetail_Schedule);
+                Reset(txtMobileBulletinDetail_AddButton_ButtonTitle);
+                Reset(txtMobileBulletinDetail_AddButton_ButtonURL);
+                Reset(txtMobileBulletinDetail_Author);
+                // Unblock User Input
+                UpdateContext({locBlockUserInput: false});
+            PaddingLeft: =8*1
+            PaddingRight: =0
+            PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+            PressedColor: =gblAppStyles.ButtonTransparent.PressedColor
+            PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+            RadiusBottomLeft: =gblAppStyles.ButtonTransparent.RadiusBottomLeft
+            RadiusBottomRight: =gblAppStyles.ButtonTransparent.RadiusBottomRight
+            RadiusTopLeft: =gblAppStyles.ButtonTransparent.RadiusTopLeft
+            RadiusTopRight: =gblAppStyles.ButtonTransparent.RadiusTopRight
+            Size: =gblAppStyles.ButtonTransparent.Size
+            Text: |-
+                =With(
+                {
+                varDefault: "Back to home",
+                varOOBTextId: "btnMobileBulletinDetail_Back__Text"
+                },
+                With(
+                {
+                varLocalizedText: LookUp(
+                colLocalization,
+                OOBTextId = varOOBTextId,
+                LocalizedText
+                )
+                },
+                Coalesce(
+                varLocalizedText,
+                varDefault
+                )
+                )
+                )
+            Tooltip: |
+                =With(
+                {
+                varDefault: "Click to return back to bulletins",
+                varOOBTextId: "btnMobileBulletinDetail_Back__Tooltip"
+                },
+                With(
+                {
+                varLocalizedText: LookUp(
+                colLocalization,
+                OOBTextId = varOOBTextId,
+                LocalizedText
+                )
+                },
+                Coalesce(
+                varLocalizedText,
+                varDefault
+                )
+                )
+                )
+            Width: =112
+            X: =8*1
+            Y: =8*1
+            ZIndex: =1
+
+        tglMobileBulletinDetail_ReadyForReview As toggleSwitch:
+            AccessibleLabel: |-
+                =With(
+                    {
+                        varDefault: "Toggle indicating that bulletin is ready for review",
+                        varOOBTextId: "tglMobileBulletinDetail_ReadyForReview__AccessibleLabel"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            BorderColor: =gblAppStyles.Toggle.BorderColor
+            BorderThickness: =gblAppStyles.Toggle.BorderThickness
+            Color: =gblAppStyles.Toggle.Color
+            Default: =gblRecordBulletin.'Ready for Review?' = 'Ready for Review? (Bulletins)'.Yes
+            DisabledBorderColor: =gblAppStyles.Toggle.DisabledBorderColor
+            DisabledColor: =gblAppStyles.Toggle.DisabledColor
+            FalseFill: =gblAppStyles.Toggle.FalseFill
+            FalseHoverFill: =gblAppStyles.Toggle.FalseHoverFill
+            FocusedBorderColor: =gblAppStyles.Toggle.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Toggle.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            FontWeight: =FontWeight.Semibold
+            HandleFill: =If(Self.Value,gblAppStyles.Toggle.HandleFillTrue,gblAppStyles.Toggle.HandleFillFalse)
+            Height: =24
+            HoverBorderColor: =gblAppStyles.Toggle.HoverBorderColor
+            OnCheck: |-
+                =// [Screen Reader Start]
+                UpdateContext(
+                    {
+                        locScreenReaderAnnouncedText: With(
+                            {
+                                varAnnouncedText: With(
+                                    {
+                                        varDefault: "Bulletin is ready to review", // Default Text to use
+                                        varOOBTextId: "tglBulletinDetail_Actions_ReadyForReview__Announcement-True" // Localized version
+                                    },
+                                    With(
+                                        {
+                                            varLocalizedText: LookUp(
+                                                colLocalization,
+                                                OOBTextId = varOOBTextId,
+                                                LocalizedText
+                                            )
+                                        },
+                                        Coalesce(
+                                            varLocalizedText,
+                                            varDefault
+                                        )
+                                    )
+                                )
+                            },
+                            If(
+                                locScreenReaderAnnouncedText = varAnnouncedText,
+                                Concatenate(
+                                    varAnnouncedText,
+                                    " "
+                                ),
+                                varAnnouncedText // If clicked twice, will append blank space to update variable
+                            )
+                        )
+                    }
+                );
+                // [Screen Reader End]
+            OnSelect: |-
+                =false;
+                //screen reader start
+                UpdateContext(
+                    {
+                        locScreenReaderAnnouncedText: With(
+                            {
+                                varAnnouncedText: With(
+                                    {
+                                        varDefault: "Bulletin is ready for review",
+                                        varOOBTextId: "tglMobileBulletinDetail_ReadyForReview__Announced_true"
+                                    },
+                                    With(
+                                        {
+                                            varLocalizedText: LookUp(
+                                                colLocalization,
+                                                OOBTextId = varOOBTextId,
+                                                LocalizedText
+                                            )
+                                        },
+                                        Coalesce(
+                                            varLocalizedText,
+                                            varDefault
+                                        )
+                                    )
+                                )
+                            },
+                            If(
+                                locScreenReaderAnnouncedText = varAnnouncedText,
+                                Concatenate(
+                                    varAnnouncedText,
+                                    " "
+                                ),
+                                varAnnouncedText
+                            )
+                        )
+                    }
+                );
+                //screen reader end
+            OnUncheck: |-
+                =// [Screen Reader Start]
+                UpdateContext(
+                    {
+                        locScreenReaderAnnouncedText: With(
+                            {
+                                varAnnouncedText: With(
+                                    {
+                                        varDefault: "Bulletin is not ready to review", // Default Text to use
+                                        varOOBTextId: "tglMobileBulletinDetail_ReadyForReview__Announced_false" // Localized version
+                                    },
+                                    With(
+                                        {
+                                            varLocalizedText: LookUp(
+                                                colLocalization,
+                                                OOBTextId = varOOBTextId,
+                                                LocalizedText
+                                            )
+                                        },
+                                        Coalesce(
+                                            varLocalizedText,
+                                            varDefault
+                                        )
+                                    )
+                                )
+                            },
+                            If(
+                                locScreenReaderAnnouncedText = varAnnouncedText,
+                                Concatenate(
+                                    varAnnouncedText,
+                                    " "
+                                ),
+                                varAnnouncedText // If clicked twice, will append blank space to update variable
+                            )
+                        )
+                    }
+                );
+                // [Screen Reader End]
+            PressedBorderColor: =gblAppStyles.Toggle.PressedBorderColor
+            ShowLabel: =false
+            Size: =gblAppStyles.Toggle.Size
+            Tooltip: =Self.AccessibleLabel
+            TrueFill: =gblAppStyles.Toggle.TrueFill
+            TrueHoverFill: =gblAppStyles.Toggle.TrueHoverFill
+            Visible: =!gblUserIsTeamOwner
+            Width: =46
+            X: =Parent.Width - Self.Width - gblPadding.Page
+            Y: =42
+            ZIndex: =2
+
+        lblMobileBulletinDetail_ReadyForReview As label:
+            Align: =Align.Right
+            BorderColor: =gblAppStyles.Label.BorderColor
+            BorderThickness: =gblAppStyles.Label.BorderThickness
+            Color: =gblAppStyles.Label.Color
+            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+            DisabledColor: |
+                =gblAppStyles.Label.DisabledColor
+            DisabledFill: =gblAppStyles.Label.DisabledFill
+            Fill: =gblAppStyles.Label.Fill
+            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            Height: =44
+            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+            HoverColor: =gblAppStyles.Label.HoverColor
+            HoverFill: =gblAppStyles.Label.HoverFill
+            OnSelect: =
+            PaddingBottom: =4
+            PaddingLeft: =4
+            PaddingRight: =10
+            PaddingTop: =4
+            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+            PressedColor: =gblAppStyles.Label.PressedColor
+            PressedFill: =gblAppStyles.Label.PressedFill
+            Size: =gblAppStyles.Label.Size.Small
+            Text: |-
+                =With(
+                {
+                varDefault: "Ready for review",
+                varOOBTextId: "lblMobileBulletinDetail_ReadyForReview__Text"
+                },
+                With(
+                {
+                varLocalizedText: LookUp(
+                colLocalization,
+                OOBTextId = varOOBTextId,
+                LocalizedText
+                )
+                },
+                Coalesce(
+                varLocalizedText,
+                varDefault
+                )
+                )
+                )
+            Visible: =!gblUserIsTeamOwner
+            Width: =160
+            Wrap: =false
+            X: =tglMobileBulletinDetail_ReadyForReview.X -Self.Width
+            Y: =32
+            ZIndex: =3
+
+        lblMobileBulletinDetail_Header As label:
+            BorderColor: =gblAppStyles.Label.BorderColor
+            BorderThickness: =gblAppStyles.Label.BorderThickness
+            Color: =gblAppStyles.Label.Color
+            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+            DisabledColor: |
+                =gblAppStyles.Label.DisabledColor
+            DisabledFill: =gblAppStyles.Label.DisabledFill
+            DisplayMode: =DisplayMode.View
+            Fill: =gblAppStyles.Label.Fill
+            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            FontWeight: =FontWeight.Bold
+            Height: =44
+            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+            HoverColor: =gblAppStyles.Label.HoverColor
+            HoverFill: =gblAppStyles.Label.HoverFill
+            OnSelect: =
+            PaddingBottom: =4
+            PaddingLeft: =16
+            PaddingRight: =4
+            PaddingTop: =4
+            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+            PressedColor: =gblAppStyles.Label.PressedColor
+            PressedFill: =gblAppStyles.Label.PressedFill
+            Size: =gblAppStyles.Label.Size.Large
+            Text: |-
+                =If(
+                    IsBlank(gblRecordBulletin),
+                    With(
+                        {
+                            varDefault: "New bulletin",
+                            varOOBTextId: "lblMobileBulletinDetail_Header__Text_new"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    ),
+                    With(
+                        {
+                            varDefault: "Edit bulletin",
+                            varOOBTextId: "lblMobileBulletinDetail_Header__Text_edit"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                )
+            Width: =192
+            Wrap: =false
+            X: =0*0
+            Y: =btnMobileBulletinDetail_Back.Y + btnMobileBulletinDetail_Back.Height
+            ZIndex: =4
+
+    conModalDialog_MobileBulletinDetail As groupContainer:
+        Fill: =gblAppStyles.Dialogs.Fill
+        Height: =Parent.Height
+        Visible: =locVisibleDialog
+        Width: =Parent.Width // 320
+        X: =0*0
+        Y: =0*0
+        ZIndex: =5
+
+        lblModalDialog_MobileBulletinDetail_Cancel As label:
+            BorderColor: =RGBA(0, 0, 0, 0)
+            Color: =RGBA(0, 0, 0, 0)
+            FocusedBorderThickness: =0.25
+            Height: =Parent.Height
+            OnSelect: |-
+                =UpdateContext(
+                    {
+                        locVisibleDialog: false,
+                        locVisibleEdit_Category: false,
+                        locVisibleEdit_Featured: false,
+                        //locVisibleEdit_Date: false,
+                        locVisibleEdit_Time: false
+                    }
+                )
+            Text: |-
+                =With(
+                {
+                varDefault: "Cancel",
+                varOOBTextId: "lblModalDialog_MobileBulletinDetail_Cancel__Text"
+                },
+                With(
+                {
+                varLocalizedText: LookUp(
+                colLocalization,
+                OOBTextId = varOOBTextId,
+                LocalizedText
+                )
+                },
+                Coalesce(
+                varLocalizedText,
+                varDefault
+                )
+                )
+                )
+            Tooltip: |-
+                =With(
+                {
+                varDefault: "Click to close the dialog window",
+                varOOBTextId: "lblModalDialog_MobileBulletinDetail_Cancel__Tooltip"
+                },
+                With(
+                {
+                varLocalizedText: LookUp(
+                colLocalization,
+                OOBTextId = varOOBTextId,
+                LocalizedText
+                )
+                },
+                Coalesce(
+                varLocalizedText,
+                varDefault
+                )
+                )
+                )
+            Width: =Parent.Width
+            X: =0*0
+            Y: =0*0
+            ZIndex: =1
+
+        galMobileBulletinDetail_Category As gallery.galleryVertical:
+            AccessibleLabel: |-
+                =With(
+                    {
+                        varDefault: "Bulletin categories",
+                        varOOBTextId: "galMobileBulletinDetail_Category__AccessibleLabel"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            Default: ={}
+            Fill: =gblAppStyles.Background.Fill
+            Height: |-
+                =Min(
+                    App.Height - (2*gblPadding.Page),
+                    (CountRows(Self.AllItems) * (Self.TemplateHeight + Self.TemplatePadding)) + Self.TemplatePadding
+                )
+            ItemAccessibleLabel: |-
+                =If(
+                ThisItem.IsSelected = true,
+                With(
+                    {
+                        varDefault: "Selected",
+                        varOOBTextId: "galMobileBulletinDetail_Category_SelectedItems__AccessibleLabel_selected"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                ),
+                With(
+                    {
+                        varDefault: "Not selected",
+                        varOOBTextId: "galMobileBulletinDetail_Category_SelectedItems__AccessibleLabel_notselected"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+                
+                )
+            Items: ='Bulletin Categories'
+            Layout: =Layout.Vertical
+            OnSelect: |-
+                =// Set Local Variable
+                UpdateContext({locValue_Category: ThisItem});
+                // Select Cancel Label to close; avoids duplicating code
+                Select(lblModalDialog_MobileBulletinDetail_Cancel);
+            TemplatePadding: =8
+            TemplateSize: =44
+            Visible: =locVisibleEdit_Category
+            Width: =Parent.Width - (2* Self.X)
+            X: =gblPadding.Page
+            Y: =(Parent.Height - Self.Height) / 2
+            ZIndex: =2
+
+            btnGalMobileBulletinDetail_Category_Select As button:
+                Align: =Align.Left
+                AutoDisableOnSelect: =false
+                BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+                Color: =gblAppStyles.ButtonTransparent.Color
+                DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+                DisabledColor: =gblAppStyles.ButtonTransparent.DisabledColor
+                DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                Fill: =gblAppStyles.ButtonTransparent.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Normal
+                Height: =Parent.TemplateHeight
+                HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                HoverColor: =gblAppStyles.ButtonTransparent.HoverColor
+                HoverFill: =gblAppStyles.Gallery.HoverFill
+                OnSelect: =Select(Parent)
+                PaddingLeft: =12
+                PaddingRight: =12
+                PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                PressedColor: =gblAppStyles.ButtonTransparent.PressedColor
+                PressedFill: =gblAppStyles.Gallery.PressedFill
+                RadiusBottomLeft: =gblAppStyles.ButtonTransparent.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.ButtonTransparent.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.ButtonTransparent.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.ButtonTransparent.RadiusTopRight
+                Size: =gblAppStyles.ButtonTransparent.Size
+                Text: =ThisItem.Name
+                Tooltip: =ThisItem.Name
+                Width: =Parent.TemplateWidth
+                ZIndex: =2
+
+        galMobileBulletinDetail_Featured As gallery.galleryVertical:
+            AccessibleLabel: |-
+                =
+                With(
+                    {
+                        varDefault: "Featured timeframes",
+                        varOOBTextId: "galMobileBulletinDetail_Featured__AccessibleLabel"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            Fill: =gblAppStyles.Background.Fill
+            Height: |-
+                =Min(
+                    App.Height - (2*gblPadding.Page),
+                    (CountRows(Self.AllItems) * (Self.TemplateHeight + Self.TemplatePadding)) + Self.TemplatePadding
+                )
+            ItemAccessibleLabel: |-
+                =If(
+                ThisItem.IsSelected = true,
+                With(
+                    {
+                        varDefault: "Selected",
+                        varOOBTextId: "galMobileBulletinDetail_Featured_SelectedItems__AccessibleLabel_selected"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                ),
+                With(
+                    {
+                        varDefault: "Not selected",
+                        varOOBTextId: "galMobileBulletinDetail_Featured_SelectedItems__AccessibleLabel_notselected"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+                
+                )
+            Items: =Choices('Bulletin Featured Timeframe')
+            Layout: =Layout.Vertical
+            OnSelect: |-
+                =// Set Local Variable
+                UpdateContext({locValue_Featured: ThisItem.Value});
+                // Select Cancel Label to close; avoids duplicating code
+                Select(lblModalDialog_MobileBulletinDetail_Cancel);
+            TemplatePadding: =8
+            TemplateSize: =44
+            Visible: =locVisibleEdit_Featured
+            Width: =Parent.Width - (2* Self.X)
+            X: =gblPadding.Page
+            Y: =(Parent.Height - Self.Height) / 2
+            ZIndex: =3
+
+            btnGalMobileBulletinDetail_Featured_Select As button:
+                Align: =Align.Left
+                AutoDisableOnSelect: =false
+                BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+                Color: =gblAppStyles.ButtonTransparent.Color
+                DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+                DisabledColor: =gblAppStyles.ButtonTransparent.DisabledColor
+                DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                Fill: =gblAppStyles.ButtonTransparent.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Normal
+                Height: =Parent.TemplateHeight
+                HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                HoverColor: =gblAppStyles.ButtonTransparent.HoverColor
+                HoverFill: =gblAppStyles.Gallery.HoverFill
+                OnSelect: =Select(Parent)
+                PaddingLeft: =12
+                PaddingRight: =12
+                PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                PressedColor: =gblAppStyles.ButtonTransparent.PressedColor
+                PressedFill: =gblAppStyles.Gallery.PressedFill
+                RadiusBottomLeft: =gblAppStyles.ButtonTransparent.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.ButtonTransparent.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.ButtonTransparent.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.ButtonTransparent.RadiusTopRight
+                Size: =gblAppStyles.ButtonTransparent.Size
+                Text: =ThisItem.Value
+                Tooltip: =ThisItem.Value
+                Width: =Parent.TemplateWidth
+                ZIndex: =2
+
+        galMobileBulletinDetail_Time As gallery.galleryVertical:
+            AccessibleLabel: |+
+                =With(
+                    {
+                        varDefault: "Thirty minute time intervals",
+                        varOOBTextId: "galMobileBulletinDetail_Time__AccessibleLabel"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+                
+            Default: |-
+                =With(
+                    {varStartDate: DateValue("01/21/2021 12:00 AM")},
+                    {
+                        valTime: Text(
+                            DateAdd(
+                                varStartDate,
+                                12,
+                                Hours
+                            ),
+                            ShortTime
+                        )
+                    }
+                )
+            Fill: =gblAppStyles.Background.Fill
+            Height: |-
+                =Min(
+                    App.Height - (2*gblPadding.Page),
+                    (CountRows(Self.AllItems) * (Self.TemplateHeight + Self.TemplatePadding)) + Self.TemplatePadding
+                )
+            ItemAccessibleLabel: |-
+                =If(
+                ThisItem.IsSelected = true,
+                With(
+                    {
+                        varDefault: "Selected",
+                        varOOBTextId: "galMobileBulletinDetail_Time_SelectedItems__AccessibleLabel_selected"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                ),
+                
+                With(
+                    {
+                        varDefault: "Not selected",
+                        varOOBTextId: "galMobileBulletinDetail_Time_SelectedItems__AccessibleLabel_notselected"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+                
+                )
+            Items: |-
+                =With(
+                    {varStartDate: DateValue("01/21/2021 12:00 AM")},
+                    ForAll(
+                        Sequence(48),
+                        {
+                            valTime: Text(
+                                DateAdd(
+                                    varStartDate,
+                                    ThisRecord.Value * 30,
+                                    Minutes
+                                ),
+                                ShortTime
+                            )
+                        }
+                    )
+                )
+            Layout: =Layout.Vertical
+            OnSelect: |-
+                =// Set Local Variable
+                UpdateContext({locValue_Time: ThisItem.valTime});
+                // Select Cancel Label to close; avoids duplicating code
+                Select(lblModalDialog_MobileBulletinDetail_Cancel);
+                // [Set Focus Start]
+                UpdateContext({locSetFocusTimerStart: false});
+                UpdateContext({locSetFocusControlTarget: "imgMobileBulletinDetail_Schedule_Edit_Time"});
+                UpdateContext({locSetFocusTimerStart: true});
+                // [Set Focus End]
+            TemplatePadding: =8
+            TemplateSize: =44
+            Visible: =locVisibleEdit_Time
+            Width: =Parent.Width - (2* Self.X)
+            X: =gblPadding.Page
+            Y: =(Parent.Height - Self.Height) / 2
+            ZIndex: =4
+
+            btnGalMobileBulletinDetail_Time_Select As button:
+                Align: =Align.Left
+                AutoDisableOnSelect: =false
+                BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+                Color: =gblAppStyles.ButtonTransparent.Color
+                DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+                DisabledColor: =gblAppStyles.ButtonTransparent.DisabledColor
+                DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                Fill: =gblAppStyles.ButtonTransparent.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Normal
+                Height: =Parent.TemplateHeight
+                HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                HoverColor: =gblAppStyles.ButtonTransparent.HoverColor
+                HoverFill: =gblAppStyles.Gallery.HoverFill
+                OnSelect: =Select(Parent)
+                PaddingLeft: =12
+                PaddingRight: =12
+                PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                PressedColor: =gblAppStyles.ButtonTransparent.PressedColor
+                PressedFill: =gblAppStyles.Gallery.PressedFill
+                RadiusBottomLeft: =gblAppStyles.ButtonTransparent.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.ButtonTransparent.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.ButtonTransparent.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.ButtonTransparent.RadiusTopRight
+                Size: =gblAppStyles.ButtonTransparent.Size
+                Text: =ThisItem.valTime
+                Tooltip: =ThisItem.valTime
+                Width: =Parent.TemplateWidth
+                ZIndex: =2
+
+    lblBlockUserInput_MobileBulletinDetail As label:
+        DisabledFill: =RGBA(0, 0, 0, 0.05)
+        DisplayMode: =DisplayMode.Disabled
+        Font: =Font.'Segoe UI'
+        Height: =Parent.Height
+        Text: =""
+        Visible: =locBlockUserInput
+        Width: =Parent.Width
+        X: =0*0
+        Y: =0*0
+        ZIndex: =6
+
+    lblAnnouncements As label:
+        Height: =0
+        Live: =Live.Assertive
+        Text: =If(locDisplayMoreDetails,"More details expanded","More details collapsed" )
+        Width: =0
+        Y: =Parent.Height
+        ZIndex: =7
+

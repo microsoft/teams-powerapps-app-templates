@@ -1,0 +1,1362 @@
+"'Settings Screen' As screen":
+    BackgroundImage: =
+    Fill: =gblAppStyles.Background.Fill
+    ImagePosition: =ImagePosition.Center
+    LoadingSpinnerColor: =gblAppStyles.ButtonPrimary.Fill
+
+    conSettingsArea As groupContainer:
+        Fill: =gblAppStyles.Background.Fill
+        Height: =Parent.Height - Self.Y
+        Width: =Parent.Width - Self.X
+        X: =conSettingsActions.X
+        Y: =conSettingsActions.Y + conSettingsActions.Height
+        ZIndex: =1
+
+        cnvSettings As fluidGrid.fluidGridWithBlankCard:
+            BorderThickness: =0
+            Height: =Parent.Height - Self.Y
+            Width: =Parent.Width
+            X: =0*0
+            Y: =0*0
+            ZIndex: =11
+
+            dtcSettings_TeamOwner As dataCard:
+                BorderColor: =RGBA(0, 0, 0, 1)
+                BorderStyle: =BorderStyle.Solid
+                BorderThickness: =0
+                DisplayMode: =DisplayMode.Edit
+                Fill: =RGBA(0, 0, 0, 0)
+                Height: =lblSettgins_TeamOwnerRestricted_OnlyOwners.Y + lblSettgins_TeamOwnerRestricted_OnlyOwners.Height + gblPadding.Page
+                Width: =Parent.Width
+                X: =
+                Y: =0
+                ZIndex: =1
+
+                lblSettgins_TeamOwnerRestricted_OnlyOwners As label:
+                    Color: |-
+                        =If(
+                            gblThemeHiCo,// If Contrast
+                            gblAppColors.HighContrastDisabled,// Contrast Color
+                            gblThemeDark,// Else If Dark
+                            gblAppColors.MessagesDarkWebWarningIcon,// Dark Color
+                            gblAppColors.MessagesDefaultWebWarningIcon
+                        // Else, Default Color
+                        )
+                    DisplayMode: =DisplayMode.View
+                    Height: =tglSettings_TeamOwnerRestricted.Height + 4
+                    PaddingLeft: =12
+                    Size: =gblAppStyles.Label.Size.Small
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "This setting is only available to Team owners",
+                                varOOBTextId: "lblSettgins_TeamOwnerRestricted_OnlyOwners__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Width: =Parent.Width - Self.X
+                    X: =tglSettings_TeamOwnerRestricted.X + tglSettings_TeamOwnerRestricted.Width
+                    Y: =tglSettings_TeamOwnerRestricted.Y - 2
+                    ZIndex: =2
+
+                tglSettings_TeamOwnerRestricted As toggleSwitch:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "Toggle indicating if the ability to create campaigns and edit settings, is limited to Team owners",
+                                varOOBTextId: "tglSettings_TeamOwnerRestricted__locAccessibleLabel"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    BorderColor: =gblAppStyles.Toggle.BorderColor
+                    BorderThickness: =gblAppStyles.Toggle.BorderThickness
+                    Color: =gblAppStyles.Toggle.Color
+                    Default: =gblRecordSettings.'Team Owner Restricted?' = 'Team Owner Restricted? (Employee Idea Settings)'.Yes
+                    DisabledBorderColor: =gblAppStyles.Toggle.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Toggle.DisabledColor
+                    DisplayMode: |-
+                        =If(
+                            Or(
+                                Param("userTeamRole") = "0",
+                                gblAppManager
+                            ),
+                            DisplayMode.Edit,
+                            DisplayMode.Disabled
+                        )
+                    FalseFill: =gblAppStyles.Toggle.FalseFill
+                    FalseHoverFill: =gblAppStyles.Toggle.FalseHoverFill
+                    FocusedBorderColor: =gblAppStyles.Toggle.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Toggle.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    HandleFill: =If(Self.Value,gblAppStyles.Toggle.HandleFillTrue,gblAppStyles.Toggle.HandleFillFalse)
+                    Height: =22
+                    HoverBorderColor: =gblAppStyles.Toggle.HoverBorderColor
+                    PressedBorderColor: =gblAppStyles.Toggle.PressedBorderColor
+                    Size: =gblAppStyles.Toggle.Size
+                    TrueFill: =gblAppStyles.Toggle.TrueFill
+                    TrueHoverFill: =gblAppStyles.Toggle.TrueHoverFill
+                    Width: =72
+                    X: =lblSettings_TeamOwnerRestricted_Instructions.X
+                    Y: =lblSettings_TeamOwnerRestricted_Instructions.Y + lblSettings_TeamOwnerRestricted_Instructions.Height + 8
+                    ZIndex: =3
+
+                lblSettings_TeamOwnerRestricted_Instructions As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =24
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PaddingLeft: =0
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Should only Team owners be allowed to create campaigns, and access settings?",
+                                varOOBTextId: "lblSettings_TeamOwnerRestricted_Instructions__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Width: =lblSettings_TeamOwnerRestricted_Header.Width
+                    X: =lblSettings_TeamOwnerRestricted_Header.X
+                    Y: =lblSettings_TeamOwnerRestricted_Header.Y + lblSettings_TeamOwnerRestricted_Header.Height
+                    ZIndex: =4
+
+                lblSettings_TeamOwnerRestricted_Header As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =28
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PaddingLeft: =0
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Large
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Team owner restricted?",
+                                varOOBTextId: "lblSettings_TeamOwnerRestricted_Header__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Width: =Max(Parent.Width,400) - Self.X
+                    X: =lblSettingsArea.X //gblPadding.Page
+                    Y: =0*0
+                    ZIndex: =5
+
+            dtcSettings_NotificationsEnabled As dataCard.blankCard:
+                BorderColor: =RGBA(0, 0, 0, 1)
+                BorderStyle: =BorderStyle.Solid
+                DisplayMode: =DisplayMode.Edit
+                Fill: =RGBA(0, 0, 0, 0)
+                Height: =tglSettings_NotificationsEnabled.Y + tglSettings_NotificationsEnabled.Height + gblPadding.Page
+                Width: =Parent.Width
+                X: =0
+                Y: =1
+                ZIndex: =2
+
+                tglSettings_NotificationsEnabled As toggleSwitch:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "Toggle indicating if the ability to create campaigns and edit settings, is limited to Team owners",
+                                varOOBTextId: "tglSettings_TeamOwnerRestricted__locAccessibleLabel"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    BorderColor: =gblAppStyles.Toggle.BorderColor
+                    BorderThickness: =gblAppStyles.Toggle.BorderThickness
+                    Color: =gblAppStyles.Toggle.Color
+                    Default: =gblRecordSettings.'Is Enabled Notifications?' = 'Is Enabled Notifications? (Employee Idea Settings)'.Yes
+                    DisabledBorderColor: =gblAppStyles.Toggle.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Toggle.DisabledColor
+                    FalseFill: =gblAppStyles.Toggle.FalseFill
+                    FalseHoverFill: =gblAppStyles.Toggle.FalseHoverFill
+                    FocusedBorderColor: =gblAppStyles.Toggle.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Toggle.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    HandleFill: =If(Self.Value,gblAppStyles.Toggle.HandleFillTrue,gblAppStyles.Toggle.HandleFillFalse)
+                    Height: =22
+                    HoverBorderColor: =gblAppStyles.Toggle.HoverBorderColor
+                    PressedBorderColor: =gblAppStyles.Toggle.PressedBorderColor
+                    Size: =gblAppStyles.Toggle.Size
+                    TrueFill: =gblAppStyles.Toggle.TrueFill
+                    TrueHoverFill: =gblAppStyles.Toggle.TrueHoverFill
+                    Width: =72
+                    X: =lblSettings_NotificationsEnabled_Instructions.X
+                    Y: =lblSettings_NotificationsEnabled_Instructions.Y + lblSettings_NotificationsEnabled_Instructions.Height + 8
+                    ZIndex: =3
+
+                lblSettings_NotificationsEnabled_Instructions As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =24
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PaddingLeft: =0
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =/*With(
+                            {
+                                varDefault: "Should only Team owners be allowed to create campaigns, and access settings?",
+                                varOOBTextId: "lblSettings_TeamOwnerRestricted_Instructions__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )*/
+                        "Should users be able to send notifications for new campaigns and ideas?"
+                    Width: =lblSettings_NotificationsEnabled_Header.Width
+                    X: =lblSettings_NotificationsEnabled_Header.X
+                    Y: =lblSettings_NotificationsEnabled_Header.Y + lblSettings_NotificationsEnabled_Header.Height
+                    ZIndex: =4
+
+                lblSettings_NotificationsEnabled_Header As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =28
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PaddingLeft: =0
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Large
+                    Text: ="Enable notifications?"
+                    Width: =Max(Parent.Width,400) - Self.X
+                    X: =lblSettingsArea.X //gblPadding.Page
+                    Y: =lblSettings_Notifications_Header.Y + lblSettings_Notifications_Header.Height
+                    ZIndex: =5
+
+                lblSettings_Notifications_Header As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =72*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PaddingBottom: =8
+                    PaddingLeft: =gblPadding.Page
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.ExtraLarge
+                    Text: ="Notifications"
+                    Width: =Parent.Width
+                    Wrap: =false
+                    X: =lblSettingsArea.X 
+                    Y: =0 * 0
+                    ZIndex: =6
+
+            dtcSettings_NotificationsConfig As dataCard.blankCard:
+                BorderColor: =RGBA(0, 0, 0, 1)
+                BorderStyle: =BorderStyle.Solid
+                DisplayMode: =DisplayMode.Edit
+                Fill: =RGBA(0, 0, 0, 0)
+                Height: =drpSettings_Channel.Y + drpSettings_Channel.Height + gblPadding.Page
+                Width: =Parent.Width
+                X: =0
+                Y: =2
+                ZIndex: =3
+
+                drpSettings_Channel As dropdown:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "Select the app channel where messages will be posted",
+                                varOOBTextId: "_translateCommon__SettingsLabelChannelInstructions"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    BorderColor: =gblAppStyles.Dropdown.BorderColor
+                    BorderThickness: =gblAppStyles.Dropdown.BorderThickness
+                    ChevronBackground: =gblAppStyles.Dropdown.ChevronBackground
+                    ChevronDisabledBackground: =gblAppStyles.Dropdown.ChevronDisabledBackground
+                    ChevronDisabledFill: =gblAppStyles.Dropdown.ChevronDisabledFill
+                    ChevronFill: =gblAppStyles.Dropdown.ChevronFill
+                    ChevronHoverBackground: =gblAppStyles.Dropdown.ChevronHoverBackground
+                    ChevronHoverFill: =gblAppStyles.Dropdown.ChevronHoverFill
+                    Color: =gblAppStyles.Dropdown.Color
+                    Default: |-
+                        =With(
+                            {
+                                varChannels: Filter(
+                                    If(
+                                        !IsBlank(gblParamTeamId),
+                                        MicrosoftTeams.GetChannelsForGroup(gblParamTeamId).value
+                                    ),
+                                    id = gblRecordSettings.'Parameter (Notification Channel Id)'
+                                )
+                            },
+                            First(varChannels).displayName
+                        )
+                    DisabledBorderColor: =gblAppStyles.Dropdown.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Dropdown.DisabledColor
+                    DisabledFill: =gblAppStyles.Dropdown.DisabledFill
+                    DisplayMode: |-
+                        =If(
+                            Or(
+                                IsBlankOrError(Self.Selected),
+                                Not(tglSettings_NotificationsEnabled.Value)
+                            ),
+                            DisplayMode.Disabled,
+                            DisplayMode.Edit
+                        )
+                    Fill: =gblAppStyles.Dropdown.Fill
+                    FocusedBorderColor: =gblAppStyles.Dropdown.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Dropdown.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32
+                    HoverBorderColor: =gblAppStyles.Dropdown.HoverBorderColor
+                    HoverColor: =gblAppStyles.Dropdown.HoverColor
+                    HoverFill: =gblAppStyles.Dropdown.HoverFill
+                    Items: |-
+                        =If(
+                            IsBlankOrError(drpSettings_Team.Selected),
+                            Blank(),
+                            MicrosoftTeams.GetChannelsForGroup(drpSettings_Team.Selected.id).value
+                        )
+                    OnChange: =
+                    PressedBorderColor: =gblAppStyles.Dropdown.PressedBorderColor
+                    PressedColor: =gblAppStyles.Dropdown.PressedColor
+                    PressedFill: =gblAppStyles.Dropdown.PressedFill
+                    SelectionColor: =gblAppStyles.Dropdown.SelectionColor
+                    SelectionFill: =gblAppStyles.Dropdown.SelectionFill
+                    Size: =gblAppStyles.Dropdown.Size
+                    Width: =lblSettings_ChannelHeader.Width
+                    X: =lblSettings_ChannelHeader.X
+                    Y: =lblSettings_ChannelInstructions.Y + lblSettings_ChannelInstructions.Height + 8
+                    ZIndex: =2
+
+                lblSettings_ChannelInstructions As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =24
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PaddingLeft: =0
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Select the app channel where messages will be posted",
+                                varOOBTextId: "_translateCommon__SettingsLabelChannelInstructions"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Width: =lblSettings_ChannelHeader.Width
+                    X: =lblSettings_ChannelHeader.X
+                    Y: =lblSettings_ChannelHeader.Y + lblSettings_ChannelHeader.Height
+                    ZIndex: =3
+
+                lblSettings_ChannelHeader As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =28
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PaddingLeft: =0
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Large
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Channel",
+                                varOOBTextId: "_translateCommon__SettingsLabelChannel"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Width: =Max(Parent.Width * .5,500)
+                    X: =lblSettingsArea.X //gblPadding.Page
+                    Y: =drpSettings_Team.Y + drpSettings_Team.Height + 24
+                    ZIndex: =4
+
+                drpSettings_Team As dropdown:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "Select the app channel where messages will be posted",
+                                varOOBTextId: "_translateCommon__SettingsLabelChannelInstructions"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    BorderColor: =gblAppStyles.Dropdown.BorderColor
+                    BorderThickness: =gblAppStyles.Dropdown.BorderThickness
+                    ChevronBackground: =gblAppStyles.Dropdown.ChevronBackground
+                    ChevronDisabledBackground: =gblAppStyles.Dropdown.ChevronDisabledBackground
+                    ChevronDisabledFill: =gblAppStyles.Dropdown.ChevronDisabledFill
+                    ChevronFill: =gblAppStyles.Dropdown.ChevronFill
+                    ChevronHoverBackground: =gblAppStyles.Dropdown.ChevronHoverBackground
+                    ChevronHoverFill: =gblAppStyles.Dropdown.ChevronHoverFill
+                    Color: =gblAppStyles.Dropdown.Color
+                    Default: |-
+                        =If(
+                            IsBlankOrError(gblRecordSettings.'Parameter (Team Id)'),
+                            Blank(),
+                            MicrosoftTeams.GetTeam(gblRecordSettings.'Parameter (Team Id)').displayName
+                        )
+                    DisabledBorderColor: =gblAppStyles.Dropdown.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Dropdown.DisabledColor
+                    DisabledFill: =gblAppStyles.Dropdown.DisabledFill
+                    DisplayMode: |-
+                        =If(
+                            Or(
+                                IsBlankOrError(Self.Selected),
+                                Not(tglSettings_NotificationsEnabled.Value)
+                            ),
+                            DisplayMode.Disabled,
+                            DisplayMode.Edit
+                        )
+                    Fill: =gblAppStyles.Dropdown.Fill
+                    FocusedBorderColor: =gblAppStyles.Dropdown.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Dropdown.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32
+                    HoverBorderColor: =gblAppStyles.Dropdown.HoverBorderColor
+                    HoverColor: =gblAppStyles.Dropdown.HoverColor
+                    HoverFill: =gblAppStyles.Dropdown.HoverFill
+                    Items: =MicrosoftTeams.GetAllTeams().value
+                    OnChange: =Reset(drpSettings_Channel)
+                    PressedBorderColor: =gblAppStyles.Dropdown.PressedBorderColor
+                    PressedColor: =gblAppStyles.Dropdown.PressedColor
+                    PressedFill: =gblAppStyles.Dropdown.PressedFill
+                    SelectionColor: =gblAppStyles.Dropdown.SelectionColor
+                    SelectionFill: =gblAppStyles.Dropdown.SelectionFill
+                    Size: =gblAppStyles.Dropdown.Size
+                    Width: =lblSettings_TeamHeader.Width
+                    X: =lblSettings_TeamHeader.X
+                    Y: =lblSettings_TeamInstructions.Y + lblSettings_TeamInstructions.Height + 32
+                    ZIndex: =5
+
+                lblSettings_TeamInstructions As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =24
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PaddingLeft: =0
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =/*With(
+                            {
+                                varDefault: "Select the app channel where messages will be posted",
+                                varOOBTextId: "_translateCommon__SettingsLabelChannelInstructions"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )*/
+                        Switch(
+                            Left(
+                                Language(),
+                                2
+                            ),
+                            "de",
+                            "Wählen Sie das Team aus, in dem Nachrichten gesendet werden sollen",
+                            "en",
+                            "Select the team where messages will be posted",
+                            "es",
+                            "Seleccione el equipo donde se publicarán los mensajes",
+                            "fr",
+                            "Sélectionnez l’équipe où les messages seront affichés",
+                            "it",
+                            "Selezionare il team in cui verranno inviati i messaggi",
+                            "ja",
+                            "メッセージを投稿するチームを選択します",
+                            "nl",
+                            "Selecteer het team waar berichten worden geplaatst",
+                            "pt",
+                            "Selecione a equipe onde as mensagens serão postadas",
+                            "Select the team where messages will be posted"// Default
+                        )
+                    Width: =lblSettings_TeamHeader.Width
+                    X: =lblSettings_TeamHeader.X
+                    Y: =lblSettings_TeamHeader.Y + lblSettings_TeamHeader.Height
+                    ZIndex: =6
+
+                lblSettings_TeamHeader As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =28
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PaddingLeft: =0
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Large
+                    Text: ="Team"
+                    Width: =Max(Parent.Width * .5,500)
+                    X: =lblSettingsArea.X //gblPadding.Page
+                    Y: =0*0
+                    ZIndex: =7
+
+                lblSettings_TeamInstructions_Suggestion As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =24
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PaddingLeft: =0
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Small
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Ensure that all app users have access to this team",
+                                varOOBTextId: "lblSettings_TeamInstructions_Suggestion__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Width: =Parent.Width - Self.X -20
+                    X: =imgSettings_TeamInstructions_Suggestion.X + imgSettings_TeamInstructions_Suggestion.Width + 5
+                    Y: =lblSettings_TeamInstructions.Y + lblSettings_TeamInstructions.Height
+                    ZIndex: =8
+
+                imgSettings_TeamInstructions_Suggestion As image:
+                    AccessibleLabel: ="Information about access to the team"
+                    DisabledFill: |-
+                        =With(
+                            {
+                                varImageIsCategory: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Settings"
+                                ).staticIconIsCategory
+                            },
+                            If(
+                                varImageIsCategory,
+                                gblAppStyles.Icons.DisabledFill_Category,
+                                Transparent
+                            )
+                        )
+                    Fill: |-
+                        =With(
+                            {
+                                varImageIsCategory: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Settings"
+                                ).staticIconIsCategory
+                            },
+                            If(
+                                varImageIsCategory,
+                                gblAppStyles.Icons.Fill_Category,
+                                Transparent
+                            )
+                        )
+                    Height: =18
+                    HoverFill: =Self.Fill
+                    Image: |-
+                        =With(
+                            {
+                                varImageRecord: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Info"
+                                ),
+                                varColor: If(
+                                    Self.DisplayMode = DisplayMode.Disabled,
+                                    gblAppStyles.Icons.DisabledColor,
+                                    gblAppStyles.Icons.Color
+                                )
+                            },
+                            With(
+                                {
+                                    varImageData: Concatenate(
+                                        "data:image/svg+xml;utf8, ",
+                                        EncodeUrl(
+                                            Concatenate(
+                                                "<svg viewBox='",
+                                                varImageRecord.staticIconViewbox,
+                                                "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                varImageRecord.staticIconPath,
+                                                "' fill='#",
+                                                varColor,
+                                                "'/></svg>"
+                                            )
+                                        )
+                                    )
+                                },
+                                varImageData
+                            )
+                        )
+                    PaddingBottom: =2
+                    PaddingLeft: =2
+                    PaddingRight: =2
+                    PaddingTop: =2
+                    PressedFill: =Self.Fill
+                    RadiusBottomLeft: =5
+                    RadiusBottomRight: =5
+                    RadiusTopLeft: =5
+                    RadiusTopRight: =5
+                    Tooltip: =Self.AccessibleLabel
+                    Width: =18
+                    X: =lblSettings_TeamInstructions.X - 2
+                    Y: =lblSettings_TeamInstructions_Suggestion.Y + (lblSettings_TeamInstructions_Suggestion.Height - Self.Height)/2 + 1
+                    ZIndex: =9
+
+    conSettingsNav As groupContainer:
+        Height: =Parent.Height - Self.Y
+        Width: =Min(Parent.Width * .3,If(App.ActiveScreen.Size < 3,0,320))
+        X: =0 * 0
+        Y: =comHeader_Settings.Y + comHeader_Settings.Height
+        ZIndex: =2
+
+        galSettings As gallery.galleryVertical:
+            AccessibleLabel: |-
+                =With(
+                    {
+                        varDefault: "Gallery of settings areas",
+                        varOOBTextId: "galSettings__locAccessibleLabel"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            Height: =Parent.Height - Self.Y
+            Items: |-
+                =Table(
+                    {
+                        tblIcon: "Settings filled",
+                        tblText: With(
+                            {
+                                varDefault: "General",
+                                varOOBTextId: "_translateCommon__SettingsLabelGeneral"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    }
+                )
+            Layout: =Layout.Vertical
+            OnSelect: =
+            TemplateFill: =gblAppStyles.Gallery.SelectedItem
+            TemplatePadding: =0
+            TemplateSize: =48
+            Width: =Parent.Width
+            X: =0 * 0
+            Y: =gblPadding.Page /2
+            ZIndex: =6
+
+            imgGalSettings_Icon As image:
+                DisplayMode: =DisplayMode.View
+                Fill: =Transparent
+                Height: =20
+                Image: |-
+                    =With(
+                        {
+                            varImageRecord: LookUp(
+                                staticIcons,
+                                staticIconName = ThisItem.tblIcon
+                            ),
+                            varColor: If(
+                                Self.DisplayMode = DisplayMode.Disabled,
+                                gblAppStyles.Icons.DisabledColor,
+                                gblAppStyles.Icons.Color
+                            )
+                        },
+                        With(
+                            {
+                                varImageData: Concatenate(
+                                    "data:image/svg+xml;utf8, ",
+                                    EncodeUrl(
+                                        Concatenate(
+                                            "<svg viewBox='",
+                                            varImageRecord.staticIconViewbox,
+                                            "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                            varImageRecord.staticIconPath,
+                                            "' fill='#",
+                                            varColor,
+                                            "'/></svg>"
+                                        )
+                                    )
+                                )
+                            },
+                            varImageData
+                        )
+                    )
+                OnSelect: =Select(Parent)
+                RadiusBottomLeft: =4
+                RadiusBottomRight: =4
+                RadiusTopLeft: =4
+                RadiusTopRight: =4
+                Width: =20
+                X: =16
+                Y: =(Parent.TemplateHeight - Self.Height) / 2
+                ZIndex: =2
+
+            lblGalSettings_Name As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: |
+                    =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                DisplayMode: =DisplayMode.View
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =Parent.TemplateHeight
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                OnSelect: =Select(Parent)
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: =ThisItem.tblText
+                Width: =Parent.TemplateWidth - Self.X
+                Wrap: =false
+                X: =imgGalSettings_Icon.X + imgGalSettings_Icon.Width + 16
+                Y: =Parent.TemplateHeight * 0
+                ZIndex: =3
+
+        shpDividerSettingsNav As rectangle:
+            DisplayMode: =DisplayMode.View
+            Fill: =gblAppStyles.Dividers.Elements
+            Height: =Parent.Height
+            Width: =1
+            X: =Parent.Width - Self.Width
+            Y: =0*0
+            ZIndex: =7
+
+    conSettingsActions As groupContainer:
+        Height: =72*1
+        Width: =Parent.Width - Self.X
+        X: =conSettingsNav.X + conSettingsNav.Width
+        Y: =conSettingsNav.Y
+        ZIndex: =3
+
+        btnSettingsCancel As button:
+            BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+            BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+            Color: =gblAppStyles.ButtonSecondary.Color
+            DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+            DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+            DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+            Fill: =gblAppStyles.ButtonSecondary.Fill
+            FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+            Font: ='Segoe UI'
+            Height: =32
+            HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+            HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+            HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+            OnSelect: |
+                =Back();
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+            PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+            PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+            RadiusBottomLeft: =gblAppStyles.ButtonSecondary.RadiusBottomLeft
+            RadiusBottomRight: =gblAppStyles.ButtonSecondary.RadiusBottomRight
+            RadiusTopLeft: =gblAppStyles.ButtonSecondary.RadiusTopLeft
+            RadiusTopRight: =gblAppStyles.ButtonSecondary.RadiusTopRight
+            Size: =gblAppStyles.ButtonSecondary.Size
+            Text: |-
+                =With(
+                    {
+                        varDefault: "Cancel",
+                        varOOBTextId: "_translateCommon__Cancel"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            Tooltip: =Self.Text
+            Width: =80
+            X: =Parent.Width - Self.Width - gblPadding.Page
+            Y: =(Parent.Height - Self.Height) / 2
+            ZIndex: =3
+
+        btnSettingsSave As button:
+            BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+            BorderThickness: =gblAppStyles.ButtonPrimary.BorderThickness
+            Color: =gblAppStyles.ButtonPrimary.Color
+            DisabledBorderColor: =gblAppStyles.ButtonPrimary.DisabledBorderColor
+            DisabledColor: =gblAppStyles.ButtonPrimary.DisabledColor
+            DisabledFill: =gblAppStyles.ButtonPrimary.DisabledFill
+            DisplayMode: |-
+                =If(
+                    Or(
+                        drpSettings_Channel.Selected.id <> gblRecordSettings.'Parameter (Notification Channel Id)',
+                        tglSettings_TeamOwnerRestricted.Value <> If(
+                            gblRecordSettings.'Team Owner Restricted?' = 'Team Owner Restricted? (Employee Idea Settings)'.Yes,
+                            true,
+                            false
+                        ),tglSettings_NotificationsEnabled.Value <> If(
+                            gblRecordSettings.'Is Enabled Notifications?' = 'Is Enabled Notifications? (Employee Idea Settings)'.Yes,
+                            true,
+                            false
+                        )
+                    ),
+                    If(
+                        And(
+                            !IsBlankOrError(drpSettings_Channel.Selected),
+                            !IsBlankOrError(drpSettings_Team.Selected)
+                        ),
+                        DisplayMode.Edit,
+                        DisplayMode.Disabled
+                    ),
+                    DisplayMode.Disabled
+                )
+            Fill: =gblAppStyles.ButtonPrimary.Fill
+            FocusedBorderColor: =gblAppStyles.ButtonPrimary.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.ButtonPrimary.FocusedBorderThickness
+            Font: ='Segoe UI'
+            Height: =32
+            HoverBorderColor: =gblAppStyles.ButtonPrimary.HoverBorderColor
+            HoverColor: =gblAppStyles.ButtonPrimary.HoverColor
+            HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+            OnSelect: |
+                =UpdateContext({locBlockUserInput: true});
+                Set(
+                    gblRecordSettings,
+                    Patch(
+                        'Employee Idea Settings',
+                        {
+                            'Employee Idea Settings': gblRecordSettings.'Employee Idea Settings',
+                            'Parameter (Team Id)': drpSettings_Team.Selected.id,
+                            'Parameter (Notification Channel Id)': drpSettings_Channel.Selected.id,
+                            'Team Owner Restricted?': If(
+                                tglSettings_TeamOwnerRestricted.Value,
+                                'Team Owner Restricted? (Employee Idea Settings)'.Yes,
+                                'Team Owner Restricted? (Employee Idea Settings)'.No
+                            ),'Is Enabled Notifications?': If(
+                                tglSettings_NotificationsEnabled.Value,
+                                'Is Enabled Notifications? (Employee Idea Settings)'.Yes,
+                                'Is Enabled Notifications? (Employee Idea Settings)'.No
+                            )
+                        }
+                    )
+                );
+                Set(
+                    gblSettingNotificationChannelId,
+                    gblRecordSettings.'Parameter (Notification Channel Id)'
+                );
+                UpdateContext({locBlockUserInput: false});
+                Navigate(
+                    'Campaign Summary Screen',
+                    ScreenTransition.Fade
+                );
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            PressedBorderColor: =gblAppStyles.ButtonPrimary.PressedBorderColor
+            PressedColor: =gblAppStyles.ButtonPrimary.PressedColor
+            PressedFill: =gblAppStyles.ButtonPrimary.PressedFill
+            RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+            RadiusBottomRight: =gblAppStyles.ButtonPrimary.RadiusBottomRight
+            RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+            RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+            Size: =gblAppStyles.ButtonPrimary.Size
+            Text: |-
+                =With(
+                    {
+                        varDefault: "Save",
+                        varOOBTextId: "_translateCommon__Save"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            Tooltip: =Self.Text
+            Width: =80
+            X: =btnSettingsCancel.X - Self.Width - gblPadding.ButtonShape
+            Y: =btnSettingsCancel.Y
+            ZIndex: =4
+
+        lblSettingsArea As label:
+            BorderColor: =gblAppStyles.Label.BorderColor
+            BorderThickness: =gblAppStyles.Label.BorderThickness
+            Color: =gblAppStyles.Label.Color
+            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+            DisabledColor: =gblAppStyles.Label.DisabledColor
+            DisabledFill: =gblAppStyles.Label.DisabledFill
+            DisplayMode: =DisplayMode.View
+            Fill: =gblAppStyles.Label.Fill
+            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            FontWeight: =FontWeight.Semibold
+            Height: =Parent.Height
+            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+            HoverColor: =gblAppStyles.Label.HoverColor
+            HoverFill: =gblAppStyles.Label.HoverFill
+            PaddingBottom: =8
+            PaddingLeft: =gblPadding.Page
+            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+            PressedColor: =gblAppStyles.Label.PressedColor
+            PressedFill: =gblAppStyles.Label.PressedFill
+            Size: =gblAppStyles.Label.Size.ExtraLarge
+            Text: |-
+                =With(
+                    {
+                        varDefault: "General",
+                        varOOBTextId: "_translateCommon__SettingsLabelGeneral"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            Width: =btnSettingsSave.X - 16
+            Wrap: =false
+            X: =25
+            Y: =0 * 0
+            ZIndex: =9
+
+    comHeader_Settings As comHeader:
+        Fill: =comHeader_Settings.inputStyles.Background.Fill
+        Height: =60*1
+        inputColors: =gblAppColors
+        inputExternalLinkSettings: =
+        inputHeaderSettings: |-
+            ={
+                headerLabel: With(
+                    {
+                        varDefault: If(
+                            gblAppManager,
+                            "Manage campaigns",
+                            "Submit ideas"
+                        ),
+                        varOOBTextId: If(
+                            gblAppManager,
+                            "_translateCommon_AppNameManager",
+                            "_translateCommon_AppNameUser"
+                        )
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                ),
+                headerTooltip: With(
+                    {
+                        varDefault: "Click to return to list of campaigns",
+                        varOOBTextId: "_translateCommon_NavigateHome"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                ),
+                headerWidth: 240,
+                headerScreen: 'Campaign Summary Screen'
+            }
+        inputHelpIcon: |-
+            =With(
+                {
+                    varImageRecord: LookUp(
+                        staticIcons,
+                        staticIconName = If(
+                            App.ActiveScreen = 'About Screen',
+                            "Info filled",
+                            "Info"
+                        )
+                    ),
+                    varColor: gblAppStyles.Icons.Color
+                },
+                With(
+                    {
+                        varImageData: Concatenate(
+                            "data:image/svg+xml;utf8, ",
+                            EncodeUrl(
+                                Concatenate(
+                                    "<svg viewBox='",
+                                    varImageRecord.staticIconViewbox,
+                                    "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                    varImageRecord.staticIconPath,
+                                    "' fill='#",
+                                    varColor,
+                                    "'/></svg>"
+                                )
+                            )
+                        )
+                    },
+                    varImageData
+                )
+            )
+        inputHelpScreen: ='About Screen'
+        inputMenuItem1: =
+        inputMenuItem2: =
+        inputMenuItem3: =
+        inputMenuItem4: =
+        inputSettingsIcon: |
+            =With(
+                {
+                    varImageRecord: LookUp(
+                        staticIcons,
+                        staticIconName = If(
+                        App.ActiveScreen = 'Settings Screen',
+                        "Settings filled",
+                        "Settings"           
+                    )
+                    ),
+                    varColor: 
+                        gblAppStyles.Icons.Color
+                },
+                With(
+                    {
+                        varImageData: Concatenate(
+                            "data:image/svg+xml;utf8, ",
+                            EncodeUrl(
+                                Concatenate(
+                                    "<svg viewBox='",
+                                    varImageRecord.staticIconViewbox,
+                                    "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                    varImageRecord.staticIconPath,
+                                    "' fill='#",
+                                    varColor,
+                                    "'/></svg>"
+                                )
+                            )
+                        )
+                    },
+                    varImageData
+                )
+            )
+        inputSettingsScreen: ='Settings Screen'
+        inputStyles: =gblAppStyles
+        Width: =Parent.Width
+        X: =0*0
+        Y: =0*0
+        ZIndex: =5
+
+    lblBlockUserInput_Settings As label:
+        DisabledFill: =RGBA(0, 0, 0, 0.05)
+        DisplayMode: =DisplayMode.Disabled
+        Font: =Font.'Segoe UI'
+        Height: =Parent.Height
+        Text: =""
+        Visible: =locBlockUserInput
+        Width: =Parent.Width
+        X: =0*0
+        Y: =0*0
+        ZIndex: =6
+

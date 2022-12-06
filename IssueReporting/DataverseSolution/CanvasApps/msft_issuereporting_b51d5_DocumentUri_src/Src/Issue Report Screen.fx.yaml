@@ -1,0 +1,2561 @@
+"'Issue Report Screen' As screen.'phoneLayout_FluidGridWithHeaderPageLayout_ver3.0'":
+    Fill: =gblAppStyles.Background.Fill
+    OnVisible: =
+
+    cnvIssueReport As fluidGrid.fluidGridWithBlankCard:
+        BorderThickness: =0
+        Height: =Parent.Height - Self.Y
+        Width: =Parent.Width
+        X: =0*0
+        Y: =comMobileHeader_IssueReport.Y + comMobileHeader_IssueReport.Height
+        ZIndex: =1
+
+        dtcIssueTemplate As dataCard:
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            BorderThickness: =0
+            DisplayMode: =DisplayMode.Edit
+            Fill: =Transparent
+            Height: =100
+            Width: =Parent.Width
+            X: =0
+            Y: =0
+            ZIndex: =1
+
+            imgSection_Template As image:
+                AccessibleLabel: |-
+                    =With(
+                        {
+                            varDefault: "Click to select an issue template for this issue",
+                            varOOBTextId: "imgSection_Template__locAccessibleLabel",
+                            varParam0: Blank(),
+                            varParam1: Blank(),
+                            varParam2: Blank()
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    staticLocalizations,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            If(
+                                IsBlankOrError(varParam0),
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                ),
+                                Coalesce(
+                                    Substitute(
+                                        Substitute(
+                                            Substitute(
+                                                varLocalizedText,
+                                                "{0}",
+                                                Text(varParam0)
+                                            ),
+                                            "{1}",
+                                            Text(varParam1)
+                                        ),
+                                        "{2}",
+                                        Text(varParam2)
+                                    ),
+                                    varDefault
+                                )
+                            )
+                        )
+                    )
+                AutoDisableOnSelect: =false
+                BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+                DisabledBorderColor: =gblAppStyles.ButtonPrimary.DisabledBorderColor
+                DisabledFill: =Transparent
+                FocusedBorderColor: =gblAppStyles.ButtonPrimary.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonPrimary.FocusedBorderThickness
+                Height: =96
+                HoverBorderColor: =gblAppStyles.ButtonPrimary.HoverBorderColor
+                Image: |
+                    =With(
+                        {
+                            varImageRecord: LookUp(
+                                staticIcons,
+                                staticIconName = "Folder"
+                            ),
+                            varColor: If(
+                                Self.DisplayMode = DisplayMode.Disabled,
+                                gblAppStyles.Icons.DisabledColor,
+                                gblAppStyles.Icons.Color
+                            )
+                        },
+                        With(
+                            {
+                                varImageData: Concatenate(
+                                    "data:image/svg+xml;utf8, ",
+                                    EncodeUrl(
+                                        Concatenate(
+                                            "<svg viewBox='",
+                                            varImageRecord.staticIconViewbox,
+                                            "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                            varImageRecord.staticIconPath,
+                                            "' fill='#",
+                                            varColor,
+                                            "'/></svg>"
+                                        )
+                                    )
+                                )
+                            },
+                            varImageData
+                        )
+                    )
+                OnSelect: =Navigate('Template Selection Screen',Fade)
+                PaddingBottom: =20
+                PaddingLeft: =16
+                PaddingRight: =16
+                PaddingTop: =20
+                PressedBorderColor: =gblAppStyles.ButtonPrimary.PressedBorderColor
+                TabIndex: =0
+                Width: =68
+                X: =2*1
+                Y: =2*1
+                ZIndex: =1
+
+            lblSection_TemplateTitle As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: ='Segoe UI'
+                FontWeight: |-
+                    =If(
+                        IsBlank(gblRecordTemplate),
+                        FontWeight.Semibold,
+                        FontWeight.Normal
+                    )
+                Height: =If(IsBlank(gblRecordTemplate),imgSection_Template.Height,52)
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                OnSelect: =Select(imgSection_Template)
+                PaddingBottom: =4
+                PaddingLeft: =8
+                PaddingRight: =8
+                PaddingTop: =4
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Large
+                TabIndex: |-
+                    =If(
+                        true,
+                        -1
+                    )
+                Text: |-
+                    =If(
+                        IsBlank(gblRecordTemplate),
+                        With(
+                            {
+                                varDefault: "Select an issue type",
+                                varOOBTextId: "lblSection_TemplateTitle",
+                                varParam0: Blank(),
+                                varParam1: Blank(),
+                                varParam2: Blank()
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        staticLocalizations,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                If(
+                                    IsBlankOrError(varParam0),
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    ),
+                                    Coalesce(
+                                        Substitute(
+                                            Substitute(
+                                                Substitute(
+                                                    varLocalizedText,
+                                                    "{0}",
+                                                    Text(varParam0)
+                                                ),
+                                                "{1}",
+                                                Text(varParam1)
+                                            ),
+                                            "{2}",
+                                            Text(varParam2)
+                                        ),
+                                        varDefault
+                                    )
+                                )
+                            )
+                        ),
+                        gblRecordTemplate.Title
+                    )
+                VerticalAlign: =If(IsBlank(gblRecordTemplate),VerticalAlign.Middle,VerticalAlign.Bottom)
+                Width: =Parent.Width - Self.X
+                Wrap: =false
+                X: =imgSection_Template.X + imgSection_Template.Width
+                Y: =imgSection_Template.Y
+                ZIndex: =2
+
+            lblSection_TemplateCategory As label:
+                BorderColor: |
+                    =gblAppStyles.Label.BorderColor
+                BorderStyle: |
+                    =BorderStyle.Solid
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: ='Segoe UI'
+                Height: =If(IsBlank(gblRecordTemplate.Category.msft_name),0,48)
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PaddingBottom: =4
+                PaddingLeft: =8
+                PaddingRight: =8
+                PaddingTop: =4
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Small
+                Text: =gblRecordTemplate.Category.msft_name
+                VerticalAlign: =VerticalAlign.Top
+                Visible: =!IsBlank(gblRecordTemplate)
+                Width: =Parent.Width - Self.X
+                Wrap: =false
+                X: =72
+                Y: =lblSection_TemplateTitle.Y + lblSection_TemplateTitle.Height
+                ZIndex: =3
+
+            shpDivider_Template As rectangle:
+                DisplayMode: =DisplayMode.View
+                Fill: =gblAppStyles.Dividers.Elements
+                Height: =1.5
+                Width: =Parent.Width - Self.X
+                X: =lblSection_TemplateTitle.X
+                Y: =Parent.Height - Self.Height
+                ZIndex: =4
+
+        dtcIssueAssignment As dataCard.blankCard:
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            DisplayMode: =DisplayMode.Edit
+            Fill: =Transparent
+            Height: =galAssignmentsFinal.Y + galAssignmentsFinal.Height
+            Width: =Parent.Width
+            X: =0
+            Y: =1
+            ZIndex: =2
+
+            galAssignmentsFinal As gallery.galleryVertical:
+                AccessibleLabel: |-
+                    =With(
+                        {
+                            varDefault: "Gallery of users to assign to this issue",
+                            varOOBTextId: "galAssignmentsFinal__locAccessibleLabel",
+                            varParam0: Blank(),
+                            varParam1: Blank(),
+                            varParam2: Blank()
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    staticLocalizations,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            If(
+                                IsBlankOrError(varParam0),
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                ),
+                                Coalesce(
+                                    Substitute(
+                                        Substitute(
+                                            Substitute(
+                                                varLocalizedText,
+                                                "{0}",
+                                                Text(varParam0)
+                                            ),
+                                            "{1}",
+                                            Text(varParam1)
+                                        ),
+                                        "{2}",
+                                        Text(varParam2)
+                                    ),
+                                    varDefault
+                                )
+                            )
+                        )
+                    )
+                DisplayMode: |-
+                    =If(
+                        Self.Height = 0,
+                        DisplayMode.Disabled,
+                        DisplayMode.Edit
+                    )
+                Fill: =Transparent
+                Height: =CountRows(colCdsIssueAssignments)* Self.TemplateHeight
+                Items: =colCdsIssueAssignments
+                Layout: =Layout.Vertical
+                OnSelect: |-
+                    =UpdateContext({locDisplayAssignmentSelect: !locDisplayAssignmentSelect})
+                TabIndex: |-
+                    =If(
+                        true,
+                        -1
+                    )
+                TemplatePadding: =0
+                TemplateSize: =72
+                Width: =Parent.Width - Self.X -gblPadding.Page
+                X: =lblSection_Assignment.X
+                Y: =lblSection_Assignment.Y + lblSection_Assignment.Height
+                ZIndex: =2
+
+                btnAssignmentsFinal_Background As button:
+                    BorderThickness: =gblAppStyles.ButtonBackground.BorderThickness
+                    Color: =gblAppStyles.ButtonBackground.Color
+                    DisabledBorderColor: =gblAppStyles.ButtonBackground.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.ButtonBackground.DisabledFill
+                    DisabledFill: =gblAppStyles.ButtonBackground.DisabledFill
+                    DisplayMode: =DisplayMode.Disabled
+                    Fill: =gblAppStyles.ButtonSecondary.Fill
+                    FocusedBorderColor: =gblAppStyles.ButtonBackground.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.ButtonBackground.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =48
+                    HoverBorderColor: =gblAppStyles.ButtonBackground.HoverBorderColor
+                    HoverColor: =gblAppStyles.ButtonBackground.HoverColor
+                    HoverFill: =gblAppStyles.ButtonBackground.HoverFill
+                    PressedBorderColor: =gblAppStyles.ButtonBackground.PressedBorderColor
+                    PressedColor: =gblAppStyles.ButtonBackground.PressedColor
+                    PressedFill: =gblAppStyles.ButtonBackground.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.ButtonBackground.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.ButtonBackground.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.ButtonBackground.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.ButtonBackground.RadiusTopRight
+                    Size: =gblAppStyles.ButtonBackground.Size
+                    TabIndex: |-
+                        =If(
+                            true,
+                            -1
+                        )
+                    Text: =lblAssignmentsFinal_FullName.Text
+                    Width: =Parent.TemplateWidth - Self.X - imgAssignmentsFinal_User.X
+                    X: =imgAssignmentsFinal_User.X + (imgAssignmentsFinal_User.Width / 2)
+                    Y: =(Parent.TemplateHeight - Self.Height) / 2
+                    ZIndex: =1
+
+                lblAssignmentsFinal_FullName As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.ButtonSecondary.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =btnAssignmentsFinal_Background.Height
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =
+                    PaddingLeft: =0
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =LookUp(
+                            colUserProfiles,
+                            ThisItem.appEmailAddress = appEmail,
+                            appDisplayName
+                        )
+                    Width: =icnAssignmentsFinal_Remove.X - Self.X
+                    Wrap: =false
+                    X: =btnAssignmentsFinal_Background.X + imgAssignmentsFinal_User.Width
+                    Y: =btnAssignmentsFinal_Background.Y
+                    ZIndex: =2
+
+                icnAssignmentsFinal_Remove As icon.Cancel:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "Click to remove this user from the list of to-be assigned users",
+                                varOOBTextId: "icnAssignmentsFinal_Remove__locAccessibleLabel",
+                                varParam0: Blank(),
+                                varParam1: Blank(),
+                                varParam2: Blank()
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        staticLocalizations,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                If(
+                                    IsBlankOrError(varParam0),
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    ),
+                                    Coalesce(
+                                        Substitute(
+                                            Substitute(
+                                                Substitute(
+                                                    varLocalizedText,
+                                                    "{0}",
+                                                    Text(varParam0)
+                                                ),
+                                                "{1}",
+                                                Text(varParam1)
+                                            ),
+                                            "{2}",
+                                            Text(varParam2)
+                                        ),
+                                        varDefault
+                                    )
+                                )
+                            )
+                        )
+                    Color: =gblAppStyles.ButtonSecondary.Color
+                    Height: =btnAssignmentsFinal_Background.Height
+                    Icon: =Icon.Cancel
+                    OnSelect: |
+                        =Remove(
+                            colCdsIssueAssignments,
+                            ThisItem
+                        );
+                    PaddingBottom: =12
+                    PaddingLeft: =12
+                    PaddingRight: =12
+                    PaddingTop: =12
+                    TabIndex: =0
+                    Width: =Self.Height
+                    X: =btnAssignmentsFinal_Background.X + btnAssignmentsFinal_Background.Width - Self.Width
+                    Y: =btnAssignmentsFinal_Background.Y
+                    ZIndex: =3
+
+                btnAssignmentsFinal_UserInitals As button:
+                    BorderThickness: =0
+                    Color: =gblAppStyles.ButtonPrimary.Color
+                    DisabledBorderColor: =Transparent
+                    DisabledColor: =gblAppStyles.ButtonPrimary.Color
+                    DisabledFill: =gblAppStyles.ButtonPrimary.Fill
+                    DisplayMode: =DisplayMode.Disabled
+                    Fill: =gblAppStyles.ButtonPrimary.Fill
+                    Font: =Font.'Segoe UI'
+                    Height: =imgAssignmentsFinal_User.Height - 1
+                    HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+                    OnSelect: =
+                    PaddingBottom: =4
+                    PaddingLeft: =0
+                    PaddingRight: =0
+                    PaddingTop: =0
+                    RadiusBottomLeft: =47
+                    RadiusBottomRight: =47
+                    RadiusTopLeft: =47
+                    RadiusTopRight: =47
+                    Size: =gblAppStyles.ButtonPrimary.Size
+                    TabIndex: |-
+                        =If(
+                            true,
+                            -1
+                        )
+                    Text: |-
+                        =With(
+                            {
+                                varName: LookUp(
+                                    colUserProfiles,
+                                    ThisItem.appEmailAddress = appEmail,
+                                    appDisplayName
+                                )
+                            },
+                            Left(
+                                varName,
+                                1
+                            ) & Right(
+                                Mid(
+                                    varName,
+                                    Find(
+                                        " ",
+                                        varName
+                                    ),
+                                    2
+                                ),
+                                1
+                            )
+                        )
+                    Visible: =false
+                    Width: =imgAssignmentsFinal_User.Width - 1
+                    X: =imgAssignmentsFinal_User.X + 0.5
+                    Y: =imgAssignmentsFinal_User.Y + 0.5
+                    ZIndex: =4
+
+                imgAssignmentsFinal_User_1 As image:
+                    DisplayMode: =DisplayMode.View
+                    Height: =btnAssignmentsFinal_Background.Height
+                    Image: =Image_Confirmation
+                    OnSelect: =
+                    RadiusBottomLeft: =Self.Height
+                    RadiusBottomRight: =Self.Height
+                    RadiusTopLeft: =Self.Height
+                    RadiusTopRight: =Self.Height
+                    Width: =Self.Height
+                    X: =20 * 1
+                    Y: =btnAssignmentsFinal_Background.Y
+                    ZIndex: =5
+
+                imgAssignmentsFinal_User As image:
+                    DisplayMode: =DisplayMode.View
+                    Height: =btnAssignmentsFinal_Background.Height
+                    Image: |-
+                        =LookUp(
+                            colUserProfiles,
+                            ThisItem.appEmailAddress = appEmail,
+                            appImg
+                        )
+                    OnSelect: =
+                    RadiusBottomLeft: =Self.Height
+                    RadiusBottomRight: =Self.Height
+                    RadiusTopLeft: =Self.Height
+                    RadiusTopRight: =Self.Height
+                    Width: =Self.Height
+                    X: =20 * 1
+                    Y: =btnAssignmentsFinal_Background.Y
+                    ZIndex: =6
+
+                shpAssignmentsFinal_Divider As rectangle:
+                    Fill: =gblAppStyles.Dividers.Elements
+                    Height: =1
+                    OnSelect: =Select(Parent)
+                    Width: =Parent.TemplateWidth
+                    Y: =Parent.TemplateHeight - Self.Height
+                    ZIndex: =7
+
+            imgSection_Assignment As image:
+                AccessibleLabel: |-
+                    =With(
+                        {
+                            varDefault: "Click to select a user to assign to this issue",
+                            varOOBTextId: "imgSection_Assignment__locAccessibleLabel",
+                            varParam0: Blank(),
+                            varParam1: Blank(),
+                            varParam2: Blank()
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    staticLocalizations,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            If(
+                                IsBlankOrError(varParam0),
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                ),
+                                Coalesce(
+                                    Substitute(
+                                        Substitute(
+                                            Substitute(
+                                                varLocalizedText,
+                                                "{0}",
+                                                Text(varParam0)
+                                            ),
+                                            "{1}",
+                                            Text(varParam1)
+                                        ),
+                                        "{2}",
+                                        Text(varParam2)
+                                    ),
+                                    varDefault
+                                )
+                            )
+                        )
+                    )
+                AutoDisableOnSelect: =false
+                BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+                DisabledBorderColor: =gblAppStyles.ButtonPrimary.DisabledBorderColor
+                DisabledFill: =Transparent
+                FocusedBorderColor: =gblAppStyles.ButtonPrimary.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonPrimary.FocusedBorderThickness
+                Height: =96
+                HoverBorderColor: =gblAppStyles.ButtonPrimary.HoverBorderColor
+                Image: |
+                    =With(
+                        {
+                            varImageRecord: LookUp(
+                                staticIcons,
+                                staticIconName = "Add person"
+                            ),
+                            varColor: If(
+                                Self.DisplayMode = DisplayMode.Disabled,
+                                gblAppStyles.Icons.DisabledColor,
+                                gblAppStyles.Icons.Color
+                            )
+                        },
+                        With(
+                            {
+                                varImageData: Concatenate(
+                                    "data:image/svg+xml;utf8, ",
+                                    EncodeUrl(
+                                        Concatenate(
+                                            "<svg viewBox='",
+                                            varImageRecord.staticIconViewbox,
+                                            "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                            varImageRecord.staticIconPath,
+                                            "' fill='#",
+                                            varColor,
+                                            "'/></svg>"
+                                        )
+                                    )
+                                )
+                            },
+                            varImageData
+                        )
+                    )
+                OnSelect: =Navigate('Assignment Selection Screen',Fade); 
+                PaddingBottom: =20
+                PaddingLeft: =16
+                PaddingRight: =16
+                PaddingTop: =20
+                PressedBorderColor: =gblAppStyles.ButtonPrimary.PressedBorderColor
+                TabIndex: =0
+                Width: =68
+                X: =2*1
+                Y: =2*1
+                ZIndex: =5
+
+            lblSection_Assignment As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: ='Segoe UI'
+                Height: =imgSection_Assignment.Height
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                OnSelect: =Select(imgSection_Assignment)
+                PaddingBottom: =0
+                PaddingLeft: =8
+                PaddingRight: =8
+                PaddingTop: =0
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Large
+                TabIndex: |-
+                    =If(
+                        true,
+                        -1
+                    )
+                Text: |-
+                    =With(
+                        {
+                            varDefault: "Assign",
+                            varOOBTextId: "lblSection_Assignment__locText",
+                            varParam0: Blank(),
+                            varParam1: Blank(),
+                            varParam2: Blank()
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    staticLocalizations,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            If(
+                                IsBlankOrError(varParam0),
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                ),
+                                Coalesce(
+                                    Substitute(
+                                        Substitute(
+                                            Substitute(
+                                                varLocalizedText,
+                                                "{0}",
+                                                Text(varParam0)
+                                            ),
+                                            "{1}",
+                                            Text(varParam1)
+                                        ),
+                                        "{2}",
+                                        Text(varParam2)
+                                    ),
+                                    varDefault
+                                )
+                            )
+                        )
+                    )
+                Width: =Parent.Width - Self.X
+                Wrap: =false
+                X: =imgSection_Assignment.X + imgSection_Assignment.Width
+                Y: =imgSection_Assignment.Y
+                ZIndex: =6
+
+            shpDivider_Assignment As rectangle:
+                DisplayMode: =DisplayMode.View
+                Fill: =gblAppStyles.Dividers.Elements
+                Height: =1.5
+                Width: =Parent.Width - Self.X
+                X: =lblSection_Assignment.X
+                Y: =lblSection_Assignment.Y + lblSection_Assignment.Height - Self.Height
+                ZIndex: =7
+
+        dtcIssueLocation As dataCard.blankCard:
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            DisplayMode: =DisplayMode.Edit
+            Fill: =Transparent
+            Height: =100
+            Width: =Parent.Width
+            X: =0
+            Y: =3
+            ZIndex: =3
+
+            txtLocation As text:
+                AccessibleLabel: |-
+                    =With(
+                        {
+                            varDefault: "A brief description of the location of the issue",
+                            varOOBTextId: "txtLocation__locAccessibleLabel",
+                            varParam0: Blank(),
+                            varParam1: Blank(),
+                            varParam2: Blank()
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    staticLocalizations,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            If(
+                                IsBlankOrError(varParam0),
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                ),
+                                Coalesce(
+                                    Substitute(
+                                        Substitute(
+                                            Substitute(
+                                                varLocalizedText,
+                                                "{0}",
+                                                Text(varParam0)
+                                            ),
+                                            "{1}",
+                                            Text(varParam1)
+                                        ),
+                                        "{2}",
+                                        Text(varParam2)
+                                    ),
+                                    varDefault
+                                )
+                            )
+                        )
+                    )
+                BorderColor: =gblAppStyles.TextInput.BorderColor
+                BorderThickness: =gblAppStyles.TextInput.BorderThickness
+                Color: =gblAppStyles.TextInput.Color
+                Default: =
+                DisabledBorderColor: =gblAppStyles.TextInput.DisabledBorderColor
+                DisabledColor: =gblAppStyles.TextInput.DisabledColor
+                DisabledFill: =gblAppStyles.TextInput.DisabledFill
+                Fill: =If(IsBlank(Self.Text),RGBA(0,0,0,.025), gblAppStyles.TextInput.Fill)
+                FocusedBorderColor: =gblAppStyles.TextInput.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.TextInput.FocusedBorderThickness
+                Font: ='Segoe UI'
+                Height: =If(tglLocation.Value,66,100) - (2*Self.Y) - 1
+                HintText: |-
+                    =With(
+                        {
+                            varDefault: "Location",
+                            varOOBTextId: "txtLocation__locHintText",
+                            varParam0: Blank(),
+                            varParam1: Blank(),
+                            varParam2: Blank()
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    staticLocalizations,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            If(
+                                IsBlankOrError(varParam0),
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                ),
+                                Coalesce(
+                                    Substitute(
+                                        Substitute(
+                                            Substitute(
+                                                varLocalizedText,
+                                                "{0}",
+                                                Text(varParam0)
+                                            ),
+                                            "{1}",
+                                            Text(varParam1)
+                                        ),
+                                        "{2}",
+                                        Text(varParam2)
+                                    ),
+                                    varDefault
+                                )
+                            )
+                        )
+                    )
+                HoverBorderColor: =gblAppStyles.TextInput.HoverBorderColor
+                HoverColor: =gblAppStyles.TextInput.HoverColor
+                HoverFill: =gblAppStyles.TextInput.HoverFill
+                PaddingBottom: =4
+                PaddingLeft: =8
+                PaddingRight: =8
+                PaddingTop: =4
+                PressedBorderColor: =gblAppStyles.TextInput.PressedBorderColor
+                PressedColor: =gblAppStyles.TextInput.PressedColor
+                PressedFill: =gblAppStyles.TextInput.PressedFill
+                RadiusBottomLeft: =gblAppStyles.TextInput.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.TextInput.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.TextInput.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.TextInput.RadiusTopRight
+                Size: =gblAppStyles.TextInput.Size
+                Width: |-
+                    =If(
+                        true,//locLocationEnabled,
+                        tglLocation.X - Self.X,
+                        Parent.Width - Self.X - gblPadding.Page
+                    )
+                X: =imgSection_Location.X + imgSection_Location.Width
+                Y: =imgSection_Location.Y + 4
+                ZIndex: =1
+
+            shpDivider_Location As rectangle:
+                DisplayMode: =DisplayMode.View
+                Fill: =gblAppStyles.Dividers.Elements
+                Height: =1.5
+                Width: =Parent.Width - Self.X
+                X: =txtLocation.X
+                Y: =Parent.Height - Self.Height
+                ZIndex: =2
+
+            tglLocation As toggleSwitch:
+                AccessibleLabel: |-
+                    =With(
+                        {
+                            varDefault: "Indicates if the issue has GPS coordinates or not",
+                            varOOBTextId: "tglLocation__locAccessibleLabel",
+                            varParam0: Blank(),
+                            varParam1: Blank(),
+                            varParam2: Blank()
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    staticLocalizations,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            If(
+                                IsBlankOrError(varParam0),
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                ),
+                                Coalesce(
+                                    Substitute(
+                                        Substitute(
+                                            Substitute(
+                                                varLocalizedText,
+                                                "{0}",
+                                                Text(varParam0)
+                                            ),
+                                            "{1}",
+                                            Text(varParam1)
+                                        ),
+                                        "{2}",
+                                        Text(varParam2)
+                                    ),
+                                    varDefault
+                                )
+                            )
+                        )
+                    )
+                BorderColor: =gblAppStyles.Toggle.BorderColor
+                BorderThickness: =gblAppStyles.Toggle.BorderThickness
+                Color: =gblAppStyles.Toggle.Color
+                DisabledBorderColor: =gblAppStyles.Toggle.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Toggle.DisabledColor
+                FalseFill: =gblAppStyles.Toggle.FalseFill
+                FalseHoverFill: =gblAppStyles.Toggle.FalseHoverFill
+                FalseText: |-
+                    =With(
+                        {
+                            varDefault: "GPS",
+                            varOOBTextId: "lblLocationGPS__locText",
+                            varParam0: Blank(),
+                            varParam1: Blank(),
+                            varParam2: Blank()
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    staticLocalizations,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            If(
+                                IsBlankOrError(varParam0),
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                ),
+                                Coalesce(
+                                    Substitute(
+                                        Substitute(
+                                            Substitute(
+                                                varLocalizedText,
+                                                "{0}",
+                                                Text(varParam0)
+                                            ),
+                                            "{1}",
+                                            Text(varParam1)
+                                        ),
+                                        "{2}",
+                                        Text(varParam2)
+                                    ),
+                                    varDefault
+                                )
+                            )
+                        )
+                    )
+                FocusedBorderColor: =gblAppStyles.Toggle.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Toggle.FocusedBorderThickness
+                Font: ='Segoe UI'
+                HandleFill: =If(Self.Value,gblAppStyles.Toggle.HandleFillTrue,gblAppStyles.Toggle.HandleFillFalse)
+                Height: =32
+                HoverBorderColor: =gblAppStyles.Toggle.HoverBorderColor
+                OnCheck: |
+                    =UpdateContext(
+                        {
+                            locLocation: Concatenate(
+                                Text(Location.Latitude),
+                                ", ",
+                                Text(Location.Longitude)
+                            )
+                        }
+                    );
+                PressedBorderColor: =gblAppStyles.Toggle.PressedBorderColor
+                Size: =gblAppStyles.Label.Size.Small
+                TextPosition: =TextPosition.Left
+                TrueFill: =gblAppStyles.Toggle.TrueFill
+                TrueHoverFill: =gblAppStyles.Toggle.TrueHoverFill
+                TrueText: =Self.FalseText
+                Visible: =true//locLocationEnabled
+                Width: |-
+                    =Switch(
+                        Self.Size,
+                        11,
+                        110,
+                        13,
+                        130,
+                        15,
+                        150,
+                        150
+                    )
+                X: =Parent.Width - Self.Width - gblPadding.Page
+                Y: =34
+                ZIndex: =3
+
+            lblLocation_Address As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                DisplayMode: =DisplayMode.View
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: ='Segoe UI'
+                Height: =If(tglLocation.Value,Parent.Height - Self.Y,0)
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PaddingBottom: =4
+                PaddingLeft: =8
+                PaddingRight: =8
+                PaddingTop: =4
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Small
+                Text: =locLocation
+                VerticalAlign: =VerticalAlign.Top
+                Visible: =tglLocation.Value
+                Width: =txtLocation.Width
+                Wrap: =false
+                X: =txtLocation.X
+                Y: =txtLocation.Y + txtLocation.Height
+                ZIndex: =4
+
+            imgSection_Location As image:
+                AccessibleLabel: |-
+                    =With(
+                        {
+                            varDefault: "Icon for the location (GPS) section of this issue",
+                            varOOBTextId: "imgSection_Location__locAccessibleLabel",
+                            varParam0: Blank(),
+                            varParam1: Blank(),
+                            varParam2: Blank()
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    staticLocalizations,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            If(
+                                IsBlankOrError(varParam0),
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                ),
+                                Coalesce(
+                                    Substitute(
+                                        Substitute(
+                                            Substitute(
+                                                varLocalizedText,
+                                                "{0}",
+                                                Text(varParam0)
+                                            ),
+                                            "{1}",
+                                            Text(varParam1)
+                                        ),
+                                        "{2}",
+                                        Text(varParam2)
+                                    ),
+                                    varDefault
+                                )
+                            )
+                        )
+                    )
+                AutoDisableOnSelect: =false
+                DisabledFill: =Transparent
+                DisplayMode: =DisplayMode.View
+                Image: |
+                    =With(
+                        {
+                            varImageRecord: LookUp(
+                                staticIcons,
+                                staticIconName = "Location"
+                            ),
+                            varColor: If(
+                                Self.DisplayMode = DisplayMode.Disabled,
+                                gblAppStyles.Icons.DisabledColor,
+                                gblAppStyles.Icons.Color
+                            )
+                        },
+                        With(
+                            {
+                                varImageData: Concatenate(
+                                    "data:image/svg+xml;utf8, ",
+                                    EncodeUrl(
+                                        Concatenate(
+                                            "<svg viewBox='",
+                                            varImageRecord.staticIconViewbox,
+                                            "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                            varImageRecord.staticIconPath,
+                                            "' fill='#",
+                                            varColor,
+                                            "'/></svg>"
+                                        )
+                                    )
+                                )
+                            },
+                            varImageData
+                        )
+                    )
+                OnSelect: =
+                PaddingBottom: =20
+                PaddingLeft: =20
+                PaddingRight: =16
+                PaddingTop: =20
+                Width: =72
+                X: =0*0
+                Y: =0*0
+                ZIndex: =5
+
+        dtcIssueDescription As dataCard.blankCard:
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            DisplayMode: =DisplayMode.Edit
+            Fill: =Transparent
+            Height: =txtDescription.Height + 8
+            Width: =Parent.Width
+            X: =0
+            Y: =3
+            ZIndex: =4
+
+            txtDescription As text:
+                AccessibleLabel: |-
+                    =With(
+                        {
+                            varDefault: "The description of the issue",
+                            varOOBTextId: "txtDescription__locAccessibleLabel",
+                            varParam0: Blank(),
+                            varParam1: Blank(),
+                            varParam2: Blank()
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    staticLocalizations,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            If(
+                                IsBlankOrError(varParam0),
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                ),
+                                Coalesce(
+                                    Substitute(
+                                        Substitute(
+                                            Substitute(
+                                                varLocalizedText,
+                                                "{0}",
+                                                Text(varParam0)
+                                            ),
+                                            "{1}",
+                                            Text(varParam1)
+                                        ),
+                                        "{2}",
+                                        Text(varParam2)
+                                    ),
+                                    varDefault
+                                )
+                            )
+                        )
+                    )
+                BorderColor: =gblAppStyles.TextInput.BorderColor
+                BorderThickness: =gblAppStyles.TextInput.BorderThickness
+                Color: =gblAppStyles.TextInput.Color
+                Default: =
+                DisabledBorderColor: =gblAppStyles.TextInput.DisabledBorderColor
+                DisabledColor: =gblAppStyles.TextInput.DisabledColor
+                DisabledFill: =gblAppStyles.TextInput.DisabledFill
+                Fill: =If(IsBlank(Self.Text),RGBA(0,0,0,.025), gblAppStyles.TextInput.Fill)
+                FocusedBorderColor: =gblAppStyles.TextInput.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.TextInput.FocusedBorderThickness
+                Font: ='Segoe UI'
+                Height: |-
+                    =Max(
+                        imgSection_Description.Height,
+                        ((RoundDown(
+                            (Len(Self.Text) / 150),
+                            0
+                        ) + 1) + (CountRows(
+                            MatchAll(
+                                Self.Text,
+                                "\n"
+                            )
+                        ) / 2.5)) * imgSection_Description.Height
+                    ) - (2 * Self.Y) - 1
+                HintText: |-
+                    =With(
+                        {
+                            varDefault: "Description",
+                            varOOBTextId: "txtDescription__locHintText",
+                            varParam0: Blank(),
+                            varParam1: Blank(),
+                            varParam2: Blank()
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    staticLocalizations,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            If(
+                                IsBlankOrError(varParam0),
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                ),
+                                Coalesce(
+                                    Substitute(
+                                        Substitute(
+                                            Substitute(
+                                                varLocalizedText,
+                                                "{0}",
+                                                Text(varParam0)
+                                            ),
+                                            "{1}",
+                                            Text(varParam1)
+                                        ),
+                                        "{2}",
+                                        Text(varParam2)
+                                    ),
+                                    varDefault
+                                )
+                            )
+                        )
+                    )
+                HoverBorderColor: =gblAppStyles.TextInput.HoverBorderColor
+                HoverColor: =gblAppStyles.TextInput.HoverColor
+                HoverFill: =gblAppStyles.TextInput.HoverFill
+                MaxLength: =2000
+                Mode: =TextMode.MultiLine
+                PaddingBottom: =4
+                PaddingLeft: =8
+                PaddingRight: =8
+                PaddingTop: |-
+                    =If(
+                        IsBlank(Self.Text),
+                        34,
+                        8
+                    )
+                PressedBorderColor: =gblAppStyles.TextInput.PressedBorderColor
+                PressedColor: =gblAppStyles.TextInput.PressedColor
+                PressedFill: =gblAppStyles.TextInput.PressedFill
+                RadiusBottomLeft: =gblAppStyles.TextInput.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.TextInput.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.TextInput.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.TextInput.RadiusTopRight
+                Size: =gblAppStyles.TextInput.Size
+                Width: =Parent.Width - Self.X - gblPadding.Page
+                X: =imgSection_Description.X + imgSection_Description.Width
+                Y: =imgSection_Description.Y + 4
+                ZIndex: =1
+
+            imgSection_Description As image:
+                AccessibleLabel: |-
+                    =With(
+                        {
+                            varDefault: "Icon for the description section of this issue",
+                            varOOBTextId: "imgSection_Description__locAccessibleLabel",
+                            varParam0: Blank(),
+                            varParam1: Blank(),
+                            varParam2: Blank()
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    staticLocalizations,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            If(
+                                IsBlankOrError(varParam0),
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                ),
+                                Coalesce(
+                                    Substitute(
+                                        Substitute(
+                                            Substitute(
+                                                varLocalizedText,
+                                                "{0}",
+                                                Text(varParam0)
+                                            ),
+                                            "{1}",
+                                            Text(varParam1)
+                                        ),
+                                        "{2}",
+                                        Text(varParam2)
+                                    ),
+                                    varDefault
+                                )
+                            )
+                        )
+                    )
+                AutoDisableOnSelect: =false
+                DisabledFill: =Transparent
+                DisplayMode: =DisplayMode.View
+                Image: |
+                    =With(
+                        {
+                            varImageRecord: LookUp(
+                                staticIcons,
+                                staticIconName = "Notes"
+                            ),
+                            varColor: If(
+                                Self.DisplayMode = DisplayMode.Disabled,
+                                gblAppStyles.Icons.DisabledColor,
+                                gblAppStyles.Icons.Color
+                            )
+                        },
+                        With(
+                            {
+                                varImageData: Concatenate(
+                                    "data:image/svg+xml;utf8, ",
+                                    EncodeUrl(
+                                        Concatenate(
+                                            "<svg viewBox='",
+                                            varImageRecord.staticIconViewbox,
+                                            "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                            varImageRecord.staticIconPath,
+                                            "' fill='#",
+                                            varColor,
+                                            "'/></svg>"
+                                        )
+                                    )
+                                )
+                            },
+                            varImageData
+                        )
+                    )
+                OnSelect: =
+                PaddingBottom: =20
+                PaddingLeft: =20
+                PaddingRight: =16
+                PaddingTop: =20
+                Width: =72
+                X: =0*0
+                Y: =0*0
+                ZIndex: =2
+
+            shpDivider_Description As rectangle:
+                DisplayMode: =DisplayMode.View
+                Fill: =gblAppStyles.Dividers.Elements
+                Height: =1.5
+                Width: =Parent.Width - Self.X
+                X: =lblSection_Assignment.X
+                Y: =Parent.Height - Self.Height
+                ZIndex: =3
+
+        dtcIssuePhotos As dataCard.blankCard:
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            DisplayMode: |-
+                =If(
+                    IsBlankOrError(gblSettingSharePointLocation),
+                    DisplayMode.Disabled,
+                    DisplayMode.Edit
+                )
+            Fill: =Transparent
+            Height: =galPhotos.Y + galPhotos.Height + 1
+            Visible: =false//!IsBlankOrError(gblSettingSharePointLocation)
+            Width: =Parent.Width
+            X: =0
+            Y: =4
+            ZIndex: =5
+
+            lblPhotos As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: ='Segoe UI'
+                Height: =imgPhotos.Height
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                OnSelect: =
+                PaddingBottom: =4
+                PaddingLeft: =8
+                PaddingRight: =8
+                PaddingTop: =4
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Large
+                Text: |-
+                    =With(
+                        {
+                            varDefault: "Add photos",
+                            varOOBTextId: "lblPhotos__locText",
+                            varParam0: Blank(),
+                            varParam1: Blank(),
+                            varParam2: Blank()
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    staticLocalizations,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            If(
+                                IsBlankOrError(varParam0),
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                ),
+                                Coalesce(
+                                    Substitute(
+                                        Substitute(
+                                            Substitute(
+                                                varLocalizedText,
+                                                "{0}",
+                                                Text(varParam0)
+                                            ),
+                                            "{1}",
+                                            Text(varParam1)
+                                        ),
+                                        "{2}",
+                                        Text(varParam2)
+                                    ),
+                                    varDefault
+                                )
+                            )
+                        )
+                    )
+                Width: =Parent.Width - Self.X
+                Wrap: =false
+                X: =imgPhotos.X + imgPhotos.Width
+                Y: =imgPhotos.Y
+                ZIndex: =1
+
+            imgPhotos As image:
+                AccessibleLabel: |-
+                    =With(
+                        {
+                            varDefault: "Icon for the photo section for this issue",
+                            varOOBTextId: "imgPhotos__locAccessibleLabel",
+                            varParam0: Blank(),
+                            varParam1: Blank(),
+                            varParam2: Blank()
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    staticLocalizations,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            If(
+                                IsBlankOrError(varParam0),
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                ),
+                                Coalesce(
+                                    Substitute(
+                                        Substitute(
+                                            Substitute(
+                                                varLocalizedText,
+                                                "{0}",
+                                                Text(varParam0)
+                                            ),
+                                            "{1}",
+                                            Text(varParam1)
+                                        ),
+                                        "{2}",
+                                        Text(varParam2)
+                                    ),
+                                    varDefault
+                                )
+                            )
+                        )
+                    )
+                DisabledFill: =Transparent
+                DisplayMode: =DisplayMode.View
+                Image: |
+                    =With(
+                        {
+                            varImageRecord: LookUp(
+                                staticIcons,
+                                staticIconName = "Camera"
+                            ),
+                            varColor: If(
+                                Self.DisplayMode = DisplayMode.Disabled,
+                                gblAppStyles.Icons.DisabledColor,
+                                gblAppStyles.Icons.Color
+                            )
+                        },
+                        With(
+                            {
+                                varImageData: Concatenate(
+                                    "data:image/svg+xml;utf8, ",
+                                    EncodeUrl(
+                                        Concatenate(
+                                            "<svg viewBox='",
+                                            varImageRecord.staticIconViewbox,
+                                            "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                            varImageRecord.staticIconPath,
+                                            "' fill='#",
+                                            varColor,
+                                            "'/></svg>"
+                                        )
+                                    )
+                                )
+                            },
+                            varImageData
+                        )
+                    )
+                OnSelect: =
+                PaddingBottom: =20
+                PaddingLeft: =20
+                PaddingRight: =16
+                PaddingTop: =20
+                Width: =72
+                X: =0*0
+                Y: =0*0
+                ZIndex: =2
+
+            shpDivider_Photos As rectangle:
+                DisplayMode: =DisplayMode.View
+                Fill: =gblAppStyles.Dividers.Elements
+                Height: =1.5
+                Width: =Parent.Width - Self.X
+                X: =lblSection_Assignment.X
+                Y: =Parent.Height - Self.Height
+                ZIndex: =3
+
+            galPhotos As gallery.galleryVertical:
+                AccessibleLabel: |-
+                    =With(
+                        {
+                            varDefault: "Gallery of photos for the issue",
+                            varOOBTextId: "galPhotos__locAccessibleLabel",
+                            varParam0: Blank(),
+                            varParam1: Blank(),
+                            varParam2: Blank()
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    staticLocalizations,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            If(
+                                IsBlankOrError(varParam0),
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                ),
+                                Coalesce(
+                                    Substitute(
+                                        Substitute(
+                                            Substitute(
+                                                varLocalizedText,
+                                                "{0}",
+                                                Text(varParam0)
+                                            ),
+                                            "{1}",
+                                            Text(varParam1)
+                                        ),
+                                        "{2}",
+                                        Text(varParam2)
+                                    ),
+                                    varDefault
+                                )
+                            )
+                        )
+                    )
+                Fill: =gblAppStyles.ButtonBackground.Fill
+                Height: |-
+                    =With(
+                        {varPhotoCount: CountRows(colPhotos)},
+                        If(
+                            Self.Visible,
+                            (RoundDown(
+                                varPhotoCount / 4,
+                                0
+                            ) + If(
+                                varPhotoCount > 0,
+                                1,
+                                0
+                            )) * (Self.TemplateHeight + Self.TemplatePadding) + Self.TemplatePadding,
+                            0
+                        )
+                    )
+                Items: =colPhotos
+                Layout: =Layout.Vertical
+                TabIndex: |-
+                    =If(
+                        true,
+                        -1
+                    )
+                TemplatePadding: =8
+                TemplateSize: =(Self.Width /3 )/ 1.6
+                Visible: =!IsEmpty(colPhotos) And !IsBlankOrError(gblSettingSharePointLocation)
+                Width: =Parent.Width - Self.X - gblPadding.Page
+                WrapCount: =3
+                X: =72
+                Y: =72
+                ZIndex: =4
+
+                imgPhotoPreview As image:
+                    AccessibleLabel: ="Preview of the photo"
+                    DisplayMode: =DisplayMode.View
+                    Height: =Parent.TemplateHeight
+                    Image: =ThisItem.Pic
+                    OnSelect: =Select(Parent)
+                    TabIndex: =56
+                    Width: =Parent.TemplateWidth
+                    ZIndex: =1
+
+                imgPhotoDelete As image:
+                    AccessibleLabel: ="Click to remove this photo from the issue"
+                    Fill: =gblAppStyles.Background.Fill
+                    Height: =30
+                    Image: |
+                        =With(
+                            {
+                                varImageRecord: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Delete"
+                                ),
+                                varColor: If(
+                                    Self.DisplayMode = DisplayMode.Disabled,
+                                    gblAppStyles.Icons.DisabledColor,
+                                    gblAppStyles.Icons.Color
+                                )
+                            },
+                            With(
+                                {
+                                    varImageData: Concatenate(
+                                        "data:image/svg+xml;utf8, ",
+                                        EncodeUrl(
+                                            Concatenate(
+                                                "<svg viewBox='",
+                                                varImageRecord.staticIconViewbox,
+                                                "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                varImageRecord.staticIconPath,
+                                                "' fill='#",
+                                                varColor,
+                                                "'/></svg>"
+                                            )
+                                        )
+                                    )
+                                },
+                                varImageData
+                            )
+                        )
+                    OnSelect: =Remove(colPhotos,ThisItem)
+                    PaddingBottom: =4
+                    PaddingLeft: =4
+                    PaddingRight: =4
+                    PaddingTop: =4
+                    RadiusBottomLeft: =30
+                    RadiusBottomRight: =30
+                    RadiusTopLeft: =30
+                    RadiusTopRight: =30
+                    TabIndex: =57
+                    Width: =30
+                    X: =Parent.TemplateWidth - Self.Width - 4
+                    Y: =4
+                    ZIndex: =2
+
+            addPhoto As addMedia:
+                AccessibleLabel: |-
+                    =With(
+                        {
+                            varDefault: "Click to add a photo to the issue",
+                            varOOBTextId: "addPhoto__locAccessibleLabel",
+                            varParam0: Blank(),
+                            varParam1: Blank(),
+                            varParam2: Blank()
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    staticLocalizations,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            If(
+                                IsBlankOrError(varParam0),
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                ),
+                                Coalesce(
+                                    Substitute(
+                                        Substitute(
+                                            Substitute(
+                                                varLocalizedText,
+                                                "{0}",
+                                                Text(varParam0)
+                                            ),
+                                            "{1}",
+                                            Text(varParam1)
+                                        ),
+                                        "{2}",
+                                        Text(varParam2)
+                                    ),
+                                    varDefault
+                                )
+                            )
+                        )
+                    )
+                BorderColor: =Transparent
+                ChangePictureText: =""
+                Fill: =Transparent
+                FocusedBorderThickness: =1
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Bold
+                Height: =imgPhotos.Height
+                OnChange: |
+                    =If(
+                        !IsBlank(Self.Media),
+                        Collect(
+                            colPhotos,
+                            {
+                                Pic: Self.Media,
+                                Name: Self.FileName
+                            }
+                        );
+                        Reset(Self);    
+                    );
+                Size: =18
+                Text: =""
+                Width: =Parent.Width
+                X: =0*0
+                Y: =0*0
+                ZIndex: =5
+
+        dtcIssueSubmit As dataCard.blankCard:
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            DisplayMode: =DisplayMode.Edit
+            Fill: =Transparent
+            Height: =btnSubmit_IssueReport.Height + btnSubmit_IssueReport.Y + btnSubmit_IssueReport.Y
+            Width: =Parent.Width
+            X: =0
+            Y: =1000
+            ZIndex: =6
+
+            btnSubmit_IssueReport As button:
+                BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+                BorderThickness: =gblAppStyles.ButtonPrimary.BorderThickness
+                Color: =gblAppStyles.ButtonPrimary.Color
+                DisabledBorderColor: =gblAppStyles.ButtonPrimary.DisabledBorderColor
+                DisabledColor: =gblAppStyles.ButtonPrimary.DisabledColor
+                DisabledFill: =gblAppStyles.ButtonPrimary.DisabledFill
+                DisplayMode: |-
+                    =If(
+                        !IsBlank(gblRecordTemplate),
+                        DisplayMode.Edit,
+                        DisplayMode.Disabled
+                    )
+                Fill: =gblAppStyles.ButtonPrimary.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonPrimary.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonPrimary.FocusedBorderThickness
+                Font: ='Segoe UI'
+                FontWeight: =FontWeight.Normal
+                Height: =80
+                HoverBorderColor: =gblAppStyles.ButtonPrimary.HoverBorderColor
+                HoverColor: =gblAppStyles.ButtonPrimary.HoverColor
+                HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+                OnSelect: |
+                    =UpdateContext({locSavingRecord: true});
+                    // Check if Bucket Still Exists
+                    ClearCollect(
+                        colPlannerBuckets,
+                        Planner.ListBucketsV3(
+                            gblPlannerPlanId,
+                            gblPlannerGroupId
+                        ).value
+                    );
+                    UpdateContext({locPlannerBucketExists: gblRecordCategory.'Planner Bucket Id' in colPlannerBuckets.id});
+                    // Create Bucket if Needed, and Update CDS
+                    UpdateContext(
+                        {
+                            locPlannerBucketForTask: If(
+                                !locPlannerBucketExists,
+                                Planner.CreateBucketV2(
+                                    gblRecordCategory.Name,
+                                    gblPlannerGroupId,
+                                    gblPlannerPlanId
+                                ).id,
+                                gblRecordCategory.'Planner Bucket Id'
+                            )
+                        }
+                    );
+                    If(
+                        !locPlannerBucketExists,
+                        UpdateIf(
+                            'Issue Report Categories',
+                            'Issue Report Categories'[@msft_issuereport_categoryid] = gblRecordCategory.'Issue Report Category',
+                            {'Planner Bucket Id': locPlannerBucketForTask}
+                        )
+                    );
+                    // Create Task
+                    With(
+                        {
+                            varHasLocation: !IsBlank(txtLocation.Text) Or tglLocation.Value,
+                            varHasDescription: !IsBlank(txtDescription.Text),
+                            varHasQuestions: !IsBlank(colCdsIssueQuestions),
+                            varBusinessDaysDue: If(
+                                IsBlank(gblRecordTemplate.'Business Days until Due'),
+                                1,
+                                gblRecordTemplate.'Business Days until Due'
+                            )
+                        },
+                        With(
+                            {
+                                varDescriptionPart_Location: If(
+                                    varHasLocation,
+                                    Concatenate(
+                                        "Location: ",
+                                        txtLocation.Text,
+                                        If(
+                                            tglLocation.Value,
+                                            Concatenate(
+                                                Char(10),
+                                                "Address: ",
+                                                lblLocation_Address.Text
+                                            )
+                                        )
+                                    ),
+                                    Blank()
+                                ),
+                                varDescriptionPart_Description: If(
+                                    varHasDescription,
+                                    Concatenate(
+                                        "Description:",
+                                        Char(10),
+                                        txtDescription.Text
+                                    ),
+                                    Blank()
+                                ),
+                                varDescriptionPart_Questions: If(
+                                    varHasQuestions,
+                                    Concat(
+                                        colCdsIssueQuestions,
+                                        Concatenate(
+                                            Instructions,
+                                            Char(10),
+                                            If(
+                                                IsBlank(appResponse),
+                                                "(No Response)",
+                                                appResponse
+                                            )
+                                        ),
+                                        Char(10) & Char(10)
+                                    ),
+                                    Blank()
+                                ),
+                                varDueDate: With(
+                                    {
+                                        varBusinessDaysBaseline: varBusinessDaysDue,
+                                        varWeekEndDaysThisWeek: If(
+                                            (Weekday(
+                                                gblToday,
+                                                StartOfWeek.Monday
+                                            ) + varBusinessDaysDue) > 5,
+                                            2,
+                                            0
+                                        ),
+                                        varWeekEndDaysFuture: If(
+                                            varBusinessDaysDue > 5,
+                                            RoundDown(
+                                                Value(varBusinessDaysDue) / 5,
+                                                0
+                                            ) * 2,
+                                            0
+                                        ),
+                                        varTodayOffset: If(
+                                            Hour(Now()) < 9,
+                                            -1,
+                                            0
+                                        )
+                                    },
+                                    DateAdd(
+                                        gblToday,
+                                        Max(
+                                            varBusinessDaysBaseline + varWeekEndDaysThisWeek + varWeekEndDaysFuture + varTodayOffset,
+                                            1
+                                        ),
+                                        Days
+                                    )
+                                )
+                            },
+                            UpdateContext(
+                                {
+                                    locNewTask: {
+                                        appTitle: gblRecordTemplate.Title,
+                                        appBucket: locPlannerBucketForTask,
+                                        appStart: Now(),
+                                        appDue: varDueDate,
+                                        appDescription: Concatenate(
+                                            If(
+                                                varHasDescription,
+                                                varDescriptionPart_Description,
+                                                Blank()
+                                            ),
+                                            If(
+                                                varHasDescription And varHasLocation,
+                                                Char(10) & Char(10),
+                                                Blank()
+                                            ),
+                                            If(
+                                                varHasLocation,
+                                                varDescriptionPart_Location,
+                                                Blank()
+                                            ),
+                                            If(
+                                                (varHasLocation And varHasQuestions) Or (varHasDescription And varHasQuestions),
+                                                Char(10) & Char(10),
+                                                Blank()
+                                            ),
+                                            If(
+                                                varHasQuestions,
+                                                varDescriptionPart_Questions,
+                                                Blank()
+                                            )
+                                        ),
+                                        appAssignments: Concat(
+                                            colCdsIssueAssignments,
+                                            appEmailAddress,
+                                            ";"
+                                        )
+                                    }
+                                }
+                            )
+                        )
+                    );
+                    UpdateContext(
+                        {
+                            locRecordPlannerTask: Planner.CreateTaskV3(
+                                gblPlannerGroupId,
+                                gblPlannerPlanId,
+                                locNewTask.appTitle,
+                                {
+                                    bucketId: locNewTask.appBucket,
+                                    startDateTime: locNewTask.appStart,
+                                    dueDateTime: locNewTask.appDue
+                                }
+                            )
+                        }
+                    );
+                    // Update Assignments
+                    If(
+                        !IsBlank(locNewTask.appAssignments),
+                        Planner.AssignUsers(
+                            locRecordPlannerTask.id,
+                            locNewTask.appAssignments
+                        )
+                    );
+                    // Description
+                    If(
+                        !IsBlank(locNewTask.appDescription),
+                        Planner.UpdateTaskDetailsV2(
+                            locRecordPlannerTask.id,
+                            {description: locNewTask.appDescription}
+                        )
+                    );
+                        // Images
+                    If(
+                        !IsEmpty(galPhotos.AllItems) And !IsBlankOrError(gblSettingSharePointLocation),
+                        ForAll(
+                            galPhotos.AllItems,
+                            IfError(
+                                Patch(
+                                    'Issue Report Photos',
+                                    Defaults('Issue Report Photos'),
+                                    {
+                                        msft_name: ThisRecord.Name,
+                                        'Planner Task Id': locRecordPlannerTask.id,
+                                        'SharePoint Site Address': gblSettingSharePointLocation,
+                                        'SharePoint Folder Path': "/Shared Documents",
+                                        Photo: {
+                                            Name: ThisRecord.Name,
+                                            Full: imgPhotoPreview.Image,
+                                            Value: imgPhotoPreview.Image
+                                        }
+                                    }
+                                ),
+                                Blank()
+                            )
+                        )
+                    );
+                    // Create Report
+                    IfError(
+                        Patch(
+                            'Issue Reports',
+                            Defaults('Issue Reports'),
+                            {
+                                Name: locNewTask.appTitle,
+                                Category: gblRecordCategory,
+                                Template: gblRecordTemplate,
+                                'Planner Task Id': locRecordPlannerTask.id,
+                                'Task Assignment': Left(
+                                    locNewTask.appAssignments,
+                                    100
+                                ),
+                                'Task Description': Left(
+                                    locNewTask.appDescription,
+                                    2000
+                                ),
+                                'Task Due Date': locNewTask.appDue,
+                                'Task Start Date': locNewTask.appStart
+                            }
+                        ),
+                        Blank()
+                    );
+                    Navigate(
+                        'Issue Submission Screen',
+                        ScreenTransition.Fade,
+                        {
+                            locDueDate: locNewTask.appDue,
+                            locTaskId: locRecordPlannerTask.id
+                        }
+                    );
+                    UpdateContext({locSavingRecord: false});
+                PaddingBottom: =4
+                PaddingLeft: =8
+                PaddingRight: =8
+                PaddingTop: =4
+                PressedBorderColor: =gblAppStyles.ButtonPrimary.PressedBorderColor
+                PressedColor: =gblAppStyles.ButtonPrimary.PressedColor
+                PressedFill: =gblAppStyles.ButtonPrimary.PressedFill
+                RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.ButtonPrimary.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+                Size: =gblAppStyles.ButtonPrimary.Size
+                Text: |-
+                    =With(
+                        {
+                            varDefault: "Submit issue",
+                            varOOBTextId: "btnSubmit_IssueReport__locText",
+                            varParam0: Blank(),
+                            varParam1: Blank(),
+                            varParam2: Blank()
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    staticLocalizations,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            If(
+                                IsBlankOrError(varParam0),
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                ),
+                                Coalesce(
+                                    Substitute(
+                                        Substitute(
+                                            Substitute(
+                                                varLocalizedText,
+                                                "{0}",
+                                                Text(varParam0)
+                                            ),
+                                            "{1}",
+                                            Text(varParam1)
+                                        ),
+                                        "{2}",
+                                        Text(varParam2)
+                                    ),
+                                    varDefault
+                                )
+                            )
+                        )
+                    )
+                Tooltip: =Self.Text
+                Width: |-
+                    =Switch(
+                        'Issue Report Screen'.Size,
+                        ScreenSize.ExtraLarge,
+                        Max(
+                            Parent.Width * .2,
+                            480
+                        ),
+                        ScreenSize.Large,
+                        Max(
+                            Parent.Width * .2,
+                            400
+                        ),
+                        ScreenSize.Medium,
+                        Max(
+                            Parent.Width * .2,
+                            320
+                        ),
+                        ScreenSize.Small,
+                        Parent.Width - (2*gblPadding.Page),
+                        Parent.Width - (2*gblPadding.Page)
+                    )
+                X: |-
+                    =Switch(
+                        'Issue Report Screen'.Size,
+                        ScreenSize.ExtraLarge,
+                        Parent.Width - Self.Width - gblPadding.Page,
+                        ScreenSize.Large,
+                        Parent.Width - Self.Width - gblPadding.Page,
+                        ScreenSize.Medium,
+                        Parent.Width - Self.Width - gblPadding.Page,
+                        ScreenSize.Small,
+                        gblPadding.Page,
+                        gblPadding.Page
+                    )
+                Y: =gblPadding.Page
+                ZIndex: =3
+
+        dtcIssueQuestions As dataCard.blankCard:
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            DisplayMode: =DisplayMode.Edit
+            Fill: =Transparent
+            Height: |-
+                =If(
+                    Self.Visible,
+                    galQuestions.Y + galQuestions.Height + gblPadding.Page,
+                    0
+                )
+            Visible: =!IsEmpty(colCdsIssueQuestions)
+            Width: =Parent.Width
+            X: =72
+            Y: =72
+            ZIndex: =7
+
+            galQuestions As gallery.variableTemplateHeightGallery:
+                AccessibleLabel: |-
+                    =With(
+                        {
+                            varDefault: "List of questions for this issue",
+                            varOOBTextId: "galQuestions__locAccessibleLabel",
+                            varParam0: Blank(),
+                            varParam1: Blank(),
+                            varParam2: Blank()
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    staticLocalizations,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            If(
+                                IsBlankOrError(varParam0),
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                ),
+                                Coalesce(
+                                    Substitute(
+                                        Substitute(
+                                            Substitute(
+                                                varLocalizedText,
+                                                "{0}",
+                                                Text(varParam0)
+                                            ),
+                                            "{1}",
+                                            Text(varParam1)
+                                        ),
+                                        "{2}",
+                                        Text(varParam2)
+                                    ),
+                                    varDefault
+                                )
+                            )
+                        )
+                    )
+                Height: =(CountRows(colCdsIssueQuestions) * Self.TemplateHeight) + 4
+                Items: =colCdsIssueQuestions
+                Layout: =Layout.Vertical
+                TabIndex: |-
+                    =If(
+                        true,
+                        -1
+                    )
+                TemplatePadding: =0
+                TemplateSize: =200
+                Width: =Parent.Width - Self.X
+                X: =0*0
+                Y: =0*0
+                ZIndex: =4
+
+                txtQuestion_Response As text:
+                    AccessibleLabel: |-
+                        =If(
+                            gblUserLanguage = "en-US",
+                            // Temporary to resolve issue with screen readers
+                            Concatenate(
+                                "The response input for the question: ",
+                                ThisItem.Instructions
+                            ),
+                            With(
+                                {
+                                    varDefault: "The response input for the question: " & ThisItem.Instructions,
+                                    varOOBTextId: "txtQuestion_Response__locAccessibleLabel",
+                                    varParam0: ThisItem.Instructions,
+                                    varParam1: Blank(),
+                                    varParam2: Blank()
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            staticLocalizations,
+                                            OOBTextId = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    If(
+                                        IsBlankOrError(varParam0),
+                                        Coalesce(
+                                            varLocalizedText,
+                                            varDefault
+                                        ),
+                                        Coalesce(
+                                            Substitute(
+                                                Substitute(
+                                                    Substitute(
+                                                        varLocalizedText,
+                                                        "{0}",
+                                                        Text(varParam0)
+                                                    ),
+                                                    "{1}",
+                                                    Text(varParam1)
+                                                ),
+                                                "{2}",
+                                                Text(varParam2)
+                                            ),
+                                            varDefault
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    BorderColor: =gblAppStyles.TextInput.BorderColor
+                    BorderThickness: =gblAppStyles.TextInput.BorderThickness
+                    Color: =gblAppStyles.TextInput.Color
+                    Default: =ThisItem.appResponse
+                    DisabledBorderColor: =gblAppStyles.TextInput.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.TextInput.DisabledColor
+                    DisabledFill: =gblAppStyles.TextInput.DisabledFill
+                    Fill: =If(IsBlank(Self.Text),RGBA(0,0,0,.025), gblAppStyles.TextInput.Fill)
+                    FocusedBorderColor: =gblAppStyles.TextInput.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.TextInput.FocusedBorderThickness
+                    Font: ='Segoe UI'
+                    Height: =Parent.TemplateHeight -Self.Y - shpDivider_Questions.Height
+                    HintText: |-
+                        =With(
+                            {
+                                varDefault: "Enter a response",
+                                varOOBTextId: "txtQuestion_Response__locHintText",
+                                varParam0: Blank(),
+                                varParam1: Blank(),
+                                varParam2: Blank()
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        staticLocalizations,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                If(
+                                    IsBlankOrError(varParam0),
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    ),
+                                    Coalesce(
+                                        Substitute(
+                                            Substitute(
+                                                Substitute(
+                                                    varLocalizedText,
+                                                    "{0}",
+                                                    Text(varParam0)
+                                                ),
+                                                "{1}",
+                                                Text(varParam1)
+                                            ),
+                                            "{2}",
+                                            Text(varParam2)
+                                        ),
+                                        varDefault
+                                    )
+                                )
+                            )
+                        )
+                    HoverBorderColor: =gblAppStyles.TextInput.HoverBorderColor
+                    HoverColor: =gblAppStyles.TextInput.HoverColor
+                    HoverFill: =gblAppStyles.TextInput.HoverFill
+                    MaxLength: =500
+                    Mode: =TextMode.MultiLine
+                    OnChange: |
+                        =UpdateIf(
+                            colCdsIssueQuestions,
+                            ThisItem.'Issue Report Question' = colCdsIssueQuestions[@'Issue Report Question'],
+                            {appResponse: Self.Text}
+                        );
+                    PaddingBottom: =4
+                    PaddingLeft: =8
+                    PaddingRight: =8
+                    PaddingTop: =4
+                    PressedBorderColor: =gblAppStyles.TextInput.PressedBorderColor
+                    PressedColor: =gblAppStyles.TextInput.PressedColor
+                    PressedFill: =gblAppStyles.TextInput.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.TextInput.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.TextInput.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.TextInput.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.TextInput.RadiusTopRight
+                    Size: =gblAppStyles.TextInput.Size
+                    Width: =lblQuestion_Instructions.Width
+                    X: =lblQuestion_Instructions.X
+                    Y: =lblQuestion_Instructions.Height + lblQuestion_Instructions.Y + 6
+                    ZIndex: =2
+
+                lblQuestion_Instructions As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: ='Segoe UI'
+                    Height: =56
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PaddingBottom: =4
+                    PaddingLeft: =8
+                    PaddingRight: =8
+                    PaddingTop: =4
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: |-
+                        =gblAppStyles.Label.Size.Medium - If(
+                            Len(Self.Text) > 60,
+                            2,
+                            Len(Self.Text) > 75,
+                            4,
+                            0
+                        )
+                    Text: =ThisItem.Instructions
+                    Tooltip: =Self.Text
+                    Width: =Parent.TemplateWidth -Self.X - gblPadding.Page
+                    Wrap: =false
+                    X: =imgSection_Questions.X +imgSection_Questions.Width
+                    Y: =gblPadding.Page
+                    ZIndex: =3
+
+                imgSection_Questions As image:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "Icon for the questions section of this issue",
+                                varOOBTextId: "imgSection_Questions__locAccessibleLabel",
+                                varParam0: Blank(),
+                                varParam1: Blank(),
+                                varParam2: Blank()
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        staticLocalizations,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                If(
+                                    IsBlankOrError(varParam0),
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    ),
+                                    Coalesce(
+                                        Substitute(
+                                            Substitute(
+                                                Substitute(
+                                                    varLocalizedText,
+                                                    "{0}",
+                                                    Text(varParam0)
+                                                ),
+                                                "{1}",
+                                                Text(varParam1)
+                                            ),
+                                            "{2}",
+                                            Text(varParam2)
+                                        ),
+                                        varDefault
+                                    )
+                                )
+                            )
+                        )
+                    Image: |
+                        =With(
+                            {
+                                varImageRecord: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Long text"
+                                ),
+                                varColor: If(
+                                    Self.DisplayMode = DisplayMode.Disabled,
+                                    gblAppStyles.Icons.DisabledColor,
+                                    gblAppStyles.Icons.Color
+                                )
+                            },
+                            With(
+                                {
+                                    varImageData: Concatenate(
+                                        "data:image/svg+xml;utf8, ",
+                                        EncodeUrl(
+                                            Concatenate(
+                                                "<svg viewBox='",
+                                                varImageRecord.staticIconViewbox,
+                                                "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                varImageRecord.staticIconPath,
+                                                "' fill='#",
+                                                varColor,
+                                                "'/></svg>"
+                                            )
+                                        )
+                                    )
+                                },
+                                varImageData
+                            )
+                        )
+                    OnSelect: =
+                    PaddingBottom: =20
+                    PaddingLeft: =20
+                    PaddingRight: =16
+                    PaddingTop: =20
+                    Width: =72
+                    X: =0*0
+                    Y: =0*0
+                    ZIndex: =4
+
+                shpDivider_Questions As rectangle:
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Dividers.Elements
+                    Height: =1.5
+                    Visible: =false
+                    Width: =Parent.Width - Self.X
+                    X: =lblSection_Assignment.X
+                    Y: =Parent.Height
+                    ZIndex: =5
+
+    comMobileHeader_IssueReport As comMobileHeader:
+        Fill: =Parent.Fill
+        inputBackColor: =gblAppStyles.Icons.Color
+        inputDesktopBack: =true//Param("hostClientType") in ["web","desktop"] Or (Param("hostClientType") = "ios" And App.Width > 800)
+        inputHeaderText: |-
+            =With(
+                {
+                    varDefault: "Back to home 3",
+                    varOOBTextId: "_translateCommon__Backtohome",
+                    varParam0: Blank(),
+                    varParam1: Blank(),
+                    varParam2: Blank()
+                },
+                With(
+                    {
+                        varLocalizedText: LookUp(
+                            staticLocalizations,
+                            OOBTextId = varOOBTextId,
+                            LocalizedText
+                        )
+                    },
+                    If(
+                        IsBlankOrError(varParam0),
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        ),
+                        Coalesce(
+                            Substitute(
+                                Substitute(
+                                    Substitute(
+                                        varLocalizedText,
+                                        "{0}",
+                                        Text(varParam0)
+                                    ),
+                                    "{1}",
+                                    Text(varParam1)
+                                ),
+                                "{2}",
+                                Text(varParam2)
+                            ),
+                            varDefault
+                        )
+                    )
+                )
+            )
+        inputHeaderTextColor: =gblAppStyles.ButtonTransparent.Color
+        inputHeaderTextHoverColor: =gblAppStyles.ButtonTransparent.HoverColor
+        inputHeaderTextPressedColor: =gblAppStyles.ButtonTransparent.PressedColor
+        inputHeaderTextSize: =gblAppStyles.Label.Size.Large
+        inputNavigateToScreen: ='Insights Screen'
+        X: =0*0
+        Y: =0*0
+        ZIndex: =2
+
+    lblBlockEntry_IssueReport As label:
+        DisabledFill: =RGBA(0, 0, 0, .05)
+        DisplayMode: =DisplayMode.Disabled
+        Fill: =RGBA(0, 0, 0, .2)
+        Height: =Parent.Height
+        Size: =21
+        Text: =""
+        Visible: =locSavingRecord
+        Width: =Parent.Width
+        X: =0*0
+        Y: =0*0
+        ZIndex: =3
+

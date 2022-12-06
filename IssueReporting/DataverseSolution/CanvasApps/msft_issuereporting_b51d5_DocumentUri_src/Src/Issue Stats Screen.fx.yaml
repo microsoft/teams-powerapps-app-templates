@@ -1,0 +1,1674 @@
+"'Issue Stats Screen' As screen":
+    Fill: =gblAppStyles.Background.Fill
+    LoadingSpinner: =LoadingSpinner.Controls
+    LoadingSpinnerColor: =gblAppStyles.ButtonPrimary.Fill
+    OnVisible: |
+        =SetFocus(txtSearch_MyIssues);
+        ClearCollect(
+            colMyIssues,
+            AddColumns(
+                colCdsIssueReports,
+                "appTask",
+                LookUp(
+                    colPlannerTasks,
+                    colCdsIssueReports[@'Planner Task Id'] = colPlannerTasks[@id]
+                )
+            )
+        );
+        Clear(colUserProfileStaging);
+        ForAll(
+            Distinct(
+                colMyIssues.appTask,
+                appTask._assignments.userId
+            ),
+            Collect(
+                colUserProfileStaging,
+                Result.userId
+            )
+        );
+        ForAll(
+            Distinct(
+                colUserProfileStaging,
+                userId
+            ),
+            If(
+                Not(Result in colUserProfiles.appRef),
+                With(
+                    {varProfile: Microsoft365Users.UserProfileV2(Result)},
+                    Collect(
+                        colUserProfiles,
+                        {
+                            appRef: varProfile.id,
+                            appEmail: varProfile.userPrincipalName,
+                            appImg: Microsoft365Users.UserPhotoV2(Result),
+                            appDisplayName: varProfile.displayName
+                        }
+                    )
+                )
+            );    
+        );
+
+    cnvMyIssues As fluidGrid.fluidGridWithBlankCard:
+        BorderThickness: =0
+        Height: =Parent.Height - Self.Y
+        Width: =Parent.Width
+        Y: =txtSearch_MyIssues.Y + txtSearch_MyIssues.Height + gblPadding.Page
+        ZIndex: =1
+
+        dtcMyIssues_NotStarted As dataCard:
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            BorderThickness: =0
+            DisplayMode: =DisplayMode.Edit
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =galNotStarted.Y + galNotStarted.Height + gblPadding.Page
+            Width: =Parent.Width
+            X: =0
+            Y: =0
+            ZIndex: =1
+
+            galNotStarted As gallery.galleryVertical:
+                AccessibleLabel: |-
+                    =With(
+                        {
+                            varDefault: "Gallery of tasks you have submitted, which are not started",
+                            varOOBTextId: "galNotStarted__locAccessibleLabel",
+                            varParam0: Blank(),
+                            varParam1: Blank(),
+                            varParam2: Blank()
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    staticLocalizations,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            If(
+                                IsBlankOrError(varParam0),
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                ),
+                                Coalesce(
+                                    Substitute(
+                                        Substitute(
+                                            Substitute(
+                                                varLocalizedText,
+                                                "{0}",
+                                                Text(varParam0)
+                                            ),
+                                            "{1}",
+                                            Text(varParam1)
+                                        ),
+                                        "{2}",
+                                        Text(varParam2)
+                                    ),
+                                    varDefault
+                                )
+                            )
+                        )
+                    )
+                Height: |-
+                    =(RoundUp(
+                        CountRows(Self.AllItems) / Max(
+                            1,
+                            'Issue Stats Screen'.Size
+                        ),
+                        0
+                    ) * (Self.TemplateHeight + Self.TemplatePadding)) + Self.TemplatePadding
+                Items: |-
+                    =Search(
+                        SortByColumns(
+                            Filter(
+                                colMyIssues,
+                                appTask.percentComplete = 0
+                            ),
+                            "createdon",
+                            Ascending
+                        ),
+                        txtSearch_MyIssues.Text,
+                        "msft_name"
+                    )
+                Layout: =Layout.Vertical
+                LoadingSpinner: ='Issue Stats Screen'.LoadingSpinner
+                TabIndex: |-
+                    =If(
+                        true,
+                        -1,
+                        0
+                    )
+                TemplatePadding: =gblPadding.Page
+                TemplateSize: =185
+                Width: =Parent.Width
+                WrapCount: =Max(1,'Issue Stats Screen'.Size)
+                X: =0*0
+                Y: =lblNotStarted_Header.Y + lblNotStarted_Header.Height + gblPadding.Page
+                ZIndex: =1
+
+                btnNotStarted_Background As button:
+                    BorderColor: |
+                        =gblAppStyles.ButtonBackground.BorderColor
+                    BorderThickness: =gblAppStyles.ButtonBackground.BorderThickness
+                    Color: =gblAppStyles.ButtonBackground.Color
+                    DisabledBorderColor: =gblAppStyles.ButtonBackground.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.ButtonBackground.DisabledFill
+                    DisabledFill: =gblAppStyles.ButtonBackground.DisabledFill
+                    DisplayMode: =DisplayMode.Disabled
+                    Fill: =gblAppStyles.ButtonBackground.Fill
+                    FocusedBorderColor: =gblAppStyles.ButtonBackground.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.ButtonBackground.FocusedBorderThickness
+                    Height: =Parent.TemplateHeight
+                    HoverBorderColor: =gblAppStyles.ButtonBackground.HoverBorderColor
+                    HoverColor: =gblAppStyles.ButtonBackground.HoverColor
+                    HoverFill: =gblAppStyles.ButtonBackground.HoverFill
+                    OnSelect: =
+                    PressedBorderColor: =gblAppStyles.ButtonBackground.PressedBorderColor
+                    PressedColor: =gblAppStyles.ButtonBackground.PressedColor
+                    PressedFill: =gblAppStyles.ButtonBackground.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.ButtonBackground.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.ButtonBackground.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.ButtonBackground.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.ButtonBackground.RadiusTopRight
+                    Size: =gblAppStyles.ButtonBackground.Size
+                    Text: =lblNotStarted_Title.Text
+                    Width: =Parent.TemplateWidth
+                    X: =Parent.Width * 0
+                    Y: =Parent.Height * 0
+                    ZIndex: =1
+
+                imgNotStarted_PlannerIcon As image:
+                    Height: =imgNotStarted_Attachment.Height
+                    Image: |
+                        =With(
+                            {
+                                varImageRecord: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Not started"
+                                ),
+                                varColor: If(
+                                    Self.DisplayMode = DisplayMode.Disabled,
+                                    gblAppStyles.Icons.DisabledColor,
+                                    gblAppStyles.Icons.Color
+                                )
+                            },
+                            With(
+                                {
+                                    varImageData: Concatenate(
+                                        "data:image/svg+xml;utf8, ",
+                                        EncodeUrl(
+                                            Concatenate(
+                                                "<svg viewBox='",
+                                                varImageRecord.staticIconViewbox,
+                                                "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                varImageRecord.staticIconPath,
+                                                "' fill='#",
+                                                varColor,
+                                                "'/></svg>"
+                                            )
+                                        )
+                                    )
+                                },
+                                varImageData
+                            )
+                        )
+                    OnSelect: =Select(Parent)
+                    Width: =24
+                    X: =imgNotStarted_Attachment.X -Self.Width - 16
+                    Y: =imgNotStarted_Attachment.Y
+                    ZIndex: =2
+
+                imgNotStarted_Attachment As image:
+                    Height: =lblNotStarted_AttachmentCount.Height
+                    Image: |
+                        =With(
+                            {
+                                varImageRecord: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Attachment"
+                                ),
+                                varColor: If(
+                                    Self.DisplayMode = DisplayMode.Disabled,
+                                    gblAppStyles.Icons.DisabledColor,
+                                    gblAppStyles.Icons.Color
+                                )
+                            },
+                            With(
+                                {
+                                    varImageData: Concatenate(
+                                        "data:image/svg+xml;utf8, ",
+                                        EncodeUrl(
+                                            Concatenate(
+                                                "<svg viewBox='",
+                                                varImageRecord.staticIconViewbox,
+                                                "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                varImageRecord.staticIconPath,
+                                                "' fill='#",
+                                                varColor,
+                                                "'/></svg>"
+                                            )
+                                        )
+                                    )
+                                },
+                                varImageData
+                            )
+                        )
+                    OnSelect: =Select(Parent)
+                    Visible: =lblNotStarted_AttachmentCount.Visible
+                    Width: =lblNotStarted_AttachmentCount.Width
+                    X: =lblNotStarted_AttachmentCount.X - Self.Width
+                    Y: =lblNotStarted_AttachmentCount.Y
+                    ZIndex: =3
+
+                lblNotStarted_AttachmentCount As label:
+                    Align: =Align.Center
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =btnNotStarted_ViewTask.Height
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =Select(Parent)
+                    PaddingBottom: =0
+                    PaddingLeft: =0
+                    PaddingRight: =0
+                    PaddingTop: =0
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Large
+                    Text: =ThisItem.appTask.referenceCount
+                    Visible: =ThisItem.appTask.referenceCount > 0
+                    Width: =If(ThisItem.appTask.referenceCount > 0,24,0)
+                    X: =Parent.TemplateWidth - gblPadding.Page - Self.Width
+                    Y: =btnNotStarted_ViewTask.Y
+                    ZIndex: =4
+
+                btnNotStarted_ViewTask As button:
+                    AutoDisableOnSelect: =false
+                    BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+                    BorderThickness: =gblAppStyles.ButtonPrimary.BorderThickness
+                    Color: =gblAppStyles.ButtonPrimary.Color
+                    DisabledBorderColor: =gblAppStyles.ButtonPrimary.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.ButtonPrimary.DisabledColor
+                    DisabledFill: =gblAppStyles.ButtonPrimary.DisabledFill
+                    Fill: =gblAppStyles.ButtonPrimary.Fill
+                    FocusedBorderColor: =gblAppStyles.ButtonPrimary.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.ButtonPrimary.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =48
+                    HoverBorderColor: =gblAppStyles.ButtonPrimary.HoverBorderColor
+                    HoverColor: =gblAppStyles.ButtonPrimary.HoverColor
+                    HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+                    OnSelect: |-
+                        =Launch(
+                            Concatenate(
+                                "https://tasks.office.com/Home/Planner#/plantaskboard?",
+                                "groupId=",
+                                gblPlannerGroupId,
+                                "&planId=",
+                                gblPlannerPlanId,
+                                "&taskId=",
+                                ThisItem.'Planner Task Id'
+                            ),
+                            {},
+                            LaunchTarget.New
+                        )
+                    PaddingTop: =10
+                    PressedBorderColor: =gblAppStyles.ButtonPrimary.PressedBorderColor
+                    PressedColor: =gblAppStyles.ButtonPrimary.PressedColor
+                    PressedFill: =gblAppStyles.ButtonPrimary.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.ButtonPrimary.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+                    Text: |-
+                        =Concatenate(
+                            With(
+                                {
+                                    varDefault: "View in Planner",
+                                    varOOBTextId: "_translateCommon__ViewInTasks",
+                                    varParam0: Blank(),
+                                    varParam1: Blank(),
+                                    varParam2: Blank()
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            staticLocalizations,
+                                            OOBTextId = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    If(
+                                        IsBlankOrError(varParam0),
+                                        Coalesce(
+                                            varLocalizedText,
+                                            varDefault
+                                        ),
+                                        Coalesce(
+                                            Substitute(
+                                                Substitute(
+                                                    Substitute(
+                                                        varLocalizedText,
+                                                        "{0}",
+                                                        Text(varParam0)
+                                                    ),
+                                                    "{1}",
+                                                    Text(varParam1)
+                                                ),
+                                                "{2}",
+                                                Text(varParam2)
+                                            ),
+                                            varDefault
+                                        )
+                                    )
+                                )
+                            ),
+                            Char(10),
+                            Char(10),
+                            ThisItem.appTask.title
+                        )
+                    VerticalAlign: =VerticalAlign.Top
+                    Width: =180
+                    X: =imgNotStarted_CategoryIcon.X
+                    Y: =btnNotStarted_Background.Height - Self.Height - gblPadding.Page
+                    ZIndex: =6
+
+                lblNotStarted_CreatedOn As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =25
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =Select(Parent)
+                    PaddingBottom: =0
+                    PaddingLeft: =0
+                    PaddingRight: =0
+                    PaddingTop: =0
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =Text(ThisItem.'Created On',"[$-en-US]m/d h:mm AM/PM",gblUserLanguage)
+                    Width: =lblNotStarted_Title.Width
+                    X: =lblNotStarted_Title.X
+                    Y: =lblNotStarted_Title.Y + lblNotStarted_Title.Height
+                    ZIndex: =7
+
+                lblNotStarted_Title As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =44
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =Select(Parent)
+                    PaddingBottom: =8
+                    PaddingLeft: =0
+                    PaddingRight: =0
+                    PaddingTop: =0
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Large
+                    Text: =ThisItem.msft_name
+                    Width: =Parent.TemplateWidth - Self.X
+                    Wrap: =false
+                    X: =imgNotStarted_CategoryIcon.X +imgNotStarted_CategoryIcon.Width + gblPadding.Page
+                    Y: =imgNotStarted_CategoryIcon.Y
+                    ZIndex: =8
+
+                imgNotStarted_CategoryIcon As image:
+                    DisplayMode: =DisplayMode.View
+                    Fill: =Transparent
+                    Height: =60
+                    Image: =ThisItem.appIcon
+                    OnSelect: =Select(Parent)
+                    PaddingBottom: =10
+                    PaddingLeft: =10
+                    PaddingRight: =10
+                    PaddingTop: =10
+                    RadiusBottomLeft: =4
+                    RadiusBottomRight: =4
+                    RadiusTopLeft: =4
+                    RadiusTopRight: =4
+                    Width: =60
+                    X: =gblPadding.Page
+                    Y: =gblPadding.Page
+                    ZIndex: =9
+
+            lblNotStarted_Header As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                DisplayMode: =DisplayMode.View
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Semibold
+                Height: =48
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PaddingBottom: =0
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.ExtraLarge
+                Text: |-
+                    =With(
+                        {
+                            varDefault: "Not started",
+                            varOOBTextId: "lblNotStarted_Header__locText",
+                            varParam0: Blank(),
+                            varParam1: Blank(),
+                            varParam2: Blank()
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    staticLocalizations,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            If(
+                                IsBlankOrError(varParam0),
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                ),
+                                Coalesce(
+                                    Substitute(
+                                        Substitute(
+                                            Substitute(
+                                                varLocalizedText,
+                                                "{0}",
+                                                Text(varParam0)
+                                            ),
+                                            "{1}",
+                                            Text(varParam1)
+                                        ),
+                                        "{2}",
+                                        Text(varParam2)
+                                    ),
+                                    varDefault
+                                )
+                            )
+                        )
+                    )
+                Width: =Parent.Width -Self.X - gblPadding.Page
+                X: =gblPadding.Page
+                Y: =gblPadding.Page
+                ZIndex: =2
+
+        dtcMyIssues_InProgress As dataCard.blankCard:
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            DisplayMode: =DisplayMode.Edit
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =galInProgress.Y + galInProgress.Height + gblPadding.Page
+            Width: =Parent.Width
+            X: =0
+            Y: =1
+            ZIndex: =2
+
+            galInProgress As gallery.galleryVertical:
+                AccessibleLabel: |-
+                    =With(
+                        {
+                            varDefault: "Gallery of tasks you have submitted, which are in progress",
+                            varOOBTextId: "galInProgress__locAccessibleLabel",
+                            varParam0: Blank(),
+                            varParam1: Blank(),
+                            varParam2: Blank()
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    staticLocalizations,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            If(
+                                IsBlankOrError(varParam0),
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                ),
+                                Coalesce(
+                                    Substitute(
+                                        Substitute(
+                                            Substitute(
+                                                varLocalizedText,
+                                                "{0}",
+                                                Text(varParam0)
+                                            ),
+                                            "{1}",
+                                            Text(varParam1)
+                                        ),
+                                        "{2}",
+                                        Text(varParam2)
+                                    ),
+                                    varDefault
+                                )
+                            )
+                        )
+                    )
+                Height: |-
+                    =(RoundUp(
+                        CountRows(Self.AllItems) / Max(
+                            1,
+                            'Issue Stats Screen'.Size
+                        ),
+                        0
+                    ) * (Self.TemplateHeight + Self.TemplatePadding)) + Self.TemplatePadding
+                Items: |-
+                    =Search(
+                        SortByColumns(
+                            Filter(
+                                colMyIssues,
+                                appTask.percentComplete = 50
+                            ),
+                            "createdon",
+                            Ascending
+                        ),
+                        txtSearch_MyIssues.Text,
+                        "msft_name"
+                    )
+                Layout: =Layout.Vertical
+                LoadingSpinner: ='Issue Stats Screen'.LoadingSpinner
+                TabIndex: |-
+                    =If(
+                        true,
+                        -1,
+                        0
+                    )
+                TemplatePadding: =gblPadding.Page
+                TemplateSize: =185
+                Width: =Parent.Width
+                WrapCount: =Max(1,'Issue Stats Screen'.Size)
+                X: =0*0
+                Y: =lblInProgress_Header.Y + lblInProgress_Header.Height + gblPadding.Page
+                ZIndex: =1
+
+                btnInProgress_Background As button:
+                    BorderColor: |
+                        =gblAppStyles.ButtonBackground.BorderColor
+                    BorderThickness: =gblAppStyles.ButtonBackground.BorderThickness
+                    Color: =gblAppStyles.ButtonBackground.Color
+                    DisabledBorderColor: =gblAppStyles.ButtonBackground.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.ButtonBackground.DisabledFill
+                    DisabledFill: =gblAppStyles.ButtonBackground.DisabledFill
+                    DisplayMode: =DisplayMode.Disabled
+                    Fill: =gblAppStyles.ButtonBackground.Fill
+                    FocusedBorderColor: =gblAppStyles.ButtonBackground.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.ButtonBackground.FocusedBorderThickness
+                    Height: =Parent.TemplateHeight
+                    HoverBorderColor: =gblAppStyles.ButtonBackground.HoverBorderColor
+                    HoverColor: =gblAppStyles.ButtonBackground.HoverColor
+                    HoverFill: =gblAppStyles.ButtonBackground.HoverFill
+                    OnSelect: =
+                    PressedBorderColor: =gblAppStyles.ButtonBackground.PressedBorderColor
+                    PressedColor: =gblAppStyles.ButtonBackground.PressedColor
+                    PressedFill: =gblAppStyles.ButtonBackground.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.ButtonBackground.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.ButtonBackground.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.ButtonBackground.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.ButtonBackground.RadiusTopRight
+                    Size: =gblAppStyles.ButtonBackground.Size
+                    Text: =lblInProgress_Title.Text
+                    Width: =Parent.TemplateWidth
+                    X: =Parent.Width * 0
+                    Y: =Parent.Height * 0
+                    ZIndex: =1
+
+                imgInProgress_PlannerIcon As image:
+                    Height: =imgInProgress_Attachment.Height
+                    Image: |
+                        =With(
+                            {
+                                varImageRecord: LookUp(
+                                    staticIcons,
+                                    staticIconName = "In progress"
+                                ),
+                                varColor: If(
+                                    Self.DisplayMode = DisplayMode.Disabled,
+                                    gblAppStyles.Icons.DisabledColor,
+                                    gblAppStyles.Icons.Color
+                                )
+                            },
+                            With(
+                                {
+                                    varImageData: Concatenate(
+                                        "data:image/svg+xml;utf8, ",
+                                        EncodeUrl(
+                                            Concatenate(
+                                                "<svg viewBox='",
+                                                varImageRecord.staticIconViewbox,
+                                                "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                varImageRecord.staticIconPath,
+                                                "' fill='#",
+                                                varColor,
+                                                "'/></svg>"
+                                            )
+                                        )
+                                    )
+                                },
+                                varImageData
+                            )
+                        )
+                    OnSelect: =Select(Parent)
+                    Width: =24
+                    X: =imgInProgress_Attachment.X -Self.Width - 16
+                    Y: =imgInProgress_Attachment.Y
+                    ZIndex: =2
+
+                imgInProgress_Attachment As image:
+                    Height: =lblInProgress_AttachmentCount.Height
+                    Image: |
+                        =With(
+                            {
+                                varImageRecord: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Attachment"
+                                ),
+                                varColor: If(
+                                    Self.DisplayMode = DisplayMode.Disabled,
+                                    gblAppStyles.Icons.DisabledColor,
+                                    gblAppStyles.Icons.Color
+                                )
+                            },
+                            With(
+                                {
+                                    varImageData: Concatenate(
+                                        "data:image/svg+xml;utf8, ",
+                                        EncodeUrl(
+                                            Concatenate(
+                                                "<svg viewBox='",
+                                                varImageRecord.staticIconViewbox,
+                                                "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                varImageRecord.staticIconPath,
+                                                "' fill='#",
+                                                varColor,
+                                                "'/></svg>"
+                                            )
+                                        )
+                                    )
+                                },
+                                varImageData
+                            )
+                        )
+                    OnSelect: =Select(Parent)
+                    Visible: =lblInProgress_AttachmentCount.Visible
+                    Width: =lblInProgress_AttachmentCount.Width
+                    X: =lblInProgress_AttachmentCount.X - Self.Width
+                    Y: =lblInProgress_AttachmentCount.Y
+                    ZIndex: =3
+
+                lblInProgress_AttachmentCount As label:
+                    Align: =Align.Center
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =btnInProgress_ViewTask.Height
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =Select(Parent)
+                    PaddingBottom: =0
+                    PaddingLeft: =0
+                    PaddingRight: =0
+                    PaddingTop: =0
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Large
+                    Text: =ThisItem.appTask.referenceCount
+                    Visible: =ThisItem.appTask.referenceCount > 0
+                    Width: =If(ThisItem.appTask.referenceCount > 0,24,0)
+                    X: =Parent.TemplateWidth - gblPadding.Page - Self.Width
+                    Y: =btnInProgress_ViewTask.Y
+                    ZIndex: =4
+
+                btnInProgress_ViewTask As button:
+                    AutoDisableOnSelect: =false
+                    BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+                    BorderThickness: =gblAppStyles.ButtonPrimary.BorderThickness
+                    Color: =gblAppStyles.ButtonPrimary.Color
+                    DisabledBorderColor: =gblAppStyles.ButtonPrimary.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.ButtonPrimary.DisabledColor
+                    DisabledFill: =gblAppStyles.ButtonPrimary.DisabledFill
+                    Fill: =gblAppStyles.ButtonPrimary.Fill
+                    FocusedBorderColor: =gblAppStyles.ButtonPrimary.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.ButtonPrimary.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =48
+                    HoverBorderColor: =gblAppStyles.ButtonPrimary.HoverBorderColor
+                    HoverColor: =gblAppStyles.ButtonPrimary.HoverColor
+                    HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+                    OnSelect: |-
+                        =Launch(
+                            Concatenate(
+                                "https://tasks.office.com/Home/Planner#/plantaskboard?",
+                                "groupId=",
+                                gblPlannerGroupId,
+                                "&planId=",
+                                gblPlannerPlanId,
+                                "&taskId=",
+                                ThisItem.'Planner Task Id'
+                            ),
+                            {},
+                            LaunchTarget.New
+                        )
+                    PaddingTop: =10
+                    PressedBorderColor: =gblAppStyles.ButtonPrimary.PressedBorderColor
+                    PressedColor: =gblAppStyles.ButtonPrimary.PressedColor
+                    PressedFill: =gblAppStyles.ButtonPrimary.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.ButtonPrimary.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+                    Text: |-
+                        =Concatenate(
+                            With(
+                                {
+                                    varDefault: "View in Planner",
+                                    varOOBTextId: "_translateCommon__ViewInTasks",
+                                    varParam0: Blank(),
+                                    varParam1: Blank(),
+                                    varParam2: Blank()
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            staticLocalizations,
+                                            OOBTextId = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    If(
+                                        IsBlankOrError(varParam0),
+                                        Coalesce(
+                                            varLocalizedText,
+                                            varDefault
+                                        ),
+                                        Coalesce(
+                                            Substitute(
+                                                Substitute(
+                                                    Substitute(
+                                                        varLocalizedText,
+                                                        "{0}",
+                                                        Text(varParam0)
+                                                    ),
+                                                    "{1}",
+                                                    Text(varParam1)
+                                                ),
+                                                "{2}",
+                                                Text(varParam2)
+                                            ),
+                                            varDefault
+                                        )
+                                    )
+                                )
+                            ),
+                            Char(10),
+                            Char(10),
+                            ThisItem.appTask.title
+                        )
+                    VerticalAlign: =VerticalAlign.Top
+                    Width: =180
+                    X: =imgInProgress_CategoryIcon.X
+                    Y: =btnInProgress_Background.Height - Self.Height - gblPadding.Page
+                    ZIndex: =6
+
+                lblInProgress_CreatedOn As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =25
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =Select(Parent)
+                    PaddingBottom: =0
+                    PaddingLeft: =0
+                    PaddingRight: =0
+                    PaddingTop: =0
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =Text(ThisItem.'Created On',"[$-en-US]m/d h:mm AM/PM",gblUserLanguage)
+                    Width: =lblInProgress_Title.Width
+                    X: =lblInProgress_Title.X
+                    Y: =lblInProgress_Title.Y + lblInProgress_Title.Height
+                    ZIndex: =7
+
+                lblInProgress_Title As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =30
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =Select(Parent)
+                    PaddingBottom: =8
+                    PaddingLeft: =0
+                    PaddingRight: =0
+                    PaddingTop: =0
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Large
+                    Text: =ThisItem.msft_name
+                    Width: =Parent.TemplateWidth - Self.X
+                    X: =imgInProgress_CategoryIcon.X +imgInProgress_CategoryIcon.Width + gblPadding.Page
+                    Y: =imgInProgress_CategoryIcon.Y
+                    ZIndex: =8
+
+                imgInProgress_CategoryIcon As image:
+                    DisplayMode: =DisplayMode.View
+                    Fill: =Transparent
+                    Height: =60
+                    Image: =ThisItem.appIcon
+                    OnSelect: =Select(Parent)
+                    PaddingBottom: =10
+                    PaddingLeft: =10
+                    PaddingRight: =10
+                    PaddingTop: =10
+                    RadiusBottomLeft: =4
+                    RadiusBottomRight: =4
+                    RadiusTopLeft: =4
+                    RadiusTopRight: =4
+                    Width: =60
+                    X: =gblPadding.Page
+                    Y: =gblPadding.Page
+                    ZIndex: =9
+
+            lblInProgress_Header As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                DisplayMode: =DisplayMode.View
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Semibold
+                Height: =48
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PaddingBottom: =0
+                PaddingTop: =0
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.ExtraLarge
+                Text: |-
+                    =With(
+                        {
+                            varDefault: "In progress",
+                            varOOBTextId: "lblInProgress_Header__locText",
+                            varParam0: Blank(),
+                            varParam1: Blank(),
+                            varParam2: Blank()
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    staticLocalizations,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            If(
+                                IsBlankOrError(varParam0),
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                ),
+                                Coalesce(
+                                    Substitute(
+                                        Substitute(
+                                            Substitute(
+                                                varLocalizedText,
+                                                "{0}",
+                                                Text(varParam0)
+                                            ),
+                                            "{1}",
+                                            Text(varParam1)
+                                        ),
+                                        "{2}",
+                                        Text(varParam2)
+                                    ),
+                                    varDefault
+                                )
+                            )
+                        )
+                    )
+                Width: =Parent.Width -Self.X - gblPadding.Page
+                X: =gblPadding.Page
+                Y: =gblPadding.Page
+                ZIndex: =2
+
+        dtcMyIssues_Completed As dataCard.blankCard:
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            DisplayMode: =DisplayMode.Edit
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =galCompleted.Y + galCompleted.Height + gblPadding.Page
+            Width: =Parent.Width
+            X: =0
+            Y: =2
+            ZIndex: =3
+
+            galCompleted As gallery.galleryVertical:
+                AccessibleLabel: |-
+                    =With(
+                        {
+                            varDefault: "Gallery of tasks you have submitted, which are completed",
+                            varOOBTextId: "galCompleted__locAccessibleLabel",
+                            varParam0: Blank(),
+                            varParam1: Blank(),
+                            varParam2: Blank()
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    staticLocalizations,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            If(
+                                IsBlankOrError(varParam0),
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                ),
+                                Coalesce(
+                                    Substitute(
+                                        Substitute(
+                                            Substitute(
+                                                varLocalizedText,
+                                                "{0}",
+                                                Text(varParam0)
+                                            ),
+                                            "{1}",
+                                            Text(varParam1)
+                                        ),
+                                        "{2}",
+                                        Text(varParam2)
+                                    ),
+                                    varDefault
+                                )
+                            )
+                        )
+                    )
+                Height: |-
+                    =(RoundUp(
+                        CountRows(Self.AllItems) / Max(
+                            1,
+                            'Issue Stats Screen'.Size
+                        ),
+                        0
+                    ) * (Self.TemplateHeight + Self.TemplatePadding)) + Self.TemplatePadding
+                Items: |-
+                    =Search(
+                        SortByColumns(
+                            Filter(
+                                colMyIssues,
+                                appTask.percentComplete = 100
+                            ),
+                            "createdon",
+                            Ascending
+                        ),
+                        txtSearch_MyIssues.Text,
+                        "msft_name"
+                    )
+                Layout: =Layout.Vertical
+                LoadingSpinner: ='Issue Stats Screen'.LoadingSpinner
+                TabIndex: |-
+                    =If(
+                        true,
+                        -1,
+                        0
+                    )
+                TemplatePadding: =gblPadding.Page
+                TemplateSize: =185
+                Width: =Parent.Width
+                WrapCount: =Max(1,'Issue Stats Screen'.Size)
+                X: =0*0
+                Y: =lblCompleted_Header.Y + lblCompleted_Header.Height + gblPadding.Page
+                ZIndex: =1
+
+                btnCompleted_Background As button:
+                    BorderColor: |
+                        =gblAppStyles.ButtonBackground.BorderColor
+                    BorderThickness: =gblAppStyles.ButtonBackground.BorderThickness
+                    Color: =gblAppStyles.ButtonBackground.Color
+                    DisabledBorderColor: =gblAppStyles.ButtonBackground.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.ButtonBackground.DisabledFill
+                    DisabledFill: =gblAppStyles.ButtonBackground.DisabledFill
+                    DisplayMode: =DisplayMode.Disabled
+                    Fill: =gblAppStyles.ButtonBackground.Fill
+                    FocusedBorderColor: =gblAppStyles.ButtonBackground.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.ButtonBackground.FocusedBorderThickness
+                    Height: =Parent.TemplateHeight
+                    HoverBorderColor: =gblAppStyles.ButtonBackground.HoverBorderColor
+                    HoverColor: =gblAppStyles.ButtonBackground.HoverColor
+                    HoverFill: =gblAppStyles.ButtonBackground.HoverFill
+                    OnSelect: =
+                    PressedBorderColor: =gblAppStyles.ButtonBackground.PressedBorderColor
+                    PressedColor: =gblAppStyles.ButtonBackground.PressedColor
+                    PressedFill: =gblAppStyles.ButtonBackground.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.ButtonBackground.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.ButtonBackground.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.ButtonBackground.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.ButtonBackground.RadiusTopRight
+                    Size: =gblAppStyles.ButtonBackground.Size
+                    Text: =lblCompleted_Title.Text
+                    Width: =Parent.TemplateWidth
+                    X: =Parent.Width * 0
+                    Y: =Parent.Height * 0
+                    ZIndex: =1
+
+                imgCompleted_PlannerIcon As image:
+                    Height: =imgCompleted_Attachment.Height
+                    Image: |
+                        =With(
+                            {
+                                varImageRecord: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Completed"
+                                ),
+                                varColor: If(
+                                    Self.DisplayMode = DisplayMode.Disabled,
+                                    gblAppStyles.Icons.DisabledColor,
+                                    gblAppStyles.Icons.Color
+                                )
+                            },
+                            With(
+                                {
+                                    varImageData: Concatenate(
+                                        "data:image/svg+xml;utf8, ",
+                                        EncodeUrl(
+                                            Concatenate(
+                                                "<svg viewBox='",
+                                                varImageRecord.staticIconViewbox,
+                                                "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                varImageRecord.staticIconPath,
+                                                "' fill='#",
+                                                varColor,
+                                                "'/></svg>"
+                                            )
+                                        )
+                                    )
+                                },
+                                varImageData
+                            )
+                        )
+                    OnSelect: =Select(Parent)
+                    Width: =24
+                    X: =imgCompleted_Attachment.X -Self.Width - 16
+                    Y: =imgCompleted_Attachment.Y
+                    ZIndex: =2
+
+                imgCompleted_Attachment As image:
+                    Height: =lblCompleted_AttachmentCount.Height
+                    Image: |
+                        =With(
+                            {
+                                varImageRecord: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Attachment"
+                                ),
+                                varColor: If(
+                                    Self.DisplayMode = DisplayMode.Disabled,
+                                    gblAppStyles.Icons.DisabledColor,
+                                    gblAppStyles.Icons.Color
+                                )
+                            },
+                            With(
+                                {
+                                    varImageData: Concatenate(
+                                        "data:image/svg+xml;utf8, ",
+                                        EncodeUrl(
+                                            Concatenate(
+                                                "<svg viewBox='",
+                                                varImageRecord.staticIconViewbox,
+                                                "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                varImageRecord.staticIconPath,
+                                                "' fill='#",
+                                                varColor,
+                                                "'/></svg>"
+                                            )
+                                        )
+                                    )
+                                },
+                                varImageData
+                            )
+                        )
+                    OnSelect: =Select(Parent)
+                    Visible: =lblCompleted_AttachmentCount.Visible
+                    Width: =lblCompleted_AttachmentCount.Width
+                    X: =lblCompleted_AttachmentCount.X - Self.Width
+                    Y: =lblCompleted_AttachmentCount.Y
+                    ZIndex: =3
+
+                lblCompleted_AttachmentCount As label:
+                    Align: =Align.Center
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =btnCompleted_ViewTask.Height
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =Select(Parent)
+                    PaddingBottom: =0
+                    PaddingLeft: =0
+                    PaddingRight: =0
+                    PaddingTop: =0
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Large
+                    Text: =ThisItem.appTask.referenceCount
+                    Visible: =ThisItem.appTask.referenceCount > 0
+                    Width: =If(ThisItem.appTask.referenceCount > 0,24,0)
+                    X: =Parent.TemplateWidth - gblPadding.Page - Self.Width
+                    Y: =btnCompleted_ViewTask.Y
+                    ZIndex: =4
+
+                btnCompleted_ViewTask As button:
+                    AutoDisableOnSelect: =false
+                    BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+                    BorderThickness: =gblAppStyles.ButtonPrimary.BorderThickness
+                    Color: =gblAppStyles.ButtonPrimary.Color
+                    DisabledBorderColor: =gblAppStyles.ButtonPrimary.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.ButtonPrimary.DisabledColor
+                    DisabledFill: =gblAppStyles.ButtonPrimary.DisabledFill
+                    Fill: =gblAppStyles.ButtonPrimary.Fill
+                    FocusedBorderColor: =gblAppStyles.ButtonPrimary.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.ButtonPrimary.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =48
+                    HoverBorderColor: =gblAppStyles.ButtonPrimary.HoverBorderColor
+                    HoverColor: =gblAppStyles.ButtonPrimary.HoverColor
+                    HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+                    OnSelect: |-
+                        =Launch(
+                            Concatenate(
+                                "https://tasks.office.com/Home/Planner#/plantaskboard?",
+                                "groupId=",
+                                gblPlannerGroupId,
+                                "&planId=",
+                                gblPlannerPlanId,
+                                "&taskId=",
+                                ThisItem.'Planner Task Id'
+                            ),
+                            {},
+                            LaunchTarget.New
+                        )
+                    PaddingTop: =10
+                    PressedBorderColor: =gblAppStyles.ButtonPrimary.PressedBorderColor
+                    PressedColor: =gblAppStyles.ButtonPrimary.PressedColor
+                    PressedFill: =gblAppStyles.ButtonPrimary.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.ButtonPrimary.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+                    Text: |-
+                        =Concatenate(
+                            With(
+                                {
+                                    varDefault: "View in Planner",
+                                    varOOBTextId: "_translateCommon__ViewInTasks",
+                                    varParam0: Blank(),
+                                    varParam1: Blank(),
+                                    varParam2: Blank()
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            staticLocalizations,
+                                            OOBTextId = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    If(
+                                        IsBlankOrError(varParam0),
+                                        Coalesce(
+                                            varLocalizedText,
+                                            varDefault
+                                        ),
+                                        Coalesce(
+                                            Substitute(
+                                                Substitute(
+                                                    Substitute(
+                                                        varLocalizedText,
+                                                        "{0}",
+                                                        Text(varParam0)
+                                                    ),
+                                                    "{1}",
+                                                    Text(varParam1)
+                                                ),
+                                                "{2}",
+                                                Text(varParam2)
+                                            ),
+                                            varDefault
+                                        )
+                                    )
+                                )
+                            ),
+                            Char(10),
+                            Char(10),
+                            ThisItem.appTask.title
+                        )
+                    Tooltip: =Concatenate(ThisItem.appTask.title,Char(10),Self.Text)
+                    VerticalAlign: =VerticalAlign.Top
+                    Width: =180
+                    X: =imgCompleted_CategoryIcon.X
+                    Y: =btnCompleted_Background.Height - Self.Height - gblPadding.Page
+                    ZIndex: =6
+
+                lblCompleted_CreatedOn As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =25
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =Select(Parent)
+                    PaddingBottom: =0
+                    PaddingLeft: =0
+                    PaddingRight: =0
+                    PaddingTop: =0
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =Text(ThisItem.'Created On',"[$-en-US]m/d h:mm AM/PM",gblUserLanguage)
+                    Width: =lblCompleted_Title.Width
+                    X: =lblCompleted_Title.X
+                    Y: =lblCompleted_Title.Y + lblCompleted_Title.Height
+                    ZIndex: =7
+
+                lblCompleted_Title As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =30
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =Select(Parent)
+                    PaddingBottom: =8
+                    PaddingLeft: =0
+                    PaddingRight: =0
+                    PaddingTop: =0
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Large
+                    Text: =ThisItem.msft_name
+                    Width: =Parent.TemplateWidth - Self.X
+                    X: =imgCompleted_CategoryIcon.X +imgCompleted_CategoryIcon.Width + gblPadding.Page
+                    Y: =imgCompleted_CategoryIcon.Y
+                    ZIndex: =8
+
+                imgCompleted_CategoryIcon As image:
+                    DisplayMode: =DisplayMode.View
+                    Fill: =Transparent
+                    Height: =60
+                    Image: =ThisItem.appIcon
+                    OnSelect: =Select(Parent)
+                    PaddingBottom: =10
+                    PaddingLeft: =10
+                    PaddingRight: =10
+                    PaddingTop: =10
+                    RadiusBottomLeft: =4
+                    RadiusBottomRight: =4
+                    RadiusTopLeft: =4
+                    RadiusTopRight: =4
+                    Width: =60
+                    X: =gblPadding.Page
+                    Y: =gblPadding.Page
+                    ZIndex: =9
+
+            lblCompleted_Header As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                DisplayMode: =DisplayMode.View
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Semibold
+                Height: =48
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.ExtraLarge
+                Text: |-
+                    =With(
+                        {
+                            varDefault: "Completed",
+                            varOOBTextId: "lblCompleted_Header__locText",
+                            varParam0: Blank(),
+                            varParam1: Blank(),
+                            varParam2: Blank()
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    staticLocalizations,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            If(
+                                IsBlankOrError(varParam0),
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                ),
+                                Coalesce(
+                                    Substitute(
+                                        Substitute(
+                                            Substitute(
+                                                varLocalizedText,
+                                                "{0}",
+                                                Text(varParam0)
+                                            ),
+                                            "{1}",
+                                            Text(varParam1)
+                                        ),
+                                        "{2}",
+                                        Text(varParam2)
+                                    ),
+                                    varDefault
+                                )
+                            )
+                        )
+                    )
+                Width: =Parent.Width -Self.X - gblPadding.Page
+                X: =gblPadding.Page
+                Y: =gblPadding.Page
+                ZIndex: =2
+
+    txtSearch_MyIssues As text:
+        AccessibleLabel: |-
+            =With(
+                {
+                    varDefault: "Search for issues",
+                    varOOBTextId: "txtSearch_MyIssues__locAccessibleLabel",
+                    varParam0: Blank(),
+                    varParam1: Blank(),
+                    varParam2: Blank()
+                },
+                With(
+                    {
+                        varLocalizedText: LookUp(
+                            staticLocalizations,
+                            OOBTextId = varOOBTextId,
+                            LocalizedText
+                        )
+                    },
+                    If(
+                        IsBlankOrError(varParam0),
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        ),
+                        Coalesce(
+                            Substitute(
+                                Substitute(
+                                    Substitute(
+                                        varLocalizedText,
+                                        "{0}",
+                                        Text(varParam0)
+                                    ),
+                                    "{1}",
+                                    Text(varParam1)
+                                ),
+                                "{2}",
+                                Text(varParam2)
+                            ),
+                            varDefault
+                        )
+                    )
+                )
+            )
+        BorderColor: =gblAppStyles.TextInput.BorderColor
+        BorderThickness: =gblAppStyles.TextInput.BorderThickness
+        Color: =gblAppStyles.TextInput.Color
+        Default: =""
+        DelayOutput: =true
+        DisabledBorderColor: =gblAppStyles.TextInput.DisabledBorderColor
+        DisabledColor: =gblAppStyles.TextInput.DisabledColor
+        DisabledFill: =gblAppStyles.TextInput.DisabledFill
+        Fill: =gblAppStyles.TextInput.Fill
+        FocusedBorderColor: =gblAppStyles.TextInput.FocusedBorderColor
+        FocusedBorderThickness: =gblAppStyles.TextInput.FocusedBorderThickness
+        Font: ='Segoe UI'
+        Height: =48
+        HintText: |-
+            =With(
+                {
+                    varDefault: "Search issues",
+                    varOOBTextId: "txtSearch_MyIssues__locHintText",
+                    varParam0: Blank(),
+                    varParam1: Blank(),
+                    varParam2: Blank()
+                },
+                With(
+                    {
+                        varLocalizedText: LookUp(
+                            staticLocalizations,
+                            OOBTextId = varOOBTextId,
+                            LocalizedText
+                        )
+                    },
+                    If(
+                        IsBlankOrError(varParam0),
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        ),
+                        Coalesce(
+                            Substitute(
+                                Substitute(
+                                    Substitute(
+                                        varLocalizedText,
+                                        "{0}",
+                                        Text(varParam0)
+                                    ),
+                                    "{1}",
+                                    Text(varParam1)
+                                ),
+                                "{2}",
+                                Text(varParam2)
+                            ),
+                            varDefault
+                        )
+                    )
+                )
+            )
+        HoverBorderColor: =gblAppStyles.TextInput.HoverBorderColor
+        HoverColor: =gblAppStyles.TextInput.HoverColor
+        HoverFill: =gblAppStyles.TextInput.HoverFill
+        PaddingBottom: =4
+        PaddingLeft: =8
+        PaddingRight: =8
+        PaddingTop: =4
+        PressedBorderColor: =gblAppStyles.TextInput.PressedBorderColor
+        PressedColor: =gblAppStyles.TextInput.PressedColor
+        PressedFill: =gblAppStyles.TextInput.PressedFill
+        RadiusBottomLeft: =gblAppStyles.TextInput.RadiusBottomLeft
+        RadiusBottomRight: =gblAppStyles.TextInput.RadiusBottomRight
+        RadiusTopLeft: =gblAppStyles.TextInput.RadiusTopLeft
+        RadiusTopRight: =gblAppStyles.TextInput.RadiusTopRight
+        Size: =gblAppStyles.TextInput.Size
+        Width: =Parent.Width - Self.X -gblPadding.Page
+        X: =gblPadding.Page
+        Y: =comMobileHeader_MyIssues.Y + comMobileHeader_MyIssues.Height + gblPadding.Page
+        ZIndex: =2
+
+    comMobileHeader_MyIssues As comMobileHeader:
+        inputBackColor: =gblAppStyles.Icons.Color
+        inputHeaderText: |-
+            =With(
+                {
+                    varDefault: "Back to home",
+                    varOOBTextId: "_translateCommon__Backtohome",
+                    varParam0: Blank(),
+                    varParam1: Blank(),
+                    varParam2: Blank()
+                },
+                With(
+                    {
+                        varLocalizedText: LookUp(
+                            staticLocalizations,
+                            OOBTextId = varOOBTextId,
+                            LocalizedText
+                        )
+                    },
+                    If(
+                        IsBlankOrError(varParam0),
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        ),
+                        Coalesce(
+                            Substitute(
+                                Substitute(
+                                    Substitute(
+                                        varLocalizedText,
+                                        "{0}",
+                                        Text(varParam0)
+                                    ),
+                                    "{1}",
+                                    Text(varParam1)
+                                ),
+                                "{2}",
+                                Text(varParam2)
+                            ),
+                            varDefault
+                        )
+                    )
+                )
+            )
+        inputHeaderTextColor: =gblAppStyles.ButtonTransparent.Color
+        inputHeaderTextHoverColor: =gblAppStyles.ButtonTransparent.HoverColor
+        inputHeaderTextPressedColor: =gblAppStyles.ButtonTransparent.PressedColor
+        inputHeaderTextSize: =gblAppStyles.Label.Size.Large
+        inputNavigateToScreen: ='Insights Screen'
+        X: =0*0
+        Y: =0*0
+        ZIndex: =3
+

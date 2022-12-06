@@ -1,0 +1,163 @@
+App As appinfo:
+    BackEnabled: =false
+    MinScreenHeight: =960
+    OnStart: |
+        =/**READ ME START**
+        Welcome to the app!
+        Please note that modifying anything in this app may result in unexpected behavior. Please do so, at your own risk. As of this writing, the app has been documented in minimal fashion with annotations in functions, and the Documentation linked on the Help screen.
+        In subsequent releases, this app will be updated to include helpful annotations and documentation to support users in customizing the app, and understanding the patterns/functions included here within.
+        **READ ME END**/
+        // App Loading
+        Set(
+            gblAppLoaded,
+            false
+        );
+        // Localization
+        // ** NOTE - This app uses a different static table name and collection name than other MSFT apps **
+        // User Language
+        Concurrent(
+            Set(
+                gblUserLanguage,
+                Switch(
+                    Left(
+                        Language(),
+                        2
+                    ),
+                    "de",
+                    "de-DE",
+                    "en",
+                    "en-US",
+                    "es",
+                    "es-ES",
+                    "fr",
+                    "fr-FR",
+                    "it",
+                    "it-IT",
+                    "ja",
+                    "ja-JP",
+                    "nl",
+                    "nl-NL",
+                    "pt",
+                    "pt-BR",
+                // Default
+                    "en-US"
+                )
+            ),// User Name
+            Set(
+                gblUserFirstName,
+                Left(
+                    User().FullName,
+                    Find(
+                        " ",
+                        User().FullName
+                    ) - 1
+                )
+            )
+        );
+        // Build Localization Collection, with User Language
+        ClearCollect(
+            staticLocalizations,
+            Filter(
+                staticLocalizationsSource,
+                LanguageTag = gblUserLanguage
+            )
+        );
+        // App Settings
+        Set(
+            gblRecordSettings,
+            LookUp(
+                'Issue Report Settings','Parameter (Channel Id)'= Param("channelId")
+        
+                //true// Gets first settings record, can be modified to get specific ones, if needed
+            )
+        );
+        // App Variables
+        Concurrent(
+            Set(
+                gblPlannerPlanId,
+                gblRecordSettings.'Parameter (Planner Id)'
+            ),
+            Set(
+                gblPlannerGroupId,
+                gblRecordSettings.'Parameter (Team Id)'
+            ),
+            Set(
+                gblSettingSharePointLocation,
+                gblRecordSettings.'Parameter (SharePoint Location)'
+            ),
+            Set(
+                gblPadding,
+                {
+                    Page: 20,
+                    ButtonShape: 12,
+                    ButtonText: 24,
+                    Container: 32
+                }
+            ),
+            Set(
+                gblAppBoundaryWidth,
+                Switch(
+                    Param("hostClientType"),
+                    "web",
+                    800,
+                    "desktop",
+                    800,
+                    1280
+                )
+            ),
+            Set(
+                gblToday,
+                Today()
+            ),
+            ClearCollect(
+                colIcons,
+                [
+                    Icon_Category_Beauty,
+                    Icon_Category_Bike,
+                    Icon_Category_Bus,
+                    Icon_Category_Car,
+                    Icon_Category_Car1,
+                    Icon_Category_Car2,
+                    Icon_Category_Clothing,
+                    Icon_Category_Communication,
+                    Icon_Category_External,
+                    Icon_Category_Factory,
+                    Icon_Category_Focus,
+                    Icon_Category_Food,
+                    Icon_Category_Gifts,
+                    Icon_Category_Globe,
+                    Icon_Category_Hardware,
+                    Icon_Category_Home,
+                    Icon_Category_Index,
+                    Icon_Category_Interior,
+                    Icon_Category_Inventory,
+                    Icon_Category_Office,
+                    Icon_Category_Organization,
+                    Icon_Category_Outdoor,
+                    Icon_Category_People,
+                    Icon_Category_Phone,
+                    Icon_Category_Rocket,
+                    Icon_Category_Rooms,
+                    Icon_Category_Sales,
+                    Icon_Category_Scan,
+                    Icon_Category_Science,
+                    Icon_Category_Security,
+                    Icon_Category_Service,
+                    Icon_Category_Stock,
+                    Icon_Category_Store,
+                    Icon_Category_Train,
+                    Icon_Category_Travel,
+                    Icon_Category_Truck,
+                    Icon_Category_Wine,
+                    Icon_Category_Work,
+                    Icon_Category_World
+                ]
+            )
+        );
+        // App Loading
+        Set(
+            gblAppLoaded,
+            true
+        );
+    SizeBreakpoints: =[1024,1366,1920]
+

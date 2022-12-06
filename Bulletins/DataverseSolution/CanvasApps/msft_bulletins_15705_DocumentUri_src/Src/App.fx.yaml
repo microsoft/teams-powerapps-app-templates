@@ -1,0 +1,139 @@
+App As appinfo:
+    BackEnabled: =false
+    MinScreenHeight: =600
+    OnStart: |
+        =/**READ ME START**
+        Welcome to the app!
+        Please note that modifying anything in this app may result in unexpected behavior. Please do so, at your own risk. As of this writing, the app has been documented in minimal fashion with annotations in functions, and the Documentation linked on the Help screen.
+        In subsequent releases, this app will be updated to include helpful annotations and documentation to support users in customizing the app, and understanding the patterns/functions included here within.
+        **READ ME END**/
+        // App Loading
+        Set(
+            gblAppLoaded,
+            false
+        );
+        // Localization
+        // User Language
+        Set(
+            gblUserLanguage,
+            Language()
+        );
+        // Build Localization Collection, with User Language
+        ClearCollect(
+            colLocalization,
+            Filter(
+                staticLocalizations,
+                LanguageTag = gblUserLanguage
+            )
+        );
+        Collect(
+            colLocalization,
+            Filter(
+                staticLocalizations,
+                LanguageTag = gblUserLanguage
+            )
+        );
+        // Set Global Padding
+        Set(
+            gblPadding,
+            {
+                Page: 20,
+                ButtonShape: 12,
+                ButtonText: 24,
+                Container: 32,
+                GalleryHeader: 16
+            }
+        );
+        // Get User Record for Context
+        Set(
+            gblUser,
+            User()
+        );
+        // User Name
+        Set(
+            gblUserFirstName,
+            Left(
+                User().FullName,
+                Find(
+                    " ",
+                    User().FullName
+                ) - 1
+            )
+        );
+        // Stock Image Collection
+        ClearCollect(
+            colStockImages,
+            {appStockImage: Blank()},
+            {appStockImage: StockImage_Abstract},
+            {appStockImage: StockImage_Brainstorm},
+            {appStockImage: StockImage_Building},
+            {appStockImage: StockImage_Celebrate},
+            {appStockImage: StockImage_Data},
+            {appStockImage: StockImage_Future},
+            {appStockImage: StockImage_Heart},
+            {appStockImage: StockImage_Meeting},
+            {appStockImage: StockImage_Meetings2},
+            {appStockImage: StockImage_Privacy},
+            {appStockImage: StockImage_Shapes},
+            {appStockImage: StockImage_Spring},
+            {appStockImage: StockImage_Sunset},
+            {appStockImage: StockImage_Vision},
+            {appStockImage: StockImage_Waves},
+            {appStockImage: StockImage_WFH},
+            {appStockImage: StockImage_Workplace}
+        );
+        // Menu Records
+        Set(
+            gblAppMenu,
+            {
+                Bulletins: {
+                    headerLabel: "Bulletins",
+                    headerTooltip: "Bulletins",
+                    headerWidth: 110,
+                    headerScreen: 'Home Screen'
+                },
+                Home: {
+                    menuLabel: "Home",
+                    menuWidth: 55,
+                    menuScreen: 'Home Screen'
+                },
+                FAQs: {
+                    menuLabel: "FAQs",
+                    menuWidth: 55,
+                    menuScreen: 'FAQs Screen'
+                },
+                LinksContacts: With(
+                    {varSmallScreen: App.Width < 400},
+                    {
+                        menuLabel: If(
+                            varSmallScreen,
+                            "Links/Contacts",
+                            "Links and contacts"
+                        ),
+                        menuWidth: If(
+                            varSmallScreen,
+                            115,
+                            155
+                        ),
+                        menuScreen: 'Links and Contacts Screen'
+                    }
+                )
+            }
+        );
+        Set(
+            gblIsHostClientWeb,
+            Param("hostClientType") = "web"
+        );
+        // App Loading
+        Set(
+            gblAppLoaded,
+            true
+        );
+    SizeBreakpoints: |-
+        =[
+            680,
+            900,
+            1200,
+            1400
+        ]
+

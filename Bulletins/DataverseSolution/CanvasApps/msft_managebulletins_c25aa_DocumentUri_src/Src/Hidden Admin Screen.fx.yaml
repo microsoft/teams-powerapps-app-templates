@@ -1,0 +1,1079 @@
+"'Hidden Admin Screen' As screen":
+    Fill: =gblAppStyles.Background.Fill
+
+    tglAdmin_DarkMode As toggleSwitch:
+        AccessibleLabel: ="Toggle which will allow the app to run in Dark theme - for studio use"
+        BorderColor: =gblAppStyles.Toggle.BorderColor
+        BorderThickness: =gblAppStyles.Toggle.BorderThickness
+        Color: =gblAppStyles.Toggle.Color
+        DisabledBorderColor: =gblAppStyles.Toggle.DisabledBorderColor
+        DisabledColor: =gblAppStyles.Toggle.DisabledColor
+        FalseFill: =gblAppStyles.Toggle.FalseFill
+        FalseHoverFill: =gblAppStyles.Toggle.FalseHoverFill
+        FalseText: ="Dark Mode Off"
+        FocusedBorderColor: =gblAppStyles.Toggle.FocusedBorderColor
+        FocusedBorderThickness: =gblAppStyles.Toggle.FocusedBorderThickness
+        Font: =Font.'Segoe UI'
+        HandleFill: =If(Self.Value,gblAppStyles.Toggle.HandleFillTrue,gblAppStyles.Toggle.HandleFillFalse)
+        Height: =48
+        HoverBorderColor: =gblAppStyles.Toggle.HoverBorderColor
+        OnChange: =Navigate('Landing Screen')
+        PressedBorderColor: =gblAppStyles.Toggle.PressedBorderColor
+        Size: =gblAppStyles.Toggle.Size
+        TrueFill: =gblAppStyles.Toggle.TrueFill
+        TrueHoverFill: =gblAppStyles.Toggle.TrueHoverFill
+        TrueText: ="Dark Mode On"
+        Width: =300
+        X: =gblPadding.Page
+        Y: =gblPadding.Page
+        ZIndex: =2
+
+    tglAdmin_ContrastMode As toggleSwitch:
+        AccessibleLabel: ="Toggle which will allow the app to run in the High Contrast theme - for studio use"
+        BorderColor: =gblAppStyles.Toggle.BorderColor
+        BorderThickness: =gblAppStyles.Toggle.BorderThickness
+        Color: =gblAppStyles.Toggle.Color
+        DisabledBorderColor: =gblAppStyles.Toggle.DisabledBorderColor
+        DisabledColor: =gblAppStyles.Toggle.DisabledColor
+        FalseFill: =gblAppStyles.Toggle.FalseFill
+        FalseHoverFill: =gblAppStyles.Toggle.FalseHoverFill
+        FalseText: ="High Contrast Off"
+        FocusedBorderColor: =gblAppStyles.Toggle.FocusedBorderColor
+        FocusedBorderThickness: =gblAppStyles.Toggle.FocusedBorderThickness
+        Font: =Font.'Segoe UI'
+        HandleFill: =If(Self.Value,gblAppStyles.Toggle.HandleFillTrue,gblAppStyles.Toggle.HandleFillFalse)
+        Height: =48
+        HoverBorderColor: =gblAppStyles.Toggle.HoverBorderColor
+        OnChange: =
+        PressedBorderColor: =gblAppStyles.Toggle.PressedBorderColor
+        Size: =gblAppStyles.Toggle.Size
+        TrueFill: =gblAppStyles.Toggle.TrueFill
+        TrueHoverFill: =gblAppStyles.Toggle.TrueHoverFill
+        TrueText: ="High Contrast On"
+        Width: =300
+        X: =gblPadding.Page
+        Y: =tglAdmin_DarkMode.Y + tglAdmin_DarkMode.Height + gblPadding.Page
+        ZIndex: =3
+
+    tglAdmin_Owner As toggleSwitch:
+        AccessibleLabel: ="Toggle which will allow the app to run in Team owner context - for studio use"
+        BorderColor: =gblAppStyles.Toggle.BorderColor
+        BorderThickness: =gblAppStyles.Toggle.BorderThickness
+        Color: =gblAppStyles.Toggle.Color
+        DisabledBorderColor: =gblAppStyles.Toggle.DisabledBorderColor
+        DisabledColor: =gblAppStyles.Toggle.DisabledColor
+        FalseFill: =gblAppStyles.Toggle.FalseFill
+        FalseHoverFill: =gblAppStyles.Toggle.FalseHoverFill
+        FalseText: ="Not a Team owner"
+        FocusedBorderColor: =gblAppStyles.Toggle.FocusedBorderColor
+        FocusedBorderThickness: =gblAppStyles.Toggle.FocusedBorderThickness
+        Font: =Font.'Segoe UI'
+        HandleFill: =If(Self.Value,gblAppStyles.Toggle.HandleFillTrue,gblAppStyles.Toggle.HandleFillFalse)
+        Height: =48
+        HoverBorderColor: =gblAppStyles.Toggle.HoverBorderColor
+        OnChange: |-
+            =// Team Owner?
+            Set(
+                gblUserIsTeamOwner,
+                Or(
+                    Param("userTeamRole") = "0",
+                    Param("userTeamRole") = "{userTeamRole}",
+                    tglAdmin_Owner.Value//Studio Testing
+                )
+            );
+        PressedBorderColor: =gblAppStyles.Toggle.PressedBorderColor
+        Size: =gblAppStyles.Toggle.Size
+        TrueFill: =gblAppStyles.Toggle.TrueFill
+        TrueHoverFill: =gblAppStyles.Toggle.TrueHoverFill
+        TrueText: ="Is a Team owner"
+        Width: =300
+        X: =gblPadding.Page
+        Y: =tglAdmin_ContrastMode.Y + tglAdmin_ContrastMode.Height + gblPadding.Page
+        ZIndex: =4
+
+    lblAdmin_Notice As label:
+        Font: =Font.'Segoe UI'
+        FontWeight: =FontWeight.Semibold
+        Height: =210
+        Text: |-
+            ="The Toggles above allow you to emulate various scenarios within the Studio.
+            
+            Change their values, within the context of the Studio, to explore various scenarios.
+            
+            Changing the Default values will impact the actual app behavior. DO NOT UPDATE the default values."
+        Width: =Parent.Width - (2 * Self.X)
+        X: =tglAdmin_Owner.X
+        Y: =tglAdmin_Mobile.Y + tglAdmin_Mobile.Height
+        ZIndex: =5
+
+    tglAdmin_Mobile As toggleSwitch:
+        AccessibleLabel: ="Toggle which will allow the app to run in Team owner context - for studio use"
+        BorderColor: =gblAppStyles.Toggle.BorderColor
+        BorderThickness: =gblAppStyles.Toggle.BorderThickness
+        Color: =gblAppStyles.Toggle.Color
+        DisabledBorderColor: =gblAppStyles.Toggle.DisabledBorderColor
+        DisabledColor: =gblAppStyles.Toggle.DisabledColor
+        FalseFill: =gblAppStyles.Toggle.FalseFill
+        FalseHoverFill: =gblAppStyles.Toggle.FalseHoverFill
+        FalseText: ="Not mobile device"
+        FocusedBorderColor: =gblAppStyles.Toggle.FocusedBorderColor
+        FocusedBorderThickness: =gblAppStyles.Toggle.FocusedBorderThickness
+        Font: =Font.'Segoe UI'
+        HandleFill: =If(Self.Value,gblAppStyles.Toggle.HandleFillTrue,gblAppStyles.Toggle.HandleFillFalse)
+        Height: =48
+        HoverBorderColor: =gblAppStyles.Toggle.HoverBorderColor
+        OnChange: =
+        PressedBorderColor: =gblAppStyles.Toggle.PressedBorderColor
+        Size: =gblAppStyles.Toggle.Size
+        TrueFill: =gblAppStyles.Toggle.TrueFill
+        TrueHoverFill: =gblAppStyles.Toggle.TrueHoverFill
+        TrueText: ="On mobile device"
+        Width: =300
+        X: =gblPadding.Page
+        Y: =tglAdmin_Owner.Y + tglAdmin_Owner.Height + gblPadding.Page
+        ZIndex: =6
+
+    FormViewer1 As formViewer:
+        DataSource: =Bulletins
+        Height: =768
+        Item: =gblRecordBulletin
+        NumberOfColumns: =1
+        Width: =477
+        X: =888
+        ZIndex: =7
+
+        "'Approval Status_DataCard1' As typedDataCard.comboBoxOptionSetSingleViewCard":
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="msft_bulletin_approvalstatuscode"
+            Default: =ThisItem.'Approval Status'
+            DisplayMode: =DisplayMode.View
+            DisplayName: ="Approval Status"
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =50
+            Required: =true
+            Update: =DataCardValue3.Selected
+            Width: =477
+            X: =0
+            Y: =1
+            ZIndex: =1
+
+            DataCardKey3 As label:
+                AutoHeight: =true
+                Height: =34
+                Text: =Parent.DisplayName
+                Width: =(Parent.Width - 60) * 0.4
+                Wrap: =false
+                X: =30
+                Y: =10 + (DataCardValue3.Height / 2) - (Self.Height / 2)
+                ZIndex: =1
+
+            DataCardValue3 As combobox:
+                BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                DefaultSelectedItems: =[Parent.Default]
+                DisplayFields: =["Value"]
+                DisplayMode: =Parent.DisplayMode
+                IsSearchable: =false
+                Items: =Choices('Bulletin Approval Status')
+                PaddingLeft: =If(Self.DisplayMode = DisplayMode.Edit, 5, 0)
+                SearchItems: =[]
+                SelectMultiple: =false
+                Width: =(Parent.Width - 60) * 0.6
+                X: =DataCardKey3.X + DataCardKey3.Width
+                Y: =10
+                ZIndex: =2
+
+            ErrorMessage1 As label:
+                AutoHeight: =true
+                Height: =10
+                Live: =Live.Assertive
+                PaddingBottom: =0
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Text: =Parent.Error
+                Visible: =Parent.DisplayMode=DisplayMode.Edit
+                Width: =Parent.Width - 60
+                X: =30
+                Y: =DataCardValue3.Y + DataCardValue3.Height
+                ZIndex: =3
+
+            StarVisible1 As label:
+                Align: =Align.Center
+                Height: =DataCardKey3.Height
+                Text: ="*"
+                Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                Width: =30
+                Wrap: =false
+                Y: =DataCardKey3.Y
+                ZIndex: =4
+
+        "'Author(s)_DataCard1' As typedDataCard.textualViewCard":
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="msft_authors"
+            Default: =ThisItem.'Author(s)'
+            DisplayMode: =DisplayMode.View
+            DisplayName: ="Author(s)"
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =40
+            Required: =false
+            Width: =477
+            X: =0
+            Y: =2
+            ZIndex: =1
+
+            DataCardKey4 As label:
+                AutoHeight: =true
+                Height: =34
+                Text: =Parent.DisplayName
+                Width: =(Parent.Width - 60) * 0.4
+                Wrap: =false
+                X: =30
+                Y: =10 + (DataCardValue4.Height / 2) - (Self.Height / 2)
+                ZIndex: =1
+
+            DataCardValue4 As label:
+                AutoHeight: =true
+                DisplayMode: =Parent.DisplayMode
+                Height: =27
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Text: =Parent.Default
+                Width: =(Parent.Width - 60) * 0.6
+                X: =DataCardKey4.X + DataCardKey4.Width
+                Y: =10
+                ZIndex: =2
+
+        Body_DataCard1 As typedDataCard.textualViewCard:
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="msft_body"
+            Default: =ThisItem.Body
+            DisplayMode: =DisplayMode.View
+            DisplayName: ="Body"
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =40
+            Required: =true
+            Width: =477
+            X: =0
+            Y: =3
+            ZIndex: =1
+
+            DataCardKey5 As label:
+                AutoHeight: =true
+                Height: =34
+                Text: =Parent.DisplayName
+                Width: =(Parent.Width - 60) * 0.4
+                Wrap: =false
+                X: =30
+                Y: =10 + (DataCardValue5.Height / 2) - (Self.Height / 2)
+                ZIndex: =1
+
+            DataCardValue5 As label:
+                AutoHeight: =true
+                DisplayMode: =Parent.DisplayMode
+                Height: =27
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Text: =Parent.Default
+                Width: =(Parent.Width - 60) * 0.6
+                X: =DataCardKey5.X + DataCardKey5.Width
+                Y: =10
+                ZIndex: =2
+
+        "'Button Title_DataCard1' As typedDataCard.textualViewCard":
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="msft_buttontitle"
+            Default: =ThisItem.'Button Title'
+            DisplayMode: =DisplayMode.View
+            DisplayName: ="Button Title"
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =40
+            Required: =false
+            Width: =477
+            X: =0
+            Y: =4
+            ZIndex: =1
+
+            DataCardKey6 As label:
+                AutoHeight: =true
+                Height: =34
+                Text: =Parent.DisplayName
+                Width: =(Parent.Width - 60) * 0.4
+                Wrap: =false
+                X: =30
+                Y: =10 + (DataCardValue6.Height / 2) - (Self.Height / 2)
+                ZIndex: =1
+
+            DataCardValue6 As label:
+                AutoHeight: =true
+                DisplayMode: =Parent.DisplayMode
+                Height: =27
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Text: =Parent.Default
+                Width: =(Parent.Width - 60) * 0.6
+                X: =DataCardKey6.X + DataCardKey6.Width
+                Y: =10
+                ZIndex: =2
+
+        "'Button URL_DataCard1' As typedDataCard.textualViewCard":
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="msft_buttonurl"
+            Default: =ThisItem.'Button URL'
+            DisplayMode: =DisplayMode.View
+            DisplayName: ="Button URL"
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =40
+            Required: =false
+            Width: =477
+            X: =0
+            Y: =5
+            ZIndex: =1
+
+            DataCardKey7 As label:
+                AutoHeight: =true
+                Height: =34
+                Text: =Parent.DisplayName
+                Width: =(Parent.Width - 60) * 0.4
+                Wrap: =false
+                X: =30
+                Y: =10 + (DataCardValue7.Height / 2) - (Self.Height / 2)
+                ZIndex: =1
+
+            DataCardValue7 As label:
+                AutoHeight: =true
+                DisplayMode: =Parent.DisplayMode
+                Height: =27
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Text: =Parent.Default
+                Width: =(Parent.Width - 60) * 0.6
+                X: =DataCardKey7.X + DataCardKey7.Width
+                Y: =10
+                ZIndex: =2
+
+        Category_DataCard1 As typedDataCard.comboBoxViewCard:
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="msft_Bulletin_CategoryId"
+            Default: =ThisItem.Category
+            DisplayMode: =DisplayMode.View
+            DisplayName: ="Category"
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =50
+            Required: =false
+            Update: =DataCardValue8.Selected
+            Width: =477
+            X: =0
+            Y: =6
+            ZIndex: =1
+
+            DataCardKey8 As label:
+                AutoHeight: =true
+                Height: =34
+                Text: =Parent.DisplayName
+                Width: =(Parent.Width - 60) * 0.4
+                Wrap: =false
+                X: =30
+                Y: =10 + (DataCardValue8.Height / 2) - (Self.Height / 2)
+                ZIndex: =1
+
+            DataCardValue8 As combobox:
+                BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                DefaultSelectedItems: =Parent.Default
+                DisplayFields: =["msft_name"]
+                DisplayMode: =Parent.DisplayMode
+                Items: =Choices([@Bulletins].Category)
+                PaddingLeft: =If(Self.DisplayMode = DisplayMode.Edit, 5, 0)
+                SearchFields: =["msft_name"]
+                SearchItems: =Search(Choices([@Bulletins].Category),DataCardValue8.SearchText,"msft_name")
+                SelectMultiple: =false
+                Width: =(Parent.Width - 60) * 0.6
+                X: =DataCardKey8.X + DataCardKey8.Width
+                Y: =10
+                ZIndex: =2
+
+            ErrorMessage2 As label:
+                AutoHeight: =true
+                Height: =10
+                Live: =Live.Assertive
+                PaddingBottom: =0
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Text: =Parent.Error
+                Visible: =Parent.DisplayMode=DisplayMode.Edit
+                Width: =Parent.Width - 60
+                X: =30
+                Y: =DataCardValue8.Y + DataCardValue8.Height
+                ZIndex: =3
+
+            StarVisible2 As label:
+                Align: =Align.Center
+                Height: =DataCardKey8.Height
+                Text: ="*"
+                Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                Width: =30
+                Wrap: =false
+                Y: =DataCardKey8.Y
+                ZIndex: =4
+
+        "'Expire On_DataCard1' As typedDataCard.textualViewCard":
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="msft_expireondatetime"
+            Default: =ThisItem.'Expire On'
+            DisplayMode: =DisplayMode.View
+            DisplayName: ="Expire On"
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =40
+            Required: =false
+            Width: =477
+            X: =0
+            Y: =7
+            ZIndex: =1
+
+            DataCardKey9 As label:
+                AutoHeight: =true
+                Height: =34
+                Text: =Parent.DisplayName
+                Width: =(Parent.Width - 60) * 0.4
+                Wrap: =false
+                X: =30
+                Y: =10 + (DataCardValue9.Height / 2) - (Self.Height / 2)
+                ZIndex: =1
+
+            DataCardValue9 As label:
+                AutoHeight: =true
+                DisplayMode: =Parent.DisplayMode
+                Height: =27
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Text: =Parent.Default
+                Width: =(Parent.Width - 60) * 0.6
+                X: =DataCardKey9.X + DataCardKey9.Width
+                Y: =10
+                ZIndex: =2
+
+        "'Feature Until_DataCard1' As typedDataCard.textualViewCard":
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="msft_featureuntildatetime"
+            Default: =ThisItem.'Feature Until'
+            DisplayMode: =DisplayMode.View
+            DisplayName: ="Feature Until"
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =40
+            Required: =false
+            Width: =477
+            X: =0
+            Y: =8
+            ZIndex: =1
+
+            DataCardKey10 As label:
+                AutoHeight: =true
+                Height: =34
+                Text: =Parent.DisplayName
+                Width: =(Parent.Width - 60) * 0.4
+                Wrap: =false
+                X: =30
+                Y: =10 + (DataCardValue10.Height / 2) - (Self.Height / 2)
+                ZIndex: =1
+
+            DataCardValue10 As label:
+                AutoHeight: =true
+                DisplayMode: =Parent.DisplayMode
+                Height: =27
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Text: =Parent.Default
+                Width: =(Parent.Width - 60) * 0.6
+                X: =DataCardKey10.X + DataCardKey10.Width
+                Y: =10
+                ZIndex: =2
+
+        "'Featured Time-frame_DataCard1' As typedDataCard.comboBoxOptionSetSingleViewCard":
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="msft_bulletin_featuredtimeframecode"
+            Default: =ThisItem.'Featured Time-frame'
+            DisplayMode: =DisplayMode.View
+            DisplayName: ="Featured Time-frame"
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =50
+            Required: =false
+            Update: =DataCardValue11.Selected
+            Width: =477
+            X: =0
+            Y: =9
+            ZIndex: =1
+
+            DataCardKey11 As label:
+                AutoHeight: =true
+                Height: =34
+                Text: =Parent.DisplayName
+                Width: =(Parent.Width - 60) * 0.4
+                Wrap: =false
+                X: =30
+                Y: =10 + (DataCardValue11.Height / 2) - (Self.Height / 2)
+                ZIndex: =1
+
+            DataCardValue11 As combobox:
+                BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                DefaultSelectedItems: =[Parent.Default]
+                DisplayFields: =["Value"]
+                DisplayMode: =Parent.DisplayMode
+                IsSearchable: =false
+                Items: =Choices('Bulletin Featured Timeframe')
+                PaddingLeft: =If(Self.DisplayMode = DisplayMode.Edit, 5, 0)
+                SearchItems: =[]
+                SelectMultiple: =false
+                Width: =(Parent.Width - 60) * 0.6
+                X: =DataCardKey11.X + DataCardKey11.Width
+                Y: =10
+                ZIndex: =2
+
+            ErrorMessage3 As label:
+                AutoHeight: =true
+                Height: =10
+                Live: =Live.Assertive
+                PaddingBottom: =0
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Text: =Parent.Error
+                Visible: =Parent.DisplayMode=DisplayMode.Edit
+                Width: =Parent.Width - 60
+                X: =30
+                Y: =DataCardValue11.Y + DataCardValue11.Height
+                ZIndex: =3
+
+            StarVisible3 As label:
+                Align: =Align.Center
+                Height: =DataCardKey11.Height
+                Text: ="*"
+                Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                Width: =30
+                Wrap: =false
+                Y: =DataCardKey11.Y
+                ZIndex: =4
+
+        "'Header Image?_DataCard1' As typedDataCard.comboBoxOptionSetSingleViewCard":
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="msft_isheaderimage"
+            Default: =ThisItem.'Header Image?'
+            DisplayMode: =DisplayMode.View
+            DisplayName: ="Header Image?"
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =50
+            Required: =false
+            Update: =DataCardValue12.Selected
+            Width: =477
+            X: =0
+            Y: =10
+            ZIndex: =1
+
+            DataCardKey12 As label:
+                AutoHeight: =true
+                Height: =34
+                Text: =Parent.DisplayName
+                Width: =(Parent.Width - 60) * 0.4
+                Wrap: =false
+                X: =30
+                Y: =10 + (DataCardValue12.Height / 2) - (Self.Height / 2)
+                ZIndex: =1
+
+            DataCardValue12 As combobox:
+                BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                DefaultSelectedItems: =[Parent.Default]
+                DisplayFields: =["Value"]
+                DisplayMode: =Parent.DisplayMode
+                IsSearchable: =false
+                Items: =Choices('Header Image? (Bulletins)')
+                PaddingLeft: =If(Self.DisplayMode = DisplayMode.Edit, 5, 0)
+                SearchItems: =[]
+                SelectMultiple: =false
+                Width: =(Parent.Width - 60) * 0.6
+                X: =DataCardKey12.X + DataCardKey12.Width
+                Y: =10
+                ZIndex: =2
+
+            ErrorMessage4 As label:
+                AutoHeight: =true
+                Height: =10
+                Live: =Live.Assertive
+                PaddingBottom: =0
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Text: =Parent.Error
+                Visible: =Parent.DisplayMode=DisplayMode.Edit
+                Width: =Parent.Width - 60
+                X: =30
+                Y: =DataCardValue12.Y + DataCardValue12.Height
+                ZIndex: =3
+
+            StarVisible4 As label:
+                Align: =Align.Center
+                Height: =DataCardKey12.Height
+                Text: ="*"
+                Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                Width: =30
+                Wrap: =false
+                Y: =DataCardKey12.Y
+                ZIndex: =4
+
+        "'Publish On_DataCard1' As typedDataCard.textualViewCard":
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="msft_publishondatetime"
+            Default: =ThisItem.'Publish On'
+            DisplayMode: =DisplayMode.View
+            DisplayName: ="Publish On"
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =40
+            Required: =false
+            Width: =477
+            X: =0
+            Y: =11
+            ZIndex: =1
+
+            DataCardKey13 As label:
+                AutoHeight: =true
+                Height: =34
+                Text: =Parent.DisplayName
+                Width: =(Parent.Width - 60) * 0.4
+                Wrap: =false
+                X: =30
+                Y: =10 + (DataCardValue13.Height / 2) - (Self.Height / 2)
+                ZIndex: =1
+
+            DataCardValue13 As label:
+                AutoHeight: =true
+                DisplayMode: =Parent.DisplayMode
+                Height: =27
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Text: =Parent.Default
+                Width: =(Parent.Width - 60) * 0.6
+                X: =DataCardKey13.X + DataCardKey13.Width
+                Y: =10
+                ZIndex: =2
+
+        "'Publication Status_DataCard1' As typedDataCard.comboBoxOptionSetSingleViewCard":
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="msft_calc_bulletin_publicationstatuscode"
+            Default: =ThisItem.'Publication Status'
+            DisplayMode: =DisplayMode.View
+            DisplayName: ="Publication Status"
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =50
+            Required: =false
+            Update: =DataCardValue14.Selected
+            Width: =477
+            X: =0
+            Y: =12
+            ZIndex: =1
+
+            DataCardKey14 As label:
+                AutoHeight: =true
+                Height: =34
+                Text: =Parent.DisplayName
+                Width: =(Parent.Width - 60) * 0.4
+                Wrap: =false
+                X: =30
+                Y: =10 + (DataCardValue14.Height / 2) - (Self.Height / 2)
+                ZIndex: =1
+
+            DataCardValue14 As combobox:
+                BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                DefaultSelectedItems: =[Parent.Default]
+                DisplayFields: =["Value"]
+                DisplayMode: =Parent.DisplayMode
+                IsSearchable: =false
+                Items: =Choices('Bulletin Publication Status')
+                PaddingLeft: =If(Self.DisplayMode = DisplayMode.Edit, 5, 0)
+                SearchItems: =[]
+                SelectMultiple: =false
+                Width: =(Parent.Width - 60) * 0.6
+                X: =DataCardKey14.X + DataCardKey14.Width
+                Y: =10
+                ZIndex: =2
+
+            ErrorMessage5 As label:
+                AutoHeight: =true
+                Height: =10
+                Live: =Live.Assertive
+                PaddingBottom: =0
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Text: =Parent.Error
+                Visible: =Parent.DisplayMode=DisplayMode.Edit
+                Width: =Parent.Width - 60
+                X: =30
+                Y: =DataCardValue14.Y + DataCardValue14.Height
+                ZIndex: =3
+
+            StarVisible5 As label:
+                Align: =Align.Center
+                Height: =DataCardKey14.Height
+                Text: ="*"
+                Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                Width: =30
+                Wrap: =false
+                Y: =DataCardKey14.Y
+                ZIndex: =4
+
+        "'Ready for Review?_DataCard1' As typedDataCard.comboBoxOptionSetSingleViewCard":
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="msft_isreadyforreview"
+            Default: =ThisItem.'Ready for Review?'
+            DisplayMode: =DisplayMode.View
+            DisplayName: ="Ready for Review?"
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =50
+            Required: =false
+            Update: =DataCardValue15.Selected
+            Width: =477
+            X: =0
+            Y: =13
+            ZIndex: =1
+
+            DataCardKey15 As label:
+                AutoHeight: =true
+                Height: =34
+                Text: =Parent.DisplayName
+                Width: =(Parent.Width - 60) * 0.4
+                Wrap: =false
+                X: =30
+                Y: =10 + (DataCardValue15.Height / 2) - (Self.Height / 2)
+                ZIndex: =1
+
+            DataCardValue15 As combobox:
+                BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                DefaultSelectedItems: =[Parent.Default]
+                DisplayFields: =["Value"]
+                DisplayMode: =Parent.DisplayMode
+                IsSearchable: =false
+                Items: =Choices('Ready for Review? (Bulletins)')
+                PaddingLeft: =If(Self.DisplayMode = DisplayMode.Edit, 5, 0)
+                SearchItems: =[]
+                SelectMultiple: =false
+                Width: =(Parent.Width - 60) * 0.6
+                X: =DataCardKey15.X + DataCardKey15.Width
+                Y: =10
+                ZIndex: =2
+
+            ErrorMessage6 As label:
+                AutoHeight: =true
+                Height: =10
+                Live: =Live.Assertive
+                PaddingBottom: =0
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Text: =Parent.Error
+                Visible: =Parent.DisplayMode=DisplayMode.Edit
+                Width: =Parent.Width - 60
+                X: =30
+                Y: =DataCardValue15.Y + DataCardValue15.Height
+                ZIndex: =3
+
+            StarVisible6 As label:
+                Align: =Align.Center
+                Height: =DataCardKey15.Height
+                Text: ="*"
+                Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                Width: =30
+                Wrap: =false
+                Y: =DataCardKey15.Y
+                ZIndex: =4
+
+        "'Scheduled?_DataCard1' As typedDataCard.comboBoxOptionSetSingleViewCard":
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="msft_isscheduled"
+            Default: =ThisItem.'Scheduled?'
+            DisplayMode: =DisplayMode.View
+            DisplayName: ="Scheduled?"
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =50
+            Required: =false
+            Update: =DataCardValue16.Selected
+            Width: =477
+            X: =0
+            Y: =14
+            ZIndex: =1
+
+            DataCardKey16 As label:
+                AutoHeight: =true
+                Height: =34
+                Text: =Parent.DisplayName
+                Width: =(Parent.Width - 60) * 0.4
+                Wrap: =false
+                X: =30
+                Y: =10 + (DataCardValue16.Height / 2) - (Self.Height / 2)
+                ZIndex: =1
+
+            DataCardValue16 As combobox:
+                BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                DefaultSelectedItems: =[Parent.Default]
+                DisplayFields: =["Value"]
+                DisplayMode: =Parent.DisplayMode
+                IsSearchable: =false
+                Items: =Choices('Scheduled? (Bulletins)')
+                PaddingLeft: =If(Self.DisplayMode = DisplayMode.Edit, 5, 0)
+                SearchItems: =[]
+                SelectMultiple: =false
+                Width: =(Parent.Width - 60) * 0.6
+                X: =DataCardKey16.X + DataCardKey16.Width
+                Y: =10
+                ZIndex: =2
+
+            ErrorMessage7 As label:
+                AutoHeight: =true
+                Height: =10
+                Live: =Live.Assertive
+                PaddingBottom: =0
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Text: =Parent.Error
+                Visible: =Parent.DisplayMode=DisplayMode.Edit
+                Width: =Parent.Width - 60
+                X: =30
+                Y: =DataCardValue16.Y + DataCardValue16.Height
+                ZIndex: =3
+
+            StarVisible7 As label:
+                Align: =Align.Center
+                Height: =DataCardKey16.Height
+                Text: ="*"
+                Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                Width: =30
+                Wrap: =false
+                Y: =DataCardKey16.Y
+                ZIndex: =4
+
+        Subtitle_DataCard1 As typedDataCard.textualViewCard:
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="msft_subtitle"
+            Default: =ThisItem.Subtitle
+            DisplayMode: =DisplayMode.View
+            DisplayName: ="Subtitle"
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =40
+            Required: =false
+            Width: =477
+            X: =0
+            Y: =15
+            ZIndex: =1
+
+            DataCardKey17 As label:
+                AutoHeight: =true
+                Height: =34
+                Text: =Parent.DisplayName
+                Width: =(Parent.Width - 60) * 0.4
+                Wrap: =false
+                X: =30
+                Y: =10 + (DataCardValue17.Height / 2) - (Self.Height / 2)
+                ZIndex: =1
+
+            DataCardValue17 As label:
+                AutoHeight: =true
+                DisplayMode: =Parent.DisplayMode
+                Height: =27
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Text: =Parent.Default
+                Width: =(Parent.Width - 60) * 0.6
+                X: =DataCardKey17.X + DataCardKey17.Width
+                Y: =10
+                ZIndex: =2
+
+        "'Stock Image_DataCard1' As typedDataCard.textualViewCard":
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="msft_appref_stockimage"
+            Default: =ThisItem.'Stock Image'
+            DisplayMode: =DisplayMode.View
+            DisplayName: ="Stock Image"
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =40
+            Required: =false
+            Width: =477
+            X: =0
+            Y: =16
+            ZIndex: =1
+
+            DataCardKey18 As label:
+                AutoHeight: =true
+                Height: =34
+                Text: =Parent.DisplayName
+                Width: =(Parent.Width - 60) * 0.4
+                Wrap: =false
+                X: =30
+                Y: =10 + (DataCardValue18.Height / 2) - (Self.Height / 2)
+                ZIndex: =1
+
+            DataCardValue18 As label:
+                AutoHeight: =true
+                DisplayMode: =Parent.DisplayMode
+                Height: =27
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Text: =Parent.Default
+                Width: =(Parent.Width - 60) * 0.6
+                X: =DataCardKey18.X + DataCardKey18.Width
+                Y: =10
+                ZIndex: =2
+
+        "'Video URL_DataCard1' As typedDataCard.urlViewCard":
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="msft_videourl"
+            Default: =ThisItem.'Video URL'
+            DisplayMode: =DisplayMode.View
+            DisplayName: ="Video URL"
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =40
+            Required: =false
+            Width: =477
+            X: =0
+            Y: =17
+            ZIndex: =1
+
+            DataCardKey19 As label:
+                AutoHeight: =true
+                Height: =34
+                Text: =Parent.DisplayName
+                Width: =(Parent.Width - 60) * 0.4
+                Wrap: =false
+                X: =30
+                Y: =10 + (DataCardValue19.Height / 2) - (Self.Height / 2)
+                ZIndex: =1
+
+            DataCardValue19 As htmlViewer:
+                AutoHeight: =true
+                DisplayMode: =Parent.DisplayMode
+                Height: =31
+                HtmlText: ="<a href='" & Parent.Default & "'>" & Parent.Default & "</a>"
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Width: =(Parent.Width - 60) * 0.6
+                X: =DataCardKey19.X + DataCardKey19.Width
+                Y: =10
+                ZIndex: =2
+
+        Type_DataCard1 As typedDataCard.comboBoxOptionSetSingleViewCard:
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="msft_calc_bulletin_typecode"
+            Default: =ThisItem.Type
+            DisplayMode: =DisplayMode.View
+            DisplayName: ="Type"
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =50
+            Required: =false
+            Update: =DataCardValue20.Selected
+            Width: =477
+            X: =0
+            Y: =18
+            ZIndex: =1
+
+            DataCardKey20 As label:
+                AutoHeight: =true
+                Height: =34
+                Text: =Parent.DisplayName
+                Width: =(Parent.Width - 60) * 0.4
+                Wrap: =false
+                X: =30
+                Y: =10 + (DataCardValue20.Height / 2) - (Self.Height / 2)
+                ZIndex: =1
+
+            DataCardValue20 As combobox:
+                BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                DefaultSelectedItems: =[Parent.Default]
+                DisplayFields: =["Value"]
+                DisplayMode: =Parent.DisplayMode
+                IsSearchable: =false
+                Items: =Choices('Bulletin Type')
+                PaddingLeft: =If(Self.DisplayMode = DisplayMode.Edit, 5, 0)
+                SearchItems: =[]
+                SelectMultiple: =false
+                Width: =(Parent.Width - 60) * 0.6
+                X: =DataCardKey20.X + DataCardKey20.Width
+                Y: =10
+                ZIndex: =2
+
+            ErrorMessage8 As label:
+                AutoHeight: =true
+                Height: =10
+                Live: =Live.Assertive
+                PaddingBottom: =0
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Text: =Parent.Error
+                Visible: =Parent.DisplayMode=DisplayMode.Edit
+                Width: =Parent.Width - 60
+                X: =30
+                Y: =DataCardValue20.Y + DataCardValue20.Height
+                ZIndex: =3
+
+            StarVisible8 As label:
+                Align: =Align.Center
+                Height: =DataCardKey20.Height
+                Text: ="*"
+                Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                Width: =30
+                Wrap: =false
+                Y: =DataCardKey20.Y
+                ZIndex: =4
+
+        Title_DataCard1 As typedDataCard.textualViewCard:
+            BorderStyle: =BorderStyle.Solid
+            DataField: ="msft_name"
+            Default: =ThisItem.Title
+            DisplayMode: =DisplayMode.View
+            DisplayName: ="Title"
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =40
+            Required: =true
+            Width: =477
+            X: =0
+            Y: =0
+            ZIndex: =8
+
+            DataCardKey1 As label:
+                AutoHeight: =true
+                Height: =34
+                Text: =Parent.DisplayName
+                Width: =(Parent.Width - 60) * 0.4
+                Wrap: =false
+                X: =30
+                Y: =10 + (DataCardValue1.Height / 2) - (Self.Height / 2)
+                ZIndex: =1
+
+            DataCardValue1 As label:
+                AutoHeight: =true
+                DisplayMode: =Parent.DisplayMode
+                Height: =27
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Text: =Parent.Default
+                Width: =(Parent.Width - 60) * 0.6
+                X: =DataCardKey1.X + DataCardKey1.Width
+                Y: =10
+                ZIndex: =2
+
+    Label1 As label:
+        Height: =53
+        Text: =gblRecordBulletin.Category.Name
+        Width: =365
+        X: =285
+        Y: =685
+        ZIndex: =8
+

@@ -1,0 +1,2901 @@
+"'Bulletins Screen' As screen":
+    Fill: =gblAppStyles.Background.Fill
+    LoadingSpinner: =LoadingSpinner.Data
+    LoadingSpinnerColor: =gblAppStyles.ButtonPrimary.Fill
+    OnHidden: |-
+        =ForAll(
+            galBulletins_Drafts_Records.AllItems,
+            With(
+                {
+                    varUserName: ThisRecord.lblGalBulletins_Drafts_CreatedBy.Text,
+                    varUserImage: ThisRecord.imgGalBulletins_Drafts_CreatedBy.Image
+                },
+                If(
+                    IsBlank(
+                        LookUp(
+                            colUserImages,
+                            tblUserName = varUserName
+                        )
+                    ),
+                    Collect(
+                        colUserImages,
+                        {
+                            tblUserName: varUserName,
+                            tblUserImage: varUserImage
+                        }
+                    )
+                )
+            )
+        );
+        ForAll(
+            galBulletins_Published_Records.AllItems,
+            With(
+                {
+                    varUserName: ThisRecord.lblGalBulletins_Published_CreatedBy.Text,
+                    varUserImage: ThisRecord.imgGalBulletins_Published_CreatedBy.Image
+                },
+                If(
+                    IsBlank(
+                        LookUp(
+                            colUserImages,
+                            tblUserName = varUserName
+                        )
+                    ),
+                    Collect(
+                        colUserImages,
+                        {
+                            tblUserName: varUserName,
+                            tblUserImage: varUserImage
+                        }
+                    )
+                )
+            )
+        )
+    OnVisible: |
+        =UpdateContext({locBlockUserInput: false});
+
+    lblAnnounce_Bulletins As label:
+        DisplayMode: =DisplayMode.Disabled
+        Height: =0*0
+        Live: =Live.Assertive
+        PaddingBottom: =0
+        PaddingLeft: =0
+        PaddingRight: =0
+        PaddingTop: =0
+        Text: =locScreenReaderAnnouncedText // This text is announced by screen readers, when the variable is updated
+        Visible: =false
+        Width: =0*0
+        X: =Parent.Width - Self.Width
+        Y: =Parent.Height - Self.Height
+        ZIndex: =1
+
+    cnvBulletins As fluidGrid.fluidGridWithBlankCard:
+        BorderThickness: =0
+        Height: =Parent.Height - Self.Y
+        Width: =Parent.Width
+        X: =0*0
+        Y: |-
+            =Switch(
+                'Bulletins Screen'.Size,
+                Small,
+                btnBulletins_NewBulletin.Y + btnBulletins_NewBulletin.Height + gblPadding.Page,
+                comHeader_Bulletins.Y + comHeader_Bulletins.Height
+            )
+        ZIndex: =2
+
+        dtcBulletins_Drafts As dataCard:
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            BorderThickness: =0
+            DisplayMode: =DisplayMode.Edit
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =galBulletins_Drafts_Records.Y + galBulletins_Drafts_Records.Height + gblPadding.Page
+            Width: =Parent.Width
+            X: =0
+            Y: =0
+            ZIndex: =1
+
+            lblBulletins_Drafts_ZeroState As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: |
+                    =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                DisplayMode: =DisplayMode.View
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =32
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                OnSelect: =
+                PaddingBottom: =4
+                PaddingLeft: =gblPadding.Page
+                PaddingRight: =4
+                PaddingTop: =4
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: |-
+                    =With(
+                    {
+                    varDefault: "Draft bulletins will appear here",
+                    varOOBTextId: "lblBulletins_Drafts_ZeroState__Text"
+                    },
+                    With(
+                    {
+                    varLocalizedText: LookUp(
+                    colLocalization,
+                    OOBTextId = varOOBTextId,
+                    LocalizedText
+                    )
+                    },
+                    Coalesce(
+                    varLocalizedText,
+                    varDefault
+                    )
+                    )
+                    )
+                Width: =Parent.Width - Self.X
+                Wrap: =false
+                X: =0*0
+                Y: =lblBulletins_Drafts_Header.Y + lblBulletins_Drafts_Header.Height
+                ZIndex: =1
+
+            galBulletins_Drafts_Records As gallery.galleryVertical:
+                AccessibleLabel: |-
+                    =With(
+                        {
+                            varDefault: "Gallery of draft bulletin records",
+                            varOOBTextId: "galBulletins_Drafts_Records__AccessibleLabel"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                BorderColor: =RGBA(0, 0, 0, 0)
+                Fill: =gblAppStyles.ButtonSecondary.Fill
+                Height: =CountRows(Self.AllItems) * Self.TemplateHeight
+                Items: |-
+                    =Filter(Bulletins, 'Bulletins (Views)'.'Publication Group: Drafts')
+                Layout: =Layout.Vertical
+                LoadingSpinner: =LoadingSpinner.Data
+                LoadingSpinnerColor: =gblAppStyles.ButtonPrimary.Fill
+                OnSelect: |-
+                    =UpdateContext({locBlockUserInput: true});
+                    // Set Bulletin record
+                    Set(
+                        gblRecordBulletin,
+                        LookUp(
+                            Bulletins,
+                            Bulletin = ThisItem.Bulletin
+                        )
+                    );
+                    // Navigate to detail screen and pass variables for use on that screen
+                    Navigate(
+                        'Bulletin Detail Screen',
+                        ScreenTransition.Fade,
+                        {
+                            locSelectedCategory: gblRecordBulletin.Category.Name,
+                            locSelectedCategory_New: gblRecordBulletin.Category.Name
+                        }
+                    );
+                    // [Screen Reader Start]
+                    UpdateContext(
+                        {
+                            locScreenReaderAnnouncedText: With(
+                                {
+                                    varAnnouncedText: With(
+                                        {
+                                            varDefault: "Navigating to review the selected bulletin", // Default Text to use
+                                            varOOBTextId: "btnGalBulletins_Published_Select__Announced" // Localized version
+                                        },
+                                        With(
+                                            {
+                                                varLocalizedText: LookUp(
+                                                    colLocalization,
+                                                    OOBTextId = varOOBTextId,
+                                                    LocalizedText
+                                                )
+                                            },
+                                            Coalesce(
+                                                varLocalizedText,
+                                                varDefault
+                                            )
+                                        )
+                                    )
+                                },
+                                If(
+                                    locScreenReaderAnnouncedText = varAnnouncedText,
+                                    Concatenate(
+                                        varAnnouncedText,
+                                        " "
+                                    ),
+                                    varAnnouncedText // If clicked twice, will append blank space to update variable
+                                )
+                            )
+                        }
+                    );
+                    // [Screen Reader End]
+                    UpdateContext({locBlockUserInput: false});
+                TemplatePadding: =0
+                TemplateSize: =44
+                Visible: =Self.Height > 0
+                Width: =Parent.Width - (2* Self.X)
+                X: =gblPadding.Page
+                Y: =galBulletins_Draft_Header.Y + galBulletins_Draft_Header.Height
+                ZIndex: =2
+
+                shpGalBulletins_Drafts_Divider As rectangle:
+                    DisabledFill: =gblAppStyles.Dividers.Background
+                    DisplayMode: =DisplayMode.Disabled
+                    Height: =1
+                    OnSelect: =Select(Parent)
+                    Width: =Parent.TemplateWidth
+                    X: =0*0
+                    Y: =Parent.TemplateHeight - Self.Height
+                    ZIndex: =1
+
+                imgGalBulletins_Drafts_CreatedBy As image:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "Image of " & ThisItem.'Created By'.'Full Name',
+                                varOOBTextId: "imgGalBulletins_Drafts_CreatedBy__AccessibleLabel",
+                                varParam0: ThisItem.'Created By'.'Full Name'
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                If(
+                                    IsBlankOrError(varParam0),
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    ),
+                                    Coalesce(
+                                        Substitute(
+                                            varLocalizedText,
+                                            "{0}",
+                                            Text(varParam0)
+                                        ),
+                                        varDefault
+                                    )
+                                )
+                            )
+                        )
+                    DisplayMode: =DisplayMode.View
+                    Height: =28*1
+                    Image: |-
+                        =With(
+                            {varUserName: ThisItem.'Created By'.'User Name'},
+                            With(
+                                {
+                                    varUserImage: LookUp(
+                                        colUserImages,
+                                        tblUserName = varUserName,
+                                        tblUserImage
+                                    )
+                                },
+                                If(
+                                    IsBlankOrError(varUserImage),
+                                    If(
+                                        IsBlankOrError(varUserName),
+                                        SampleImage,
+                                        Office365Users.UserPhotoV2(varUserName)
+                                    ),
+                                    varUserImage
+                                )
+                            )
+                        )
+                    ImagePosition: =ImagePosition.Fill
+                    OnSelect: =Select(Parent)
+                    RadiusBottomLeft: =44
+                    RadiusBottomRight: =44
+                    RadiusTopLeft: =44
+                    RadiusTopRight: =44
+                    Tooltip: =Self.AccessibleLabel
+                    Width: =Self.Height
+                    X: =lblGalBulletins_Drafts_CreatedBy.X + 8
+                    Y: =0*0 + 8
+                    ZIndex: =2
+
+                lblGalBulletins_Drafts_CreatedBy As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: |
+                        =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =Parent.TemplateHeight
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =
+                    PaddingBottom: =4
+                    PaddingLeft: =44
+                    PaddingRight: =4
+                    PaddingTop: =4
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: =ThisItem.'Created By'.'Full Name'
+                    Width: |-
+                        =Parent.Width * Switch(
+                            'Bulletins Screen'.Size,
+                            Small,
+                            0.25,
+                            0.2
+                        )
+                    Wrap: =false
+                    X: =lblGalBulletins_Drafts_Status.X + lblGalBulletins_Drafts_Status.Width
+                    Y: =0*0
+                    ZIndex: =3
+
+                btnGalBulletins_Drafts_Status As button:
+                    Align: =Align.Left
+                    AutoDisableOnSelect: =false
+                    BorderColor: =Transparent
+                    BorderThickness: =0
+                    Color: =gblAppStyles.Label.Color
+                    DisplayMode: =DisplayMode.View
+                    Fill: |-
+                        =With(
+                            {
+                                varColorDraft: If(
+                                    gblThemeHiCo,
+                                    gblAppColors.HighContrastBackground,
+                                    gblThemeDark,
+                                    gblAppColors.NeutralWebGray90,
+                                    gblAppColors.NeutralWebGray40
+                                ),
+                                varColorPending: If(
+                                    gblThemeHiCo,
+                                    gblAppColors.HighContrastBackground,
+                                    gblThemeDark,
+                                    gblAppColors.TeamsDarkShade10,
+                                    gblAppColors.TeamsDefaultTint40
+                                ),
+                                varColorApproved: If(
+                                    gblThemeHiCo,
+                                    gblAppColors.HighContrastBackground,
+                                    gblThemeDark,
+                                    gblAppColors.MessagesDarkWebSuccessIcon,
+                                    gblAppColors.MessagesDefaultWebSuccess
+                                )
+                            },
+                                Switch(
+                                Self.Text,
+                                "Draft",
+                                varColorDraft,
+                                "Pending",
+                                varColorPending,
+                                "Approved",
+                                varColorApproved
+                            )
+                            /*
+                            Switch(
+                                ThisItem.'Approval Status',
+                                'Bulletin Approval Status'.Draft,
+                                varColorDraft,
+                                'Bulletin Approval Status'.Pending,
+                                varColorPending,
+                                'Bulletin Approval Status'.Approved,
+                                varColorApproved
+                            )*/
+                        )
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Normal
+                    Height: =Parent.TemplateHeight - (2*Self.Y)
+                    OnSelect: =Select(Parent)
+                    PaddingLeft: =32
+                    RadiusBottomLeft: =24
+                    RadiusBottomRight: =24
+                    RadiusTopLeft: =24
+                    RadiusTopRight: =24
+                    Size: =10.5
+                    TabIndex: =-1
+                    Text: =ThisItem.'Approval Status'
+                    Tooltip: =Self.Text
+                    Width: |-
+                        =Min(
+                            lblGalBulletins_Drafts_CreatedBy.X - Self.X,
+                            Switch(
+                                Self.Text,
+                                "Draft",
+                                80,
+                                "Pending",
+                                100,
+                                "Approved",
+                                110
+                            )
+                        )
+                    X: =lblGalBulletins_Drafts_ScheduledFor.X + lblGalBulletins_Drafts_ScheduledFor.Width
+                    Y: =8
+                    ZIndex: =4
+
+                imgGalBulletins_Drafts_Status As image:
+                    AccessibleLabel: |-
+                        =    With(
+                                {
+                                    varDefault: "Approval status of the bulletin",
+                                    varOOBTextId: "imgGalBulletins_Drafts_Status__AccessibleLabel"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextId = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                    AutoDisableOnSelect: =false
+                    BorderColor: =Transparent
+                    DisplayMode: =DisplayMode.View
+                    Height: =btnGalBulletins_Drafts_Status.Height
+                    Image: |-
+                        =With(
+                            {
+                                varImageRecord: LookUp(
+                                    staticIcons,
+                                    staticIconName = btnGalBulletins_Drafts_Status.Text
+                                ),
+                                varColor: "000000"
+                            },
+                            With(
+                                {
+                                    varImageData: Concatenate(
+                                        "data:image/svg+xml;utf8, ",
+                                        EncodeUrl(
+                                            Concatenate(
+                                                "<svg viewBox='",
+                                                varImageRecord.staticIconViewbox,
+                                                "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                varImageRecord.staticIconPath,
+                                                "' fill='#",
+                                                varColor,
+                                                "'/></svg>"
+                                            )
+                                        )
+                                    )
+                                },
+                                varImageData
+                            )
+                        )
+                    OnSelect: =Select(Parent)
+                    Tooltip: =Self.AccessibleLabel
+                    Width: =Self.Height
+                    X: =btnGalBulletins_Drafts_Status.X
+                    Y: =btnGalBulletins_Drafts_Status.Y
+                    ZIndex: =5
+
+                lblGalBulletins_Drafts_Status As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: |
+                        =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =Parent.TemplateHeight
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =
+                    PaddingBottom: =4
+                    PaddingLeft: =8
+                    PaddingRight: =4
+                    PaddingTop: =4
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: =ThisItem.'Approval Status'
+                    Visible: =false
+                    Width: |-
+                        =Parent.Width * Switch(
+                            'Bulletins Screen'.Size,
+                            Small,
+                            0.2,
+                            0.15
+                        )
+                    Wrap: =false
+                    X: =lblGalBulletins_Drafts_ScheduledFor.X + lblGalBulletins_Drafts_ScheduledFor.Width
+                    Y: =0*0
+                    ZIndex: =6
+
+                lblGalBulletins_Drafts_ScheduledFor As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: |
+                        =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =Parent.TemplateHeight
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =
+                    PaddingBottom: =4
+                    PaddingLeft: =8
+                    PaddingRight: =4
+                    PaddingTop: =4
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =Text(
+                            ThisItem.'Publish On',
+                            DateTimeFormat.ShortDateTime,
+                            gblUserLanguage
+                        )
+                    Width: |-
+                        =Parent.Width * Switch(
+                            'Bulletins Screen'.Size,
+                            Small,
+                            0.25,
+                            0.125
+                        )
+                    Wrap: =false
+                    X: =lblGalBulletins_Drafts_Modified.X + lblGalBulletins_Drafts_Modified.Width
+                    Y: =0*0
+                    ZIndex: =7
+
+                lblGalBulletins_Drafts_Modified As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: |
+                        =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =Parent.TemplateHeight
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =
+                    PaddingBottom: =4
+                    PaddingLeft: =8
+                    PaddingRight: =4
+                    PaddingTop: =4
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =Text(
+                            ThisItem.'Modified On',
+                            DateTimeFormat.ShortDate,
+                            gblUserLanguage
+                        )
+                    Width: |-
+                        =Parent.Width * Switch(
+                            'Bulletins Screen'.Size,
+                            Small,
+                            0,
+                            0.125
+                        )
+                    Wrap: =false
+                    X: =lblGalBulletins_Drafts_Category.X + lblGalBulletins_Drafts_Category.Width
+                    Y: =0*0
+                    ZIndex: =8
+
+                lblGalBulletins_Drafts_Category As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: |
+                        =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =Parent.TemplateHeight
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =
+                    PaddingBottom: =4
+                    PaddingLeft: =8
+                    PaddingRight: =4
+                    PaddingTop: =4
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: =ThisItem.Category.Name
+                    Width: |-
+                        =Parent.Width * Switch(
+                            'Bulletins Screen'.Size,
+                            Small,
+                            0,
+                            0.15
+                        )
+                    Wrap: =false
+                    X: =lblGalBulletins_Drafts_Title.X + lblGalBulletins_Drafts_Title.Width
+                    Y: =0*0
+                    ZIndex: =9
+
+                lblGalBulletins_Drafts_Title As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: |
+                        =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =Parent.TemplateHeight
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =Select(Parent)
+                    PaddingBottom: =4
+                    PaddingLeft: =8
+                    PaddingRight: =4
+                    PaddingTop: =4
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: =ThisItem.Title
+                    Width: |-
+                        =Parent.Width * Switch(
+                            'Bulletins Screen'.Size,
+                            Small,
+                            0.3,
+                            0.25
+                        )
+                    Wrap: =false
+                    X: =0*0
+                    Y: =0*0
+                    ZIndex: =10
+
+                btnGalBulletins_Drafts_Select As button:
+                    BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                    BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+                    Color: =Transparent
+                    DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+                    DisabledColor: =Transparent
+                    DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                    Fill: =gblAppStyles.ButtonTransparent.Fill
+                    FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =Parent.TemplateHeight
+                    HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                    HoverColor: =Transparent
+                    HoverFill: =gblAppStyles.Gallery.HoverFill
+                    OnSelect: =Select(Parent)
+                    PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                    PressedColor: =Transparent
+                    PressedFill: =gblAppStyles.Gallery.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.ButtonTransparent.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.ButtonTransparent.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.ButtonTransparent.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.ButtonTransparent.RadiusTopRight
+                    Size: =gblAppStyles.ButtonTransparent.Size
+                    Text: =ThisItem.Title
+                    Tooltip: =ThisItem.Title
+                    Width: =Parent.TemplateWidth
+                    ZIndex: =11
+
+            galBulletins_Draft_Header As gallery.galleryVertical:
+                AccessibleLabel: |-
+                    =With(
+                        {
+                            varDefault: "Gallery of header columns for draft bulletin records",
+                            varOOBTextId: "galBulletins_Draft_Header__AccessibleLabel"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                BorderColor: =RGBA(0, 0, 0, 0)
+                Fill: =gblAppStyles.ButtonBackground.DisabledFill
+                Height: =CountRows(Self.AllItems) * Self.TemplateHeight
+                Items: =[1]
+                Layout: =Layout.Vertical
+                TemplatePadding: =0
+                TemplateSize: =44
+                Visible: =galBulletins_Drafts_Records.Visible
+                Width: =Parent.Width - (2* Self.X)
+                X: =gblPadding.Page
+                Y: =lblBulletins_Drafts_Header.Y + lblBulletins_Drafts_Header.Height
+                ZIndex: =3
+
+                imgGalBulletins_Drafts_Header_SortByColumn As image:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "Draft bulletins are sorted by latest modified on date",
+                                varOOBTextId: "imgGalBulletins_Drafts_Header_SortByColumn__AccessibleLabel__AccessibleLabel"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    DisplayMode: =DisplayMode.View
+                    Height: =Parent.TemplateHeight
+                    Image: |-
+                        =With(
+                            {
+                                varImageRecord: LookUp(
+                                    staticIcons,
+                                    staticIconName = 
+                        
+                                        "Chevron down"
+                                ),
+                                varColor: gblAppStyles.Icons.Color
+                            },
+                            With(
+                                {
+                                    varImageData: Concatenate(
+                                        "data:image/svg+xml;utf8, ",
+                                        EncodeUrl(
+                                            Concatenate(
+                                                "<svg viewBox='",
+                                                varImageRecord.staticIconViewbox,
+                                                "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                varImageRecord.staticIconPath,
+                                                "' fill='#",
+                                                varColor,
+                                                "'/></svg>"
+                                            )
+                                        )
+                                    )
+                                },
+                                varImageData
+                            )
+                        )
+                    OnSelect: =Select(Parent)
+                    PaddingLeft: =2
+                    PaddingRight: =2
+                    Tooltip: =Self.AccessibleLabel
+                    Visible: =false
+                    Width: =20
+                    X: =lblGalBulletins_Drafts_Header_Modified.X
+                    ZIndex: =1
+
+                lblGalBulletins_Drafts_Header_CreatedBy As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: |
+                        =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =Parent.TemplateHeight
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =
+                    PaddingBottom: =4
+                    PaddingLeft: =8
+                    PaddingRight: =4
+                    PaddingTop: =4
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                        {
+                        varDefault: "Created by",
+                        varOOBTextId: "lblGalBulletins_Drafts_Header_CreatedBy__Text"
+                        },
+                        With(
+                        {
+                        varLocalizedText: LookUp(
+                        colLocalization,
+                        OOBTextId = varOOBTextId,
+                        LocalizedText
+                        )
+                        },
+                        Coalesce(
+                        varLocalizedText,
+                        varDefault
+                        )
+                        )
+                        )
+                    Width: |-
+                        =Parent.Width * Switch(
+                            'Bulletins Screen'.Size,
+                            Small,
+                            0.25,
+                            0.2
+                        )
+                    Wrap: =false
+                    X: =lblGalBulletins_Drafts_Header_Status.X + lblGalBulletins_Drafts_Header_Status.Width
+                    Y: =0*0
+                    ZIndex: =2
+
+                lblGalBulletins_Drafts_Header_Status As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: |
+                        =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =Parent.TemplateHeight
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =
+                    PaddingBottom: =4
+                    PaddingLeft: =8
+                    PaddingRight: =4
+                    PaddingTop: =4
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                        {
+                        varDefault: "Ready to publish",
+                        varOOBTextId: "lblGalBulletins_Drafts_Header_Status__Text"
+                        },
+                        With(
+                        {
+                        varLocalizedText: LookUp(
+                        colLocalization,
+                        OOBTextId = varOOBTextId,
+                        LocalizedText
+                        )
+                        },
+                        Coalesce(
+                        varLocalizedText,
+                        varDefault
+                        )
+                        )
+                        )
+                    Width: |-
+                        =Parent.Width * Switch(
+                            'Bulletins Screen'.Size,
+                            Small,
+                            0.2,
+                            0.15
+                        )
+                    Wrap: =false
+                    X: =lblGalBulletins_Drafts_Header_ScheduledFor.X + lblGalBulletins_Drafts_Header_ScheduledFor.Width
+                    Y: =0*0
+                    ZIndex: =3
+
+                lblGalBulletins_Drafts_Header_ScheduledFor As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: |
+                        =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =Parent.TemplateHeight
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =
+                    PaddingBottom: =4
+                    PaddingLeft: =8
+                    PaddingRight: =4
+                    PaddingTop: =4
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                        {
+                        varDefault: "Scheduled for",
+                        varOOBTextId: "lblGalBulletins_Drafts_Header_ScheduledFor__Text"
+                        },
+                        With(
+                        {
+                        varLocalizedText: LookUp(
+                        colLocalization,
+                        OOBTextId = varOOBTextId,
+                        LocalizedText
+                        )
+                        },
+                        Coalesce(
+                        varLocalizedText,
+                        varDefault
+                        )
+                        )
+                        )
+                    Width: |-
+                        =Parent.Width * Switch(
+                            'Bulletins Screen'.Size,
+                            Small,
+                            0.25,
+                            0.125
+                        )
+                    Wrap: =false
+                    X: =lblGalBulletins_Drafts_Header_Modified.X + lblGalBulletins_Drafts_Header_Modified.Width
+                    Y: =0*0
+                    ZIndex: =4
+
+                lblGalBulletins_Drafts_Header_Modified As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: |
+                        =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =Parent.TemplateHeight
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =
+                    PaddingBottom: =4
+                    PaddingLeft: =8
+                    PaddingRight: =4
+                    PaddingTop: =4
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                        {
+                        varDefault: "Last modified",
+                        varOOBTextId: "lblGalBulletins_Drafts_Header_Modified__Text"
+                        },
+                        With(
+                        {
+                        varLocalizedText: LookUp(
+                        colLocalization,
+                        OOBTextId = varOOBTextId,
+                        LocalizedText
+                        )
+                        },
+                        Coalesce(
+                        varLocalizedText,
+                        varDefault
+                        )
+                        )
+                        )
+                    Width: |-
+                        =Parent.Width * Switch(
+                            'Bulletins Screen'.Size,
+                            Small,
+                            0,
+                            0.125
+                        )
+                    Wrap: =false
+                    X: =lblGalBulletins_Drafts_Header_Category.X + lblGalBulletins_Drafts_Header_Category.Width
+                    Y: =0*0
+                    ZIndex: =5
+
+                lblGalBulletins_Drafts_Header_Category As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: |
+                        =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =Parent.TemplateHeight
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =
+                    PaddingBottom: =4
+                    PaddingLeft: =8
+                    PaddingRight: =4
+                    PaddingTop: =4
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                        {
+                        varDefault: "Category",
+                        varOOBTextId: "lblGalBulletins_Drafts_Header_Category__Text"
+                        },
+                        With(
+                        {
+                        varLocalizedText: LookUp(
+                        colLocalization,
+                        OOBTextId = varOOBTextId,
+                        LocalizedText
+                        )
+                        },
+                        Coalesce(
+                        varLocalizedText,
+                        varDefault
+                        )
+                        )
+                        )
+                    Width: |-
+                        =Parent.Width * Switch(
+                            'Bulletins Screen'.Size,
+                            Small,
+                            0,
+                            0.15
+                        )
+                    Wrap: =false
+                    X: =lblGalBulletins_Drafts_Header_Title.X + lblGalBulletins_Drafts_Header_Title.Width
+                    Y: =0*0
+                    ZIndex: =6
+
+                lblGalBulletins_Drafts_Header_Title As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: |
+                        =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =Parent.TemplateHeight
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =
+                    PaddingBottom: =4
+                    PaddingLeft: =8
+                    PaddingRight: =4
+                    PaddingTop: =4
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                        {
+                        varDefault: "Title",
+                        varOOBTextId: "lblGalBulletins_Drafts_Header_Title__Text"
+                        },
+                        With(
+                        {
+                        varLocalizedText: LookUp(
+                        colLocalization,
+                        OOBTextId = varOOBTextId,
+                        LocalizedText
+                        )
+                        },
+                        Coalesce(
+                        varLocalizedText,
+                        varDefault
+                        )
+                        )
+                        )
+                    Width: |-
+                        =Parent.Width * Switch(
+                            'Bulletins Screen'.Size,
+                            Small,
+                            0.3,
+                            0.25
+                        )
+                    Wrap: =false
+                    X: =0*0
+                    Y: =0*0
+                    ZIndex: =7
+
+            lblBulletins_Drafts_Header As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: |
+                    =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                DisplayMode: =DisplayMode.View
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Semibold
+                Height: =48
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                OnSelect: =
+                PaddingBottom: =4
+                PaddingLeft: =gblPadding.Page
+                PaddingRight: =4
+                PaddingTop: =4
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Role: =TextRole.Heading1
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: |-
+                    =With(
+                    {
+                    varDefault: "Drafts",
+                    varOOBTextId: "lblBulletins_Drafts_Header__Text"
+                    },
+                    With(
+                    {
+                    varLocalizedText: LookUp(
+                    colLocalization,
+                    OOBTextId = varOOBTextId,
+                    LocalizedText
+                    )
+                    },
+                    Coalesce(
+                    varLocalizedText,
+                    varDefault
+                    )
+                    )
+                    )
+                Width: =Parent.Width - Self.X
+                Wrap: =false
+                X: =0*0
+                Y: =0*0
+                ZIndex: =4
+
+        dtcBulletins_Published As dataCard.blankCard:
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            DisplayMode: =DisplayMode.Edit
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =galBulletins_Published_Records.Y + galBulletins_Published_Records.Height + gblPadding.Page
+            Width: =Parent.Width
+            X: =0
+            Y: =1
+            ZIndex: =2
+
+            conBulletins_Published_ZeroState As groupContainer:
+                Height: =220*1
+                Visible: =!galBulletins_Published_Records.Visible
+                Width: =Parent.Width
+                X: =0*0
+                Y: =galBulletins_Published_Header.Y + galBulletins_Published_Header.Height
+                ZIndex: =1
+
+                btnBulletins_ZeroState_NewBulletin As button:
+                    BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+                    BorderThickness: =gblAppStyles.ButtonPrimary.BorderThickness
+                    Color: =gblAppStyles.ButtonPrimary.Color
+                    DisabledBorderColor: =gblAppStyles.ButtonPrimary.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.ButtonPrimary.DisabledColor
+                    DisabledFill: =gblAppStyles.ButtonPrimary.DisabledFill
+                    Fill: =gblAppStyles.ButtonPrimary.Fill
+                    FocusedBorderColor: =gblAppStyles.ButtonPrimary.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.ButtonPrimary.FocusedBorderThickness
+                    Height: =32
+                    HoverBorderColor: =gblAppStyles.ButtonPrimary.HoverBorderColor
+                    HoverColor: =gblAppStyles.ButtonPrimary.HoverColor
+                    HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+                    OnSelect: |
+                        =UpdateContext({locBlockUserInput: true});
+                        Set(
+                            gblRecordBulletin,
+                            Blank()
+                        );
+                        Navigate(
+                            'Bulletin Detail Screen',
+                            ScreenTransition.Fade
+                        );
+                        UpdateContext({locBlockUserInput: false});
+                    PressedBorderColor: =gblAppStyles.ButtonPrimary.PressedBorderColor
+                    PressedColor: =gblAppStyles.ButtonPrimary.PressedColor
+                    PressedFill: =gblAppStyles.ButtonPrimary.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.ButtonPrimary.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+                    Size: =gblAppStyles.ButtonPrimary.Size
+                    Text: |-
+                        =With(
+                        {
+                        varDefault: "New bulletin",
+                        varOOBTextId: "btnBulletins_ZeroState_NewBulletin__Text"
+                        },
+                        With(
+                        {
+                        varLocalizedText: LookUp(
+                        colLocalization,
+                        OOBTextId = varOOBTextId,
+                        LocalizedText
+                        )
+                        },
+                        Coalesce(
+                        varLocalizedText,
+                        varDefault
+                        )
+                        )
+                        )
+                    Width: =132
+                    X: =(Parent.Width - Self.Width) / 2
+                    Y: =lblBulletins_Published_ZeroState.Y + lblBulletins_Published_ZeroState.Height + gblPadding.ButtonShape
+                    ZIndex: =1
+
+                imgBulletins_Published_ZeroState As image:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "There are no bulletins yet",
+                                varOOBTextId: "imgBulletins_Published_ZeroState__AccessibleLabel__AccessibleLabel"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    DisplayMode: =DisplayMode.View
+                    Height: =120
+                    Image: =Image_ZeroState_Bulletins
+                    Tooltip: =Self.AccessibleLabel
+                    Width: =140
+                    X: =(Parent.Width - Self.Width) / 2
+                    Y: =0*0
+                    ZIndex: =2
+
+                lblBulletins_Published_ZeroState As label:
+                    Align: =Align.Center
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: |
+                        =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =
+                    PaddingBottom: =4
+                    PaddingLeft: =gblPadding.Page
+                    PaddingRight: =4
+                    PaddingTop: =4
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                        {
+                        varDefault: "Published bulletins will appear here",
+                        varOOBTextId: "lblBulletins_Published_ZeroState__Text"
+                        },
+                        With(
+                        {
+                        varLocalizedText: LookUp(
+                        colLocalization,
+                        OOBTextId = varOOBTextId,
+                        LocalizedText
+                        )
+                        },
+                        Coalesce(
+                        varLocalizedText,
+                        varDefault
+                        )
+                        )
+                        )
+                    Width: =Parent.Width - Self.X
+                    Wrap: =false
+                    X: =0*0
+                    Y: =imgBulletins_Published_ZeroState.Y + imgBulletins_Published_ZeroState.Height
+                    ZIndex: =3
+
+            galBulletins_Published_Records As gallery.galleryVertical:
+                AccessibleLabel: |-
+                    =With(
+                        {
+                            varDefault: "Gallery of published bulletin records",
+                            varOOBTextId: "galBulletins_Published_Records__AccessibleLabel"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                BorderColor: =RGBA(0, 0, 0, 0)
+                Fill: =gblAppStyles.ButtonSecondary.Fill
+                Height: =CountRows(Self.AllItems) * Self.TemplateHeight
+                Items: |-
+                    =Filter(Bulletins, 'Bulletins (Views)'.'Publication Group: Published')
+                Layout: =Layout.Vertical
+                LoadingSpinner: =LoadingSpinner.Data
+                LoadingSpinnerColor: =gblAppStyles.ButtonPrimary.Fill
+                OnSelect: |-
+                    =UpdateContext({locBlockUserInput: true});
+                    // Set Bulletin record
+                    Set(
+                        gblRecordBulletin,
+                        LookUp(
+                            Bulletins,
+                            Bulletin = ThisItem.Bulletin
+                        )
+                    );
+                    // Navigate to Overview screen, and pass stat local variables
+                    Navigate(
+                        'Bulletin Overview Screen',
+                        ScreenTransition.Fade,
+                        {
+                            locStatsViews: Value(lblGalBulletins_Published_Views.Text),
+                            locStatsBookmarks: Value(lblGalBulletins_Published_Bookmarks.Text)
+                        }
+                    );
+                    // [Screen Reader Start]
+                    UpdateContext(
+                        {
+                            locScreenReaderAnnouncedText: With(
+                                {
+                                    varAnnouncedText: With(
+                                        {
+                                            varDefault: "Action occurred", // Default Text to use
+                                            varOOBTextId: "localizationKey" // Localized version
+                                        },
+                                        With(
+                                            {
+                                                varLocalizedText: LookUp(
+                                                    colLocalization,
+                                                    OOBTextId = varOOBTextId,
+                                                    LocalizedText
+                                                )
+                                            },
+                                            Coalesce(
+                                                varLocalizedText,
+                                                varDefault
+                                            )
+                                        )
+                                    )
+                                },
+                                If(
+                                    locScreenReaderAnnouncedText = varAnnouncedText,
+                                    Concatenate(
+                                        varAnnouncedText,
+                                        " "
+                                    ),
+                                    varAnnouncedText // If clicked twice, will append blank space to update variable
+                                )
+                            )
+                        }
+                    );
+                    // [Screen Reader End]
+                    UpdateContext({locBlockUserInput: false});
+                TemplatePadding: =0
+                TemplateSize: =44
+                Visible: =Self.Height > 0
+                Width: =Parent.Width - (2* Self.X)
+                X: =gblPadding.Page
+                Y: =galBulletins_Published_Header.Y + galBulletins_Published_Header.Height
+                ZIndex: =2
+
+                shpGalBulletins_Published_Divider As rectangle:
+                    DisabledFill: =gblAppStyles.Dividers.Background
+                    DisplayMode: =DisplayMode.Disabled
+                    Height: =1
+                    OnSelect: =Select(Parent)
+                    Width: =Parent.TemplateWidth
+                    X: =0*0
+                    Y: =Parent.TemplateHeight - Self.Height
+                    ZIndex: =1
+
+                imgGalBulletins_Published_CreatedBy As image:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "Image of " & ThisItem.'Created By'.'Full Name',
+                                varOOBTextId: "imgGalBulletins_Published_CreatedBy__AccessibleLabel__AccessibleLabel",
+                                varParam0: ThisItem.'Created By'.'Full Name'
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                If(
+                                    IsBlankOrError(varParam0),
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    ),
+                                    Coalesce(
+                                        Substitute(
+                                            varLocalizedText,
+                                            "{0}",
+                                            Text(varParam0)
+                                        ),
+                                        varDefault
+                                    )
+                                )
+                            )
+                        )
+                    DisplayMode: =DisplayMode.Disabled
+                    Height: =28*1
+                    Image: |-
+                        =With(
+                            {varUserName: ThisItem.'Created By'.'User Name'},
+                            With(
+                                {
+                                    varUserImage: LookUp(
+                                        colUserImages,
+                                        tblUserName = varUserName,
+                                        tblUserImage
+                                    )
+                                },
+                                If(
+                                    IsBlankOrError(varUserImage),
+                                    If(
+                                        IsBlank(varUserName),
+                                        SampleImage,
+                                        Office365Users.UserPhotoV2(varUserName)
+                                    ),
+                                    varUserImage
+                                )
+                            )
+                        )
+                    ImagePosition: =ImagePosition.Fill
+                    OnSelect: =Select(Parent)
+                    RadiusBottomLeft: =Self.Width
+                    RadiusBottomRight: =Self.Width
+                    RadiusTopLeft: =Self.Width
+                    RadiusTopRight: =Self.Width
+                    Tooltip: =Self.AccessibleLabel
+                    Width: =Self.Height
+                    X: =lblGalBulletins_Published_CreatedBy.X + 8
+                    Y: =0*0 + 8
+                    ZIndex: =2
+
+                lblGalBulletins_Published_CreatedBy As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: |
+                        =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =Parent.TemplateHeight
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =
+                    PaddingBottom: =4
+                    PaddingLeft: =44
+                    PaddingRight: =4
+                    PaddingTop: =4
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: =ThisItem.'Created By'.'Full Name'
+                    Width: |-
+                        =Parent.Width * Switch(
+                            'Bulletins Screen'.Size,
+                            Small,
+                            0.25,
+                            0.2
+                        )
+                    Wrap: =false
+                    X: =lblGalBulletins_Published_Bookmarks.X + lblGalBulletins_Published_Bookmarks.Width
+                    Y: =0*0
+                    ZIndex: =3
+
+                lblGalBulletins_Published_Bookmarks As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: |
+                        =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =Parent.TemplateHeight
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =
+                    PaddingBottom: =4
+                    PaddingLeft: =8
+                    PaddingRight: =4
+                    PaddingTop: =4
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                            {varRows: ThisItem.'Bulletin Bookmarks'},
+                            Coalesce(
+                                Text(CountRows(varRows)),
+                                "0"
+                            )
+                        )
+                        /*
+                        // Use code below if delegation becomes an issue, otherwise counting directly is more performant
+                        Coalesce(
+                            Text(
+                                CountRows(
+                                    Filter(
+                                        'Bulletin Bookmarks',
+                                        'Bulletin Bookmarks'[@Bulletin].Bulletin = ThisItem.Bulletin
+                                    )
+                                )
+                            ),
+                            "0"
+                        )
+                        */
+                    Width: |-
+                        =Parent.Width * Switch(
+                            'Bulletins Screen'.Size,
+                            Small,
+                            0.2,
+                            0.15
+                        )
+                    Wrap: =false
+                    X: =lblGalBulletins_Published_Views.X + lblGalBulletins_Published_Views.Width
+                    Y: =0*0
+                    ZIndex: =4
+
+                lblGalBulletins_Published_Views As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: |
+                        =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =Parent.TemplateHeight
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =
+                    PaddingBottom: =4
+                    PaddingLeft: =8
+                    PaddingRight: =4
+                    PaddingTop: =4
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |
+                        =With(
+                            {varRows: ThisItem.'Bulletin Read Receipts'},
+                            Coalesce(
+                                Text(CountRows(varRows)),
+                                "0"
+                            )
+                        )
+                        /*
+                        // Use code below if delegation becomes an issue, otherwise counting directly is more performant
+                        Filter(
+                            'Bulletin Read Receipts',
+                            'Bulletin Read Receipts'[@Bulletin].Bulletin = ThisItem.Bulletin
+                        )
+                        */
+                    Width: |-
+                        =Parent.Width * Switch(
+                            'Bulletins Screen'.Size,
+                            Small,
+                            0.25,
+                            0.125
+                        )
+                    Wrap: =false
+                    X: =lblGalBulletins_Published_PublishOn.X + lblGalBulletins_Published_PublishOn.Width
+                    Y: =0*0
+                    ZIndex: =5
+
+                lblGalBulletins_Published_PublishOn As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: |
+                        =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =Parent.TemplateHeight
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =
+                    PaddingBottom: =4
+                    PaddingLeft: =8
+                    PaddingRight: =4
+                    PaddingTop: =4
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =Text(
+                            ThisItem.'Publish On',
+                            DateTimeFormat.ShortDate,
+                            gblUserLanguage
+                        )
+                    Width: |-
+                        =Parent.Width * Switch(
+                            'Bulletins Screen'.Size,
+                            Small,
+                            0,
+                            0.125
+                        )
+                    Wrap: =false
+                    X: =lblGalBulletins_Published_Category.X + lblGalBulletins_Published_Category.Width
+                    Y: =0*0
+                    ZIndex: =6
+
+                lblGalBulletins_Published_Category As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: |
+                        =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =Parent.TemplateHeight
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =
+                    PaddingBottom: =4
+                    PaddingLeft: =8
+                    PaddingRight: =4
+                    PaddingTop: =4
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: =ThisItem.Category.Name
+                    Width: |-
+                        =Parent.Width * Switch(
+                            'Bulletins Screen'.Size,
+                            Small,
+                            0,
+                            0.15
+                        )
+                    Wrap: =false
+                    X: =lblGalBulletins_Published_Title.X + lblGalBulletins_Published_Title.Width
+                    Y: =0*0
+                    ZIndex: =7
+
+                lblGalBulletins_Published_Title As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: |
+                        =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =Parent.TemplateHeight
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =Select(Parent)
+                    PaddingBottom: =4
+                    PaddingLeft: =8
+                    PaddingRight: =4
+                    PaddingTop: =4
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: =ThisItem.Title
+                    Width: |-
+                        =Parent.Width * Switch(
+                            'Bulletins Screen'.Size,
+                            Small,
+                            0.3,
+                            0.25
+                        )
+                    Wrap: =false
+                    X: =0*0
+                    Y: =0*0
+                    ZIndex: =8
+
+                btnGalBulletins_Published_Select As button:
+                    BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                    BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+                    Color: =Transparent
+                    DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+                    DisabledColor: =Transparent
+                    DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                    Fill: =gblAppStyles.ButtonTransparent.Fill
+                    FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =Parent.TemplateHeight
+                    HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                    HoverColor: =Transparent
+                    HoverFill: =gblAppStyles.Gallery.HoverFill
+                    OnSelect: =Select(Parent)
+                    PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                    PressedColor: =Transparent
+                    PressedFill: =gblAppStyles.Gallery.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.ButtonTransparent.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.ButtonTransparent.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.ButtonTransparent.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.ButtonTransparent.RadiusTopRight
+                    Size: =gblAppStyles.ButtonTransparent.Size
+                    Text: =ThisItem.Title
+                    Tooltip: =ThisItem.Title
+                    Width: =Parent.TemplateWidth
+                    ZIndex: =9
+
+            galBulletins_Published_Header As gallery.galleryVertical:
+                AccessibleLabel: |-
+                    =With(
+                        {
+                            varDefault: "Gallery of header columns for published bulletin records",
+                            varOOBTextId: "galBulletins_Published_Header__AccessibleLabel"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                BorderColor: =RGBA(0, 0, 0, 0)
+                Fill: =gblAppStyles.ButtonBackground.DisabledFill
+                Height: =CountRows(Self.AllItems) * Self.TemplateHeight
+                Items: =[1]
+                Layout: =Layout.Vertical
+                TemplatePadding: =0
+                TemplateSize: =44
+                Visible: =galBulletins_Published_Records.Visible
+                Width: =Parent.Width - (2* Self.X)
+                X: =gblPadding.Page
+                Y: =lblBulletins_Published_Header.Y + lblBulletins_Published_Header.Height
+                ZIndex: =3
+
+                imgGalBulletins_Published_Header_SortByColumn As image:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "Published bulletins are sorted by latest publish on date",
+                                varOOBTextId: "imgGalBulletins_Published_Header_SortByColumn__AccessibleLabel__AccessibleLabel"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    DisplayMode: =DisplayMode.View
+                    Height: =Parent.TemplateHeight
+                    Image: |-
+                        =With(
+                            {
+                                varImageRecord: LookUp(
+                                    staticIcons,
+                                    staticIconName = 
+                        
+                                        "Chevron down"
+                                ),
+                                varColor: gblAppStyles.Icons.Color
+                            },
+                            With(
+                                {
+                                    varImageData: Concatenate(
+                                        "data:image/svg+xml;utf8, ",
+                                        EncodeUrl(
+                                            Concatenate(
+                                                "<svg viewBox='",
+                                                varImageRecord.staticIconViewbox,
+                                                "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                varImageRecord.staticIconPath,
+                                                "' fill='#",
+                                                varColor,
+                                                "'/></svg>"
+                                            )
+                                        )
+                                    )
+                                },
+                                varImageData
+                            )
+                        )
+                    OnSelect: =Select(Parent)
+                    PaddingLeft: =2
+                    PaddingRight: =2
+                    Tooltip: =Self.AccessibleLabel
+                    Visible: =false
+                    Width: =20
+                    X: =lblGalBulletins_Published_Header_PublishedOn.X
+                    ZIndex: =1
+
+                lblGalBulletins_Published_Header_CreatedBy As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: |
+                        =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =Parent.TemplateHeight
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =
+                    PaddingBottom: =4
+                    PaddingLeft: =8
+                    PaddingRight: =4
+                    PaddingTop: =4
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                        {
+                        varDefault: "Created by",
+                        varOOBTextId: "lblGalBulletins_Published_Header_CreatedBy__Text"
+                        },
+                        With(
+                        {
+                        varLocalizedText: LookUp(
+                        colLocalization,
+                        OOBTextId = varOOBTextId,
+                        LocalizedText
+                        )
+                        },
+                        Coalesce(
+                        varLocalizedText,
+                        varDefault
+                        )
+                        )
+                        )
+                    Width: |-
+                        =Parent.Width * Switch(
+                            'Bulletins Screen'.Size,
+                            Small,
+                            0.25,
+                            0.2
+                        )
+                    Wrap: =false
+                    X: =lblGalBulletins_Published_Header_Bookmarks.X + lblGalBulletins_Published_Header_Bookmarks.Width
+                    Y: =0*0
+                    ZIndex: =2
+
+                lblGalBulletins_Published_Header_Bookmarks As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: |
+                        =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =Parent.TemplateHeight
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =
+                    PaddingBottom: =4
+                    PaddingLeft: =8
+                    PaddingRight: =4
+                    PaddingTop: =4
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                        {
+                        varDefault: "Bookmarks",
+                        varOOBTextId: "lblGalBulletins_Published_Header_Bookmarks__Text"
+                        },
+                        With(
+                        {
+                        varLocalizedText: LookUp(
+                        colLocalization,
+                        OOBTextId = varOOBTextId,
+                        LocalizedText
+                        )
+                        },
+                        Coalesce(
+                        varLocalizedText,
+                        varDefault
+                        )
+                        )
+                        )
+                    Width: |-
+                        =Parent.Width * Switch(
+                            'Bulletins Screen'.Size,
+                            Small,
+                            0.2,
+                            0.15
+                        )
+                    Wrap: =false
+                    X: =lblGalBulletins_Published_Header_Views.X + lblGalBulletins_Published_Header_Views.Width
+                    Y: =0*0
+                    ZIndex: =3
+
+                lblGalBulletins_Published_Header_Views As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: |
+                        =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =Parent.TemplateHeight
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =
+                    PaddingBottom: =4
+                    PaddingLeft: =8
+                    PaddingRight: =4
+                    PaddingTop: =4
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                        {
+                        varDefault: "Views",
+                        varOOBTextId: "lblGalBulletins_Published_Header_Views__Text"
+                        },
+                        With(
+                        {
+                        varLocalizedText: LookUp(
+                        colLocalization,
+                        OOBTextId = varOOBTextId,
+                        LocalizedText
+                        )
+                        },
+                        Coalesce(
+                        varLocalizedText,
+                        varDefault
+                        )
+                        )
+                        )
+                    Width: |-
+                        =Parent.Width * Switch(
+                            'Bulletins Screen'.Size,
+                            Small,
+                            0.25,
+                            0.125
+                        )
+                    Wrap: =false
+                    X: =lblGalBulletins_Published_Header_PublishedOn.X + lblGalBulletins_Published_Header_PublishedOn.Width
+                    Y: =0*0
+                    ZIndex: =4
+
+                lblGalBulletins_Published_Header_PublishedOn As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: |
+                        =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =Parent.TemplateHeight
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =
+                    PaddingBottom: =4
+                    PaddingLeft: =8
+                    PaddingRight: =4
+                    PaddingTop: =4
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                        {
+                        varDefault: "Published on",
+                        varOOBTextId: "lblGalBulletins_Published_Header_PublishedOn__Text"
+                        },
+                        With(
+                        {
+                        varLocalizedText: LookUp(
+                        colLocalization,
+                        OOBTextId = varOOBTextId,
+                        LocalizedText
+                        )
+                        },
+                        Coalesce(
+                        varLocalizedText,
+                        varDefault
+                        )
+                        )
+                        )
+                    Width: |-
+                        =Parent.Width * Switch(
+                            'Bulletins Screen'.Size,
+                            Small,
+                            0,
+                            0.125
+                        )
+                    Wrap: =false
+                    X: =lblGalBulletins_Published_Header_Category.X + lblGalBulletins_Published_Header_Category.Width
+                    Y: =0*0
+                    ZIndex: =5
+
+                lblGalBulletins_Published_Header_Category As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: |
+                        =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =Parent.TemplateHeight
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =
+                    PaddingBottom: =4
+                    PaddingLeft: =8
+                    PaddingRight: =4
+                    PaddingTop: =4
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                        {
+                        varDefault: "Category",
+                        varOOBTextId: "lblGalBulletins_Published_Header_Category__Text"
+                        },
+                        With(
+                        {
+                        varLocalizedText: LookUp(
+                        colLocalization,
+                        OOBTextId = varOOBTextId,
+                        LocalizedText
+                        )
+                        },
+                        Coalesce(
+                        varLocalizedText,
+                        varDefault
+                        )
+                        )
+                        )
+                    Width: |-
+                        =Parent.Width * Switch(
+                            'Bulletins Screen'.Size,
+                            Small,
+                            0,
+                            0.15
+                        )
+                    Wrap: =false
+                    X: =lblGalBulletins_Published_Header_Title.X + lblGalBulletins_Published_Header_Title.Width
+                    Y: =0*0
+                    ZIndex: =6
+
+                lblGalBulletins_Published_Header_Title As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: |
+                        =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =Parent.TemplateHeight
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =
+                    PaddingBottom: =4
+                    PaddingLeft: =8
+                    PaddingRight: =4
+                    PaddingTop: =4
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                        {
+                        varDefault: "Title",
+                        varOOBTextId: "lblGalBulletins_Published_Header_Title__Text"
+                        },
+                        With(
+                        {
+                        varLocalizedText: LookUp(
+                        colLocalization,
+                        OOBTextId = varOOBTextId,
+                        LocalizedText
+                        )
+                        },
+                        Coalesce(
+                        varLocalizedText,
+                        varDefault
+                        )
+                        )
+                        )
+                    Width: |-
+                        =Parent.Width * Switch(
+                            'Bulletins Screen'.Size,
+                            Small,
+                            0.3,
+                            0.25
+                        )
+                    Wrap: =false
+                    X: =0*0
+                    Y: =0*0
+                    ZIndex: =7
+
+            lblBulletins_Published_Header As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: |
+                    =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                DisplayMode: =DisplayMode.View
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Semibold
+                Height: =48
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                OnSelect: =
+                PaddingBottom: =4
+                PaddingLeft: =gblPadding.Page
+                PaddingRight: =4
+                PaddingTop: =4
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Role: =TextRole.Heading1
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: |-
+                    =With(
+                    {
+                    varDefault: "Published",
+                    varOOBTextId: "lblBulletins_Published_Header__Text"
+                    },
+                    With(
+                    {
+                    varLocalizedText: LookUp(
+                    colLocalization,
+                    OOBTextId = varOOBTextId,
+                    LocalizedText
+                    )
+                    },
+                    Coalesce(
+                    varLocalizedText,
+                    varDefault
+                    )
+                    )
+                    )
+                Width: =Parent.Width - Self.X
+                Wrap: =false
+                X: =0*0
+                Y: =0*0
+                ZIndex: =4
+
+    comHeader_Bulletins As comHeader:
+        Fill: =gblAppStyles.Background.Fill
+        Height: =60*1
+        inputAboutIcon: |-
+            =With(
+                {
+                    varImageRecord: LookUp(
+                        staticIcons,
+                        staticIconName = If(
+                            App.ActiveScreen = 'About Screen',
+                            "Info filled",
+                            "Info"
+                        )
+                    ),
+                    varColor: gblAppStyles.Icons.Color
+                },
+                With(
+                    {
+                        varImageData: Concatenate(
+                            "data:image/svg+xml;utf8, ",
+                            EncodeUrl(
+                                Concatenate(
+                                    "<svg viewBox='",
+                                    varImageRecord.staticIconViewbox,
+                                    "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                    varImageRecord.staticIconPath,
+                                    "' fill='#",
+                                    varColor,
+                                    "'/></svg>"
+                                )
+                            )
+                        )
+                    },
+                    varImageData
+                )
+            )
+        inputAboutScreen: ='About Screen'
+        inputColors: =gblAppColors
+        inputDarkTheme: =gblThemeDark
+        inputHeaderSettings: =gblAppMenu.Home
+        inputHighContrastTheme: =gblThemeHiCo
+        inputMenuItem1: =gblAppMenu.Bulletins
+        inputMenuItem2: =gblAppMenu.FAQs
+        inputMenuItem3: =gblAppMenu.LinksContacts
+        inputMenuItem4: =
+        inputMenuItem5: =
+        inputSettingsIcon: |-
+            =With(
+                {
+                    varImageRecord: LookUp(
+                        staticIcons,
+                        staticIconName = If(
+                            App.ActiveScreen = 'Settings Screen',
+                            "Settings filled",
+                            "Settings"
+                        )
+                    ),
+                    varColor: gblAppStyles.Icons.Color
+                },
+                With(
+                    {
+                        varImageData: Concatenate(
+                            "data:image/svg+xml;utf8, ",
+                            EncodeUrl(
+                                Concatenate(
+                                    "<svg viewBox='",
+                                    varImageRecord.staticIconViewbox,
+                                    "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                    varImageRecord.staticIconPath,
+                                    "' fill='#",
+                                    varColor,
+                                    "'/></svg>"
+                                )
+                            )
+                        )
+                    },
+                    varImageData
+                )
+            )
+        inputSettingsScreen: ='Settings Screen'
+        inputStyles: =gblAppStyles
+        Width: =Parent.Width
+        X: =0*0
+        Y: =0*0
+        ZIndex: =3
+
+    btnBulletins_NewBulletin As button:
+        BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+        BorderThickness: =gblAppStyles.ButtonPrimary.BorderThickness
+        Color: =gblAppStyles.ButtonPrimary.Color
+        DisabledBorderColor: =gblAppStyles.ButtonPrimary.DisabledBorderColor
+        DisabledColor: =gblAppStyles.ButtonPrimary.DisabledColor
+        DisabledFill: =gblAppStyles.ButtonPrimary.DisabledFill
+        Fill: =gblAppStyles.ButtonPrimary.Fill
+        FocusedBorderColor: =gblAppStyles.ButtonPrimary.FocusedBorderColor
+        FocusedBorderThickness: =gblAppStyles.ButtonPrimary.FocusedBorderThickness
+        Height: =32
+        HoverBorderColor: =gblAppStyles.ButtonPrimary.HoverBorderColor
+        HoverColor: =gblAppStyles.ButtonPrimary.HoverColor
+        HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+        OnSelect: |
+            =UpdateContext({locBlockUserInput: true});
+            // Set Bulletin Variable to Blank(), for new record
+            Set(
+                gblRecordBulletin,
+                Blank()
+            );Set(locSelectedStockImage,Blank());//addBulletinDetail_Image.Media=Blank();
+            // Navigate to the Detail Screen
+            Navigate(
+                'Bulletin Detail Screen',
+                ScreenTransition.Fade
+            );
+            // [Screen Reader Start]
+            UpdateContext(
+                {
+                    locScreenReaderAnnouncedText: With(
+                        {
+                            varAnnouncedText: With(
+                                {
+                                    varDefault: "Navigating to add a new bulletin",
+                                    varOOBTextId: "btnBulletins_NewBulletin__Announced"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextId = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        },
+                        If(
+                            locScreenReaderAnnouncedText = varAnnouncedText,
+                            Concatenate(
+                                varAnnouncedText,
+                                " "
+                            ),
+                            varAnnouncedText
+                        )
+                    )
+                }
+            );
+            // [Screen Reader End]
+            UpdateContext({locBlockUserInput: false});
+        PressedBorderColor: =gblAppStyles.ButtonPrimary.PressedBorderColor
+        PressedColor: =gblAppStyles.ButtonPrimary.PressedColor
+        PressedFill: =gblAppStyles.ButtonPrimary.PressedFill
+        RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+        RadiusBottomRight: =gblAppStyles.ButtonPrimary.RadiusBottomRight
+        RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+        RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+        Size: =gblAppStyles.ButtonPrimary.Size
+        Text: |-
+            =With(
+            {
+            varDefault: "New bulletin",
+            varOOBTextId: "btnBulletins_NewBulletin__Text"
+            },
+            With(
+            {
+            varLocalizedText: LookUp(
+            colLocalization,
+            OOBTextId = varOOBTextId,
+            LocalizedText
+            )
+            },
+            Coalesce(
+            varLocalizedText,
+            varDefault
+            )
+            )
+            )
+        Width: |-
+            =Switch(
+                'Bulletins Screen'.Size,
+                Small,
+                Parent.Width - (2* gblPadding.Page),
+                132
+            )
+        X: |-
+            =Switch(
+                'Bulletins Screen'.Size,
+                Small,
+                gblPadding.Page,
+                Parent.Width - Self.Width - 98
+            )
+        Y: |-
+            =Switch(
+                'Bulletins Screen'.Size,
+                Small,
+                comHeader_Bulletins.Height + gblPadding.Page,
+                (comHeader_Bulletins.Height - Self.Height) / 2
+            )
+        ZIndex: =4
+
+    conDialogSetup As groupContainer:
+        Fill: =gblAppStyles.Dialogs.Fill
+        Height: =Parent.Height
+        Visible: =locVisibleDialog
+        Width: =Parent.Width
+        X: =0*0
+        Y: =0*0
+        ZIndex: =5
+
+        conDialogSplash_PowerApps As groupContainer:
+            Fill: =gblAppStyles.Background.Fill
+            Height: =600
+            Visible: =locVisibleSplash
+            Width: =600
+            X: =(Parent.Width - Self.Width) / 2
+            Y: =(Parent.Height - Self.Height) / 2
+            ZIndex: =2
+
+            btnSplashPowerApps_Proceed As button:
+                BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+                BorderThickness: =gblAppStyles.ButtonPrimary.BorderThickness
+                Color: =gblAppStyles.ButtonPrimary.Color
+                DisabledBorderColor: =gblAppStyles.ButtonPrimary.DisabledBorderColor
+                DisabledColor: =gblAppStyles.ButtonPrimary.DisabledColor
+                DisabledFill: =gblAppStyles.ButtonPrimary.DisabledFill
+                Fill: =gblAppStyles.ButtonPrimary.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonPrimary.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonPrimary.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =32
+                HoverBorderColor: =gblAppStyles.ButtonPrimary.HoverBorderColor
+                HoverColor: =gblAppStyles.ButtonPrimary.HoverColor
+                HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+                OnSelect: |
+                    =If(
+                        chkSplashPowerApps_DoNotShowAgain.Value,
+                        Patch(
+                            'Bulletin User Settings',
+                            gblRecordUserSettings,
+                            {'Display Splash (Power Apps)?': 'Display Splash (Power Apps)? (Bulletin User Settings)'.No}
+                        )
+                    );
+                    UpdateContext(
+                        {
+                            locVisibleSplash: false,
+                            locVisibleDialog: false
+                        }
+                    );
+                PressedBorderColor: =gblAppStyles.ButtonPrimary.PressedBorderColor
+                PressedColor: =gblAppStyles.ButtonPrimary.PressedColor
+                PressedFill: =gblAppStyles.ButtonPrimary.PressedFill
+                RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.ButtonPrimary.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+                Size: =gblAppStyles.ButtonPrimary.Size
+                Text: |-
+                    =With(
+                        {
+                            varDefault: "Got it",
+                            varOOBTextId: "_translateCommon__Splash_Proceed"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                Tooltip: |
+                    =With(
+                        {
+                            varLocalText: LookUp(
+                                staticLocalizations,
+                                OOBTextId = "btnSaveSetup_Tooltip", // The 'key' to match
+                                LocalizedText
+                            )
+                        },
+                        If(
+                            IsBlank(varLocalText),
+                            "Click to Let's go", // Text to fallback to, and show in app studio
+                            varLocalText
+                        )
+                    )
+                Width: =120
+                X: =Parent.Width -Self.Width - gblPadding.Page
+                Y: =Parent.Height - Self.Height - 24
+                ZIndex: =1
+
+            chkSplashPowerApps_DoNotShowAgain As checkbox:
+                BorderColor: =gblAppStyles.Checkbox.BorderColor
+                BorderThickness: =gblAppStyles.Checkbox.BorderThickness
+                CheckboxBackgroundFill: =gblAppStyles.Checkbox.CheckboxBackgroundFill
+                CheckboxBorderColor: =gblAppStyles.Checkbox.CheckboxBorderColor
+                CheckboxSize: =24
+                CheckmarkFill: =gblAppStyles.Checkbox.CheckmarkFill
+                Color: =gblAppStyles.Checkbox.Color
+                DisabledBorderColor: =gblAppStyles.Checkbox.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Checkbox.DisabledColor
+                DisabledFill: =gblAppStyles.Checkbox.DisabledFill
+                Fill: =gblAppStyles.Checkbox.Fill
+                FocusedBorderColor: =gblAppStyles.Checkbox.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Checkbox.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =40
+                HoverBorderColor: =gblAppStyles.Checkbox.HoverBorderColor
+                HoverColor: =gblAppStyles.Checkbox.HoverColor
+                HoverFill: =gblAppStyles.Checkbox.HoverFill
+                PressedBorderColor: =gblAppStyles.Checkbox.PressedBorderColor
+                PressedColor: =gblAppStyles.Checkbox.PressedColor
+                PressedFill: =gblAppStyles.Checkbox.PressedFill
+                Size: =gblAppStyles.Checkbox.Size
+                Text: |-
+                    =With(
+                        {
+                            varDefault: "Don’t show this again",
+                            varOOBTextId: "_translateCommon__Splash_DoNotShowAgain"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                Width: =215
+                X: =gblPadding.Page
+                Y: =btnSplashPowerApps_Proceed.Y
+                ZIndex: =3
+
+            imgSplashPowerApps_Editor As image:
+                AccessibleLabel: =htmSplashPowerApps_Summary.HtmlText
+                Height: =256
+                Image: =Image_SplashPage_PowerPlatform
+                Width: =Parent.Width - 40
+                X: =(Parent.Width - Self.Width) / 2
+                Y: =htmSplashPowerApps_Summary.Y +htmSplashPowerApps_Summary.Height + 24
+                ZIndex: =4
+
+            htmSplashPowerApps_Summary As htmlViewer:
+                BorderColor: =RGBA(0, 0, 0, 0)
+                Color: =gblAppStyles.Label.Color
+                Font: =Font.'Segoe UI'
+                Height: =46
+                HtmlText: |-
+                    =Concatenate(
+                        "<center>",
+                        With(
+                            {
+                                varDefault: "You can extend the app capabilities using powerful data platform and approachable low-code tools from the Power Platform, all within Teams. ",
+                                varOOBTextId: "_translateCommon__Splash_Description"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        ),
+                        "</center>"
+                    )
+                PaddingBottom: =0
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Size: =gblAppStyles.Label.Size.Medium
+                Width: =lblSplashPowerApps_Title.Width
+                X: =lblSplashPowerApps_Title.X
+                Y: =lblSplashPowerApps_Title.Y + lblSplashPowerApps_Title.Height
+                ZIndex: =5
+
+            lblSplashPowerApps_Title As label:
+                Align: =Align.Center
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Semibold
+                Height: =55
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PaddingBottom: =0
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Role: =TextRole.Heading1
+                Size: =gblAppStyles.Label.Size.Large
+                Text: |-
+                    =With(
+                        {
+                            varDefault: "Built with Microsoft Power Platform. Ready for you to extend.",
+                            varOOBTextId: "_translateCommon__BuiltWithPowerPlatform"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                Width: =560
+                X: =(Parent.Width - Self.Width) / 2
+                Y: =imgSplashPowerApps_AppLogo.Y + imgSplashPowerApps_AppLogo.Height + 16
+                ZIndex: =6
+
+            imgSplashPowerApps_AppLogo As image:
+                AccessibleLabel: =lblSplashPowerApps_Title.Text
+                Height: =80
+                Image: =Icon_Bulletins
+                RadiusBottomLeft: =5
+                RadiusBottomRight: =5
+                RadiusTopLeft: =5
+                RadiusTopRight: =5
+                Width: =80
+                X: =(Parent.Width - Self.Width) / 2
+                Y: =30
+                ZIndex: =7
+
+            btnSplashPowerApps_LearnMore As button:
+                BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+                BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+                Color: =gblAppStyles.ButtonSecondary.Color
+                DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+                DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+                DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+                Fill: =gblAppStyles.ButtonSecondary.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =32
+                HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+                HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+                HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+                OnSelect: |-
+                    =Launch(
+                        "https://go.microsoft.com/fwlink/?linkid=2147034&clcid=0x409",
+                        {},
+                        LaunchTarget.New
+                    )
+                PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+                PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+                PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+                RadiusBottomLeft: =gblAppStyles.ButtonSecondary.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.ButtonSecondary.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.ButtonSecondary.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.ButtonSecondary.RadiusTopRight
+                Size: =gblAppStyles.ButtonSecondary.Size
+                Text: |-
+                    =With(
+                            {
+                                varDefault: "Learn more",
+                                varOOBTextId: "_translateCommon__Splash_LearnMore"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                Tooltip: =Self.Text
+                Width: =120
+                X: =btnSplashPowerApps_Proceed.X - Self.Width - 20
+                Y: =btnSplashPowerApps_Proceed.Y
+                ZIndex: =8
+
+    lblBlockUserInput_Bulletins As label:
+        DisabledFill: =RGBA(0, 0, 0, 0.05)
+        DisplayMode: =DisplayMode.Disabled
+        Font: =Font.'Segoe UI'
+        Height: =Parent.Height
+        Text: =""
+        Visible: =locBlockUserInput
+        Width: =Parent.Width
+        X: =0*0
+        Y: =0*0
+        ZIndex: =6
+

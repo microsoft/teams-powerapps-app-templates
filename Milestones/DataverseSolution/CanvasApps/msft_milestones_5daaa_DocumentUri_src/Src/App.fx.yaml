@@ -1,0 +1,264 @@
+App As appinfo:
+    BackEnabled: =false
+    MinScreenHeight: =600
+    OnStart: |
+        =//app loading
+        Set(
+            gblAppLoaded,
+            false
+        );
+        //user language
+        Set(
+            gblUserLanguage,
+            Switch(
+                Left(
+                    Language(),
+                    2
+                ),
+                "de",
+                "de-DE",
+                "en",
+                "en-US",
+                "es",
+                "es-ES",
+                "fr",
+                "fr-FR",
+                "it",
+                "it-IT",
+                "ja",
+                "ja-JP",
+                "nl",
+                "nl-NL",
+                "pt",
+                "pt-BR",
+                //default
+                "en-US"
+            )
+        );
+        //build localization collection, with user's language
+        ClearCollect(
+            colLocalization,
+            Filter(
+                staticLocalizations,
+                LanguageTag = gblUserLanguage
+            )
+        );
+        Collect(
+            colLocalization,
+            Filter(
+                staticLocalizationsNewMessages,
+                LanguageTag = gblUserLanguage
+            )
+        );
+        Collect(
+            colLocalization,
+            Filter(
+                staticLocalizationBugFixes,
+                LanguageTag = gblUserLanguage
+            )
+        );
+        //local table of character widths, used for auto width labels
+        ClearCollect(
+            colCharsWidth,
+            staticCharWidths
+        );
+        //params
+        Concurrent(
+            Set(
+                gblThemeDark,
+                Param("theme") = "dark" Or (tglAdmin_DarkMode.Value)//for testing within studio
+            ),
+            Set(
+                gblThemeHiCo,
+                Param("theme") = "contrast" Or (tglAdmin_ContrastMode.Value)//for testing within studio
+            ),
+            Set(
+                gblMobileMode,
+                true//Param("hostClientType") = "android" Or (Param("hostClientType") = "ios" And App.Width < 800) Or (tglAdmin_Mobile.Value) //for testing within studio
+            ),
+            Set(
+                gblIsHostClientWeb,
+                Param("hostClientType") = "web"
+            )
+        );
+        Set(
+            gblAppSetting_inputMobileOnWeb,
+            false
+        );
+        Set(
+            gblAppSetting_inputMobile,
+            gblMobileMode
+        );
+        Set(
+            gblAppSetting_inputScaleFontsBy,
+            0
+        );
+        //stock project cover images
+        ClearCollect(
+            colStockImages,
+            {appStockImage: Blank()},
+            {appStockImage: ProjectCover_Future},
+            {appStockImage: ProjectCover_Work},
+            {appStockImage: ProjectCover_Shapes},
+            {appStockImage: ProjectCover_Design},
+            {appStockImage: ProjectCover_Flow},
+            {appStockImage: ProjectCover_Abstract},
+            {appStockImage: ProjectCover_Mountain},
+            {appStockImage: ProjectCover_Vision},
+            {appStockImage: ProjectCover_DarkShapes},
+            {appStockImage: ProjectCover_Morning},
+            {appStockImage: ProjectCover_Sublime},
+            {appStockImage: ProjectCover_Tech},
+            {appStockImage: ProjectCover_Neon},
+            {appStockImage: ProjectCover_City}
+        );
+        //project cover colors
+        ClearCollect(
+            colProjectCoverColors,
+            {
+                Color: "#F4B9B9",
+                Theme: "default",
+                Base: "Color1"
+            },
+            {
+                Color: "#94BFFF",
+                Theme: "default",
+                Base: "Color2"
+            },
+            {
+                Color: "#E6F0FF",
+                Theme: "default",
+                Base: "Color3"
+            },
+            {
+                Color: "#5AC6CC",
+                Theme: "default",
+                Base: "Color4"
+            },
+            {
+                Color: "#C5E9EA",
+                Theme: "default",
+                Base: "Color5"
+            },
+            {
+                Color: "#F0F9FA",
+                Theme: "default",
+                Base: "Color6"
+            },
+            {
+                Color: "#EE6F99",
+                Theme: "default",
+                Base: "Color7"
+            },
+            {
+                Color: "#F495BF",
+                Theme: "default",
+                Base: "Color8"
+            },
+            {
+                Color: "#F4D2DC",
+                Theme: "default",
+                Base: "Color9"
+            },
+            {
+                Color: "#CEF0CD",
+                Theme: "default",
+                Base: "Color10"
+            },
+            {
+                Color: "#BDBDE6",
+                Theme: "default",
+                Base: "Color11"
+            },
+            {
+                Color: "#E2E2F6",
+                Theme: "default",
+                Base: "Color12"
+            },
+            {
+                Color: "#F4F4FC",
+                Theme: "default",
+                Base: "Color13"
+            },
+            {
+                Color: "#FBF6D9",
+                Theme: "default",
+                Base: "Color14"
+            },
+            {
+                Color: "#791818",
+                Theme: "dark",
+                Base: "Color1"
+            },
+            {
+                Color: "#053385",
+                Theme: "dark",
+                Base: "Color2"
+            },
+            {
+                Color: "#6264A7",
+                Theme: "dark",
+                Base: "Color3"
+            },
+            {
+                Color: "#002F31",
+                Theme: "dark",
+                Base: "Color4"
+            },
+            {
+                Color: "#025C5F",
+                Theme: "dark",
+                Base: "Color5"
+            },
+            {
+                Color: "#03787C",
+                Theme: "dark",
+                Base: "Color6"
+            },
+            {
+                Color: "#461525",
+                Theme: "dark",
+                Base: "Color7"
+            },
+            {
+                Color: "#CC3D6D",
+                Theme: "dark",
+                Base: "Color8"
+            },
+            {
+                Color: "#EA5788",
+                Theme: "dark",
+                Base: "Color9"
+            },
+            {
+                Color: "#043615",
+                Theme: "dark",
+                Base: "Color10"
+            },
+            {
+                Color: "#33344A",
+                Theme: "dark",
+                Base: "Color11"
+            },
+            {
+                Color: "#6264A7",
+                Theme: "dark",
+                Base: "Color12"
+            },
+            {
+                Color: "#464775",
+                Theme: "dark",
+                Base: "Color13"
+            },
+            {
+                Color: "#FFAA44",
+                Theme: "dark",
+                Base: "Color14"
+            }
+        );
+        //app loaded
+        Set(
+            gblAppLoaded,
+            true
+        );
+

@@ -1,0 +1,138 @@
+"'Hidden Admin Screen' As screen":
+    Fill: =gblAppStyles.Background.Fill
+    OnVisible: =
+
+    tglAdmin_Manager As toggleSwitch:
+        AccessibleLabel: ="Toggle, for studio-use, to set the Manager-mode of the app"
+        BorderColor: =gblAppStyles.Toggle.BorderColor
+        BorderThickness: =gblAppStyles.Toggle.BorderThickness
+        Color: =gblAppStyles.Toggle.Color
+        DisabledBorderColor: =gblAppStyles.Toggle.DisabledBorderColor
+        DisabledColor: =gblAppStyles.Toggle.DisabledColor
+        FalseFill: =gblAppStyles.Toggle.FalseFill
+        FalseHoverFill: =gblAppStyles.Toggle.FalseHoverFill
+        FalseText: ="User is NOT Manager"
+        FocusedBorderColor: =gblAppStyles.Toggle.FocusedBorderColor
+        FocusedBorderThickness: =gblAppStyles.Toggle.FocusedBorderThickness
+        Font: =Font.'Segoe UI'
+        HandleFill: =If(Self.Value,gblAppStyles.Toggle.HandleFillTrue,gblAppStyles.Toggle.HandleFillFalse)
+        Height: =48
+        HoverBorderColor: =gblAppStyles.Toggle.HoverBorderColor
+        PressedBorderColor: =gblAppStyles.Toggle.PressedBorderColor
+        Size: =gblAppStyles.Toggle.Size
+        TrueFill: =gblAppStyles.Toggle.TrueFill
+        TrueHoverFill: =gblAppStyles.Toggle.TrueHoverFill
+        TrueText: ="User is Manager"
+        Width: =280
+        X: =gblPadding.Page
+        Y: =tglAdmin_ContrastMode.Y + tglAdmin_ContrastMode.Height + gblPadding.Page
+        ZIndex: =1
+
+    tglAdmin_Context As toggleSwitch:
+        AccessibleLabel: ="Toggle, for studio-use, to set the Context of the app"
+        BorderColor: =gblAppStyles.Toggle.BorderColor
+        BorderThickness: =gblAppStyles.Toggle.BorderThickness
+        Color: =gblAppStyles.Toggle.Color
+        DisabledBorderColor: =gblAppStyles.Toggle.DisabledBorderColor
+        DisabledColor: =gblAppStyles.Toggle.DisabledColor
+        FalseFill: =gblAppStyles.Toggle.FalseFill
+        FalseHoverFill: =gblAppStyles.Toggle.FalseHoverFill
+        FalseText: ="Context Incorrect"
+        FocusedBorderColor: =gblAppStyles.Toggle.FocusedBorderColor
+        FocusedBorderThickness: =gblAppStyles.Toggle.FocusedBorderThickness
+        Font: =Font.'Segoe UI'
+        HandleFill: =If(Self.Value,gblAppStyles.Toggle.HandleFillTrue,gblAppStyles.Toggle.HandleFillFalse)
+        Height: =48
+        HoverBorderColor: =gblAppStyles.Toggle.HoverBorderColor
+        OnCheck: |-
+            =// Studio/Testing Settings
+            If(
+                IsBlank(gblParamTeamId) Or IsBlank(gblParamChannelId),
+                Set(
+                    gblParamTeamId,
+                    "83b7c882-7124-43ec-a407-c17f5b756f30"// For Studio/Testing use-only
+                );
+                Set(
+                    gblParamChannelId,
+                    "19:0b8d927c66f44f31aaac18f3ba6e14c3@thread.tacv2"// For Studio/Testing use-only
+                )
+            );
+        PressedBorderColor: =gblAppStyles.Toggle.PressedBorderColor
+        Size: =gblAppStyles.Toggle.Size
+        TrueFill: =gblAppStyles.Toggle.TrueFill
+        TrueHoverFill: =gblAppStyles.Toggle.TrueHoverFill
+        TrueText: ="Context Correct"
+        Width: =280
+        X: =gblPadding.Page
+        Y: =gblPadding.Page
+        ZIndex: =2
+
+    tglAdmin_DarkMode As toggleSwitch:
+        AccessibleLabel: ="Toggle, for studio-use, to set the Theme (Dark) of the app"
+        BorderColor: =gblAppStyles.Toggle.BorderColor
+        BorderThickness: =gblAppStyles.Toggle.BorderThickness
+        Color: =gblAppStyles.Toggle.Color
+        DisabledBorderColor: =gblAppStyles.Toggle.DisabledBorderColor
+        DisabledColor: =gblAppStyles.Toggle.DisabledColor
+        FalseFill: =gblAppStyles.Toggle.FalseFill
+        FalseHoverFill: =gblAppStyles.Toggle.FalseHoverFill
+        FalseText: ="Dark Mode Off"
+        FocusedBorderColor: =gblAppStyles.Toggle.FocusedBorderColor
+        FocusedBorderThickness: =gblAppStyles.Toggle.FocusedBorderThickness
+        Font: =Font.'Segoe UI'
+        HandleFill: =If(Self.Value,gblAppStyles.Toggle.HandleFillTrue,gblAppStyles.Toggle.HandleFillFalse)
+        Height: =48
+        HoverBorderColor: =gblAppStyles.Toggle.HoverBorderColor
+        OnChange: =
+        PressedBorderColor: =gblAppStyles.Toggle.PressedBorderColor
+        Size: =gblAppStyles.Toggle.Size
+        TrueFill: =gblAppStyles.Toggle.TrueFill
+        TrueHoverFill: =gblAppStyles.Toggle.TrueHoverFill
+        TrueText: ="Dark Mode On"
+        Width: =tglAdmin_Context.Width
+        X: =tglAdmin_Context.X
+        Y: =tglAdmin_Context.Y + tglAdmin_Context.Height + gblPadding.Page
+        ZIndex: =3
+
+    tglAdmin_ContrastMode As toggleSwitch:
+        AccessibleLabel: ="Toggle, for studio-use, to set the Theme (High Contrast) of the app"
+        BorderColor: =gblAppStyles.Toggle.BorderColor
+        BorderThickness: =gblAppStyles.Toggle.BorderThickness
+        Color: =gblAppStyles.Toggle.Color
+        DisabledBorderColor: =gblAppStyles.Toggle.DisabledBorderColor
+        DisabledColor: =gblAppStyles.Toggle.DisabledColor
+        FalseFill: =gblAppStyles.Toggle.FalseFill
+        FalseHoverFill: =gblAppStyles.Toggle.FalseHoverFill
+        FalseText: ="High Contrast Off"
+        FocusedBorderColor: =gblAppStyles.Toggle.FocusedBorderColor
+        FocusedBorderThickness: =gblAppStyles.Toggle.FocusedBorderThickness
+        Font: =Font.'Segoe UI'
+        HandleFill: =If(Self.Value,gblAppStyles.Toggle.HandleFillTrue,gblAppStyles.Toggle.HandleFillFalse)
+        Height: =48
+        HoverBorderColor: =gblAppStyles.Toggle.HoverBorderColor
+        OnChange: =
+        PressedBorderColor: =gblAppStyles.Toggle.PressedBorderColor
+        Size: =gblAppStyles.Toggle.Size
+        TrueFill: =gblAppStyles.Toggle.TrueFill
+        TrueHoverFill: =gblAppStyles.Toggle.TrueHoverFill
+        TrueText: ="High Contrast On"
+        Width: =tglAdmin_Context.Width
+        X: =tglAdmin_Context.X
+        Y: =tglAdmin_DarkMode.Y + tglAdmin_DarkMode.Height + gblPadding.Page
+        ZIndex: =4
+
+    lblAdmin_Notice As label:
+        Font: =Font.'Segoe UI'
+        FontWeight: =FontWeight.Semibold
+        Height: =210
+        Text: |-
+            ="The Toggles above allow you to emulate various scenarios within the Studio.
+            
+            Change their values, within the context of the Studio, to explore various scenarios.
+            
+            Changing the Default values will impact the actual app behavior. DO NOT UPDATE the default values."
+        Width: =Parent.Width - (2 * Self.X)
+        X: =tglAdmin_Manager.X
+        Y: =tglAdmin_Manager.Y + tglAdmin_Manager.Height
+        ZIndex: =5
+

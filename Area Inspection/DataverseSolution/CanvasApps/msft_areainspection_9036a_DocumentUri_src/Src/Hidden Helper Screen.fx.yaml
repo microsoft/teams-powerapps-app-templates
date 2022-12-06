@@ -1,0 +1,196 @@
+"'Hidden Helper Screen' As screen":
+
+    "galPlannerMyTasks As gallery.'BrowseLayout_Vertical_TwoTextOneImageVariant_ver4.0'":
+        AccessibleLabel: ="Gallery of my planner tasks"
+        Height: =444
+        Items: |-
+            =If(
+                !IsBlank(gblRecordSettings.'Parameter (Planner Id)') && gblUserCanAccessPlanner,
+                Planner.ListMyTasks().value,
+                Blank()
+            )
+        Layout: =Layout.Vertical
+        TabIndex: |-
+            =If(
+                true,
+                -1,
+                0
+            )
+        TemplatePadding: =0
+        TemplateSize: =444
+        Y: =40
+        ZIndex: =1
+
+        Image3_6 As image:
+            Height: =128
+            OnSelect: =Select(Parent)
+            Width: =128
+            X: =16
+            Y: =(Parent.TemplateHeight / 2) - (Self.Height / 2)
+            ZIndex: =1
+
+        Title1 As label:
+            Height: =Self.Size * 1.8
+            OnSelect: =Select(Parent)
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            Text: =ThisItem.title
+            VerticalAlign: =VerticalAlign.Top
+            Width: =Parent.TemplateWidth - Image3_6.Width - 104
+            X: =Image3_6.X + Image3_6.Width + 24
+            Y: =44
+            ZIndex: =2
+
+        Subtitle1 As label:
+            Height: =Self.Size * 1.8
+            OnSelect: =Select(Parent)
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            Text: =ThisItem.planId
+            VerticalAlign: =VerticalAlign.Top
+            Width: =Title1.Width
+            X: =Title1.X
+            Y: =Title1.Y + Title1.Height + 4
+            ZIndex: =3
+
+        NextArrow1 As icon.ChevronRight:
+            AccessibleLabel: =Self.Tooltip
+            Height: =60
+            Icon: =Icon.ChevronRight
+            OnSelect: =Select(Parent)
+            PaddingBottom: =10
+            PaddingLeft: =10
+            PaddingRight: =10
+            PaddingTop: =10
+            TabIndex: =0
+            Tooltip: ="View item details"
+            Width: =60
+            X: =Parent.TemplateWidth - Self.Width - 5
+            Y: =(Parent.TemplateHeight / 2) - (Self.Height / 2)
+            ZIndex: =4
+
+        Separator4 As rectangle:
+            Height: =1
+            OnSelect: =Select(Parent)
+            Width: =Parent.TemplateWidth
+            Y: =Parent.TemplateHeight - 1
+            ZIndex: =5
+
+    galPlannerTasks As gallery.galleryVertical:
+        AccessibleLabel: ="Gallery of planner tasks"
+        Height: =405
+        Items: |-
+            =If(
+                !IsBlank(gblRecordSettings.'Parameter (Planner Id)') && gblUserCanAccessPlanner,
+                Planner.ListTasks(gblPlannerPlanId).value,
+                Blank()
+            )
+        Layout: =Layout.Vertical
+        TabIndex: |-
+            =If(
+                true,
+                -1,
+                0
+            )
+        TemplateSize: =90
+        Y: =535
+        ZIndex: =2
+
+        Label14 As label:
+            Height: =70
+            OnSelect: =Select(Parent)
+            Size: =21
+            Text: =ThisItem.createdDateTime
+            Width: =560
+            X: =40
+            Y: =20
+            ZIndex: =1
+
+    "galAreaTypeIcons As gallery.'BrowseLayout_Vertical_TwoTextOneImageVariant_ver4.0'":
+        AccessibleLabel: ="Gallery of area type icons"
+        Fill: =RGBA(255, 255, 255, 1)
+        Height: =1136
+        Items: =colLocationTypeIcons
+        Layout: =Layout.Vertical
+        TabIndex: |-
+            =If(
+                true,
+                -1,
+                0
+            )
+        TemplatePadding: =0
+        TemplateSize: =Min(160, Self.Height - 60)
+        ZIndex: =3
+
+        Image1 As image:
+            Height: =128
+            Image: =ThisItem.appIcon
+            OnSelect: =Select(Parent)
+            Width: =128
+            X: =16
+            Y: =(Parent.TemplateHeight / 2) - (Self.Height / 2)
+            ZIndex: =1
+
+        Title3 As label:
+            Height: =Self.Size * 1.8
+            OnSelect: =Select(Parent)
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            Text: =ThisItem.Name
+            VerticalAlign: =VerticalAlign.Top
+            Width: =Parent.TemplateWidth - Image1.Width - 104
+            X: =Image1.X + Image1.Width + 24
+            Y: =44
+            ZIndex: =2
+
+        Subtitle2 As label:
+            Height: =Self.Size * 1.8
+            OnSelect: =Select(Parent)
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            Text: =ThisItem.Name
+            VerticalAlign: =VerticalAlign.Top
+            Width: =Title3.Width
+            X: =Title3.X
+            Y: =Title3.Y + Title3.Height + 4
+            ZIndex: =3
+
+        NextArrow3 As icon.ChevronRight:
+            AccessibleLabel: =Self.Tooltip
+            Height: =60
+            Icon: =Icon.ChevronRight
+            OnSelect: =Select(Parent)
+            PaddingBottom: =10
+            PaddingLeft: =10
+            PaddingRight: =10
+            PaddingTop: =10
+            TabIndex: =0
+            Tooltip: ="View item details"
+            Width: =60
+            X: =Parent.TemplateWidth - Self.Width - 5
+            Y: =(Parent.TemplateHeight / 2) - (Self.Height / 2)
+            ZIndex: =4
+
+        Separator1 As rectangle:
+            Height: =1
+            OnSelect: =Select(Parent)
+            Width: =Parent.TemplateWidth
+            Y: =Parent.TemplateHeight - 1
+            ZIndex: =5
+
+    imgInspectionStepIssue As image:
+        Height: =320
+        Image: =areaInspectionStepIssue
+        Width: =320
+        X: =60
+        Y: =60
+        ZIndex: =4
+

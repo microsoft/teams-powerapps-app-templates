@@ -1,0 +1,2698 @@
+"'Insights Screen' As screen":
+    Fill: =gblAppStyles.Background.Fill  
+    LoadingSpinner: =LoadingSpinner.Controls
+    LoadingSpinnerColor: |-
+        =If(
+            gblThemeHiCo,
+            gblAppColors.HighContrastHyperlinks,
+            gblThemeDark,
+            gblAppColors.TeamsDarkPrimary,
+            gblAppColors.TeamsDefaultPrimary
+        )
+    OnVisible: |
+        =//count the total number of inspections to decide if charts should be visible or zero state images
+        ClearCollect(
+            colInspectionsForCharts,
+            Filter(
+                'Area Inspections',
+                'Area Inspections (Views)'.'Active Area Inspections'
+            )
+        );
+        ClearCollect(
+            colInspectionsLastSevenDays,
+            Filter(
+                'Area Inspections',
+                'Area Inspections (Views)'.'Active Area Inspections - Last 7 Days'
+            )
+        );
+        ClearCollect(
+            colInspectionsLastThirtyDays,
+            Filter(
+                'Area Inspections',
+                'Area Inspections (Views)'.'Active Area Inspections - Last 30 Days'
+            )
+        );
+        ClearCollect(
+            colInspectionsLastSixtyDays,
+            Filter(
+                'Area Inspections',
+                'Area Inspections (Views)'.'Active Area Inspections - Last 60 Days'
+            )
+        );
+        //average inspection time - calculate inspection time for all completed inspections and divide the total by the number of inspections
+        ForAll(
+            Filter(
+                'Area Inspections',
+                'Area Inspections (Views)'.'Active Area Inspections',
+                !IsBlank('Started On') && !IsBlank('Ended On')
+            ),
+            Collect(
+                colTeamDurations,
+                DateDiff(
+                    'Started On',
+                    'Ended On',
+                    Minutes
+                )
+            )
+        );
+        UpdateContext(
+            {
+                locTeamAvgTime: RoundUp(
+                    Sum(
+                        colTeamDurations,
+                        Value
+                    ) / CountRows(colTeamDurations),
+                    0
+                )
+            }
+        );
+        //top contributors bar chart last 7 days - count of inspections grouped by owner
+        ClearCollect(
+            colTopContributorsByOwnerName,
+            AddColumns(
+                Filter(
+                    'Area Inspections',
+                    'Area Inspections (Views)'.'Active Area Inspections - Last 7 Days'
+                ),
+                "OwnerName",
+                'Created By'.'Full Name'
+            )
+        );
+        ClearCollect(
+            colTopContributors,
+            Sort(
+                DropColumns(
+                    AddColumns(
+                        GroupBy(
+                            colTopContributorsByOwnerName,
+                            "OwnerName",
+                            "GroupedByOwner"
+                        ),
+                        "CountByOwner",
+                        CountRows(GroupedByOwner)
+                    ),
+                    "GroupedByOwner"
+                ),
+                CountByOwner,
+                Descending
+            )
+        );
+        //average inspection time by form bar chart - inspections time for inspections in the last 7 days grouped by form
+        ClearCollect(
+            colInspectionTimeByFormID,
+            AddColumns(
+                Filter(
+                    'Area Inspections',
+                    'Area Inspections (Views)'.'Active Area Inspections - Last 7 Days'
+                ),
+                "FormID",
+                Checklist.'Area Inspection Checklist'
+            )
+        );
+        ClearCollect(
+            colInspectionTimeByForm,
+            DropColumns(
+                AddColumns(
+                    GroupBy(
+                        colInspectionTimeByFormID,
+                        "FormID",
+                        "GroupedByForm"
+                    ),
+                    "Average",
+                    RoundUp(
+                        Sum(
+                            GroupedByForm,
+                            DateDiff(
+                                'Started On',
+                                'Ended On',
+                                Minutes
+                            )
+                        ) / CountRows(GroupedByForm),
+                        0
+                    ),
+                    "FormName",
+                    LookUp(
+                        'Area Inspection Checklists',
+                        'Area Inspection Checklist' = FormID
+                    ).Name
+                ),
+                "GroupedByForm"
+            )
+        );
+        //open inspection count by item type
+        Select(btnOpenInspections7Days);
+        //default views for all charts to last 7 days
+        UpdateContext(
+            {
+                locOpenInspectionsView: 7,
+                locInspectionTimeByFormsView: 7,
+                locTopContributorsView: 7
+            }
+        );
+
+    conInsightsHeader As groupContainer:
+        Height: =60
+        Width: =Parent.Width
+        ZIndex: =1
+
+        shpInsightsHeaderDivider As rectangle:
+            AccessibleLabel: ="Divider"
+            Fill: =gblAppStyles.Dividers.TopMenu
+            Height: =1
+            OnSelect: =Parent.Width
+            TabIndex: |-
+                =If(
+                    true,
+                    -1,
+                    0
+                )
+            Width: =Parent.Width - 20
+            Y: =59
+            ZIndex: =2
+
+        btnInsightsHeaderItems As button:
+            BorderThickness: =0
+            Color: =gblAppStyles.ButtonTransparent.Color
+            DisabledColor: =gblAppStyles.ButtonTransparent.DisabledColor
+            DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+            Fill: =gblAppStyles.ButtonTransparent.Fill
+            FocusedBorderColor: =gblAppStyles.ButtonPrimary.Fill
+            FocusedBorderThickness: =1.5
+            Font: =Font.'Segoe UI'
+            FontWeight: =FontWeight.Lighter
+            Height: =55
+            HoverColor: =gblAppStyles.ButtonTransparent.HoverColor
+            HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+            OnSelect: |-
+                =Navigate(
+                    'Items Screen',
+                    ScreenTransition.Fade
+                )
+            PaddingLeft: =8
+            PaddingRight: =9.32
+            PaddingTop: =20
+            PressedColor: =gblAppStyles.ButtonTransparent.PressedColor
+            PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+            RadiusBottomLeft: =0
+            RadiusBottomRight: =0
+            RadiusTopLeft: =0
+            RadiusTopRight: =0
+            Size: =gblAppStyles.ButtonTransparent.Size
+            Text: |-
+                =LookUp(
+                    colItemConfig,
+                    Type = "Main section"
+                ).Name & "s"
+            VerticalAlign: =VerticalAlign.Top
+            Width: |-
+                =If(
+                    Self.Text = "Locations",
+                    110.73,
+                    Switch(
+                        gblUserLanguage,
+                        "en-US",
+                        lblWidthInsightsScreen.Width + 40,
+                        100
+                    )
+                )
+            X: |-
+                =Max(
+                    If(
+                        gblUserLanguage = "es-ES" || gblUserLanguage = "de-DE",
+                        250,
+                        200
+                    ),
+                    Parent.Width / 9
+                )
+            Y: =1
+            ZIndex: =4
+
+        btnInsightsHeaderInsights As button:
+            Align: =Align.Left
+            BorderThickness: =0
+            Color: =gblAppStyles.ButtonTransparent.HoverColor
+            DisabledColor: =Self.Color
+            DisabledFill: =Self.Fill
+            Fill: =gblAppStyles.ButtonTransparent.Fill
+            FocusedBorderColor: =gblAppStyles.ButtonPrimary.Fill
+            FocusedBorderThickness: =1.5
+            Font: =Font.'Segoe UI'
+            Height: =55
+            HoverColor: =gblAppStyles.ButtonTransparent.HoverColor
+            HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+            PaddingLeft: =0
+            PaddingRight: =9.32
+            PaddingTop: =20
+            PressedColor: =gblAppStyles.ButtonTransparent.PressedColor
+            PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+            RadiusBottomLeft: =0
+            RadiusBottomRight: =0
+            RadiusTopLeft: =0
+            RadiusTopRight: =0
+            Size: =gblAppStyles.ButtonTransparent.Size
+            Text: |-
+                =With(
+                    {
+                        varDefault: gblWorkType & " " & "insights",
+                        varOOBTextId: "_translateCommon_Header" & gblWorkType & "Insights"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                ) & Char(10) & Char(10) & " active"
+            VerticalAlign: =VerticalAlign.Top
+            Width: |-
+                =If(
+                    gblWorkType = "Walk",
+                    Switch(
+                        gblUserLanguage,
+                        "en-US",
+                        108,
+                        "de-DE",
+                        205,
+                        "es-ES",
+                        185,
+                        "fr-FR",
+                        185,
+                        "it-IT",
+                        220,
+                        "ja-JP",
+                        155,
+                        "nl-NL",
+                        130,
+                        "pt-BR",
+                        155,
+                        108
+                    ),
+                    If(
+                        gblWorkType = "Audit",
+                        Switch(
+                            gblUserLanguage,
+                            "en-US",
+                            115,
+                            "de-DE",
+                            200,
+                            "es-ES",
+                            185,
+                            "fr-FR",
+                            180,
+                            "it-IT",
+                            245,
+                            "ja-JP",
+                            125,
+                            "nl-NL",
+                            145,
+                            "pt-BR",
+                            155,
+                            115
+                        ),
+                        Switch(
+                            gblUserLanguage,
+                            "en-US",
+                            148,
+                            "de-DE",
+                            180,
+                            "es-ES",
+                            195,
+                            "fr-FR",
+                            210,
+                            "it-IT",
+                            245,
+                            "ja-JP",
+                            125,
+                            "nl-NL",
+                            145,
+                            "pt-BR",
+                            155,
+                            148
+                        )
+                    )
+                )
+            X: =btnInsightsHeaderItems.X + btnInsightsHeaderItems.Width + 2
+            Y: =1
+            ZIndex: =5
+
+        btnInsightsHeaderHome As button:
+            Align: =Align.Left
+            BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+            BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+            Color: =gblAppStyles.ButtonTransparent.Color
+            DisabledColor: =gblAppStyles.ButtonTransparent.DisabledColor
+            DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+            Fill: =gblAppStyles.ButtonTransparent.Fill
+            FocusedBorderColor: =gblAppStyles.ButtonPrimary.Fill
+            FocusedBorderThickness: =1.5
+            Font: =Font.'Segoe UI'
+            FontWeight: =FontWeight.Bold
+            Height: =Parent.Height - 2
+            HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+            HoverColor: =gblAppStyles.ButtonTransparent.HoverColor
+            HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+            OnSelect: |-
+                =Navigate(
+                    'Items Screen',
+                    ScreenTransition.Fade
+                )
+            PaddingLeft: =20
+            PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+            PressedColor: =gblAppStyles.ButtonTransparent.PressedColor
+            PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+            RadiusBottomLeft: =0
+            RadiusBottomRight: =0
+            RadiusTopLeft: =0
+            RadiusTopRight: =0
+            Size: =13
+            Text: |-
+                =If(
+                    gblWorkType = "Inspection",
+                    With(
+                        {
+                            varDefault: "Review " & Lower(gblWorkType) & "s",
+                            varOOBTextId: "_translateCommon_HeaderReview" & gblWorkType & "s"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    ),
+                    With(
+                        {
+                            varDefault: "Review " & Lower(gblWorkType) & "s",
+                            varOOBTextId: "_translateCommon_HeaderReview" & Lower(gblWorkType) & "s"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                )
+            Width: |-
+                =If(
+                    gblUserLanguage = "es-ES" || gblUserLanguage = "de-DE",
+                    250,
+                    200
+                )
+            Y: =1
+            ZIndex: =8
+
+        shpInsightsHeaderUnderline As rectangle:
+            Fill: =gblAppStyles.ButtonTransparent.HoverColor
+            Height: =3
+            Width: |-
+                =If(
+                    gblWorkType = "Walk",
+                    Switch(
+                        gblUserLanguage,
+                        "en-US",
+                        95,
+                        "de-DE",
+                        195,
+                        "es-ES",
+                        172,
+                        "fr-FR",
+                        170,
+                        "it-IT",
+                        205,
+                        "ja-JP",
+                        135,
+                        "nl-NL",
+                        120,
+                        "pt-BR",
+                        140,
+                        95
+                    ),
+                    If(
+                        gblWorkType = "Audit",
+                        Switch(
+                            gblUserLanguage,
+                            "en-US",
+                            98,
+                            "de-DE",
+                            200 - 12,
+                            "es-ES",
+                            170,
+                            "fr-FR",
+                            160,
+                            "it-IT",
+                            230,
+                            "ja-JP",
+                            110,
+                            "nl-NL",
+                            130,
+                            "pt-BR",
+                            145,
+                            98
+                        ),
+                        Switch(
+                            gblUserLanguage,
+                            "en-US",
+                            131,
+                            "de-DE",
+                            166,
+                            "es-ES",
+                            180,
+                            "fr-FR",
+                            210 - 15,
+                            "it-IT",
+                            240 - 5,
+                            "ja-JP",
+                            125 - 15,
+                            "nl-NL",
+                            140 - 10,
+                            "pt-BR",
+                            150 - 10,
+                            131
+                        )
+                    )
+                )
+            X: =btnInsightsHeaderItems.X + btnInsightsHeaderItems.Width
+            Y: =57
+            ZIndex: =9
+
+        imgInsightsHeaderAbout As image:
+            AccessibleLabel: ="Icon for help"
+            DisabledFill: |-
+                =With(
+                    {
+                        varImageIsCategory: LookUp(
+                            staticIcons,
+                            staticIconName = "Info"
+                        ).staticIconIsCategory
+                    },
+                    If(
+                        varImageIsCategory,
+                        gblAppStyles.Icons.DisabledFill_Category,
+                        Transparent
+                    )
+                )
+            Fill: |-
+                =With(
+                    {
+                        varImageIsCategory: LookUp(
+                            staticIcons,
+                            staticIconName = "Info"
+                        ).staticIconIsCategory
+                    },
+                    If(
+                        varImageIsCategory,
+                        gblAppStyles.Icons.Fill_Category,
+                        Transparent
+                    )
+                )
+            Height: =24
+            HoverFill: =Self.Fill
+            Image: |-
+                =With(
+                    {
+                        varImageRecord: LookUp(
+                            staticIcons,
+                            staticIconName = "Info"
+                        ),
+                        varColor: If(
+                            Self.DisplayMode = DisplayMode.Disabled,
+                            gblAppStyles.Icons.DisabledColor,
+                            gblAppStyles.Icons.Color
+                        )
+                    },
+                    With(
+                        {
+                            varImageData: Concatenate(
+                                "data:image/svg+xml;utf8, ",
+                                EncodeUrl(
+                                    Concatenate(
+                                        "<svg viewBox='",
+                                        varImageRecord.staticIconViewbox,
+                                        "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                        varImageRecord.staticIconPath,
+                                        "' fill='#",
+                                        varColor,
+                                        "'/></svg>"
+                                    )
+                                )
+                            )
+                        },
+                        varImageData
+                    )
+                )
+            OnSelect: |-
+                =Navigate(
+                    'About Screen',
+                    ScreenTransition.Fade
+                )
+            PaddingBottom: =2
+            PaddingLeft: =2
+            PaddingRight: =2
+            PaddingTop: =2
+            PressedFill: =Self.Fill
+            RadiusBottomLeft: =5
+            RadiusBottomRight: =5
+            RadiusTopLeft: =5
+            RadiusTopRight: =5
+            TabIndex: =0
+            Width: =24
+            X: =Parent.Width - Self.Width - 20
+            Y: =17.5
+            ZIndex: =12
+
+        lblWidthInsightsScreen As label:
+            Color: =RGBA(0, 0, 0, 0)
+            Font: =Font.'Segoe UI'
+            FontWeight: =FontWeight.Semibold
+            Height: =1
+            Size: =11
+            Text: =First(colItemConfig).Name
+            Width: |-
+                =Sum(
+                    AddColumns(
+                        Split(
+                            Self.Text,
+                            ""
+                        ),
+                        "Size",
+                        LookUp(
+                            colCharsWidth,
+                            CharFont = Self.Font && CharWeight = Self.FontWeight && Char = Result
+                        ).Size
+                    ),
+                    Size
+                ) * Self.Size + Self.PaddingLeft + Self.PaddingRight
+            X: =Parent.Width
+            ZIndex: =13
+
+    conTopContributors As groupContainer:
+        Height: =Parent.Height - Self.Y 
+        Width: =Parent.Width
+        Y: =conMiddleInsights.Y+conMiddleInsights.Height
+        ZIndex: =2
+
+        btnTopContributors7Days As button:
+            BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+            BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+            Color: |-
+                =If(
+                    locTopContributorsView = 7,
+                    gblAppStyles.ButtonPrimary.Fill,
+                    gblAppStyles.ButtonTransparent.Color
+                )
+            DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+            DisabledColor: =gblAppStyles.ButtonTransparent.DisabledColor
+            DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+            Fill: =gblAppStyles.ButtonTransparent.Fill
+            FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            Height: =24
+            HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+            HoverColor: =gblAppStyles.ButtonTransparent.HoverColor
+            HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+            OnSelect: |
+                =UpdateContext({locTopContributorsView: 7});
+                //top contributors bar chart last 7 days - count of inspections grouped by owner
+                ClearCollect(
+                    colTopContributorsByOwnerName,
+                    AddColumns(
+                        Filter(
+                            'Area Inspections',
+                            'Area Inspections (Views)'.'Active Area Inspections - Last 7 Days'
+                        ),
+                        "OwnerName",
+                        'Created By'.'Full Name'
+                    )
+                );
+                ClearCollect(
+                    colTopContributors,
+                    Sort(
+                        DropColumns(
+                            AddColumns(
+                                GroupBy(
+                                    colTopContributorsByOwnerName,
+                                    "OwnerName",
+                                    "GroupedByOwner"
+                                ),
+                                "CountByOwner",
+                                CountRows(GroupedByOwner)
+                            ),
+                            "GroupedByOwner"
+                        ),
+                        CountByOwner,
+                        Descending
+                    )
+                );
+            PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+            PressedColor: =gblAppStyles.ButtonTransparent.PressedColor
+            PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+            RadiusBottomLeft: =gblAppStyles.ButtonTransparent.RadiusBottomLeft
+            RadiusBottomRight: =gblAppStyles.ButtonTransparent.RadiusBottomRight
+            RadiusTopLeft: =gblAppStyles.ButtonTransparent.RadiusTopLeft
+            RadiusTopRight: =gblAppStyles.ButtonTransparent.RadiusTopRight
+            Size: =gblAppStyles.ButtonTransparent.Size
+            Text: |-
+                =With(
+                    {
+                        varDefault: "7 days",
+                        varOOBTextId: "_translateCommon_DashboardFilter7Days"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            Visible: =CountRows(colInspectionsLastSevenDays) > 0 || CountRows(colInspectionsLastThirtyDays) > 0 || CountRows(colInspectionsLastSixtyDays) > 0
+            Width: =82.75
+            X: =(Parent.Width - 20) - Self.Width*3 - 10
+            Y: =lblTopContributorsHeader.Y + lblTopContributorsHeader.Height
+            ZIndex: =3
+
+        btnTopContributors30Days As button:
+            BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+            BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+            Color: |-
+                =If(
+                    locTopContributorsView = 30,
+                    gblAppStyles.ButtonPrimary.Fill,
+                    gblAppStyles.ButtonTransparent.Color
+                )
+            DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+            DisabledColor: =gblAppStyles.ButtonTransparent.DisabledColor
+            DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+            Fill: =gblAppStyles.ButtonTransparent.Fill
+            FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            Height: =24
+            HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+            HoverColor: =gblAppStyles.ButtonTransparent.HoverColor
+            HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+            OnSelect: |
+                =UpdateContext({locTopContributorsView: 30});
+                //top contributors bar chart last 30 days - count of inspections grouped by owner
+                ClearCollect(
+                    colTopContributorsByOwnerName,
+                    AddColumns(
+                        Filter(
+                            'Area Inspections',
+                            'Area Inspections (Views)'.'Active Area Inspections - Last 30 Days'
+                        ),
+                        "OwnerName",
+                        'Created By'.'Full Name'
+                    )
+                );
+                ClearCollect(
+                    colTopContributors,
+                    Sort(
+                        DropColumns(
+                            AddColumns(
+                                GroupBy(
+                                    colTopContributorsByOwnerName,
+                                    "OwnerName",
+                                    "GroupedByOwner"
+                                ),
+                                "CountByOwner",
+                                CountRows(GroupedByOwner)
+                            ),
+                            "GroupedByOwner"
+                        ),
+                        CountByOwner,
+                        Descending
+                    )
+                );
+            PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+            PressedColor: =gblAppStyles.ButtonTransparent.PressedColor
+            PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+            RadiusBottomLeft: =gblAppStyles.ButtonTransparent.RadiusBottomLeft
+            RadiusBottomRight: =gblAppStyles.ButtonTransparent.RadiusBottomRight
+            RadiusTopLeft: =gblAppStyles.ButtonTransparent.RadiusTopLeft
+            RadiusTopRight: =gblAppStyles.ButtonTransparent.RadiusTopRight
+            Size: =gblAppStyles.ButtonTransparent.Size
+            Text: |-
+                =With(
+                    {
+                        varDefault: "30 days",
+                        varOOBTextId: "_translateCommon_DashboardFilter30Days"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            Visible: =CountRows(colInspectionsLastSevenDays) > 0 || CountRows(colInspectionsLastThirtyDays) > 0 || CountRows(colInspectionsLastSixtyDays) > 0
+            Width: =82.75
+            X: =btnTopContributors7Days.X + btnTopContributors7Days.Width
+            Y: =lblTopContributorsHeader.Y + lblTopContributorsHeader.Height
+            ZIndex: =4
+
+        btnTopContributors60Days As button:
+            BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+            BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+            Color: |-
+                =If(
+                    locTopContributorsView = 60,
+                    gblAppStyles.ButtonPrimary.Fill,
+                    gblAppStyles.ButtonTransparent.Color
+                )
+            DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+            DisabledColor: =gblAppStyles.ButtonTransparent.DisabledColor
+            DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+            Fill: =gblAppStyles.ButtonTransparent.Fill
+            FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            Height: =24
+            HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+            HoverColor: =gblAppStyles.ButtonTransparent.HoverColor
+            HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+            OnSelect: |
+                =UpdateContext({locTopContributorsView: 60});
+                //top contributors bar chart last 60 days - count of inspections grouped by owner
+                ClearCollect(
+                    colTopContributorsByOwnerName,
+                    AddColumns(
+                        Filter(
+                            'Area Inspections',
+                            'Area Inspections (Views)'.'Active Area Inspections - Last 60 Days'
+                        ),
+                        "OwnerName",
+                        'Created By'.'Full Name'
+                    )
+                );
+                ClearCollect(
+                    colTopContributors,
+                    Sort(
+                        DropColumns(
+                            AddColumns(
+                                GroupBy(
+                                    colTopContributorsByOwnerName,
+                                    "OwnerName",
+                                    "GroupedByOwner"
+                                ),
+                                "CountByOwner",
+                                CountRows(GroupedByOwner)
+                            ),
+                            "GroupedByOwner"
+                        ),
+                        CountByOwner,
+                        Descending
+                    )
+                );
+            PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+            PressedColor: =gblAppStyles.ButtonTransparent.PressedColor
+            PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+            RadiusBottomLeft: =gblAppStyles.ButtonTransparent.RadiusBottomLeft
+            RadiusBottomRight: =gblAppStyles.ButtonTransparent.RadiusBottomRight
+            RadiusTopLeft: =gblAppStyles.ButtonTransparent.RadiusTopLeft
+            RadiusTopRight: =gblAppStyles.ButtonTransparent.RadiusTopRight
+            Size: =gblAppStyles.ButtonTransparent.Size
+            Text: |-
+                =With(
+                    {
+                        varDefault: "60 days",
+                        varOOBTextId: "_translateCommon_DashboardFilter60Days"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            Visible: =CountRows(colInspectionsLastSevenDays) > 0 || CountRows(colInspectionsLastThirtyDays) > 0 || CountRows(colInspectionsLastSixtyDays) > 0
+            Width: =82.75
+            X: =btnTopContributors30Days.X + btnTopContributors30Days.Width
+            Y: =lblTopContributorsHeader.Y + lblTopContributorsHeader.Height
+            ZIndex: =5
+
+        "galTopContributors As gallery.'BrowseLayout_Vertical_OneTextVariant_ver4.0'":
+            AccessibleLabel: ="Top Contributors List"
+            Fill: =Transparent
+            Height: =Parent.Height - Self.Y - 20
+            Items: =colTopContributors
+            Layout: =Layout.Vertical
+            ShowNavigation: =true
+            ShowScrollbar: =false
+            TabIndex: |-
+                =If(
+                    true,
+                    -1,
+                    0
+                )
+            TemplatePadding: =0
+            TemplateSize: =35
+            Visible: =CountRows(colTopContributors) > 0
+            Width: =Parent.Width - Self.X - 20
+            X: =35
+            Y: =btnTopContributors7Days.Y + btnTopContributors7Days.Height + 10
+            ZIndex: =6
+
+            lblContributionCount As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =Parent.TemplateHeight - 1
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                OnSelect: =Select(Parent)
+                PaddingBottom: =0
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Large
+                Text: =ThisItem.CountByOwner
+                Width: =58.28
+                X: =lblContributionBar.X + lblContributionBar.Width + 10
+                ZIndex: =1
+
+            lblContributionBar As label:
+                Color: =RGBA(0, 0, 0, 0)
+                Fill: |-
+                    =If(
+                        gblThemeHiCo,
+                        gblAppColors.HighContrastText,
+                        gblThemeDark,
+                        gblAppColors.TeamsDarkPrimary,
+                        gblAppColors.TeamsDefaultPrimary
+                    )
+                Height: =Parent.TemplateHeight - 1
+                OnSelect: =Select(Parent)
+                PaddingRight: =5.83
+                PaddingTop: =5.83
+                Size: =15.15
+                Text: ="Graph bar displaying inspection contribution count"
+                Width: |-
+                    =(Parent.Width - 250) * (ThisItem.CountByOwner / Coalesce(
+                        Max(
+                            colTopContributors,
+                            CountByOwner
+                        ),
+                        1
+                    ))
+                X: =186.48
+                ZIndex: =4
+
+            lblContributor As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =Parent.TemplateHeight-1 
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                OnSelect: =Select(Parent)
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: =ThisItem.OwnerName
+                Width: =174.83
+                X: =0.00
+                ZIndex: =5
+
+        lblTopContributorsHeader As label:
+            BorderColor: =gblAppStyles.Label.BorderColor
+            BorderThickness: =gblAppStyles.Label.BorderThickness
+            Color: =gblAppStyles.Label.Color
+            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+            DisabledColor: =gblAppStyles.Label.DisabledColor
+            DisabledFill: =gblAppStyles.Label.DisabledFill
+            Fill: =gblAppStyles.Label.Fill
+            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            FontWeight: =FontWeight.Semibold
+            Height: =28
+            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+            HoverColor: =gblAppStyles.Label.HoverColor
+            HoverFill: =gblAppStyles.Label.HoverFill
+            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+            PressedColor: =gblAppStyles.Label.PressedColor
+            PressedFill: =gblAppStyles.Label.PressedFill
+            Size: =gblAppStyles.Label.Size.Large
+            Text: |-
+                =With(
+                    {
+                        varDefault: "Top " & Lower(gblWorkType) & " report contributors",
+                        varOOBTextId: "_translateCommon_Top" & gblWorkType & "ContributorsHeader"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            Width: =Parent.Width - Self.X - 20
+            X: =35
+            Y: =20
+            ZIndex: =7
+
+        imgZeroStateTopContributors As image:
+            Image: =Zero_State_Contributors
+            Visible: |-
+                =Switch(
+                    locTopContributorsView,
+                    7,
+                    CountRows(colInspectionsLastSevenDays) = 0,
+                    30,
+                    CountRows(colInspectionsLastThirtyDays) = 0,
+                    60,
+                    CountRows(colInspectionsLastSixtyDays) = 0
+                )
+            X: =(Parent.Width - Self.Width) / 2
+            Y: =galTopContributors.Y
+            ZIndex: =8
+
+        lblZeroStateTopContributors As label:
+            Align: =Align.Center
+            BorderColor: =gblAppStyles.Label.BorderColor
+            BorderThickness: =gblAppStyles.Label.BorderThickness
+            Color: =gblAppStyles.Label.Color
+            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+            DisabledColor: =gblAppStyles.Label.DisabledColor
+            DisabledFill: =gblAppStyles.Label.DisabledFill
+            Fill: =gblAppStyles.Label.Fill
+            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+            HoverColor: =gblAppStyles.Label.HoverColor
+            HoverFill: =gblAppStyles.Label.HoverFill
+            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+            PressedColor: =gblAppStyles.Label.PressedColor
+            PressedFill: =gblAppStyles.Label.PressedFill
+            Size: =gblAppStyles.Label.Size.Medium
+            Text: |-
+                =With(
+                    {
+                        varDefault: "Top contributors will appear here",
+                        varOOBTextId: "lblZeroStateTopContributors__locText"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            Visible: |-
+                =Switch(
+                    locTopContributorsView,
+                    7,
+                    CountRows(colInspectionsLastSevenDays) = 0,
+                    30,
+                    CountRows(colInspectionsLastThirtyDays) = 0,
+                    60,
+                    CountRows(colInspectionsLastSixtyDays) = 0
+                )
+            Width: =323
+            X: =(Parent.Width - Self.Width) / 2
+            Y: =imgZeroStateTopContributors.Y + imgZeroStateTopContributors.Height
+            ZIndex: =9
+
+    conMiddleInsights As groupContainer:
+        Height: =(Parent.Height -conInspectionStats.Height - conInspectionStats.Y)*1/2 
+        Width: =Parent.Width
+        Y: =conInspectionStats.Y + conInspectionStats.Height
+        ZIndex: =3
+
+        conMiddleInsightsDivider As groupContainer:
+            Height: =Parent.Height
+            Width: =Parent.Width
+            ZIndex: =1
+
+            shpMiddleInsightsDivider As rectangle:
+                Fill: =gblAppStyles.Dividers.Elements
+                Height: =1
+                Width: =Parent.Width - Self.X - 20
+                Y: =Parent.Height - 1
+                ZIndex: =3
+
+        conOpenInspections As groupContainer:
+            Height: =Parent.Height 
+            Width: |-
+                =Max(
+                    250,
+                    Parent.Width / 3
+                )
+            ZIndex: =2
+
+            "galHelper_InpsectionsByItemType As gallery.'BrowseLayout_Vertical_OneTextVariant_ver4.0'":
+                AccessibleLabel: ="Helper gall"
+                Fill: =RGBA(255, 255, 255, 1)
+                Height: =1
+                Items: =colInspectionsByItemType
+                Layout: =Layout.Vertical
+                TabIndex: |-
+                    =If(
+                        true,
+                        -1,
+                        0
+                    )
+                TemplatePadding: =0
+                TemplateSize: =36
+                Width: =1
+                ZIndex: =1
+
+                lblHelper_ItemTypeName As label:
+                    Font: =Font.'Segoe UI'
+                    Height: =Self.Size * 1.8
+                    OnSelect: =Select(Parent)
+                    PaddingBottom: =0
+                    PaddingLeft: =0
+                    PaddingRight: =0
+                    PaddingTop: =0
+                    Text: =ThisItem.ItemType.Name
+                    VerticalAlign: =VerticalAlign.Top
+                    Width: =Parent.TemplateWidth - 104
+                    X: =32
+                    Y: =(Parent.TemplateHeight / 2) - (Self.Height / 2)
+                    ZIndex: =1
+
+            lblOpenInspectionsHeader As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Semibold
+                Height: =28
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Large
+                Text: |-
+                    =With(
+                        {
+                            varDefault: "Open " & Lower(gblWorkType) & "s",
+                            varOOBTextId: "_translateCommon_Open" & gblWorkType & "sHeader"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                Width: =Parent.Width - Self.X
+                X: =35
+                Y: =20
+                ZIndex: =2
+
+            btnOpenInspections7Days As button:
+                BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+                Color: |-
+                    =If(
+                        locOpenInspectionsView = 7,
+                        gblAppStyles.ButtonPrimary.Fill,
+                        gblAppStyles.ButtonTransparent.Color
+                    )
+                DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+                DisabledColor: =gblAppStyles.ButtonTransparent.DisabledColor
+                DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                Fill: =gblAppStyles.ButtonTransparent.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =24
+                HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                HoverColor: =gblAppStyles.ButtonTransparent.HoverColor
+                HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+                OnSelect: |
+                    =UpdateContext({locOpenInspectionsView: 7});
+                    //open inspection count by item type for the last 7 days
+                    //collect all item types
+                    ClearCollect(
+                        colItemTypes,
+                        Filter(
+                            'Area Inspection Location Types',
+                            'Area Inspection Location Types (Views)'.'Active Area Inspection Location Types'
+                        )
+                    );
+                    //collect all open inspections for the last 7 days by item type ID
+                    Clear(colInspectionsByItemTypeID);
+                    ForAll(
+                        Filter(
+                            'Area Inspections',
+                            'Area Inspections (Views)'.'Active Area Inspections - Last 7 Days',
+                            'Review Status Code' = 'Area Inspection Review Status Code'.'Pending action' || 'Review Status Code' = 'Area Inspection Review Status Code'.'Pending review'
+                        ),
+                        Collect(
+                            colInspectionsByItemTypeID,
+                            {ItemID: Location.'Area Inspection Location'}
+                        )
+                    );
+                    //collect all open inspections for the last 7 days by item type record
+                    Clear(colInspectionsByItemType);
+                    ForAll(
+                        colInspectionsByItemTypeID,
+                        Collect(
+                            colInspectionsByItemType,
+                            {
+                                Count: 1,
+                                ItemType: LookUp(
+                                    'Area Inspection Locations',
+                                    'Area Inspection Location' = colInspectionsByItemTypeID[@ItemID]
+                                ).'Location Type',
+                                ItemID: colInspectionsByItemTypeID[@ItemID]
+                            }
+                        )
+                    );
+                    //collect all open inspections for the last 7 days by item type name
+                    Clear(colInspectionsByItemTypeName);
+                    ForAll(
+                        colInspectionsByItemType,
+                        Collect(
+                            colInspectionsByItemTypeName,
+                            {
+                                Count: 1,
+                                ItemTypeName: ItemType.Name
+                            }
+                        )
+                    );
+                    //rearrange data for pie chart
+                    Clear(colOpenInspections);
+                    ClearCollect(
+                        colItemTypesID,
+                        RenameColumns(
+                            colItemTypes,
+                            "msft_areainspection_locationtypeid",
+                            "UniqueID"
+                        )
+                    );
+                    ForAll(
+                        colItemTypesID,
+                        Collect(
+                            colOpenInspections,
+                            {
+                                ItemType: If(
+                                    IsBlank('Menu Label'),
+                                    If(
+                                        Len(Name) > 10,
+                                        Left(
+                                            Name,
+                                            10
+                                        ) & "...",
+                                        Name
+                                    ),
+                                    'Menu Label'
+                                ),
+                                Count: CountRows(
+                                    Filter(
+                                        colInspectionsByItemTypeName,
+                                        ItemTypeName = LookUp(
+                                            'Area Inspection Location Types',
+                                            msft_areainspection_locationtypeid = UniqueID
+                                        ).msft_name
+                                    )
+                                )
+                            }
+                        )
+                    );
+                PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                PressedColor: =gblAppStyles.ButtonTransparent.PressedColor
+                PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+                RadiusBottomLeft: =gblAppStyles.ButtonTransparent.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.ButtonTransparent.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.ButtonTransparent.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.ButtonTransparent.RadiusTopRight
+                Size: =gblAppStyles.ButtonTransparent.Size
+                Text: |-
+                    =With(
+                        {
+                            varDefault: "7 days",
+                            varOOBTextId: "_translateCommon_DashboardFilter7Days"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                Visible: =CountRows(colInspectionsLastSevenDays) > 0 || CountRows(colInspectionsLastThirtyDays) > 0 || CountRows(colInspectionsLastSixtyDays) > 0
+                Width: =82.75
+                X: |-
+                    =Max(
+                        0,
+                        Parent.Width - Self.Width*3 - 10
+                    )
+                Y: =lblOpenInspectionsHeader.Y +lblOpenInspectionsHeader.Height
+                ZIndex: =3
+
+            btnOpenInspections30Days As button:
+                BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+                Color: |-
+                    =If(
+                        locOpenInspectionsView = 30,
+                        gblAppStyles.ButtonPrimary.Fill,
+                        gblAppStyles.ButtonTransparent.Color
+                    )
+                DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+                DisabledColor: =gblAppStyles.ButtonTransparent.DisabledColor
+                DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                Fill: =gblAppStyles.ButtonTransparent.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =24
+                HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                HoverColor: =gblAppStyles.ButtonTransparent.HoverColor
+                HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+                OnSelect: |
+                    =UpdateContext({locOpenInspectionsView: 30});
+                    //open inspection count by item type for the last 30 days
+                    //collect all item types
+                    ClearCollect(
+                        colItemTypes,
+                        Filter(
+                            'Area Inspection Location Types',
+                            'Area Inspection Location Types (Views)'.'Active Area Inspection Location Types'
+                        )
+                    );
+                    //collect all open inspections for the last 30 days by item type ID
+                    Clear(colInspectionsByItemTypeID);
+                    ForAll(
+                        Filter(
+                            'Area Inspections',
+                            'Area Inspections (Views)'.'Active Area Inspections - Last 30 Days',
+                            'Review Status Code' = 'Area Inspection Review Status Code'.'Pending action' || 'Review Status Code' = 'Area Inspection Review Status Code'.'Pending review'
+                        ),
+                        Collect(
+                            colInspectionsByItemTypeID,
+                            {ItemID: Location.'Area Inspection Location'}
+                        )
+                    );
+                    //collect all open inspections for the last 30 days by item type record
+                    Clear(colInspectionsByItemType);
+                    ForAll(
+                        colInspectionsByItemTypeID,
+                        Collect(
+                            colInspectionsByItemType,
+                            {
+                                Count: 1,
+                                ItemType: LookUp(
+                                    'Area Inspection Locations',
+                                    'Area Inspection Location' = ItemID
+                                ).'Location Type',
+                                ItemID: colInspectionsByItemTypeID[@ItemID]
+                            }
+                        )
+                    );
+                    //collect all open inspections for the last 30 days by item type name
+                    Clear(colInspectionsByItemTypeName);
+                    ForAll(
+                        colInspectionsByItemType,
+                        Collect(
+                            colInspectionsByItemTypeName,
+                            {
+                                Count: 1,
+                                ItemTypeName: ItemType.Name
+                            }
+                        )
+                    );
+                    //rearrange data for pie chart
+                    Clear(colOpenInspections);
+                    ClearCollect(
+                        colItemTypesID,
+                        RenameColumns(
+                            colItemTypes,
+                            "msft_areainspection_locationtypeid",
+                            "UniqueID"
+                        )
+                    );
+                    ForAll(
+                        colItemTypesID,
+                        Collect(
+                            colOpenInspections,
+                            {
+                                ItemType: If(
+                                    IsBlank('Menu Label'),
+                                    If(
+                                        Len(Name) > 10,
+                                        Left(
+                                            Name,
+                                            10
+                                        ) & "...",
+                                        Name
+                                    ),
+                                    'Menu Label'
+                                ),
+                                Count: CountRows(
+                                    Filter(
+                                        colInspectionsByItemTypeName,
+                                        ItemTypeName = LookUp(
+                                            'Area Inspection Location Types',
+                                            msft_areainspection_locationtypeid = UniqueID
+                                        ).msft_name
+                                    )
+                                )
+                            }
+                        )
+                    );
+                PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                PressedColor: =gblAppStyles.ButtonTransparent.PressedColor
+                PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+                RadiusBottomLeft: =gblAppStyles.ButtonTransparent.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.ButtonTransparent.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.ButtonTransparent.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.ButtonTransparent.RadiusTopRight
+                Size: =gblAppStyles.ButtonTransparent.Size
+                Text: |-
+                    =With(
+                        {
+                            varDefault: "30 days",
+                            varOOBTextId: "_translateCommon_DashboardFilter30Days"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                Visible: =CountRows(colInspectionsLastSevenDays) > 0 || CountRows(colInspectionsLastThirtyDays) > 0 || CountRows(colInspectionsLastSixtyDays) > 0
+                Width: =82.75
+                X: =btnOpenInspections7Days.X + btnOpenInspections7Days.Width
+                Y: =lblOpenInspectionsHeader.Y +lblOpenInspectionsHeader.Height
+                ZIndex: =4
+
+            btnOpenInspections60Days As button:
+                BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+                Color: |-
+                    =If(
+                        locOpenInspectionsView = 60,
+                        gblAppStyles.ButtonPrimary.Fill,
+                        gblAppStyles.ButtonTransparent.Color
+                    )
+                DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+                DisabledColor: =gblAppStyles.ButtonTransparent.DisabledColor
+                DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                Fill: =gblAppStyles.ButtonTransparent.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =24
+                HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                HoverColor: =gblAppStyles.ButtonTransparent.HoverColor
+                HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+                OnSelect: |
+                    =UpdateContext({locOpenInspectionsView: 60});
+                    //open inspection count by item type for the last 60 days
+                    //collect all item types
+                    ClearCollect(
+                        colItemTypes,
+                        Filter(
+                            'Area Inspection Location Types',
+                            'Area Inspection Location Types (Views)'.'Active Area Inspection Location Types'
+                        )
+                    );
+                    //collect all open inspections for the last 60 days by item type ID
+                    Clear(colInspectionsByItemTypeID);
+                    ForAll(
+                        Filter(
+                            'Area Inspections',
+                            'Area Inspections (Views)'.'Active Area Inspections - Last 60 Days',
+                            'Review Status Code' = 'Area Inspection Review Status Code'.'Pending action' || 'Review Status Code' = 'Area Inspection Review Status Code'.'Pending review'
+                        ),
+                        Collect(
+                            colInspectionsByItemTypeID,
+                            {ItemID: Location.'Area Inspection Location'}
+                        )
+                    );
+                    //collect all open inspections for the last 60 days by item type record
+                    Clear(colInspectionsByItemType);
+                    ForAll(
+                        colInspectionsByItemTypeID,
+                        Collect(
+                            colInspectionsByItemType,
+                            {
+                                Count: 1,
+                                ItemType: LookUp(
+                                    'Area Inspection Locations',
+                                    'Area Inspection Location' = ItemID
+                                ).'Location Type',
+                                ItemID: colInspectionsByItemTypeID[@ItemID]
+                            }
+                        )
+                    );
+                    //collect all open inspections for the last 60 days by item type name
+                    Clear(colInspectionsByItemTypeName);
+                    ForAll(
+                        colInspectionsByItemType,
+                        Collect(
+                            colInspectionsByItemTypeName,
+                            {
+                                Count: 1,
+                                ItemTypeName: ItemType.Name
+                            }
+                        )
+                    );
+                    //rearrange data for pie chart
+                    Clear(colOpenInspections);
+                    ClearCollect(
+                        colItemTypesID,
+                        RenameColumns(
+                            colItemTypes,
+                            "msft_areainspection_locationtypeid",
+                            "UniqueID"
+                        )
+                    );
+                    ForAll(
+                        colItemTypesID,
+                        Collect(
+                            colOpenInspections,
+                            {
+                                ItemType: If(
+                                    IsBlank('Menu Label'),
+                                    If(
+                                        Len(Name) > 10,
+                                        Left(
+                                            Name,
+                                            10
+                                        ) & "...",
+                                        Name
+                                    ),
+                                    'Menu Label'
+                                ),
+                                Count: CountRows(
+                                    Filter(
+                                        colInspectionsByItemTypeName,
+                                        ItemTypeName = LookUp(
+                                            'Area Inspection Location Types',
+                                            msft_areainspection_locationtypeid = UniqueID
+                                        ).msft_name
+                                    )
+                                )
+                            }
+                        )
+                    );
+                PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                PressedColor: =gblAppStyles.ButtonTransparent.PressedColor
+                PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+                RadiusBottomLeft: =gblAppStyles.ButtonTransparent.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.ButtonTransparent.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.ButtonTransparent.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.ButtonTransparent.RadiusTopRight
+                Size: =gblAppStyles.ButtonTransparent.Size
+                Text: |-
+                    =With(
+                        {
+                            varDefault: "60 days",
+                            varOOBTextId: "_translateCommon_DashboardFilter60Days"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                Visible: =CountRows(colInspectionsLastSevenDays) > 0 || CountRows(colInspectionsLastThirtyDays) > 0 || CountRows(colInspectionsLastSixtyDays) > 0
+                Width: =82.75
+                X: =btnOpenInspections30Days.X + btnOpenInspections30Days.Width
+                Y: =lblOpenInspectionsHeader.Y +lblOpenInspectionsHeader.Height
+                ZIndex: =5
+
+            pieOpenInspections As pieChart:
+                DisplayMode: =DisplayMode.View
+                Font: =Font.'Segoe UI'
+                Height: =Parent.Height-Self.Y-20
+                ItemColorSet: =[RGBA(49,130,93,1),RGBA(212,96,104,1),RGBA(118,154,204,1),RGBA(48,166,103,1),RGBA(94,193,108,1),RGBA(246,199,144,1),RGBA(247,199,114,1),RGBA(247,180,91,1),RGBA(246,143,100,1),RGBA(148,110,176,1),RGBA(96,197,234,1)]
+                Items: =colOpenInspections
+                ShowLabels: =If(true, false, true)
+                Size: =11.66
+                Visible: =CountRows(Filter(colOpenInspections, Count=0))<CountRows(colOpenInspections)
+                Width: =Parent.Width - Self.X
+                X: =legOpenInspections.X + legOpenInspections.Width
+                Y: =legOpenInspections.Y 
+                ZIndex: =6
+
+            legOpenInspections As legend:
+                Color: =gblAppStyles.Label.Color
+                DisplayMode: =DisplayMode.View
+                Font: =Font.'Segoe UI'
+                Height: =Parent.Height - Self.Y - 20
+                ItemColorSet: =pieOpenInspections.ItemColorSet
+                Items: =pieOpenInspections.SeriesLabels
+                Size: =gblAppStyles.Label.Size.Small
+                Visible: =CountRows(Filter(colOpenInspections, Count=0))<CountRows(colOpenInspections)
+                Width: =130
+                X: =35
+                Y: =btnOpenInspections7Days.Y + btnOpenInspections7Days.Height + 10
+                ZIndex: =7
+
+            shpOpenInspectionsDivider As rectangle:
+                Fill: =gblAppStyles.Dividers.Elements
+                Height: =Parent.Height - 40
+                Width: =1
+                X: =Parent.Width-1
+                Y: =20
+                ZIndex: =8
+
+            imgZeroStateOpenInspections As image:
+                Image: =Zero_State_Distribution
+                Visible: |-
+                    =Switch(
+                        locOpenInspectionsView,
+                        7,
+                        CountRows(colInspectionsLastSevenDays) = 0,
+                        30,
+                        CountRows(colInspectionsLastThirtyDays) = 0,
+                        60,
+                        CountRows(colInspectionsLastSixtyDays) = 0
+                    )
+                X: =(Parent.Width - Self.Width) / 2
+                Y: =legOpenInspections.Y
+                ZIndex: =9
+
+            lblZeroStateOpenInspections As label:
+                Align: =Align.Center
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =90
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: |-
+                    =With(
+                        {
+                            varDefault: "Open " & Lower(gblWorkType) & " distribution by " & Lower(Last(colItemConfig).Name) & " will appear here",
+                            varOOBTextId: "_translateCommon_ZeroStateOpen" & gblWorkType & "s",
+                            varParam0: Lower(Last(colItemConfig).Name)
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            If(
+                                IsBlankOrError(varParam0),
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                ),
+                                Coalesce(
+                                    Substitute(
+                                        varLocalizedText,
+                                        "{0}",
+                                        Text(varParam0)
+                                    ),
+                                    varDefault
+                                )
+                            )
+                        )
+                    )
+                Visible: |-
+                    =Switch(
+                        locOpenInspectionsView,
+                        7,
+                        CountRows(colInspectionsLastSevenDays) = 0,
+                        30,
+                        CountRows(colInspectionsLastThirtyDays) = 0,
+                        60,
+                        CountRows(colInspectionsLastSixtyDays) = 0
+                    )
+                Width: |-
+                    =Max(
+                        250,
+                        Parent.Width / 3
+                    )
+                X: =(Parent.Width - Self.Width) / 2
+                Y: =imgZeroStateOpenInspections.Y + imgZeroStateOpenInspections.Height
+                ZIndex: =10
+
+        conAvgInspectionTime As groupContainer:
+            Height: =Parent.Height 
+            Width: =Parent.Width-Self.X
+            X: =conOpenInspections.X + conOpenInspections.Width
+            ZIndex: =3
+
+            lblAvgInspectionTimeHeader As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Semibold
+                Height: =28
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Large
+                Text: |-
+                    =With(
+                        {
+                            varDefault: "Average " & Lower(gblWorkType) & " " & "time by form",
+                            varOOBTextId: "_translateCommon_" & gblWorkType & "AvgTimeTitle"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                Width: =Parent.Width - Self.X
+                X: =35
+                Y: =20
+                ZIndex: =1
+
+            btnAvgInspectionTime7Days As button:
+                BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+                Color: |-
+                    =If(
+                        locInspectionTimeByFormsView = 7,
+                        gblAppStyles.ButtonPrimary.Fill,
+                        gblAppStyles.ButtonTransparent.Color
+                    )
+                DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+                DisabledColor: =gblAppStyles.ButtonTransparent.DisabledColor
+                DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                Fill: =gblAppStyles.ButtonTransparent.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =24
+                HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                HoverColor: =gblAppStyles.ButtonTransparent.HoverColor
+                HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+                OnSelect: |
+                    =UpdateContext({locInspectionTimeByFormsView: 7});
+                    //average inspection time by form bar chart - inspections time for inspections in the last 7 days grouped by form
+                    ClearCollect(
+                        colInspectionTimeByFormID,
+                        AddColumns(
+                            Filter(
+                                'Area Inspections',
+                                'Area Inspections (Views)'.'Active Area Inspections - Last 7 Days'
+                            ),
+                            "FormID",
+                            Checklist.'Area Inspection Checklist'
+                        )
+                    );
+                    ClearCollect(
+                        colInspectionTimeByForm,
+                        DropColumns(
+                            AddColumns(
+                                GroupBy(
+                                    colInspectionTimeByFormID,
+                                    "FormID",
+                                    "GroupedByForm"
+                                ),
+                                "Average",
+                                RoundUp(
+                                    Sum(
+                                        GroupedByForm,
+                                        DateDiff(
+                                            'Started On',
+                                            'Ended On',
+                                            Minutes
+                                        )
+                                    ) / CountRows(GroupedByForm),
+                                    0
+                                ),
+                                "FormName",
+                                LookUp(
+                                    'Area Inspection Checklists',
+                                    'Area Inspection Checklist' = FormID
+                                ).Name
+                            ),
+                            "GroupedByForm"
+                        )
+                    );
+                PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                PressedColor: =gblAppStyles.ButtonTransparent.PressedColor
+                PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+                RadiusBottomLeft: =gblAppStyles.ButtonTransparent.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.ButtonTransparent.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.ButtonTransparent.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.ButtonTransparent.RadiusTopRight
+                Size: =gblAppStyles.ButtonTransparent.Size
+                Text: |-
+                    =With(
+                        {
+                            varDefault: "7 days",
+                            varOOBTextId: "_translateCommon_DashboardFilter7Days"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                Visible: =CountRows(colInspectionsLastSevenDays) > 0 || CountRows(colInspectionsLastThirtyDays) > 0 || CountRows(colInspectionsLastSixtyDays) > 0
+                Width: =82.75
+                X: =(Parent.Width - 20) - Self.Width*3 - 10
+                Y: =lblAvgInspectionTimeHeader.Y + lblAvgInspectionTimeHeader.Height
+                ZIndex: =2
+
+            btnAvgInspectionTime30Days As button:
+                BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+                Color: |-
+                    =If(
+                        locInspectionTimeByFormsView = 30,
+                        gblAppStyles.ButtonPrimary.Fill,
+                        gblAppStyles.ButtonTransparent.Color
+                    )
+                DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+                DisabledColor: =gblAppStyles.ButtonTransparent.DisabledColor
+                DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                Fill: =gblAppStyles.ButtonTransparent.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =24
+                HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                HoverColor: =gblAppStyles.ButtonTransparent.HoverColor
+                HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+                OnSelect: |
+                    =UpdateContext({locInspectionTimeByFormsView: 30});
+                    //average inspection time by form bar chart - inspections time for inspections in the last 30 days grouped by form
+                    ClearCollect(
+                        colInspectionTimeByFormID,
+                        AddColumns(
+                            Filter(
+                                'Area Inspections',
+                                'Area Inspections (Views)'.'Active Area Inspections - Last 30 Days'
+                            ),
+                            "FormID",
+                            Checklist.'Area Inspection Checklist'
+                        )
+                    );
+                    ClearCollect(
+                        colInspectionTimeByForm,
+                        DropColumns(
+                            AddColumns(
+                                GroupBy(
+                                    colInspectionTimeByFormID,
+                                    "FormID",
+                                    "GroupedByForm"
+                                ),
+                                "Average",
+                                RoundUp(
+                                    Sum(
+                                        GroupedByForm,
+                                        DateDiff(
+                                            'Started On',
+                                            'Ended On',
+                                            Minutes
+                                        )
+                                    ) / CountRows(GroupedByForm),
+                                    0
+                                ),
+                                "FormName",
+                                LookUp(
+                                    'Area Inspection Checklists',
+                                    'Area Inspection Checklist' = FormID
+                                ).Name
+                            ),
+                            "GroupedByForm"
+                        )
+                    );
+                PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                PressedColor: =gblAppStyles.ButtonTransparent.PressedColor
+                PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+                RadiusBottomLeft: =gblAppStyles.ButtonTransparent.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.ButtonTransparent.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.ButtonTransparent.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.ButtonTransparent.RadiusTopRight
+                Size: =gblAppStyles.ButtonTransparent.Size
+                Text: |-
+                    =With(
+                        {
+                            varDefault: "30 days",
+                            varOOBTextId: "_translateCommon_DashboardFilter30Days"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                Visible: =CountRows(colInspectionsLastSevenDays) > 0 || CountRows(colInspectionsLastThirtyDays) > 0 || CountRows(colInspectionsLastSixtyDays) > 0
+                Width: =82.75
+                X: =btnAvgInspectionTime7Days.X + btnAvgInspectionTime7Days.Width - 10
+                Y: =lblAvgInspectionTimeHeader.Y + lblAvgInspectionTimeHeader.Height
+                ZIndex: =3
+
+            btnAvgInspectionTime60Days As button:
+                BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+                Color: |-
+                    =If(
+                        locInspectionTimeByFormsView = 60,
+                        gblAppStyles.ButtonPrimary.Fill,
+                        gblAppStyles.ButtonTransparent.Color
+                    )
+                DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+                DisabledColor: =gblAppStyles.ButtonTransparent.DisabledColor
+                DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                Fill: =gblAppStyles.ButtonTransparent.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =24
+                HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                HoverColor: =gblAppStyles.ButtonTransparent.HoverColor
+                HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+                OnSelect: |
+                    =UpdateContext({locInspectionTimeByFormsView: 60});
+                    //average inspection time by form bar chart - inspections time for inspections in the last 60 days grouped by form
+                    ClearCollect(
+                        colInspectionTimeByFormID,
+                        AddColumns(
+                            Filter(
+                                'Area Inspections',
+                                'Area Inspections (Views)'.'Active Area Inspections - Last 60 Days'
+                            ),
+                            "FormID",
+                            Checklist.'Area Inspection Checklist'
+                        )
+                    );
+                    ClearCollect(
+                        colInspectionTimeByForm,
+                        DropColumns(
+                            AddColumns(
+                                GroupBy(
+                                    colInspectionTimeByFormID,
+                                    "FormID",
+                                    "GroupedByForm"
+                                ),
+                                "Average",
+                                RoundUp(
+                                    Sum(
+                                        GroupedByForm,
+                                        DateDiff(
+                                            'Started On',
+                                            'Ended On',
+                                            Minutes
+                                        )
+                                    ) / CountRows(GroupedByForm),
+                                    0
+                                ),
+                                "FormName",
+                                LookUp(
+                                    'Area Inspection Checklists',
+                                    'Area Inspection Checklist' = FormID
+                                ).Name
+                            ),
+                            "GroupedByForm"
+                        )
+                    );
+                PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                PressedColor: =gblAppStyles.ButtonTransparent.PressedColor
+                PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+                RadiusBottomLeft: =gblAppStyles.ButtonTransparent.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.ButtonTransparent.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.ButtonTransparent.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.ButtonTransparent.RadiusTopRight
+                Size: =gblAppStyles.ButtonTransparent.Size
+                Text: |-
+                    =With(
+                        {
+                            varDefault: "60 days",
+                            varOOBTextId: "_translateCommon_DashboardFilter60Days"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                Visible: =CountRows(colInspectionsLastSevenDays) > 0 || CountRows(colInspectionsLastThirtyDays) > 0 || CountRows(colInspectionsLastSixtyDays) > 0
+                Width: =82.75
+                X: =btnAvgInspectionTime30Days.X + btnAvgInspectionTime30Days.Width - 10
+                Y: =lblAvgInspectionTimeHeader.Y + lblAvgInspectionTimeHeader.Height
+                ZIndex: =4
+
+            "galAvgInspectionTime As gallery.'BrowseLayout_Vertical_OneTextVariant_ver4.0'":
+                AccessibleLabel: ="Hidden Average inspection time list"
+                Fill: =Transparent
+                Height: =Parent.Height - Self.Y - 20
+                Items: |-
+                    =Sort(
+                        colInspectionTimeByForm,
+                        Average,
+                        Descending
+                    )
+                Layout: =Layout.Vertical
+                ShowNavigation: =true
+                ShowScrollbar: =false
+                TabIndex: |-
+                    =If(
+                        true,
+                        -1,
+                        0
+                    )
+                TemplatePadding: =0
+                TemplateSize: =35
+                Visible: =CountRows(colInspectionTimeByForm) > 0
+                Width: =Parent.Width - Self.X - 20
+                X: =35
+                Y: =btnAvgInspectionTime7Days.Y + btnAvgInspectionTime7Days.Height + 10
+                ZIndex: =5
+
+                lblTimeValue As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =Parent.TemplateHeight - 1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =Select(Parent)
+                    PaddingBottom: =0
+                    PaddingLeft: =0
+                    PaddingRight: =0.00
+                    PaddingTop: =0.00
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Large
+                    Text: =ThisItem.Average
+                    Width: =34.97
+                    X: =lblTimeBar.X + lblTimeBar.Width + 10
+                    ZIndex: =1
+
+                lblTimeBar As label:
+                    Color: =RGBA(0, 0, 0, 0)
+                    Fill: |-
+                        =If(
+                            gblThemeHiCo,
+                            gblAppColors.HighContrastText,
+                            gblThemeDark,
+                            gblAppColors.TeamsDarkPrimary,
+                            gblAppColors.TeamsDefaultPrimary
+                        )
+                    Height: =Parent.TemplateHeight - 1
+                    OnSelect: =Select(Parent)
+                    Size: =15.15
+                    Text: ="Graph bar displaying average inspection time"
+                    Width: |-
+                        =(Parent.Width - 250) * (ThisItem.Average / Coalesce(
+                            Max(
+                                colInspectionTimeByForm,
+                                Average
+                            ),
+                            1
+                        ))
+                    X: =lblFormInspectionTime.X + lblFormInspectionTime.Width
+                    ZIndex: =4
+
+                lblFormInspectionTime As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =Parent.TemplateHeight - 1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =Select(Parent)
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: =ThisItem.FormName
+                    Width: =174.83
+                    X: =0.00
+                    ZIndex: =5
+
+            imgZeroStateAvgTime As image:
+                Image: =Zero_State_Time
+                Visible: |-
+                    =Switch(
+                        locInspectionTimeByFormsView,
+                        7,
+                        CountRows(colInspectionsLastSevenDays) = 0,
+                        30,
+                        CountRows(colInspectionsLastThirtyDays) = 0,
+                        60,
+                        CountRows(colInspectionsLastSixtyDays) = 0
+                    )
+                X: =(Parent.Width - Self.Width) / 2
+                Y: =btnAvgInspectionTime7Days.Y + btnAvgInspectionTime7Days.Height + 10
+                ZIndex: =6
+
+            lblZeroStateAvgTime As label:
+                Align: =Align.Center
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: |-
+                    =With(
+                        {
+                            varDefault: "Average " & Lower(gblWorkType) & " time will appear here",
+                            varOOBTextId: "_translateCommon_Avg" & gblWorkType & "TimeHeader"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                Visible: |-
+                    =Switch(
+                        locInspectionTimeByFormsView,
+                        7,
+                        CountRows(colInspectionsLastSevenDays) = 0,
+                        30,
+                        CountRows(colInspectionsLastThirtyDays) = 0,
+                        60,
+                        CountRows(colInspectionsLastSixtyDays) = 0
+                    )
+                Width: =323
+                X: =(Parent.Width - Self.Width) / 2
+                Y: =imgZeroStateAvgTime.Y + imgZeroStateAvgTime.Height
+                ZIndex: =7
+
+    conInspectionStats As groupContainer:
+        Height: |-
+            =Max(
+                121,
+                (Parent.Height - Self.Y) / 5
+            )
+        Width: =Parent.Width
+        Y: =conInsightsHeader.Y + conInsightsHeader.Height + 1
+        ZIndex: =4
+
+        conInspectionStatsDivider As groupContainer:
+            Height: =Parent.Height
+            Width: =Parent.Width
+            ZIndex: =1
+
+            shpInspectionStatsDivider As rectangle:
+                Fill: =gblAppStyles.Dividers.Elements
+                Height: =1
+                Width: =Parent.Width - 20
+                Y: =Parent.Height - 1
+                ZIndex: =3
+
+        conInspectionPendingReview As groupContainer:
+            Height: =Parent.Height
+            Width: =(Parent.Width) / 4
+            ZIndex: =2
+
+            lblInspectionStatsHeader As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Semibold
+                Height: =28
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Large
+                Text: |-
+                    =With(
+                        {
+                            varDefault: gblWorkType & "s",
+                            varOOBTextId: "_translateCommon_" & gblWorkType & "StatsHeader"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                Width: =Parent.Width - Self.X
+                X: =35
+                Y: =20
+                ZIndex: =2
+
+            lblInspectionPendingReviewCount As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Bold
+                Height: =43
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Large
+                Text: |-
+                    =CountRows(
+                        Filter(
+                            colInspectionsForCharts,
+                            'Review Status Code' = 'Area Inspection Review Status Code'.'Pending review'
+                        )
+                    )
+                Width: =Parent.Width - Self.X
+                X: =35
+                Y: =lblInspectionStatsHeader.Y+lblInspectionStatsHeader.Height
+                ZIndex: =3
+
+            lblInspectionPendingReviewTitle As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =35
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: |-
+                    =With(
+                        {
+                            varDefault: "Pending review",
+                            varOOBTextId: "lblInspectionPendingReviewTitle__locText"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                Width: =Parent.Width - Self.X
+                X: =35
+                Y: =lblInspectionPendingReviewCount.Y+lblInspectionPendingReviewCount.Height
+                ZIndex: =4
+
+            shpInspectionPendingReviewDivider As rectangle:
+                Fill: =gblAppStyles.Dividers.Elements
+                Height: =Parent.Height - 40
+                Width: =1
+                X: =Parent.Width - 1
+                Y: =20
+                ZIndex: =5
+
+        colInspectionAvgTime As groupContainer:
+            Height: =Parent.Height
+            Width: =(Parent.Width) / 4
+            X: =colInspectionClosed.X + colInspectionClosed.Width
+            ZIndex: =3
+
+            lblInspectionAvgTimeValue As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Bold
+                Height: =43
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Large
+                Text: |-
+                    =If(
+                        locTeamAvgTime = 0,
+                        "-",
+                        locTeamAvgTime
+                    )
+                Width: =Parent.Width - Self.X
+                X: =35
+                Y: =48
+                ZIndex: =1
+
+            lblInspectionAvgTimeTitle As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =35
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: |-
+                    =With(
+                        {
+                            varDefault: "Avg " & Lower(gblWorkType) & " " & "time in mins",
+                            varOOBTextId: "_translateCommon_" & gblWorkType & "AvgTimeTitle"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                Width: =Parent.Width - Self.X
+                X: =35
+                Y: =lblInspectionAvgTimeValue.Y + lblInspectionAvgTimeValue.Height
+                ZIndex: =2
+
+        colInspectionClosed As groupContainer:
+            Height: =Parent.Height
+            Width: =(Parent.Width) / 4
+            X: =colInspectionPendingAction.X + colInspectionPendingAction.Width
+            ZIndex: =4
+
+            lblInspectionClosedCount As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Bold
+                Height: =43
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Large
+                Text: |-
+                    =CountRows(
+                        Filter(
+                            colInspectionsForCharts,
+                            'Review Status Code' = 'Area Inspection Review Status Code'.Closed
+                        )
+                    )
+                Width: =Parent.Width - Self.X
+                X: =35
+                Y: =48
+                ZIndex: =2
+
+            lblInspectionClosedTitle As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =35
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: |-
+                    =With(
+                        {
+                            varDefault: "Closed",
+                            varOOBTextId: "lblInspectionClosedTitle__locText"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                Width: =Parent.Width - Self.X
+                X: =35
+                Y: =lblInspectionClosedCount.Y + lblInspectionClosedCount.Height
+                ZIndex: =3
+
+            shpInspectionClosedDivider As rectangle:
+                Fill: =gblAppStyles.Dividers.Elements
+                Height: =Parent.Height - 40
+                Width: =1
+                X: =Parent.Width - 1
+                Y: =20
+                ZIndex: =4
+
+        colInspectionPendingAction As groupContainer:
+            Height: =Parent.Height
+            Width: =(Parent.Width) / 4
+            X: =conInspectionPendingReview.X + conInspectionPendingReview.Width
+            ZIndex: =5
+
+            lblInspectionPendingActionCount As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Bold
+                Height: =43
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Large
+                Text: |-
+                    =CountRows(
+                        Filter(
+                            colInspectionsForCharts,
+                            'Review Status Code' = 'Area Inspection Review Status Code'.'Pending action'
+                        )
+                    )
+                Width: =Parent.Width - Self.X
+                X: =35
+                Y: =48
+                ZIndex: =2
+
+            lblInspectionPendingActionTitle As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =35
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: |-
+                    =With(
+                        {
+                            varDefault: "Pending action",
+                            varOOBTextId: "lblInspectionPendingActionTitle__locText"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                Width: =Parent.Width-Self.X
+                X: =35
+                Y: =lblInspectionPendingActionCount.Y + lblInspectionPendingActionCount.Height
+                ZIndex: =3
+
+            shpInspectionPendingActionDivider As rectangle:
+                Fill: =gblAppStyles.Dividers.Elements
+                Height: =Parent.Height - 40
+                Width: =1
+                X: =Parent.Width-1
+                Y: =20
+                ZIndex: =4
+

@@ -1,0 +1,1682 @@
+"'Mobile Idea Screen' As screen":
+    Fill: =gblAppStyles.Background.Fill
+    LoadingSpinner: =LoadingSpinner.Controls
+    LoadingSpinnerColor: =gblAppStyles.ButtonPrimary.Fill
+    OnVisible: =
+
+    conMobileIdeaSubmission As groupContainer:
+        BorderColor: =gblAppStyles.Dividers.Elements
+        Height: =Parent.Height
+        Width: |-
+            =Min(
+                Parent.Width,
+                Coalesce(
+                    gblMobileWidth,
+                    App.MinScreenWidth
+                )
+            )
+        X: |-
+            =(Parent.Width - Min(
+                Parent.Width,
+                Coalesce(
+                    gblMobileWidth,
+                    App.MinScreenWidth
+                )
+            )) / 2
+        Y: =0*0
+        ZIndex: =4
+
+        cnvMobileCampaignIdeaSubmission As fluidGrid.fluidGridWithBlankCard:
+            BorderThickness: =0
+            Height: =Parent.Height - Self.Y
+            SnapToColumns: =false
+            Width: =Parent.Width
+            Y: =comMobileHeader_IdeaSubmission.Y + comMobileHeader_IdeaSubmission.Height
+            ZIndex: =1
+
+            dtcMobileIdea_Responses As dataCard:
+                BorderColor: =RGBA(0, 0, 0, 1)
+                BorderStyle: =BorderStyle.Solid
+                BorderThickness: =0
+                DisplayMode: =If(locCreateNewIdea, DisplayMode.Edit,DisplayMode.View)
+                Fill: =RGBA(0, 0, 0, 0)
+                Height: =galMobileIdeaResponses.Height
+                Width: =Parent.Width
+                X: =400
+                Y: =2
+                ZIndex: =1
+
+                galMobileIdeaResponses As gallery.galleryVertical:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "Gallery of responses for the idea",
+                                varOOBTextId: "galIdeaResponses__locAccessibleLabel"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Height: =(CountRows(colResponses) * Self.TemplateHeight) + (CountRows(colResponses) * Self.TemplatePadding) + 32
+                    Items: |-
+                        =SortByColumns(
+                            colResponses,
+                            "msft_snapshot_sequence"
+                        )
+                    Layout: =Layout.Vertical
+                    LoadingSpinner: =LoadingSpinner.Data
+                    TemplatePadding: =20
+                    TemplateSize: =120
+                    Width: =Parent.Width
+                    Y: =0*0
+                    ZIndex: =1
+
+                    shpMobileResponsesDivider As rectangle:
+                        Fill: =gblAppStyles.Dividers.Elements
+                        Height: =0.5
+                        OnSelect: =Select(Parent)
+                        Width: =Parent.TemplateWidth - (2 * Self.X)
+                        X: =gblPadding.Page
+                        Y: =Parent.TemplateHeight - Self.Height
+                        ZIndex: =1
+
+                    btnMobileResponse_SelectBorder As button:
+                        BorderColor: =gblAppStyles.ButtonBackground.BorderColor
+                        BorderThickness: =gblAppStyles.ButtonBackground.BorderThickness
+                        Color: =gblAppStyles.ButtonBackground.Color
+                        DisabledBorderColor: =gblAppStyles.ButtonBackground.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.ButtonBackground.DisabledColor
+                        DisabledFill: =gblAppStyles.Background.Fill
+                        DisplayMode: =DisplayMode.Disabled
+                        Fill: =gblAppStyles.ButtonBackground.Fill
+                        FocusedBorderColor: =gblAppStyles.ButtonBackground.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.ButtonBackground.FocusedBorderThickness
+                        Height: =Parent.TemplateHeight
+                        HoverBorderColor: =gblAppStyles.ButtonBackground.HoverBorderColor
+                        HoverColor: =gblAppStyles.ButtonBackground.HoverColor
+                        HoverFill: =gblAppStyles.ButtonBackground.HoverFill
+                        OnSelect: =Select(Parent)
+                        PressedBorderColor: =gblAppStyles.ButtonBackground.PressedBorderColor
+                        PressedColor: =gblAppStyles.ButtonBackground.PressedColor
+                        PressedFill: =gblAppStyles.ButtonBackground.PressedFill
+                        RadiusBottomLeft: =gblAppStyles.ButtonBackground.RadiusBottomLeft
+                        RadiusBottomRight: =gblAppStyles.ButtonBackground.RadiusBottomRight
+                        RadiusTopLeft: =gblAppStyles.ButtonBackground.RadiusTopLeft
+                        RadiusTopRight: =gblAppStyles.ButtonBackground.RadiusTopRight
+                        Size: =gblAppStyles.ButtonBackground.Size
+                        Text: =""
+                        Tooltip: =
+                        Visible: =false
+                        Width: =Parent.TemplateWidth
+                        ZIndex: =2
+
+                    lblMobileHiddenResponseType As label:
+                        DisplayMode: =DisplayMode.Disabled
+                        Font: =Font.'Segoe UI'
+                        Height: =10
+                        OnSelect: =Select(Parent)
+                        Size: =12
+                        Text: =ThisItem.'Response Type'
+                        Visible: =false
+                        Width: =10
+                        ZIndex: =3
+
+                    lblMobileHiddenResponseRating As label:
+                        DisplayMode: =DisplayMode.Disabled
+                        Font: =Font.'Segoe UI'
+                        Height: =10
+                        OnSelect: =Select(Parent)
+                        Size: =12
+                        Text: =ThisItem.'Response Rating'
+                        Visible: =false
+                        Width: =10
+                        ZIndex: =4
+
+                    lblMobileIdeaResponseRating_Instructions As label:
+                        BorderColor: =gblAppStyles.Label.BorderColor
+                        BorderThickness: =gblAppStyles.Label.BorderThickness
+                        Color: =gblAppStyles.Label.Color
+                        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.Label.DisabledColor
+                        DisabledFill: =gblAppStyles.Label.DisabledFill
+                        DisplayMode: =DisplayMode.View
+                        Fill: =gblAppStyles.Label.Fill
+                        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        FontWeight: =FontWeight.Semibold
+                        Height: =48
+                        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                        HoverColor: =gblAppStyles.Label.HoverColor
+                        HoverFill: =gblAppStyles.Label.HoverFill
+                        PaddingBottom: =10
+                        PaddingLeft: =20
+                        PaddingTop: =0
+                        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                        PressedColor: =gblAppStyles.Label.PressedColor
+                        PressedFill: =gblAppStyles.Label.PressedFill
+                        Size: =gblAppStyles.Label.Size.Medium
+                        Text: =ThisItem.Instructions
+                        Tooltip: =ThisItem.Instructions
+                        VerticalAlign: =VerticalAlign.Bottom
+                        Width: =Parent.TemplateWidth
+                        ZIndex: =5
+
+                    txtMobileResponseText As text:
+                        AccessibleLabel: |-
+                            =With(
+                                {
+                                    varConditionalDefault: Switch(
+                                        ThisItem.msft_snapshot_sequence,
+                                        -2,
+                                        "Text input for the title of your idea",
+                                        -1,
+                                        "Text input for the description of your idea",
+                                        "Text input for this question, for this idea"
+                                    ),
+                                    varConditionalOOBTextId: Switch(
+                                        ThisItem.msft_snapshot_sequence,
+                                        -2,
+                                        "",
+                                        -1,
+                                        "",
+                                        "txtResponseText__locAccessibleLabel"
+                                    )
+                                },
+                                With(
+                                    {
+                                        varDefault: varConditionalDefault,
+                                        varOOBTextId: varConditionalOOBTextId
+                                    },
+                                    With(
+                                        {
+                                            varLocalizedText: LookUp(
+                                                colLocalization,
+                                                OOBTextId = varOOBTextId,
+                                                LocalizedText
+                                            )
+                                        },
+                                        Coalesce(
+                                            varLocalizedText,
+                                            varDefault
+                                        )
+                                    )
+                                )
+                            )
+                        BorderColor: =gblAppStyles.TextInput.BorderColor
+                        BorderThickness: =gblAppStyles.TextInput.BorderThickness
+                        Color: =gblAppStyles.TextInput.Color
+                        Default: =ThisItem.'Response Text'
+                        DisabledBorderColor: =gblAppStyles.TextInput.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.TextInput.DisabledColor
+                        DisabledFill: =gblAppStyles.TextInput.DisabledFill
+                        Fill: =gblAppStyles.TextInput.Fill
+                        FocusedBorderColor: =gblAppStyles.TextInput.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.TextInput.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        Height: =If(ThisItem.'Response Type' = 'Employee Idea Response Type'.'Text (Single Line)',36,Parent.TemplateHeight - Self.Y)
+                        HoverBorderColor: =gblAppStyles.TextInput.HoverBorderColor
+                        HoverColor: =gblAppStyles.TextInput.HoverColor
+                        HoverFill: =gblAppStyles.TextInput.HoverFill
+                        MaxLength: =If(ThisItem.'Response Type' = 'Employee Idea Response Type'.'Text (Single Line)',100,2000)
+                        Mode: =If(ThisItem.'Response Type' = 'Employee Idea Response Type'.'Text (Single Line)',TextMode.SingleLine,TextMode.MultiLine)
+                        OnChange: |-
+                            =UpdateIf(
+                                colResponses,
+                                ThisItem.appRef = appRef,
+                                {msft_responsetext: Self.Text}
+                            )
+                        PaddingBottom: =8
+                        PaddingLeft: =8
+                        PaddingRight: =0
+                        PaddingTop: =8
+                        PressedBorderColor: =gblAppStyles.TextInput.PressedBorderColor
+                        PressedColor: =gblAppStyles.TextInput.PressedColor
+                        PressedFill: =gblAppStyles.TextInput.PressedFill
+                        RadiusBottomLeft: =gblAppStyles.TextInput.RadiusBottomLeft
+                        RadiusBottomRight: =gblAppStyles.TextInput.RadiusBottomRight
+                        RadiusTopLeft: =gblAppStyles.TextInput.RadiusTopLeft
+                        RadiusTopRight: =gblAppStyles.TextInput.RadiusTopRight
+                        Size: =gblAppStyles.TextInput.Size
+                        Visible: =ThisItem.'Response Type' <> 'Employee Idea Response Type'.Rating
+                        Width: =Parent.TemplateWidth - (2 * Self.X)
+                        X: =gblPadding.Page
+                        Y: =lblMobileIdeaResponseRating_Instructions.Y + lblMobileIdeaResponseRating_Instructions.Height
+                        ZIndex: =7
+
+                    galMobileIdeaResponseRating As gallery.galleryHorizontal:
+                        AccessibleLabel: |-
+                            =With(
+                                {
+                                    varDefault: "Gallery of response ratings for the question, for this idea",
+                                    varOOBTextId: "galIdeaResponseRating__locAccessibleLabel"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextId = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        Height: =Parent.TemplateHeight - Self.Y
+                        Items: |-
+                            =With(
+                                {varRecord: ThisItem},
+                                Table(
+                                    {
+                                        appRefNo: 1,
+                                        appRef: varRecord.appRef,
+                                        appRatingValue: varRecord.'Response Rating',
+                                        appRatingTextLow: varRecord.'Rating Text (Low)',
+                                        appRatingTextHigh: varRecord.'Rating Text (High)'
+                                    },
+                                    {
+                                        appRefNo: 2,
+                                        appRef: varRecord.appRef,
+                                        appRatingValue: varRecord.'Response Rating',
+                                        appRatingTextLow: varRecord.'Rating Text (Low)',
+                                        appRatingTextHigh: varRecord.'Rating Text (High)'
+                                    },
+                                    {
+                                        appRefNo: 3,
+                                        appRef: varRecord.appRef,
+                                        appRatingValue: varRecord.'Response Rating',
+                                        appRatingTextLow: varRecord.'Rating Text (Low)',
+                                        appRatingTextHigh: varRecord.'Rating Text (High)'
+                                    },
+                                    {
+                                        appRefNo: 4,
+                                        appRef: varRecord.appRef,
+                                        appRatingValue: varRecord.'Response Rating',
+                                        appRatingTextLow: varRecord.'Rating Text (Low)',
+                                        appRatingTextHigh: varRecord.'Rating Text (High)'
+                                    },
+                                    {
+                                        appRefNo: 5,
+                                        appRef: varRecord.appRef,
+                                        appRatingValue: varRecord.'Response Rating',
+                                        appRatingTextLow: varRecord.'Rating Text (Low)',
+                                        appRatingTextHigh: varRecord.'Rating Text (High)'
+                                    }
+                                )
+                            )
+                        OnSelect: =
+                        TemplatePadding: =0
+                        TemplateSize: =Self.Width / 5
+                        Visible: =ThisItem.'Response Type' = 'Employee Idea Response Type'.Rating
+                        Width: =Parent.TemplateWidth
+                        Y: =lblMobileIdeaResponseRating_Instructions.Y + lblMobileIdeaResponseRating_Instructions.Height
+                        ZIndex: =8
+
+                        lblMobileIdeaResponseRating_HighLow As label:
+                            Align: =Align.Center
+                            BorderColor: =gblAppStyles.Label.BorderColor
+                            BorderThickness: =gblAppStyles.Label.BorderThickness
+                            Color: =gblAppStyles.Label.Color
+                            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                            DisabledColor: =gblAppStyles.Label.DisabledColor
+                            DisabledFill: =gblAppStyles.Label.DisabledFill
+                            DisplayMode: =DisplayMode.View
+                            Fill: =gblAppStyles.Label.Fill
+                            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                            Font: =Font.'Segoe UI'
+                            Height: =Parent.TemplateHeight - Self.Y
+                            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                            HoverColor: =gblAppStyles.Label.HoverColor
+                            HoverFill: =gblAppStyles.Label.HoverFill
+                            OnSelect: =Select(Parent)
+                            PaddingBottom: =0
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            PaddingTop: =0
+                            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                            PressedColor: =gblAppStyles.Label.PressedColor
+                            PressedFill: =gblAppStyles.Label.PressedFill
+                            Size: =gblAppStyles.Label.Size.Medium
+                            Text: |-
+                                =If(
+                                    ThisItem.appRefNo = 1,
+                                    ThisItem.appRatingTextLow,
+                                    ThisItem.appRefNo = 5,
+                                    ThisItem.appRatingTextHigh,
+                                    Blank()
+                                )
+                            Tooltip: |-
+                                =If(
+                                    ThisItem.appRefNo = 1,
+                                    ThisItem.appRatingTextLow,
+                                    ThisItem.appRefNo = 5,
+                                    ThisItem.appRatingTextHigh,
+                                    Blank()
+                                )
+                            VerticalAlign: =VerticalAlign.Top
+                            Width: =Parent.TemplateWidth
+                            Wrap: =false
+                            X: =0*0
+                            Y: =Parent.TemplateHeight * .6
+                            ZIndex: =3
+
+                        btnMobileIdeaResponseRating As button:
+                            AutoDisableOnSelect: =false
+                            BorderColor: |-
+                                =If(
+                                    ThisItem.appRefNo = ThisItem.appRatingValue,
+                                    gblAppStyles.ButtonPrimary.BorderColor,
+                                    gblAppStyles.ButtonSecondary.BorderColor
+                                )
+                            BorderThickness: |-
+                                =If(
+                                    ThisItem.appRefNo = ThisItem.appRatingValue,
+                                    gblAppStyles.ButtonPrimary.BorderThickness,
+                                    gblAppStyles.ButtonSecondary.BorderThickness
+                                )
+                            Color: |-
+                                =If(
+                                    ThisItem.appRefNo = ThisItem.appRatingValue,
+                                    gblAppStyles.ButtonPrimary.Color,
+                                    gblAppStyles.ButtonSecondary.Color
+                                )
+                            DisabledBorderColor: |-
+                                =If(
+                                    ThisItem.appRefNo = ThisItem.appRatingValue,
+                                    gblAppStyles.ButtonPrimary.DisabledBorderColor,
+                                    gblAppStyles.ButtonSecondary.DisabledBorderColor
+                                )
+                            DisabledColor: |-
+                                =If(
+                                    ThisItem.appRefNo = ThisItem.appRatingValue,
+                                    gblAppStyles.ButtonPrimary.DisabledColor,
+                                    gblAppStyles.ButtonSecondary.DisabledColor
+                                )
+                            DisabledFill: |-
+                                =If(
+                                    ThisItem.appRefNo = ThisItem.appRatingValue,
+                                    gblAppStyles.ButtonPrimary.DisabledFill,
+                                    gblAppStyles.ButtonSecondary.DisabledFill
+                                )
+                            Fill: |-
+                                =If(
+                                    ThisItem.appRefNo = ThisItem.appRatingValue,
+                                    gblAppStyles.ButtonPrimary.Fill,
+                                    gblAppStyles.ButtonSecondary.Fill
+                                )
+                            FocusedBorderColor: |-
+                                =If(
+                                    ThisItem.appRefNo = ThisItem.appRatingValue,
+                                    gblAppStyles.ButtonPrimary.FocusedBorderColor,
+                                    gblAppStyles.ButtonSecondary.FocusedBorderColor
+                                )
+                            FocusedBorderThickness: |-
+                                =If(
+                                    ThisItem.appRefNo = ThisItem.appRatingValue,
+                                    gblAppStyles.ButtonPrimary.FocusedBorderThickness,
+                                    gblAppStyles.ButtonSecondary.FocusedBorderThickness
+                                ) + 1
+                            Font: =Font.'Segoe UI'
+                            FontWeight: =FontWeight.Normal
+                            Height: =25
+                            HoverBorderColor: |-
+                                =If(
+                                    ThisItem.appRefNo = ThisItem.appRatingValue,
+                                    gblAppStyles.ButtonPrimary.HoverBorderColor,
+                                    gblAppStyles.ButtonSecondary.HoverBorderColor
+                                )
+                            HoverColor: |-
+                                =If(
+                                    ThisItem.appRefNo = ThisItem.appRatingValue,
+                                    gblAppStyles.ButtonPrimary.HoverColor,
+                                    gblAppStyles.ButtonSecondary.HoverColor
+                                )
+                            HoverFill: |-
+                                =If(
+                                    ThisItem.appRefNo = ThisItem.appRatingValue,
+                                    gblAppStyles.ButtonPrimary.HoverFill,
+                                    gblAppStyles.ButtonSecondary.HoverFill
+                                )
+                            OnSelect: |-
+                                =UpdateIf(
+                                    colResponses,
+                                    colResponses[@appRef] = ThisItem.appRef,
+                                    {msft_responserating: ThisItem.appRefNo}
+                                );
+                            PaddingBottom: =0
+                            PaddingLeft: =0
+                            PaddingRight: =0
+                            PaddingTop: =2.5
+                            PressedBorderColor: |-
+                                =If(
+                                    ThisItem.appRefNo = ThisItem.appRatingValue,
+                                    gblAppStyles.ButtonPrimary.PressedBorderColor,
+                                    gblAppStyles.ButtonSecondary.PressedBorderColor
+                                )
+                            PressedColor: |-
+                                =If(
+                                    ThisItem.appRefNo = ThisItem.appRatingValue,
+                                    gblAppStyles.ButtonPrimary.PressedColor,
+                                    gblAppStyles.ButtonSecondary.PressedColor
+                                )
+                            PressedFill: |-
+                                =If(
+                                    ThisItem.appRefNo = ThisItem.appRatingValue,
+                                    gblAppStyles.ButtonPrimary.PressedFill,
+                                    gblAppStyles.ButtonSecondary.PressedFill
+                                )
+                            RadiusBottomLeft: =25
+                            RadiusBottomRight: =25
+                            RadiusTopLeft: =25
+                            RadiusTopRight: =25
+                            Size: =10.5
+                            Text: |-
+                                =Concatenate(
+                                    Text(ThisItem.appRefNo),
+                                    Char(10),
+                                    With(
+                                        {
+                                            varDefault: "Rating",
+                                            varOOBTextId: "_translateDataValue__ReponseTypeRating"
+                                        },
+                                        With(
+                                            {
+                                                varLocalizedText: LookUp(
+                                                    colLocalization,
+                                                    OOBTextId = varOOBTextId,
+                                                    LocalizedText
+                                                )
+                                            },
+                                            Coalesce(
+                                                varLocalizedText,
+                                                varDefault
+                                            )
+                                        )
+                                    )
+                                )
+                            VerticalAlign: =VerticalAlign.Top
+                            Width: =25
+                            X: =(Parent.TemplateWidth - Self.Width) / 2
+                            Y: =((Parent.TemplateHeight * .6) - Self.Height) / 2
+                            ZIndex: =5
+
+            dtcMobileIdea_FilesImages As dataCard.blankCard:
+                BorderColor: =RGBA(0, 0, 0, 1)
+                BorderStyle: =BorderStyle.Solid
+                DisplayMode: =DisplayMode.Edit
+                Fill: =RGBA(0, 0, 0, 0)
+                Height: =galMobileIdeaFiles.Y + galMobileIdeaFiles.Height + 24
+                Width: =Parent.Width
+                X: =0
+                Y: |
+                    =3
+                ZIndex: =2
+
+                lbMobileldeaFiles_Header As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =32
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PaddingLeft: =0
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =If(
+                            locCreateNewIdea,// And locVisibleCampaignIdea,
+                            With(
+                                {
+                                    varDefault: "Attach supporting files",
+                                    varOOBTextId: "lbldeaFiles_Header__locText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextId = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            ),
+                            With(
+                                {
+                                    varDefault: "Attachments",
+                                    varOOBTextId: "lbldeaFiles_HeaderAttachments__locText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextId = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        )
+                    Width: =Parent.Width
+                    X: =40
+                    ZIndex: =1
+
+                imgMobileAddFile As image:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "Click to add a file to this idea",
+                                varOOBTextId: "addFileIdea__locAccessibleLabel"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    DisabledFill: |-
+                        =With(
+                            {
+                                varImageIsCategory: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Attachment"
+                                ).staticIconIsCategory
+                            },
+                            If(
+                                varImageIsCategory,
+                                gblAppStyles.Icons.DisabledFill_Category,
+                                Transparent
+                            )
+                        )
+                    Fill: |-
+                        =With(
+                            {
+                                varImageIsCategory: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Attachment"
+                                ).staticIconIsCategory
+                            },
+                            If(
+                                varImageIsCategory,
+                                gblAppStyles.Icons.Fill_Category,
+                                Transparent
+                            )
+                        )
+                    Height: =32*1
+                    Image: |
+                        =With(
+                            {
+                                varImageRecord: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Attachment"
+                                ),
+                                varColor: If(
+                                    Self.DisplayMode = DisplayMode.Disabled,
+                                    gblAppStyles.Icons.DisabledColor,
+                                    gblAppStyles.Icons.Color
+                                )
+                            },
+                            With(
+                                {
+                                    varImageData: Concatenate(
+                                        "data:image/svg+xml;utf8, ",
+                                        EncodeUrl(
+                                            Concatenate(
+                                                "<svg viewBox='",
+                                                varImageRecord.staticIconViewbox,
+                                                "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                varImageRecord.staticIconPath,
+                                                "' fill='#",
+                                                varColor,
+                                                "'/></svg>"
+                                            )
+                                        )
+                                    )
+                                },
+                                varImageData
+                            )
+                        )
+                    OnSelect: =
+                    RadiusBottomLeft: =5
+                    RadiusBottomRight: =5
+                    RadiusTopLeft: =5
+                    RadiusTopRight: =5
+                    Visible: =locCreateNewIdea
+                    Width: =32*1
+                    X: =40*1
+                    Y: =40*1
+                    ZIndex: =5
+
+                lblMobileAddFile As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =imgMobileAddFile.Height
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PaddingLeft: =8
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "File",
+                                varOOBTextId: "lblAddFile__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Tooltip: ="Click to add a file"
+                    Visible: =locCreateNewIdea
+                    Width: =64
+                    X: =imgMobileAddFile.X + imgMobileAddFile.Width
+                    Y: =imgMobileAddFile.Y
+                    ZIndex: =7
+
+                addMobileFile As addMedia:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "Click to add a file to this idea",
+                                varOOBTextId: "addFileIdea__locAccessibleLabel"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    BorderColor: =RGBA(0, 0, 0, 0)
+                    ChangePictureText: =""
+                    Color: =RGBA(0, 0, 0, 0)
+                    Fill: =RGBA(0, 0, 0, 0)
+                    Height: =imgMobileAddFile.Height
+                    OnChange: |-
+                        =Collect(
+                            colFiles,
+                            {
+                                appIsNew: true,
+                                appFileValue: addMobileFile.Media,
+                                msft_name: addMobileFile.FileName
+                            }
+                        );
+                    Text: ="Attach supporting files"
+                    Visible: =locCreateNewIdea
+                    Width: =imgMobileAddFile.Width + lblMobileAddFile.Width
+                    X: =imgMobileAddFile.X
+                    Y: =imgMobileAddFile.Y
+                    ZIndex: =8
+
+                galMobileIdeaFiles As gallery.galleryVertical:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "Gallery of files added to this idea",
+                                varOOBTextId: "galIdeaFiles__locAccessibleLabel"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Height: =CountRows(colFiles) * (Self.TemplateHeight + (2 * Self.TemplatePadding))
+                    Items: =colFiles
+                    Layout: =Layout.Vertical
+                    OnSelect: |-
+                        =If(
+                            !locCreateNewIdea,
+                            Launch(ThisItem.msft_file.Value)
+                        )
+                    TemplateFill: =Transparent
+                    TemplateSize: =48
+                    Width: =Parent.Width - (2 * Self.X)
+                    X: =35
+                    Y: =imgMobileAddFile.Y + imgMobileAddFile.Height + 16
+                    ZIndex: =9
+
+                    btnMobileBackgroundIdeaFiles As button:
+                        BorderColor: =gblAppStyles.ButtonBackground.BorderColor
+                        BorderThickness: =gblAppStyles.ButtonBackground.BorderThickness
+                        Color: =gblAppStyles.ButtonBackground.Color
+                        DisabledBorderColor: =gblAppStyles.ButtonBackground.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.ButtonBackground.DisabledColor
+                        DisabledFill: =gblAppStyles.ButtonBackground.DisabledFill
+                        DisplayMode: =DisplayMode.Disabled
+                        Fill: =gblAppStyles.ButtonBackground.Fill
+                        FocusedBorderColor: =gblAppStyles.ButtonBackground.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.ButtonBackground.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        Height: =48
+                        HoverBorderColor: =gblAppStyles.ButtonBackground.HoverBorderColor
+                        HoverColor: =gblAppStyles.ButtonBackground.HoverColor
+                        HoverFill: =gblAppStyles.ButtonBackground.HoverFill
+                        OnSelect: =
+                        PressedBorderColor: =gblAppStyles.ButtonBackground.PressedBorderColor
+                        PressedColor: =gblAppStyles.ButtonBackground.PressedColor
+                        PressedFill: =gblAppStyles.ButtonBackground.PressedFill
+                        RadiusBottomLeft: =gblAppStyles.ButtonBackground.RadiusBottomLeft
+                        RadiusBottomRight: =gblAppStyles.ButtonBackground.RadiusBottomRight
+                        RadiusTopLeft: =gblAppStyles.ButtonBackground.RadiusTopLeft
+                        RadiusTopRight: =gblAppStyles.ButtonBackground.RadiusTopRight
+                        Size: =gblAppStyles.ButtonBackground.Size
+                        TabIndex: =-1
+                        Text: =Blank()
+                        Width: =Parent.TemplateWidth
+                        ZIndex: =1
+
+                    imgMobileIdeaFile_FileType_Generic As image:
+                        Height: =48
+                        Image: =Icon_File_Generic
+                        PaddingBottom: =12
+                        PaddingLeft: =12
+                        PaddingRight: =12
+                        PaddingTop: =12
+                        Visible: =IsBlank(imgMobileIdeaFile_FileType)
+                        Width: =48
+                        ZIndex: =2
+
+                    lblMobileIdeaFile_Name As label:
+                        BorderColor: =gblAppStyles.Label.BorderColor
+                        BorderThickness: =gblAppStyles.Label.BorderThickness
+                        Color: =gblAppStyles.Label.Color
+                        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.Label.DisabledColor
+                        DisabledFill: =gblAppStyles.Label.DisabledFill
+                        Fill: =gblAppStyles.Label.Fill
+                        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        Height: =Parent.TemplateHeight
+                        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                        HoverColor: =gblAppStyles.Label.HoverColor
+                        HoverFill: =gblAppStyles.Label.HoverFill
+                        OnSelect: =Select(Parent)
+                        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                        PressedColor: =gblAppStyles.Label.PressedColor
+                        PressedFill: =gblAppStyles.Label.PressedFill
+                        Size: =gblAppStyles.Label.Size.Small
+                        Text: =ThisItem.msft_name
+                        Width: =Parent.TemplateWidth - Self.X - Self.X
+                        X: =48
+                        ZIndex: =3
+
+                    imgMobileIdeaFile_Delete As image:
+                        AccessibleLabel: |-
+                            =With(
+                                {
+                                    varDefault: "Click to delete this file, from the idea",
+                                    varOOBTextId: "imgIdeaFile_Delete__locAccessibleLabel"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextId = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        DisabledFill: |-
+                            =With(
+                                {
+                                    varImageIsCategory: LookUp(
+                                        staticIcons,
+                                        staticIconName = "Delete"
+                                    ).staticIconIsCategory
+                                },
+                                If(
+                                    varImageIsCategory,
+                                    gblAppStyles.Icons.DisabledFill_Category,
+                                    Transparent
+                                )
+                            )
+                        Fill: |-
+                            =With(
+                                {
+                                    varImageIsCategory: LookUp(
+                                        staticIcons,
+                                        staticIconName = "Delete"
+                                    ).staticIconIsCategory
+                                },
+                                If(
+                                    varImageIsCategory,
+                                    gblAppStyles.Icons.Fill_Category,
+                                    Transparent
+                                )
+                            )
+                        Height: =16
+                        Image: |
+                            =With(
+                                {
+                                    varImageRecord: LookUp(
+                                        staticIcons,
+                                        staticIconName = "Delete"
+                                    ),
+                                    varColor: If(
+                                        Self.DisplayMode = DisplayMode.Disabled,
+                                        gblAppStyles.Icons.DisabledColor,
+                                        gblAppStyles.Icons.Color_Red
+                                    )
+                                },
+                                With(
+                                    {
+                                        varImageData: Concatenate(
+                                            "data:image/svg+xml;utf8, ",
+                                            EncodeUrl(
+                                                Concatenate(
+                                                    "<svg viewBox='",
+                                                    varImageRecord.staticIconViewbox,
+                                                    "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                    varImageRecord.staticIconPath,
+                                                    "' fill='#",
+                                                    varColor,
+                                                    "'/></svg>"
+                                                )
+                                            )
+                                        )
+                                    },
+                                    varImageData
+                                )
+                            )
+                        OnSelect: =Remove(colFiles,ThisItem)
+                        RadiusBottomLeft: =5
+                        RadiusBottomRight: =5
+                        RadiusTopLeft: =5
+                        RadiusTopRight: =5
+                        Visible: =locCreateNewIdea
+                        Width: =16
+                        X: =Parent.TemplateWidth - Self.Width - 16
+                        Y: =(Parent.TemplateHeight - Self.Height) / 2
+                        ZIndex: =4
+
+                    imgMobileIdeaFile_FileType As image:
+                        Height: =Parent.TemplateHeight
+                        Image: |-
+                            =LookUp(
+                                colFileIcons,
+                                Upper(appFileType) = Upper(
+                                    Right(
+                                        ThisItem.msft_name,
+                                        Len(ThisItem.msft_name) - Find(
+                                            ".",
+                                            ThisItem.msft_name
+                                        )
+                                    )
+                                ),
+                                appFileIcon
+                            )
+                        OnSelect: =Select(Parent)
+                        PaddingBottom: =12
+                        PaddingLeft: =12
+                        PaddingRight: =12
+                        PaddingTop: =12
+                        Width: =Parent.TemplateHeight
+                        ZIndex: =5
+
+                    atcMobileIdeaFile As attachments:
+                        AccessibleLabel: |-
+                            =With(
+                                {
+                                    varDefault: "Click to open the attached file",
+                                    varOOBTextId: "atcIdeaFile__locAccessibleLabel"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextId = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        AddAttachmentText: ="Upload file"
+                        BorderColor: =Transparent
+                        Color: =RGBA(0, 0, 0, 0)
+                        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                        DisabledColor: =RGBA(0, 0, 0, 0)
+                        DisabledFill: =RGBA(0, 0, 0, 0)
+                        DisplayMode: =DisplayMode.View
+                        Fill: =RGBA(0, 0, 0, 0)
+                        Font: =Font.'Segoe UI'
+                        Height: =Parent.TemplateHeight
+                        HoverColor: =RGBA(0, 0, 0, 0)
+                        HoverFill: =gblAppColors.OverlayLight
+                        IsInDataCard: =true
+                        ItemFill: =Black
+                        ItemHoverFill: =gblAppColors.OverlayLight
+                        Items: |-
+                            =Table(
+                                {
+                                    DisplayName: ThisItem.msft_file.FileName,
+                                    Value: ThisItem.msft_file.Value
+                                }
+                            )
+                        MaxAttachments: =1
+                        MaxAttachmentsText: =""
+                        NoAttachmentsText: ="There is no file."
+                        PaddingBottom: =5
+                        PaddingLeft: =If(Self.DisplayMode = DisplayMode.Edit, 5, 0)
+                        PaddingRight: =5
+                        PaddingTop: =5
+                        PressedColor: =RGBA(0, 0, 0, 0)
+                        PressedFill: =RGBA(0, 0, 0, 0)
+                        Size: =gblAppStyles.Label.Size.Small
+                        Visible: =!locCreateNewIdea
+                        Width: =Parent.TemplateWidth
+                        X: =0*0
+                        Y: =0*0
+                        ZIndex: =6
+
+            dtcMobileIdea_ShareChannel As dataCard.blankCard:
+                BorderColor: =RGBA(0, 0, 0, 1)
+                BorderStyle: =BorderStyle.Solid
+                DisplayMode: =DisplayMode.Edit
+                Fill: =RGBA(0, 0, 0, 0)
+                Height: =96
+                Visible: =locCreateNewIdea
+                Width: =Parent.Width
+                X: =0
+                Y: =4
+                ZIndex: =3
+
+                tglMobileIdeaDetailControls_PostToTeams As toggleSwitch:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "Toggle to post idea to Teams Channel",
+                                varOOBTextId: "tglIdeaDetailControls_PostToTeams__locAccessibleLabel"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    BorderColor: =gblAppStyles.Toggle.BorderColor
+                    BorderThickness: =gblAppStyles.Toggle.BorderThickness
+                    Color: =gblAppStyles.Toggle.Color
+                    Default: =
+                    DisabledBorderColor: =gblAppStyles.Toggle.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Toggle.DisabledColor
+                    FalseFill: =gblAppStyles.Toggle.FalseFill
+                    FalseHoverFill: =gblAppStyles.Toggle.FalseHoverFill
+                    FalseText: |-
+                        =With(
+                            {
+                                varDefault: "No",
+                                varOOBTextId: "_translateCommon_ToggleFalse_No"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    FocusedBorderColor: =gblAppStyles.Toggle.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Toggle.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    HandleFill: =If(Self.Value,gblAppStyles.Toggle.HandleFillTrue,gblAppStyles.Toggle.HandleFillFalse)
+                    Height: =32
+                    HoverBorderColor: =gblAppStyles.Toggle.HoverBorderColor
+                    PressedBorderColor: =gblAppStyles.Toggle.PressedBorderColor
+                    Size: =gblAppStyles.Toggle.Size
+                    TextPosition: =TextPosition.Left
+                    TrueFill: =gblAppStyles.Toggle.TrueFill
+                    TrueHoverFill: =gblAppStyles.Toggle.TrueHoverFill
+                    TrueText: |-
+                        =With(
+                            {
+                                varDefault: "Yes",
+                                varOOBTextId: "_translateCommon_ToggleTrue_Yes"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Width: =96
+                    X: =lblMobileIdeaDetailControls_PostToTeams.X + lblMobileIdeaDetailControls_PostToTeams.PaddingLeft
+                    Y: =lblMobileIdeaDetailControls_PostToTeams.Y + lblMobileIdeaDetailControls_PostToTeams.Height
+                    ZIndex: =2
+
+                lblMobileIdeaDetailControls_PostToTeams As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =32
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PaddingLeft: =gblPadding.Page
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Share in channel",
+                                varOOBTextId: "lblIdeaDetailControls_PostToTeams__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    VerticalAlign: =VerticalAlign.Top
+                    Width: =Parent.Width - (2* Self.X)
+                    X: =gblPadding.Page
+                    ZIndex: =3
+
+            dtcMobileIdea_Submit As dataCard.blankCard:
+                BorderColor: =RGBA(0, 0, 0, 1)
+                BorderStyle: =BorderStyle.Solid
+                DisplayMode: =DisplayMode.Edit
+                Fill: =RGBA(0, 0, 0, 0)
+                Height: =100
+                Visible: =locCreateNewIdea
+                Width: =Parent.Width
+                X: =0
+                Y: =5
+                ZIndex: =4
+
+                btnMobileCampaignIdeaControls_Submit As button:
+                    AutoDisableOnSelect: =false
+                    BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+                    BorderThickness: =gblAppStyles.ButtonPrimary.BorderThickness
+                    Color: =gblAppStyles.ButtonPrimary.Color
+                    DisabledBorderColor: =gblAppStyles.ButtonPrimary.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.ButtonPrimary.DisabledColor
+                    DisabledFill: =gblAppStyles.ButtonPrimary.DisabledFill
+                    DisplayMode: |-
+                        =If(
+                            locBlockUserInput,
+                            DisplayMode.Disabled,
+                            !IsBlank(
+                                LookUp(
+                                    colResponses,
+                                    Sequence = -2,
+                                    'Response Text'
+                                )
+                            ),
+                            DisplayMode.Edit,
+                            DisplayMode.Disabled
+                        )
+                    Fill: =gblAppStyles.ButtonPrimary.Fill
+                    FocusedBorderColor: =gblAppStyles.ButtonPrimary.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.ButtonPrimary.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =64
+                    HoverBorderColor: =gblAppStyles.ButtonPrimary.HoverBorderColor
+                    HoverColor: =gblAppStyles.ButtonPrimary.HoverColor
+                    HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+                    OnSelect: |
+                        =UpdateContext({locBlockUserInput: true});
+                        // Patch Idea Record
+                        UpdateContext(
+                            {
+                                locFormRecordIdea: Patch(
+                                    'Employee Ideas',
+                                    Defaults('Employee Ideas'),
+                                    {
+                                        Campaign: gblSelectedRecordCampaign,
+                                        Title: LookUp(
+                                            colResponses,
+                                            Sequence = -2,
+                                            msft_responsetext
+                                        ),
+                                        Description: LookUp(
+                                            colResponses,
+                                            Sequence = -1,
+                                            msft_responsetext
+                                        ),
+                                        Icon: StockIdeaImage,
+                                        'Cover Image': If(
+                                            !IsBlank(addMobileIdea_Uploaded.Media),
+                                            {
+                                                Name: addMobileIdea_Uploaded.FileName,
+                                                Value: addMobileIdea_Uploaded.Media,
+                                                Full: addMobileIdea_Uploaded.Media
+                                            }
+                                        ),
+                                        'Post To Teams?': If(
+                                            tglMobileIdeaDetailControls_PostToTeams.Value,
+                                            'Post To Teams? (Employee Ideas)'.Yes,
+                                            'Post To Teams? (Employee Ideas)'.No
+                                        ),
+                                        'Team ID': gblParamTeamId,
+                                        'Channel ID': gblParamChannelId,
+                                        'Attachment Count': CountRows(
+                                            Filter(
+                                                colFiles,
+                                                appIsNew
+                                            )
+                                        ),
+                                        'Vote Count': 0
+                                    }
+                                )
+                            }
+                        );
+                        Concurrent(
+                            ForAll(
+                                Filter(
+                                    colResponses,
+                                    Sequence >= 0
+                                ),
+                                Patch(
+                                    'Employee Idea Responses',
+                                    Defaults('Employee Idea Responses'),
+                                    {
+                                        Idea: locFormRecordIdea,
+                                        Instructions: ThisRecord.Instructions,
+                                        Question: ThisRecord.msft_employeeidea_questionid,
+                                        Sequence: ThisRecord.Sequence,
+                                        'Response Type': ThisRecord.'Response Type',
+                                        'Response Text': ThisRecord.'Response Text',
+                                        'Response Rating': ThisRecord.'Response Rating',
+                                        'Rating Text (Low)': ThisRecord.'Rating Text (Low)',
+                                        'Rating Text (High)': ThisRecord.'Rating Text (High)'
+                                    }
+                                )
+                            ),
+                            ForAll(
+                                Filter(
+                                    colFiles,
+                                    appIsNew
+                                ),
+                                Patch(
+                                    'Employee Idea Files',
+                                    Defaults('Employee Idea Files'),
+                                    {
+                                        Idea: locFormRecordIdea,
+                                        Name: Text(ThisRecord.msft_name),
+                                        File: {
+                                            FileName: Text(ThisRecord.msft_name),
+                                            Value: ThisRecord.appFileValue
+                                        }
+                                    }
+                                )
+                            ),
+                            If(
+                                tglIdeaDetailControls_PostToTeams.Value,
+                                If(
+                                    IsError(
+                                        MicrosoftTeams.PostMessageToChannelV3(
+                                            gblParamTeamId,
+                                            gblParamChannelId,
+                                            {
+                                                content: Concatenate(
+                                                    "A new employee idea has been created!",
+                                                    "<br><br>",
+                                                    "<b>Description</b>",
+                                                    "<br>",
+                                                    locFormRecordIdea.Description
+                                                ),
+                                                contentType: "html"
+                                            },
+                                            {subject: locFormRecordIdea.Title}
+                                        )
+                                    ),
+                                    Notify(
+                                        "Message was not posted. You may not have access to the Team and/or Channel. Contact the app administrator.",
+                                        NotificationType.Warning
+                                    )
+                                );
+                            )
+                        );
+                        Clear(colFiles);
+                        // Collect Ideas for Selected Campaign
+                        ClearCollect(
+                            colIdeas,
+                            Filter(
+                                'Employee Ideas',
+                                'Employee Ideas'[@Campaign].'Employee Idea Campaign' = gblSelectedRecordCampaign.'Employee Idea Campaign'
+                            )
+                        );
+                        Navigate(
+                            'Mobile Success Screen',
+                            ScreenTransition.Fade
+                        );
+                        Reset(addMobileIdea_Uploaded);
+                        UpdateContext({locBlockUserInput: false});
+                    PressedBorderColor: =gblAppStyles.ButtonPrimary.PressedBorderColor
+                    PressedColor: =gblAppStyles.ButtonPrimary.PressedColor
+                    PressedFill: =gblAppStyles.ButtonPrimary.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.ButtonPrimary.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+                    Size: =gblAppStyles.Label.Size.Large
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Submit idea",
+                                varOOBTextId: "btnCampaignIdeaControls_Submit__locTex"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Tooltip: =Self.Text
+                    Width: =Parent.Width - (4* gblPadding.Page)
+                    X: =(Parent.Width - Self.Width) / 2
+                    Y: =(Parent.Height - Self.Height) / 2
+                    ZIndex: =2
+
+            dtcMobileIdea_ExistingDetails As dataCard.blankCard:
+                BorderColor: =RGBA(0, 0, 0, 1)
+                BorderStyle: =BorderStyle.Solid
+                DisplayMode: =DisplayMode.View
+                Fill: =RGBA(0, 0, 0, 0)
+                Height: =100
+                Visible: =!locCreateNewIdea
+                Width: =Parent.Width
+                X: =0
+                Y: =1
+                ZIndex: =5
+
+                conMobileCampaignIdeaCard As groupContainer:
+                    Height: =lblMobileCampaignIdeaCard_Description.Y +lblMobileCampaignIdeaCard_Description.Height + gblPadding.Page
+                    Width: =Parent.Width - Self.X
+                    X: =0*0
+                    Y: =0*0
+                    ZIndex: =2
+
+                    lblMobileCampaignIdeaCard_Title As label:
+                        BorderColor: =gblAppStyles.Label.BorderColor
+                        BorderThickness: =gblAppStyles.Label.BorderThickness
+                        Color: =gblAppStyles.Label.Color
+                        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.Label.DisabledColor
+                        DisabledFill: =gblAppStyles.Label.DisabledFill
+                        DisplayMode: =DisplayMode.View
+                        Fill: =gblAppStyles.Label.Fill
+                        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        Height: =48
+                        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                        HoverColor: =gblAppStyles.Label.HoverColor
+                        HoverFill: =gblAppStyles.Label.HoverFill
+                        PaddingBottom: =0
+                        PaddingLeft: =0
+                        PaddingRight: =0
+                        PaddingTop: =0
+                        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                        PressedColor: =gblAppStyles.Label.PressedColor
+                        PressedFill: =gblAppStyles.Label.PressedFill
+                        Size: =gblAppStyles.Label.Size.ExtraLarge
+                        Text: =gblRecordCampaignIdea.Title
+                        Width: =Parent.Width - (2 * Self.X)
+                        Wrap: =false
+                        X: =gblPadding.Page * 2
+                        Y: =gblPadding.Page
+                        ZIndex: =1
+
+                    lblMobileCampaignIdeaCard_CreatedByOn As label:
+                        BorderColor: =gblAppStyles.Label.BorderColor
+                        BorderThickness: =gblAppStyles.Label.BorderThickness
+                        Color: =gblAppStyles.Label.Color
+                        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.Label.DisabledColor
+                        DisabledFill: =gblAppStyles.Label.DisabledFill
+                        DisplayMode: =DisplayMode.View
+                        Fill: =gblAppStyles.Label.Fill
+                        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        Height: =24
+                        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                        HoverColor: =gblAppStyles.Label.HoverColor
+                        HoverFill: =gblAppStyles.Label.HoverFill
+                        PaddingBottom: =0
+                        PaddingLeft: =0
+                        PaddingRight: =0
+                        PaddingTop: =0
+                        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                        PressedColor: =gblAppStyles.Label.PressedColor
+                        PressedFill: =gblAppStyles.Label.PressedFill
+                        Size: =gblAppStyles.Label.Size.Medium
+                        Text: |-
+                            =Concatenate(
+                                gblRecordCampaignIdea.'Owning User'.'Full Name',
+                                "  ",
+                                Text(
+                                    gblRecordCampaignIdea.'Created On',
+                                    "[$-en-US]mm/dd h:mm:ss AM/PM "
+                                )
+                            )
+                        Width: =Parent.Width - (2 * Self.X)
+                        Wrap: =false
+                        X: =gblPadding.Page * 2
+                        Y: =lblMobileCampaignIdeaCard_Title.Y + lblMobileCampaignIdeaCard_Title.Height
+                        ZIndex: =2
+
+                    lblMobileCampaignIdeaCard_Description As label:
+                        AutoHeight: =true
+                        BorderColor: =gblAppStyles.Label.BorderColor
+                        BorderThickness: =gblAppStyles.Label.BorderThickness
+                        Color: =gblAppStyles.Label.Color
+                        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.Label.DisabledColor
+                        DisabledFill: =gblAppStyles.Label.DisabledFill
+                        DisplayMode: =DisplayMode.View
+                        Fill: =gblAppStyles.Label.Fill
+                        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        Height: =72
+                        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                        HoverColor: =gblAppStyles.Label.HoverColor
+                        HoverFill: =gblAppStyles.Label.HoverFill
+                        Overflow: =Overflow.Scroll
+                        PaddingBottom: =0
+                        PaddingLeft: =0
+                        PaddingRight: =0
+                        PaddingTop: =8
+                        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                        PressedColor: =gblAppStyles.Label.PressedColor
+                        PressedFill: =gblAppStyles.Label.PressedFill
+                        Size: =gblAppStyles.Label.Size.Small
+                        Text: =gblRecordCampaignIdea.Description
+                        VerticalAlign: =VerticalAlign.Top
+                        Width: =Parent.Width - (2 * Self.X)
+                        X: =gblPadding.Page * 2
+                        Y: =lblMobileCampaignIdeaCard_CreatedByOn.Y + lblMobileCampaignIdeaCard_CreatedByOn.Height
+                        ZIndex: =3
+
+                    shpMobileCampaignIdeaCard_QuestionHeader As rectangle:
+                        DisplayMode: =DisplayMode.View
+                        Fill: =gblAppStyles.Dividers.Elements
+                        Height: =1
+                        Width: =Parent.Width - (2 * Self.X)
+                        X: =gblPadding.Page
+                        Y: =Parent.Height - Self.Height
+                        ZIndex: =8
+
+            dtcMobileIdea_CoverImage As dataCard.blankCard:
+                BorderColor: =RGBA(0, 0, 0, 1)
+                BorderStyle: =BorderStyle.Solid
+                DisplayMode: =DisplayMode.Edit
+                Fill: =RGBA(0, 0, 0, 0)
+                Height: =conMobileIdeaImage.Height
+                Width: =Parent.Width
+                X: =0
+                Y: =0
+                ZIndex: =6
+
+                conMobileIdeaImage As groupContainer:
+                    Width: =Parent.Width
+                    X: =0*0
+                    Y: =0*0
+                    ZIndex: =2
+
+                    imgMobileIdea_Uploaded As image:
+                        BorderColor: =gblAppStyles.Dividers.Elements
+                        BorderThickness: =0.5
+                        DisplayMode: =DisplayMode.View
+                        Height: =addMobileIdea_Uploaded.Height
+                        Image: |-
+                            =If(
+                                locCreateNewIdea,
+                                If(
+                                    IsBlank(addMobileIdea_Uploaded.Media),
+                                    StockIdeaImage,
+                                    addMobileIdea_Uploaded.Media
+                                ),
+                                Coalesce(
+                                    gblRecordCampaignIdea.'Cover Image'.Full,
+                                    gblRecordCampaignIdea.Icon,
+                                    StockIdeaImage
+                                )
+                            )
+                        ImagePosition: =ImagePosition.Fill
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                        Width: =addMobileIdea_Uploaded.Width
+                        X: =addMobileIdea_Uploaded.X
+                        Y: =addMobileIdea_Uploaded.Y
+                        ZIndex: =2
+
+                    addMobileIdea_Uploaded As addMedia:
+                        AccessibleLabel: ="Click to add an image to this idea"
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        ChangePictureText: |-
+                            =With(
+                                {
+                                    varDefault: "Click to change",
+                                    varOOBTextId: "addIdea_Uploaded_Change__locText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextId = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        Color: =gblAppStyles.ButtonSecondary.Color
+                        Fill: =gblAppStyles.ButtonSecondary.Fill
+                        Font: =Font.'Segoe UI'
+                        Height: =Parent.Height - Self.Y - 1
+                        HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+                        HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+                        PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+                        PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+                        Text: |-
+                            =With(
+                                {
+                                    varDefault: "Add an image",
+                                    varOOBTextId: "addIdea_Uploaded_Add__locText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextId = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        Visible: =locCreateNewIdea
+                        Width: =Parent.Width -(Self.X *2)
+                        X: =gblPadding.Page * 2
+                        Y: =0*0
+                        ZIndex: =3
+
+        comMobileHeader_IdeaSubmission As comMobileHeader:
+            inputHeaderText: |-
+                =With(
+                    {
+                        varDefault: "Back to campaign",
+                        varOOBTextId: "comMobileHeader_CampaignDetail__BackToCampaign"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            inputHeaderTextColor: =gblAppStyles.ButtonTransparent.Color
+            inputHeaderTextHoverColor: =gblAppStyles.ButtonTransparent.HoverColor
+            inputHeaderTextPressedColor: =gblAppStyles.ButtonTransparent.PressedColor
+            inputNavigateToScreen: ='Mobile Campaign Detail Screen'
+            Width: =Parent.Width
+            X: =0*0
+            Y: =0*0
+            ZIndex: =3
+
+    lblMobileBlockUserInput_IdeaSubmission As label:
+        DisabledFill: =RGBA(0, 0, 0, 0.05)
+        DisplayMode: =DisplayMode.Disabled
+        Font: =Font.'Segoe UI'
+        Height: =Parent.Height
+        Text: =""
+        Visible: =locBlockUserInput
+        Width: =Parent.Width
+        X: =0*0
+        Y: =0*0
+        ZIndex: =5
+

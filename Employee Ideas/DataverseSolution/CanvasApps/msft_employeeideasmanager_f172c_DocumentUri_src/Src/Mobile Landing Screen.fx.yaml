@@ -1,0 +1,1291 @@
+"'Mobile Landing Screen' As screen":
+    Fill: =gblAppStyles.Background.Fill
+    LoadingSpinnerColor: =gblAppStyles.ButtonPrimary.Fill
+
+    conMobileLanding As groupContainer:
+        Height: =Parent.Height - Self.Y
+        Width: =Min(Parent.Width,gblMobileWidth)
+        X: =(Parent.Width - Min(Parent.Width,gblMobileWidth)) / 2
+        Y: =0*0
+        ZIndex: =3
+
+        conMobileCampaignSummaryLeaderboard As groupContainer:
+            Height: =Parent.Height - Self.Y
+            Width: =Parent.Width
+            Y: =btnMobileBrowseCampaigns.Y + btnMobileBrowseCampaigns.Height + gblPadding.Page
+            ZIndex: =1
+
+            conMobileCampaignStatsTopIdeas As groupContainer:
+                Height: =galMobileCampaignStatsTopIdeas.Height + galMobileCampaignStatsTopIdeas.Y + gblPadding.Page
+                Width: =Parent.Width
+                X: =0*0
+                Y: =conMobileCampaignStatsTopContributors.Y + conMobileCampaignStatsTopContributors.Height
+                ZIndex: =1
+
+                btnMobileBackgroundStatsTopIdeas As button:
+                    BorderColor: =gblAppStyles.ButtonBackground.BorderColor
+                    BorderThickness: =gblAppStyles.ButtonBackground.BorderThickness
+                    Color: =gblAppStyles.ButtonBackground.Color
+                    DisabledBorderColor: =gblAppStyles.ButtonBackground.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.ButtonBackground.DisabledFill
+                    DisabledFill: =gblAppStyles.ButtonBackground.DisabledFill
+                    DisplayMode: =DisplayMode.Disabled
+                    Fill: =gblAppStyles.ButtonBackground.Fill
+                    FocusedBorderColor: =gblAppStyles.ButtonBackground.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.ButtonBackground.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =galMobileCampaignStatsTopIdeas.Height
+                    HoverBorderColor: =gblAppStyles.ButtonBackground.HoverBorderColor
+                    HoverColor: =gblAppStyles.ButtonBackground.HoverColor
+                    HoverFill: =gblAppStyles.ButtonBackground.HoverFill
+                    OnSelect: =
+                    PressedBorderColor: =gblAppStyles.ButtonBackground.PressedBorderColor
+                    PressedColor: =gblAppStyles.ButtonBackground.PressedColor
+                    PressedFill: =gblAppStyles.ButtonBackground.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.ButtonBackground.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.ButtonBackground.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.ButtonBackground.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.ButtonBackground.RadiusTopRight
+                    Size: =gblAppStyles.ButtonBackground.Size
+                    TabIndex: =-1
+                    Text: =lblMobileCampaignStatsTopIdeas.Text
+                    Width: =galMobileCampaignStatsTopIdeas.Width
+                    X: =galMobileCampaignStatsTopIdeas.X
+                    Y: =galMobileCampaignStatsTopIdeas.Y
+                    ZIndex: =1
+
+                comMobileZeroState_TopIdeas As comZeroState:
+                    Height: =galMobileCampaignStatsTopIdeas.Height
+                    inputImage: =Image_ZeroState_Leaderboards
+                    inputSizePercent: =35
+                    inputTextColor: =gblAppStyles.Label.Color
+                    inputTextToDisplay: |-
+                        =With(
+                            {
+                                varDefault: "Top voted ideas will appear here",
+                                varOOBTextId: "comZeroState_TopIdeas__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Visible: =IsEmpty(galMobileCampaignStatsTopIdeas.AllItems)
+                    Width: =galMobileCampaignStatsTopIdeas.Width
+                    X: =galMobileCampaignStatsTopIdeas.X
+                    Y: =galMobileCampaignStatsTopIdeas.Y - 16
+                    ZIndex: =2
+
+                galMobileCampaignStatsTopIdeas As gallery.galleryVertical:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "Gallery of weekly top ideas, by vote count",
+                                varOOBTextId: "galCampaignStatsTopIdeas__locAccessibleLabel"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    DelayItemLoading: =true
+                    Height: =Self.TemplatePadding + (CountRows(Self.AllItems) * (Self.TemplateHeight + Self.TemplatePadding))
+                    Items: |-
+                        =With(
+                            {
+                                varDataSet: FirstN(
+                                    SortByColumns(
+                                        AddColumns(
+                                            Filter(
+                                                colIdeaStats_Raw,
+                                                !IsBlank('Vote Count')
+                                            ),
+                                            "appOrder",
+                                            0
+                                        ),
+                                        "msft_votecount",
+                                        Descending,
+                                        "msft_name",
+                                        Ascending
+                                    ),
+                                    3
+                                )
+                            },
+                            With(
+                                {varRowCount: CountRows(varDataSet)},
+                                With(
+                                    {
+                                        varRow1_Visible: varRowCount >= 1,
+                                        varRow1_Record: First(varDataSet),
+                                        varRow2_Visible: varRowCount >= 2,
+                                        varRow2_Record: Last(
+                                            FirstN(
+                                                varDataSet,
+                                                2
+                                            )
+                                        ),
+                                        varRow3_Visible: varRowCount >= 3 And App.ActiveScreen.Height > 640,
+                                        varRow3_Record: Last(varDataSet)
+                                    },
+                                    Filter(
+                                        Table(
+                                            {
+                                                statId: 1,
+                                                statVisible: varRow1_Visible,
+                                                statRecord: varRow1_Record,
+                                                showDivider: true
+                                            },
+                                            {
+                                                statId: 2,
+                                                statVisible: varRow2_Visible,
+                                                statRecord: varRow2_Record,
+                                                showDivider: true
+                                            },
+                                            {
+                                                statId: 3,
+                                                statVisible: varRow3_Visible,
+                                                statRecord: varRow3_Record,
+                                                showDivider: false
+                                            }
+                                        ),
+                                        statVisible
+                                    )
+                                )
+                            )
+                        )
+                    Layout: =Layout.Vertical
+                    OnSelect: |
+                        =UpdateContext({locBlockUserInput: true});
+                        Set(
+                            gblSelectedRecordCampaign,
+                            LookUp(
+                                'Employee Idea Campaigns',
+                                'Employee Idea Campaigns'[@'Employee Idea Campaign'] = ThisItem.statRecord.Campaign.'Employee Idea Campaign'
+                            )
+                        );
+                        Set(
+                            gblRecordCampaignIdea,
+                            LookUp(
+                                'Employee Ideas',
+                                'Employee Ideas'[@'Employee Idea'] = ThisItem.statRecord.'Employee Idea'
+                            )
+                        );
+                        ClearCollect(
+                            colIdeas,
+                            Filter(
+                                'Employee Ideas',
+                                'Employee Ideas'[@Campaign].'Employee Idea Campaign' = gblSelectedRecordCampaign.'Employee Idea Campaign'
+                            )
+                        );
+                        // Remove Temporary Vote Offset, since we have actual value now
+                        RemoveIf(
+                            colVoteCounter,
+                            colVoteCounter[@appIdea] in colIdeas.'Employee Idea'
+                        );
+                        ClearCollect(
+                            colResponses,
+                            Filter(
+                                'Employee Idea Responses',
+                                Idea.msft_employeeideaid = gblRecordCampaignIdea.msft_employeeideaid
+                            )
+                        );
+                        ClearCollect(
+                            colFiles,
+                            Filter(
+                                'Employee Idea Files',
+                                'Employee Idea Files'[@Idea].'Employee Idea' = gblRecordCampaignIdea.'Employee Idea'
+                            )
+                        );
+                        Navigate(
+                            'Mobile Idea Screen',
+                            ScreenTransition.Fade,
+                            {locCreateNewIdea: false}
+                        );
+                        UpdateContext({locBlockUserInput: false});
+                    TemplatePadding: =0
+                    TemplateSize: =48
+                    Width: =Parent.Width - Self.X - gblPadding.Page
+                    X: =gblPadding.Page
+                    Y: =lblMobileCampaignStatsTopIdeas.Y + lblMobileCampaignStatsTopIdeas.Height
+                    ZIndex: =3
+
+                    shpMobileCampaignStatsTopIdeas_Divider As rectangle:
+                        DisplayMode: =DisplayMode.View
+                        Fill: =gblAppStyles.Dividers.Background
+                        Height: =0.5
+                        OnSelect: =Select(Parent)
+                        Visible: =ThisItem.statId < 3
+                        Width: =Parent.TemplateWidth - 16
+                        X: =0*0 + 8
+                        Y: =Parent.TemplateHeight - Self.Height
+                        ZIndex: =1
+
+                    lblMobileCampaignStatsTopIdeas_VoteCount As label:
+                        Align: =Align.Right
+                        BorderColor: =gblAppStyles.Label.BorderColor
+                        BorderThickness: =gblAppStyles.Label.BorderThickness
+                        Color: =gblAppStyles.Label.Color
+                        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.Label.DisabledColor
+                        DisabledFill: =gblAppStyles.Label.DisabledFill
+                        DisplayMode: =DisplayMode.View
+                        Fill: =gblAppStyles.Label.Fill
+                        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        Height: =Parent.TemplateHeight
+                        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                        HoverColor: =gblAppStyles.Label.HoverColor
+                        HoverFill: =gblAppStyles.Label.HoverFill
+                        OnSelect: =Select(Parent)
+                        PaddingBottom: =0
+                        PaddingLeft: =0
+                        PaddingRight: =0
+                        PaddingTop: =0
+                        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                        PressedColor: =gblAppStyles.Label.PressedColor
+                        PressedFill: =gblAppStyles.Label.PressedFill
+                        Size: =gblAppStyles.Label.Size.Small
+                        Text: |-
+                            =With(
+                                {varVoteCount: ThisItem.statRecord.'Vote Count'},
+                                With(
+                                    {
+                                        varDefault: If(
+                                            varVoteCount = 1,
+                                            varVoteCount & " vote",
+                                            varVoteCount & " votes"
+                                        ),
+                                        varOOBTextId: If(
+                                            varVoteCount = 1,
+                                            "_translateVariable__vote",
+                                            "_translateVariable__votes"
+                                        ),
+                                        varParam0: varVoteCount,
+                                        varParam1: Blank(),
+                                        varParam2: Blank()
+                                    },
+                                    With(
+                                        {
+                                            varLocalizedText: LookUp(
+                                                colLocalization,
+                                                OOBTextId = varOOBTextId,
+                                                LocalizedText
+                                            )
+                                        },
+                                        If(
+                                            IsBlankOrError(varParam0),
+                                            Coalesce(
+                                                varLocalizedText,
+                                                varDefault
+                                            ),
+                                            Coalesce(
+                                                Substitute(
+                                                    Substitute(
+                                                        Substitute(
+                                                            varLocalizedText,
+                                                            "{0}",
+                                                            Text(varParam0)
+                                                        ),
+                                                        "{1}",
+                                                        Text(varParam1)
+                                                    ),
+                                                    "{2}",
+                                                    Text(varParam2)
+                                                ),
+                                                varDefault
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        Width: =64
+                        X: =Parent.TemplateWidth - Self.Width - 16
+                        ZIndex: =2
+
+                    lblMobileCampaignStatsTopIdeas_IdeaTitle As label:
+                        Color: |-
+                            =If(
+                                btnMobileCampaignStatsTopIdeas_Select.DisplayMode = DisplayMode.Edit,
+                                If(
+                                    gblThemeHiCo,
+                                    gblAppColors.HighContrastHyperlinks,
+                                    gblThemeDark,
+                                    gblAppColors.TeamsDarkShade20,
+                                    gblAppColors.TeamsDefaultPrimary
+                                ),
+                                gblAppStyles.Label.Color
+                            )
+                        DisplayMode: =DisplayMode.View
+                        Font: =Font.'Segoe UI'
+                        Height: =Parent.TemplateHeight
+                        OnSelect: =Select(Parent)
+                        PaddingLeft: =12
+                        Size: =gblAppStyles.Label.Size.Medium
+                        Text: =ThisItem.statRecord.Title
+                        Width: =lblMobileCampaignStatsTopIdeas_VoteCount.X - Self.X
+                        Wrap: =false
+                        X: =imgMobileCampaignStatsTopIdeas_IdeaIcon.X + imgMobileCampaignStatsTopIdeas_IdeaIcon.Width
+                        ZIndex: =3
+
+                    imgMobileCampaignStatsTopIdeas_IdeaIcon As image:
+                        DisplayMode: =DisplayMode.View
+                        Height: =36
+                        Image: =Icon_StockEmployeeIdea
+                        OnSelect: =Select(Parent)
+                        RadiusBottomLeft: =Self.Height
+                        RadiusBottomRight: =Self.Height
+                        RadiusTopLeft: =Self.Height
+                        RadiusTopRight: =Self.Height
+                        Width: =If(Parent.Width < 200,0,36)
+                        X: =lblMobileCampaignStatsTopIdeas_Order.X + lblMobileCampaignStatsTopIdeas_Order.Width
+                        Y: =(Parent.TemplateHeight - Self.Height) / 2
+                        ZIndex: =4
+
+                    lblMobileCampaignStatsTopIdeas_Order As label:
+                        Align: =Align.Center
+                        BorderColor: =gblAppStyles.Label.BorderColor
+                        BorderThickness: =gblAppStyles.Label.BorderThickness
+                        Color: |-
+                            =If(
+                                gblThemeHiCo,
+                                gblAppColors.HighContrastHyperlinks,
+                                gblThemeDark,
+                                gblAppColors.TeamsDarkPrimary,
+                                gblAppColors.TeamsDefaultPrimary
+                            )
+                        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.Label.DisabledColor
+                        DisabledFill: =gblAppStyles.Label.DisabledFill
+                        DisplayMode: =DisplayMode.View
+                        Fill: =gblAppStyles.Label.Fill
+                        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        FontWeight: =FontWeight.Bold
+                        Height: =Parent.TemplateHeight
+                        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                        HoverColor: =gblAppStyles.Label.HoverColor
+                        HoverFill: =gblAppStyles.Label.HoverFill
+                        OnSelect: =Select(Parent)
+                        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                        PressedColor: =gblAppStyles.Label.PressedColor
+                        PressedFill: =gblAppStyles.Label.PressedFill
+                        Size: =gblAppStyles.Label.Size.Medium
+                        Text: =ThisItem.statId
+                        Width: =If(Parent.Width < 200,0,40)
+                        ZIndex: =5
+
+                    btnMobileCampaignStatsTopIdeas_Select As button:
+                        BorderColor: =Transparent
+                        BorderThickness: =0
+                        Color: =Transparent
+                        DisabledBorderColor: =Self.BorderColor
+                        DisabledFill: =Self.Fill
+                        DisplayMode: |-
+                            =If(
+                                gblAppManager Or ThisItem.statRecord.'Campaign Status' = 'Employee Idea Campaign Status'.Active,
+                                DisplayMode.Edit,
+                                DisplayMode.Disabled
+                            )
+                        Fill: =RGBA(0, 0, 0, 0)
+                        FocusedBorderThickness: =0.25
+                        Font: =Font.'Segoe UI'
+                        Height: =Parent.TemplateHeight
+                        HoverColor: =Self.Color
+                        HoverFill: =gblAppStyles.Gallery.HoverFill
+                        OnSelect: =Select(Parent)
+                        PaddingBottom: =0
+                        PaddingLeft: =0
+                        PaddingRight: =0
+                        PaddingTop: =0
+                        PressedColor: =Self.Color
+                        PressedFill: =gblAppStyles.Gallery.PressedFill
+                        RadiusBottomLeft: =4
+                        RadiusBottomRight: =4
+                        RadiusTopLeft: =0
+                        RadiusTopRight: =0
+                        Size: =12
+                        Text: =Blank()
+                        Tooltip: =Concatenate(ThisItem.statRecord.Title," (",Text(ThisItem.statRecord.'Vote Count'),") votes")
+                        Width: =Parent.TemplateWidth
+                        X: =Parent.TemplateWidth * 0
+                        Y: =Parent.TemplateHeight * 0
+                        ZIndex: =6
+
+                lblMobileCampaignStatsTopIdeas As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =56
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PaddingLeft: =0
+                    PaddingTop: =16
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Weekly top ideas",
+                                varOOBTextId: "lblCampaignStatsTopIdeas__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Width: =galMobileCampaignStatsTopIdeas.Width
+                    X: =gblPadding.Page
+                    ZIndex: =4
+
+            conMobileCampaignStatsTopContributors As groupContainer:
+                Height: =galMobileCampaignStatsTopContributors.Height + galMobileCampaignStatsTopContributors.Y + gblPadding.Page
+                Width: =Parent.Width
+                ZIndex: =2
+
+                btnMobileBackgroundStatsTopContributors As button:
+                    BorderColor: =gblAppStyles.ButtonBackground.BorderColor
+                    BorderThickness: =gblAppStyles.ButtonBackground.BorderThickness
+                    Color: =gblAppStyles.ButtonBackground.Color
+                    DisabledBorderColor: =gblAppStyles.ButtonBackground.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.ButtonBackground.DisabledFill
+                    DisabledFill: =gblAppStyles.ButtonBackground.DisabledFill
+                    DisplayMode: =DisplayMode.Disabled
+                    Fill: =gblAppStyles.ButtonBackground.Fill
+                    FocusedBorderColor: =gblAppStyles.ButtonBackground.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.ButtonBackground.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =galMobileCampaignStatsTopContributors.Height
+                    HoverBorderColor: =gblAppStyles.ButtonBackground.HoverBorderColor
+                    HoverColor: =gblAppStyles.ButtonBackground.HoverColor
+                    HoverFill: =gblAppStyles.ButtonBackground.HoverFill
+                    OnSelect: =
+                    PressedBorderColor: =gblAppStyles.ButtonBackground.PressedBorderColor
+                    PressedColor: =gblAppStyles.ButtonBackground.PressedColor
+                    PressedFill: =gblAppStyles.ButtonBackground.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.ButtonBackground.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.ButtonBackground.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.ButtonBackground.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.ButtonBackground.RadiusTopRight
+                    Size: =gblAppStyles.ButtonBackground.Size
+                    TabIndex: =-1
+                    Text: =lblMobileCampaignStatsTopContributors.Text
+                    Width: =galMobileCampaignStatsTopContributors.Width
+                    X: =galMobileCampaignStatsTopContributors.X
+                    Y: =galMobileCampaignStatsTopContributors.Y
+                    ZIndex: =1
+
+                comMobileZeroState_TopContributors As comZeroState:
+                    Height: =galMobileCampaignStatsTopContributors.Height
+                    inputImage: =Image_ZeroState_Leaderboards
+                    inputSizePercent: =35
+                    inputTextColor: =gblAppStyles.Label.Color
+                    inputTextToDisplay: |-
+                        =With(
+                            {
+                                varDefault: "Team members who submit the most ideas will appear here",
+                                varOOBTextId: "comZeroState_TopContributors__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Visible: =IsEmpty(galMobileCampaignStatsTopContributors.AllItems)
+                    Width: =galMobileCampaignStatsTopContributors.Width
+                    X: =galMobileCampaignStatsTopContributors.X
+                    Y: =galMobileCampaignStatsTopContributors.Y - 16
+                    ZIndex: =2
+
+                galMobileCampaignStatsTopContributors As gallery.galleryVertical:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "Gallery of weekly top idea contributors",
+                                varOOBTextId: "galCampaignStatsTopContributors__locAccessibleLabel"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    DelayItemLoading: =true
+                    DisplayMode: =DisplayMode.View
+                    Height: =Self.TemplatePadding + (CountRows(Self.AllItems) * (Self.TemplateHeight + Self.TemplatePadding))
+                    Items: |
+                        =With(
+                            {
+                                varDataSet: SortByColumns(
+                                    FirstN(
+                                        AddColumns(
+                                            GroupBy(
+                                                colIdeaStats_Raw,
+                                                "appOwner",
+                                                "ideasByOwner"
+                                            ),
+                                            "appIdeaTotal",
+                                            CountRows(ideasByOwner)
+                                        ),
+                                        3
+                                    ),
+                                    "appIdeaTotal",
+                                    Descending
+                                )
+                            },
+                            With(
+                                {varRowCount: CountRows(varDataSet)},
+                                With(
+                                    {
+                                        varRow1_Visible: varRowCount >= 1,
+                                        varRow1_Record: First(varDataSet),
+                                        varRow2_Visible: varRowCount >= 2,
+                                        varRow2_Record: Last(
+                                            FirstN(
+                                                varDataSet,
+                                                2
+                                            )
+                                        ),
+                                        varRow3_Visible: varRowCount >= 3 And App.ActiveScreen.Height > 640,
+                                        varRow3_Record: Last(varDataSet)
+                                    },
+                                    Filter(
+                                        Table(
+                                            {
+                                                statId: 1,
+                                                statVisible: varRow1_Visible,
+                                                statRecord: varRow1_Record,
+                                                showDivider: true
+                                            },
+                                            {
+                                                statId: 2,
+                                                statVisible: varRow2_Visible,
+                                                statRecord: varRow2_Record,
+                                                showDivider: true
+                                            },
+                                            {
+                                                statId: 3,
+                                                statVisible: varRow3_Visible,
+                                                statRecord: varRow3_Record,
+                                                showDivider: false
+                                            }
+                                        ),
+                                        statVisible
+                                    )
+                                )
+                            )
+                        )
+                    Layout: =Layout.Vertical
+                    LoadingSpinner: =LoadingSpinner.Controls
+                    LoadingSpinnerColor: =App.ActiveScreen.LoadingSpinnerColor
+                    TemplatePadding: =0
+                    TemplateSize: =48
+                    Width: =Parent.Width - Self.X - gblPadding.Page
+                    X: =gblPadding.Page
+                    Y: =lblMobileCampaignStatsTopContributors.Height + lblMobileCampaignStatsTopContributors.Y
+                    ZIndex: =3
+
+                    shpMobileCampaignStatsTopContributors_Divider As rectangle:
+                        DisplayMode: =DisplayMode.View
+                        Fill: =gblAppStyles.Dividers.Background
+                        Height: =0.5
+                        OnSelect: =Select(Parent)
+                        Visible: =ThisItem.statId < 3
+                        Width: =Parent.TemplateWidth - 16
+                        X: =0*0 + 8
+                        Y: =Parent.TemplateHeight - Self.Height
+                        ZIndex: =1
+
+                    imgMobileCampaignStatsTopContributors_UserBlank As image:
+                        DisplayMode: =DisplayMode.View
+                        Height: =36
+                        Image: =Icon_StockEmployeeIdea
+                        OnSelect: =Select(Parent)
+                        RadiusBottomLeft: =Self.Height
+                        RadiusBottomRight: =Self.Height
+                        RadiusTopLeft: =Self.Height
+                        RadiusTopRight: =Self.Height
+                        Width: =imgMobileCampaignStatsTopContributors_User.Width
+                        X: =lblMobileCampaignStatsTopContributors_Order.X + lblMobileCampaignStatsTopContributors_Order.Width
+                        Y: =(Parent.TemplateHeight - Self.Height) / 2
+                        ZIndex: =2
+
+                    lblMobileCampaignStatsTopContributors_IdeaCount As label:
+                        Align: =Align.Right
+                        BorderColor: =gblAppStyles.Label.BorderColor
+                        BorderThickness: =gblAppStyles.Label.BorderThickness
+                        Color: =gblAppStyles.Label.Color
+                        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.Label.DisabledColor
+                        DisabledFill: =gblAppStyles.Label.DisabledFill
+                        DisplayMode: =DisplayMode.View
+                        Fill: =gblAppStyles.Label.Fill
+                        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        Height: =Parent.TemplateHeight
+                        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                        HoverColor: =gblAppStyles.Label.HoverColor
+                        HoverFill: =gblAppStyles.Label.HoverFill
+                        OnSelect: =Select(Parent)
+                        PaddingBottom: =0
+                        PaddingLeft: =0
+                        PaddingRight: =0
+                        PaddingTop: =0
+                        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                        PressedColor: =gblAppStyles.Label.PressedColor
+                        PressedFill: =gblAppStyles.Label.PressedFill
+                        Size: =gblAppStyles.Label.Size.Small
+                        Text: |-
+                            =With(
+                                {varIdeaCount: ThisItem.statRecord.appIdeaTotal},
+                                With(
+                                    {
+                                        varDefault: If(
+                                            varIdeaCount = 1,
+                                            varIdeaCount & " idea",
+                                            varIdeaCount & " ideas"
+                                        ),
+                                        varOOBTextId: If(
+                                            varIdeaCount = 1,
+                                            "_translateVariable__idea",
+                                            "_translateVariable__ideas"
+                                        ),
+                                        varParam0: varIdeaCount,
+                                        varParam1: Blank(),
+                                        varParam2: Blank()
+                                    },
+                                    With(
+                                        {
+                                            varLocalizedText: LookUp(
+                                                colLocalization,
+                                                OOBTextId = varOOBTextId,
+                                                LocalizedText
+                                            )
+                                        },
+                                        If(
+                                            IsBlankOrError(varParam0),
+                                            Coalesce(
+                                                varLocalizedText,
+                                                varDefault
+                                            ),
+                                            Coalesce(
+                                                Substitute(
+                                                    Substitute(
+                                                        Substitute(
+                                                            varLocalizedText,
+                                                            "{0}",
+                                                            Text(varParam0)
+                                                        ),
+                                                        "{1}",
+                                                        Text(varParam1)
+                                                    ),
+                                                    "{2}",
+                                                    Text(varParam2)
+                                                ),
+                                                varDefault
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        Width: =110
+                        X: =Parent.TemplateWidth - Self.Width - 16
+                        ZIndex: =3
+
+                    lblMobileCampaignStatsTopContributors_User As label:
+                        BorderColor: =gblAppStyles.Label.BorderColor
+                        BorderThickness: =gblAppStyles.Label.BorderThickness
+                        Color: =gblAppStyles.Label.Color
+                        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.Label.DisabledColor
+                        DisabledFill: =gblAppStyles.Label.DisabledFill
+                        DisplayMode: =DisplayMode.View
+                        Fill: =gblAppStyles.Label.Fill
+                        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        Height: =Parent.TemplateHeight
+                        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                        HoverColor: =gblAppStyles.Label.HoverColor
+                        HoverFill: =gblAppStyles.Label.HoverFill
+                        OnSelect: =Select(Parent)
+                        PaddingLeft: =12
+                        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                        PressedColor: =gblAppStyles.Label.PressedColor
+                        PressedFill: =gblAppStyles.Label.PressedFill
+                        Size: =gblAppStyles.Label.Size.Medium
+                        Text: =ThisItem.statRecord.appOwner
+                        Width: =lblMobileCampaignStatsTopContributors_IdeaCount.X - Self.X
+                        Wrap: =false
+                        X: =imgMobileCampaignStatsTopContributors_User.X + imgMobileCampaignStatsTopContributors_User.Width
+                        ZIndex: =4
+
+                    imgMobileCampaignStatsTopContributors_User As image:
+                        DisplayMode: =DisplayMode.View
+                        Height: =36
+                        Image: |-
+                            =If(
+                                !IsBlank(First(ThisItem.statRecord.ideasByOwner).appOwnerEmail),
+                                Microsoft365Users.UserPhotoV2(First(ThisItem.statRecord.ideasByOwner.appOwnerEmail).appOwnerEmail)
+                            )
+                        OnSelect: =Select(Parent)
+                        RadiusBottomLeft: =Self.Height
+                        RadiusBottomRight: =Self.Height
+                        RadiusTopLeft: =Self.Height
+                        RadiusTopRight: =Self.Height
+                        Width: =If(Parent.Width < 200,0,36)
+                        X: =lblMobileCampaignStatsTopContributors_Order.X + lblMobileCampaignStatsTopContributors_Order.Width
+                        Y: =(Parent.TemplateHeight - Self.Height) / 2
+                        ZIndex: =5
+
+                    lblMobileCampaignStatsTopContributors_Order As label:
+                        Align: =Align.Center
+                        BorderColor: =gblAppStyles.Label.BorderColor
+                        BorderThickness: =gblAppStyles.Label.BorderThickness
+                        Color: =gblAppStyles.Label.Color
+                        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.Label.DisabledColor
+                        DisabledFill: =gblAppStyles.Label.DisabledFill
+                        DisplayMode: =DisplayMode.View
+                        Fill: =gblAppStyles.Label.Fill
+                        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        FontWeight: =FontWeight.Bold
+                        Height: =Parent.TemplateHeight
+                        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                        HoverColor: =gblAppStyles.Label.HoverColor
+                        HoverFill: =gblAppStyles.Label.HoverFill
+                        OnSelect: =Select(Parent)
+                        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                        PressedColor: =gblAppStyles.Label.PressedColor
+                        PressedFill: =gblAppStyles.Label.PressedFill
+                        Size: =gblAppStyles.Label.Size.Medium
+                        Text: =ThisItem.statId
+                        Width: =If(Parent.Width < 200,0,40)
+                        ZIndex: =6
+
+                lblMobileCampaignStatsTopContributors As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =56
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PaddingLeft: =0
+                    PaddingTop: =16
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Weekly top contributors",
+                                varOOBTextId: "lblCampaignStatsTopContributors__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Width: =galMobileCampaignStatsTopContributors.Width
+                    X: =gblPadding.Page
+                    ZIndex: =4
+
+        btnMobileBrowseCampaigns As button:
+            BorderColor: |
+                =gblAppStyles.ButtonPrimary.BorderColor
+            BorderThickness: =gblAppStyles.ButtonPrimary.BorderThickness
+            Color: =gblAppStyles.ButtonPrimary.Color
+            DisabledBorderColor: =gblAppStyles.ButtonPrimary.DisabledBorderColor
+            DisabledColor: =gblAppStyles.ButtonPrimary.DisabledColor
+            DisabledFill: =gblAppStyles.ButtonPrimary.DisabledFill
+            Fill: =gblAppStyles.ButtonPrimary.Fill
+            FocusedBorderColor: =gblAppStyles.ButtonPrimary.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.ButtonPrimary.FocusedBorderThickness
+            Font: ='Segoe UI'
+            FontWeight: =FontWeight.Normal
+            Height: =64
+            HoverBorderColor: =gblAppStyles.ButtonPrimary.HoverBorderColor
+            HoverColor: =gblAppStyles.ButtonPrimary.HoverColor
+            HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+            OnSelect: =Navigate('Mobile Campaign Summary Screen', ScreenTransition.Fade)
+            PaddingBottom: =4
+            PaddingLeft: =8
+            PaddingRight: =8
+            PaddingTop: =4
+            PressedBorderColor: =gblAppStyles.ButtonPrimary.PressedBorderColor
+            PressedColor: =gblAppStyles.ButtonPrimary.PressedColor
+            PressedFill: =gblAppStyles.ButtonPrimary.PressedFill
+            RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+            RadiusBottomRight: =gblAppStyles.ButtonPrimary.RadiusBottomRight
+            RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+            RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+            Size: =gblAppStyles.ButtonPrimary.Size
+            Text: |-
+                =With(
+                    {
+                        varDefault: "Browse campaigns",
+                        varOOBTextId: "btnMobileBrowseCampaigns__locText"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            Tooltip: =Self.Text
+            Width: =Parent.Width -Self.X - gblPadding.Page
+            X: =gblPadding.Page
+            Y: =lblMobileGreetingInstructions.Y+ lblMobileGreetingInstructions.Height + gblPadding.Page
+            ZIndex: =2
+
+        lblMobileGreetingInstructions As label:
+            BorderColor: =gblAppStyles.Label.BorderColor
+            BorderThickness: =gblAppStyles.Label.BorderThickness
+            Color: =gblAppStyles.Label.Color
+            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+            DisabledColor: =gblAppStyles.Label.DisabledColor
+            DisabledFill: =gblAppStyles.Label.DisabledFill
+            DisplayMode: =DisplayMode.View
+            Fill: =gblAppStyles.Label.Fill
+            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+            Font: ='Segoe UI'
+            Height: =48
+            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+            HoverColor: =gblAppStyles.Label.HoverColor
+            HoverFill: =gblAppStyles.Label.HoverFill
+            PaddingBottom: =4
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =4
+            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+            PressedColor: =gblAppStyles.Label.PressedColor
+            PressedFill: =gblAppStyles.Label.PressedFill
+            Size: =gblAppStyles.Label.Size.Medium
+            Text: |-
+                =With(
+                    {
+                        varDefault: "Glad to have you here, let’s get your great ideas added to a campaign or vote for an existing one.",
+                        varOOBTextId: "lblMobileGreetingInstructions__locText"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            Width: =lblMobileGreetingName.Width
+            X: =lblMobileGreetingName.X
+            Y: =lblMobileGreetingName.Y + lblMobileGreetingName.Height
+            ZIndex: =3
+
+        lblMobileGreetingName As label:
+            BorderColor: =gblAppStyles.Label.BorderColor
+            BorderThickness: =gblAppStyles.Label.BorderThickness
+            Color: =gblAppStyles.Label.Color
+            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+            DisabledColor: =gblAppStyles.Label.DisabledColor
+            DisabledFill: =gblAppStyles.Label.DisabledFill
+            DisplayMode: =DisplayMode.View
+            Fill: =gblAppStyles.Label.Fill
+            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            FontWeight: =FontWeight.Bold
+            Height: =64
+            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+            HoverColor: =gblAppStyles.Label.HoverColor
+            HoverFill: =gblAppStyles.Label.HoverFill
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+            PressedColor: =gblAppStyles.Label.PressedColor
+            PressedFill: =gblAppStyles.Label.PressedFill
+            Size: =gblAppStyles.Label.Size.ExtraLarge
+            Text: |-
+                =With(
+                    {
+                        varDefault: With(
+                            {
+                                varTimeValueNow: Hour(Now()),
+                                varTimeValueMorning: 5,
+                                varTimeValueAfternoon: 12,
+                                varTimeValueEvening: 20
+                            },
+                            With(
+                                {
+                                    varGreeting: If(
+                                        varTimeValueNow >= varTimeValueMorning And varTimeValueNow < varTimeValueAfternoon,
+                                        "morning",
+                                        varTimeValueNow >= varTimeValueAfternoon And varTimeValueNow < varTimeValueEvening,
+                                        "afternoon",
+                                        "evening"
+                                    )
+                                },
+                                Concatenate(
+                                    "Good ",
+                                    varGreeting,
+                                    ", ",
+                                    gblUserFirstName,
+                                    "."
+                                )
+                            )
+                        ),
+                        varOOBTextId: With(
+                            {
+                                varTimeValueNow: Hour(Now()),
+                                varTimeValueMorning: 5,
+                                varTimeValueAfternoon: 12,
+                                varTimeValueEvening: 20
+                            },
+                            If(
+                                varTimeValueNow >= varTimeValueMorning And varTimeValueNow < varTimeValueAfternoon,
+                                "lblMobileGreetingName_Morning__locText",
+                                varTimeValueNow >= varTimeValueAfternoon And varTimeValueNow < varTimeValueEvening,
+                                "lblMobileGreetingName_Afternoon__locText",
+                                "lblMobileGreetingName_Evening__locText"
+                            )
+                        ),
+                        varParam0: gblUserFirstName,
+                        varParam1: Blank(),
+                        varParam2: Blank()
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                staticLocalizations,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        If(
+                            IsBlankOrError(varParam0),
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            ),
+                            Coalesce(
+                                Substitute(
+                                    Substitute(
+                                        Substitute(
+                                            varLocalizedText,
+                                            "{0}",
+                                            Text(varParam0)
+                                        ),
+                                        "{1}",
+                                        Text(varParam1)
+                                    ),
+                                    "{2}",
+                                    Text(varParam2)
+                                ),
+                                varDefault
+                            )
+                        )
+                    )
+                )
+            Width: =Parent.Width - Self.X - gblPadding.Page
+            Wrap: =false
+            X: =gblPadding.Page
+            Y: =gblPadding.Page
+            ZIndex: =4
+
+    conMobileIncorrectContext As groupContainer:
+        Fill: =gblAppStyles.Background.Fill
+        Height: =App.Height
+        Visible: =locShowSetup
+        Width: =App.Width
+        X: =(Parent.Width - Self.Width) / 2
+        Y: =(Parent.Height - Self.Height) / 2
+        ZIndex: =4
+
+        btnMobileIncorrectContext_Exit As button:
+            BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+            BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+            Color: =gblAppStyles.ButtonSecondary.Color
+            DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+            DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+            DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+            Fill: =gblAppStyles.ButtonSecondary.Fill
+            FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+            HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+            HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+            OnSelect: =Exit()
+            PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+            PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+            PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+            RadiusBottomLeft: =gblAppStyles.ButtonSecondary.RadiusBottomLeft
+            RadiusBottomRight: =gblAppStyles.ButtonSecondary.RadiusBottomRight
+            RadiusTopLeft: =gblAppStyles.ButtonSecondary.RadiusTopLeft
+            RadiusTopRight: =gblAppStyles.ButtonSecondary.RadiusTopRight
+            Size: =gblAppStyles.ButtonSecondary.Size
+            Text: |-
+                =With(
+                    {
+                        varDefault: "Close app",
+                        varOOBTextId: "_translateCommon__IncorrectContext_CloseApp"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            X: =(Parent.Width - Self.Width) / 2
+            Y: =lblMobileIncorrectContext_Explanation.Y + lblMobileIncorrectContext_Explanation.Height + 24
+            ZIndex: =1
+
+        imgMobileIncorrectContext As image:
+            AccessibleLabel: =lblMobileIncorrectContext_Explanation.Text
+            Height: =200
+            Image: =Image_SomethingWentWrong
+            Width: =200
+            X: =(Parent.Width - Self.Width) / 2
+            Y: =(Parent.Height - Self.Height) / 2
+            ZIndex: =4
+
+        lblMobileIncorrectContext_Explanation As label:
+            Align: =Align.Center
+            BorderColor: =gblAppStyles.Label.BorderColor
+            BorderThickness: =gblAppStyles.Label.BorderThickness
+            Color: |
+                =// Non-variable colors, while variable is established
+                Switch(
+                    Param("theme"),
+                    "contrast",
+                    White,
+                    "dark",
+                    White,
+                    ColorValue("#252423") // NeutralWebGray190
+                )
+            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+            DisabledColor: =gblAppStyles.Label.DisabledColor
+            DisabledFill: =gblAppStyles.Label.DisabledFill
+            Fill: =Transparent
+            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            Height: =48
+            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+            HoverColor: =gblAppStyles.Label.HoverColor
+            HoverFill: =gblAppStyles.Label.HoverFill
+            PaddingLeft: =60
+            PaddingRight: =60
+            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+            PressedColor: =gblAppStyles.Label.PressedColor
+            PressedFill: =gblAppStyles.Label.PressedFill
+            Size: =gblAppStyles.Label.Size.Medium
+            Text: |-
+                =With(
+                    {
+                        varDefault: "Please run this app within Teams on your desktop or web browser to complete setup.",
+                        varOOBTextId: "_translateCommon__NotSetup_UseTeamsFirst"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            Width: =Parent.Width
+            X: =0*0
+            Y: =lblMobileIncorrectContext_Notification.Y + lblMobileIncorrectContext_Notification.Height
+            ZIndex: =5
+
+        lblMobileIncorrectContext_Notification As label:
+            Align: =Align.Center
+            BorderColor: =gblAppStyles.Label.BorderColor
+            BorderThickness: =gblAppStyles.Label.BorderThickness
+            Color: |
+                =// Non-variable colors, while variable is established
+                Switch(
+                    Param("theme"),
+                    "contrast",
+                    White,
+                    "dark",
+                    White,
+                    ColorValue("#252423") // NeutralWebGray190
+                )
+            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+            DisabledColor: =gblAppStyles.Label.DisabledColor
+            DisabledFill: =gblAppStyles.Label.DisabledFill
+            Fill: =Transparent
+            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            FontWeight: =FontWeight.Semibold
+            Height: =32
+            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+            HoverColor: =gblAppStyles.Label.HoverColor
+            HoverFill: =gblAppStyles.Label.HoverFill
+            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+            PressedColor: =gblAppStyles.Label.PressedColor
+            PressedFill: =gblAppStyles.Label.PressedFill
+            Size: =gblAppStyles.Label.Size.Large
+            Text: |-
+                =With(
+                    {
+                        varDefault: "Oops! This app isn't setup yet.",
+                        varOOBTextId: "_translateCommon__NotSetup_Title"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            Width: =Parent.Width
+            X: =0*0
+            Y: =imgMobileIncorrectContext.Y + imgMobileIncorrectContext.Height
+            ZIndex: =6
+
+        btnMobileIncorrectContext_Hidden_StyleErrorFallback As button:
+            Fill: =RGBA(166, 166, 166, 1)
+            Font: =Font.'Segoe UI'
+            Height: =btnMobileIncorrectContext_Exit.Height
+            HoverFill: =ColorFade(Self.Fill, -20%)
+            OnSelect: =Select(btnMobileIncorrectContext_Exit)
+            Size: =btnMobileIncorrectContext_Exit.Size
+            Text: =btnMobileIncorrectContext_Exit.Text
+            Visible: =IsBlankOrError(gblAppStyles)
+            Width: =btnMobileIncorrectContext_Exit.Width
+            X: =btnMobileIncorrectContext_Exit.X
+            Y: =btnMobileIncorrectContext_Exit.Y
+            ZIndex: =7
+
+    lblBlockUserInput_MobileLanding As label:
+        DisabledFill: =RGBA(0, 0, 0, 0.05)
+        DisplayMode: =DisplayMode.Disabled
+        Font: =Font.'Segoe UI'
+        Height: =Parent.Height
+        Text: =""
+        Visible: =locBlockUserInput
+        Width: =Parent.Width
+        X: =0*0
+        Y: =0*0
+        ZIndex: =5
+

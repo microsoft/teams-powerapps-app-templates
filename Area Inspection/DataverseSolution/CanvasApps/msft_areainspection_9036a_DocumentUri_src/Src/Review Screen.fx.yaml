@@ -1,0 +1,1091 @@
+"'Review Screen' As screen":
+    Fill: =gblAppStyles.Background.Fill 
+    LoadingSpinner: =LoadingSpinner.Data
+    LoadingSpinnerColor: |-
+        =If(
+            gblThemeHiCo,
+            gblAppColors.HighContrastHyperlinks,
+            gblThemeDark,
+            gblAppColors.TeamsDarkPrimary,
+            gblAppColors.TeamsDefaultPrimary
+        )
+    OnVisible: |-
+        =Set(
+            gblLastInspection,
+            LookUp(
+                'Area Inspections',
+                'Area Inspection' = lastInspection
+            )
+        );
+        Set(gblLocID, First(colSelectedLocation).Value);
+
+    "galChecklistStepsReview As gallery.'BrowseLayout_Vertical_OneTextVariant_ver4.0'":
+        AccessibleLabel: |-
+            =With({varDefault: "List Of Checklist Steps For Review",varOOBTextId: "_translateCommon_ListOfChecklistStepsForReview"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+        Fill: =gblAppStyles.Gallery.Fill
+        Height: =If(gblAppMobileOnDesktop, Parent.Height-Self.Y, Self.TemplateHeight*5-2)
+        Items: |-
+            =Sort(
+                colLastInspectionSteps,
+                Sequence,
+                Ascending
+            )
+        Layout: =Layout.Vertical
+        OnSelect: |-
+            =//global variable to ensure new inspection is not created when navigating back to the Checklist Steps screen
+            Set(
+                gblBackNav,
+                true
+            );
+            //to keep instrutions collapsed when the user navigates back to the Checklist Steps screen
+            Set(
+                gblExpandVar,
+                false
+            );
+            //use the selected record of the gallery to set the focus on the relevant record on the Checklist Steps screen
+            Set(
+                gblFocusStep,
+                First(galChecklistStepsReview.AllItems).'Checklist Step'.'Area Inspection Checklist Step'
+            );
+            Reset(galInspectionSteps);
+            Set(
+                gblFocusStep,
+                galChecklistStepsReview.Selected.'Checklist Step'.'Area Inspection Checklist Step'
+            );
+            Reset(galInspectionSteps);
+            Navigate(
+                'Checklist Steps Screen',
+                ScreenTransition.Fade
+            )
+        ShowScrollbar: =gblAppMobileOnDesktop
+        TabIndex: =0
+        TemplatePadding: =0
+        TemplateSize: =108
+        Width: =Parent.Width
+        Y: =lblChecklistReview.Y+lblChecklistReview.Height
+        ZIndex: =1
+
+        lblChecklistStepNameReview As label:
+            BorderColor: =gblAppStyles.Label.BorderColor
+            BorderThickness: =gblAppStyles.Label.BorderThickness
+            Color: =gblAppStyles.Label.Color
+            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+            DisabledColor: =gblAppStyles.Label.DisabledColor
+            DisabledFill: =gblAppStyles.Label.DisabledFill
+            Fill: =gblAppStyles.Label.Fill
+            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+            HoverColor: =gblAppStyles.Label.HoverColor
+            HoverFill: =gblAppStyles.Label.HoverFill
+            OnSelect: =Select(Parent)
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+            PressedColor: =gblAppStyles.Label.PressedColor
+            PressedFill: =gblAppStyles.Label.PressedFill
+            Size: =gblAppStyles.Label.Size.Large
+            Text: =ThisItem.msft_name
+            VerticalAlign: =VerticalAlign.Top
+            Width: =Parent.Width-Self.X-imgChecklistStepSelectReview.Width - btnImageAttachmentCount.Width
+            X: =92
+            Y: =20
+            ZIndex: =1
+
+        shpChecklistStepSeparatorReview As rectangle:
+            Fill: =gblAppStyles.Dividers.Background
+            Height: =1
+            OnSelect: =Select(Parent)
+            Width: =Parent.TemplateWidth - 80
+            X: =80
+            Y: =Parent.TemplateHeight - 1
+            ZIndex: =3
+
+        imgChecklistStepNotStartedReview As image:
+            AccessibleLabel: |-
+                =With({varDefault: "Image For Checklist Step Not Started",varOOBTextId: "imgChecklistStepNotStartedReview__loc_Text"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+            Height: =32
+            Image: |-
+                =With(
+                    {
+                        varImageRecord: LookUp(
+                            staticIcons,
+                            staticIconName = "Not started"
+                        ),
+                        varColor: If(
+                            Self.DisplayMode = DisplayMode.Disabled,
+                            gblAppStyles.Icons.DisabledColor,
+                            gblAppStyles.Icons.Color
+                        )
+                    },
+                    With(
+                        {
+                            varImageData: Concatenate(
+                                "data:image/svg+xml;utf8, ",
+                                EncodeUrl(
+                                    Concatenate(
+                                        "<svg viewBox='",
+                                        varImageRecord.staticIconViewbox,
+                                        "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                        varImageRecord.staticIconPath,
+                                        "' fill='#",
+                                        varColor,
+                                        "'/></svg>"
+                                    )
+                                )
+                            )
+                        },
+                        varImageData
+                    )
+                )
+                //assetInspectionStepNotInspected
+            OnSelect: =Select(Parent)
+            Tooltip: =Self.AccessibleLabel
+            Visible: |-
+                =//display not started image if step outcome has not been recorded
+                IsBlank(
+                    LookUp(
+                        colStepOutcomes,
+                        Value = ThisItem.'Checklist Step'.'Area Inspection Checklist Step'
+                    ).OutcomeValue
+                )
+            Width: =32
+            X: =28
+            Y: =38
+            ZIndex: =5
+
+        imgChecklistStepIssueReview As image:
+            AccessibleLabel: |-
+                =With({varDefault: "Image For Checklist Step Issue",varOOBTextId: "imgChecklistStepIssueReview__loc_Text"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+            Height: =32
+            Image: |
+                =With(
+                    {
+                        varImageRecord: LookUp(
+                            staticIcons,
+                            staticIconName = "Error"
+                        ),
+                        varColor: If(
+                            Self.DisplayMode = DisplayMode.Disabled,
+                            gblAppStyles.Icons.DisabledColor,
+                            gblAppStyles.Icons.Color_Red
+                        )
+                    },
+                    With(
+                        {
+                            varImageData: Concatenate(
+                                "data:image/svg+xml;utf8, ",
+                                EncodeUrl(
+                                    Concatenate(
+                                        "<svg viewBox='",
+                                        varImageRecord.staticIconViewbox,
+                                        "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                        varImageRecord.staticIconPath,
+                                        "' fill='#",
+                                        varColor,
+                                        "'/></svg>"
+                                    )
+                                )
+                            )
+                        },
+                        varImageData
+                    )
+                )
+            OnSelect: =Select(Parent)
+            Tooltip: =Self.AccessibleLabel
+            Visible: |-
+                =//display issue image if step outcome is issue
+                If(
+                    LookUp(
+                        colStepOutcomes,
+                        Value = ThisItem.'Checklist Step'.'Area Inspection Checklist Step'
+                    ).OutcomeValue = 'Inspection Outcome'.Issue,
+                    true,
+                    false
+                )
+            Width: =32
+            X: =28
+            Y: =38
+            ZIndex: =6
+
+        imgChecklistStepSuccessReview As image:
+            AccessibleLabel: |-
+                =With({varDefault: "Image For Checklist Step Success",varOOBTextId: "imgChecklistStepSuccessReview__loc_Text"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+            Height: =32
+            Image: |-
+                =With(
+                    {
+                        varImageRecord: LookUp(
+                            staticIcons,
+                            staticIconName = "Success"
+                        ),
+                        varColor: If(
+                            Self.DisplayMode = DisplayMode.Disabled,
+                            gblAppStyles.Icons.DisabledColor,
+                            gblAppStyles.Icons.Color_Green
+                        )
+                    },
+                    With(
+                        {
+                            varImageData: Concatenate(
+                                "data:image/svg+xml;utf8, ",
+                                EncodeUrl(
+                                    Concatenate(
+                                        "<svg viewBox='",
+                                        varImageRecord.staticIconViewbox,
+                                        "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                        varImageRecord.staticIconPath,
+                                        "' fill='#",
+                                        varColor,
+                                        "'/></svg>"
+                                    )
+                                )
+                            )
+                        },
+                        varImageData
+                    )
+                )
+                //assetInspectionStepSuccess
+            OnSelect: =Select(Parent)
+            Tooltip: =Self.AccessibleLabel
+            Visible: |-
+                =//display success image if step outcome is either OK or N/A
+                If(
+                    LookUp(
+                        colStepOutcomes,
+                        Value = ThisItem.'Checklist Step'.'Area Inspection Checklist Step',
+                        OutcomeValue
+                    ) = 'Inspection Outcome'.OK || LookUp(
+                        colStepOutcomes,
+                        Value = ThisItem.'Checklist Step'.'Area Inspection Checklist Step',
+                        OutcomeValue
+                    ) = 'Inspection Outcome'.'N/A',
+                    true,
+                    false
+                )
+            Width: =32
+            X: =28
+            Y: =38
+            ZIndex: =7
+
+        lblChecklistStepStatusReview As label:
+            BorderColor: =gblAppStyles.Label.BorderColor
+            BorderThickness: =gblAppStyles.Label.BorderThickness
+            Color: =gblAppStyles.Label.Color
+            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+            DisabledColor: =gblAppStyles.Label.DisabledColor
+            DisabledFill: =gblAppStyles.Label.DisabledFill
+            Fill: =gblAppStyles.Label.Fill
+            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            FontWeight: =FontWeight.Normal
+            Height: =35
+            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+            HoverColor: =gblAppStyles.Label.HoverColor
+            HoverFill: =gblAppStyles.Label.HoverFill
+            OnSelect: =Select(Parent)
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+            PressedColor: =gblAppStyles.Label.PressedColor
+            PressedFill: =gblAppStyles.Label.PressedFill
+            Size: =gblAppStyles.Label.Size.Medium
+            Text: |-
+                =Switch(
+                    LookUp(
+                        colStepOutcomes,
+                        Value = ThisItem.'Checklist Step'.'Area Inspection Checklist Step'
+                    ).OutcomeValue,
+                    'Inspection Outcome'.OK,
+                    With({varDefault: "All looks good",varOOBTextId: "_translateCommon_StepStatusOk"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault))),
+                    'Inspection Outcome'.Issue,
+                    With({varDefault: "Issue noted",varOOBTextId: "_translateCommon_StepStatusIssue"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault))),
+                    'Inspection Outcome'.'N/A',
+                        With({varDefault: "All looks good",varOOBTextId: "_translateCommon_StepStatusOk"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault))),
+                        With({varDefault:     If(
+                        Lower(gblWorkType) = "inspection","Not yet inspected", "Not yet " & Lower(gblWorkType) & "ed"),varOOBTextId: If(gblWorkType = "Inspection" ,"_translateCommon_NotYetInspected", "_translateCommon_NotYet" & gblWorkType & "ed")},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+                
+                    
+                )
+            VerticalAlign: =VerticalAlign.Top
+            Width: =Parent.Width-Self.X-imgChecklistStepSelectReview.Width - btnImageAttachmentCount.Width
+            X: =92
+            Y: =60
+            ZIndex: =8
+
+        imgChecklistStepSelectReview As image:
+            AccessibleLabel: |-
+                =With({varDefault: "Image For  Checklist Step Select",varOOBTextId: "imgChecklistStepSelectReview__loc_Text"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+            Height: =60
+            Image: |-
+                =With(
+                    {
+                        varImageRecord: LookUp(
+                            staticIcons,
+                            staticIconName = "Back"
+                        ),
+                        varColor: If(
+                            Self.DisplayMode = DisplayMode.Disabled,
+                            gblAppStyles.Icons.DisabledColor,
+                            gblAppStyles.Icons.Color
+                        )
+                    },
+                    With(
+                        {
+                            varImageData: Concatenate(
+                                "data:image/svg+xml;utf8, ",
+                                EncodeUrl(
+                                    Concatenate(
+                                        "<svg viewBox='",
+                                        varImageRecord.staticIconViewbox,
+                                        "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                        varImageRecord.staticIconPath,
+                                        "' fill='#",
+                                        varColor,
+                                        "'/></svg>"
+                                    )
+                                )
+                            )
+                        },
+                        varImageData
+                    )
+                )
+                //assetInspectionArrow
+            ImageRotation: =ImageRotation.Rotate180
+            OnSelect: =Select(Parent)
+            PaddingBottom: =16
+            PaddingLeft: =16
+            PaddingRight: =16
+            PaddingTop: =16
+            Width: =60
+            X: =If(gblAppMobileOnDesktop, Parent.Width-Self.Width-30, Parent.Width-Self.Width)
+            Y: =24
+            ZIndex: =9
+
+        btnChecklistStepForegroundReview As button:
+            BorderThickness: =0
+            Color: =RGBA(0, 0, 0, 0)
+            DisabledColor: =RGBA(0, 0, 0, 0)
+            Fill: =RGBA(0, 0, 0, 0)
+            FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+            Height: =108
+            HoverColor: =RGBA(0, 0, 0, 0)
+            HoverFill: =Self.Fill
+            OnSelect: =Select(Parent)
+            PressedFill: =Self.Fill
+            Size: =24
+            Text: |-
+                =With({varDefault: "Click To Review The " & gblWorkType,varOOBTextId: "_translateCommon_ClickToReviewThe" & gblWorkType},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+            Width: =Parent.Width
+            ZIndex: =12
+
+        grpImageCount As group:
+            Height: =5
+            Width: =5
+            X: =40
+            Y: =40
+            ZIndex: =13
+
+            btnImageAttachmentCount As button:
+                Align: =Align.Right
+                BorderThickness: =0
+                Color: =gblAppStyles.Label.Color
+                Fill: |-
+                    =If(
+                        gblThemeHiCo,
+                        gblAppColors.HighContrastText,
+                        gblThemeDark,
+                        gblAppColors.TeamsDarkShade30,
+                        gblAppColors.TeamsDefaultTint40
+                    )
+                FocusedBorderThickness: =1
+                Font: =Font.'Segoe UI'
+                HoverFill: =Self.Fill
+                OnSelect: =Select(Parent)
+                PaddingRight: =30
+                PressedFill: =Self.Fill
+                Size: =14
+                Text: |-
+                    =//count of images/attachments for the step
+                    CountRows(
+                        Filter(
+                            colImages,
+                            InspectionStep = ThisItem.'Checklist Step'.'Area Inspection Checklist Step'
+                        )
+                    )
+                Tooltip: =Self.Text
+                Visible: |
+                    =//if number of images/attachments for the step is more than 0
+                    If(
+                        CountRows(
+                            Filter(
+                                colImages,
+                                InspectionStep = ThisItem.'Checklist Step'.'Area Inspection Checklist Step'
+                            )
+                        ) > 0,
+                        true,
+                        false
+                    )
+                Width: =60
+                X: =Parent.Width-Self.Width-imgChecklistStepSelectReview.Width
+                Y: =37
+                ZIndex: =10
+
+            iconImageAttachment As image:
+                Height: =28
+                Image: =areaInspectionAttachments
+                OnSelect: =Select(Parent)
+                PaddingBottom: =2
+                PaddingLeft: =2
+                PaddingRight: =2
+                PaddingTop: =2
+                Visible: |
+                    =//if number of images/attachments for the step is more than 0
+                    If(
+                        CountRows(
+                            Filter(
+                                colImages,
+                                InspectionStep = ThisItem.'Checklist Step'.'Area Inspection Checklist Step'
+                            )
+                        ) > 0,
+                        true,
+                        false
+                    )
+                Width: =28
+                X: =btnImageAttachmentCount.X+32
+                Y: =43
+                ZIndex: =11
+
+    lblChecklistReview As label:
+        BorderColor: =gblAppStyles.Label.BorderColor
+        BorderThickness: =gblAppStyles.Label.BorderThickness
+        Color: =gblAppStyles.Label.Color
+        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+        DisabledColor: =gblAppStyles.Label.DisabledColor
+        DisabledFill: =gblAppStyles.Label.DisabledFill
+        Fill: =gblAppStyles.Label.Fill
+        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+        Font: =Font.'Segoe UI'
+        Height: =50
+        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+        HoverColor: =gblAppStyles.Label.HoverColor
+        HoverFill: =gblAppStyles.Label.HoverFill
+        PaddingLeft: =28
+        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+        PressedColor: =gblAppStyles.Label.PressedColor
+        PressedFill: =gblAppStyles.Label.PressedFill
+        Size: =gblAppStyles.Label.Size.Medium
+        Text: |-
+            =With({varDefault: "Checklist",varOOBTextId: "_translateCommon_ChecklistHeader"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+        Width: =640
+        Y: =imgAreaImageReview.Y+imgAreaImageReview.Height+20
+        ZIndex: =2
+
+    btnContinueSubmitInspection As button:
+        BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+        BorderThickness: =gblAppStyles.ButtonPrimary.BorderThickness
+        Color: =gblAppStyles.ButtonPrimary.Color
+        DisabledBorderColor: =gblAppStyles.ButtonPrimary.DisabledBorderColor
+        DisabledColor: =gblAppStyles.ButtonPrimary.DisabledColor
+        DisabledFill: =gblAppStyles.ButtonPrimary.DisabledFill
+        Fill: =gblAppStyles.ButtonPrimary.Fill
+        FocusedBorderColor: =gblAppStyles.ButtonPrimary.FocusedBorderColor
+        FocusedBorderThickness: =gblAppStyles.ButtonPrimary.FocusedBorderThickness
+        Font: =Font.'Segoe UI'
+        Height: =70
+        HoverBorderColor: =gblAppStyles.ButtonPrimary.HoverBorderColor
+        HoverColor: =gblAppStyles.ButtonPrimary.HoverColor
+        HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+        OnSelect: |
+            =
+            //code to retain state when switchin Teams tabs
+            Set(
+                gblLastInspection,
+                First(colLastInspection)
+            );
+            //Clear(colLastInspection);
+            //reset the variable to be prepared for the next inspection
+            Set(
+                gblInspectionPatchComplete,
+                false
+            );
+            If(
+                IsEmpty(
+                    Filter(
+                        colStepOutcomes,
+                        IsBlank(OutcomeValue)
+                    )
+                ),//if all steps of the inspection have been completed, proceed further
+                Navigate(
+                    'Confirmation Screen',
+                    ScreenTransition.Fade
+                );
+                
+            //code for     
+            //create area inspection steps using colLastInspectionSteps
+            ForAll(
+                    AddColumns(
+                        colLastInspectionSteps,
+                        "newCS",
+                        'Checklist Step'.'Area Inspection Checklist Step',
+                        "newN",
+                        Name,
+                        "newI",
+                        Instructions,
+                        "newS",
+                        Sequence
+                    ),
+                    IfError(Patch(
+                        'Area Inspection Steps',
+                        Defaults('Area Inspection Steps'),
+                        {
+                            Inspection: LookUp(
+                                'Area Inspections',
+                                'Area Inspection' = gblLastInspection.'Area Inspection'
+                            ),
+                            'Checklist Step': LookUp(
+                                'Area Inspection Checklist Steps',
+                                'Area Inspection Checklist Step' = newCS
+                            ),
+                            Name: newN,
+                            Instructions: newI,
+                            Sequence: newS
+                        }
+                    ),Blank())
+                );
+                
+            //update newly created area inspection steps with outcome and notes from colStepOutcomes
+            ForAll(
+                    colStepOutcomes,
+                    IfError(Patch(
+                        'Area Inspection Steps',
+                        LookUp(
+                            'Area Inspection Steps',
+                            'Checklist Step'.'Area Inspection Checklist Step' = Value && Inspection.'Area Inspection' = gblLastInspection.'Area Inspection'
+                        ),
+                        {
+                            Outcome: OutcomeValue,
+                            Note: NoteText
+                        }
+                    ),Blank())
+                );
+                
+            //update newly created area inspection steps with images from colImages
+            ForAll(
+                    colImages,
+                   IfError(Patch(
+                        'Area Inspection Images',
+                        Defaults('Area Inspection Images'),
+                        {
+                            msft_image: colImages[@Image],
+                            msft_Areainspection_Stepid: LookUp(
+                                'Area Inspection Steps',
+                                'Checklist Step'.'Area Inspection Checklist Step' = InspectionStep && Inspection.'Area Inspection' = gblLastInspection.'Area Inspection'
+                            )
+                        }
+                    ),Blank())
+                );
+                //update newly created area inspection steps with tasks
+            ForAll(
+                    colAreaPlannerTasks,
+                    IfError(Patch(
+                        'Area Inspection Tasks',
+                        Defaults('Area Inspection Tasks'),
+                        {
+                            msft_taskid: colAreaPlannerTasks[@TaskID],
+                            msft_stepid: colAreaPlannerTasks[@StepID],
+                            msft_areainspection_inspectionid: colAreaPlannerTasks[@InspectionID]
+                        }
+                    ),Blank())
+                );
+                
+            //update Outcome of the inspection, if all OK or N/A, then OK, else Issue
+            If(
+                    IsEmpty(
+                        Filter(
+                            colStepOutcomes,
+                            OutcomeValue = 'Inspection Outcome'.Issue
+                        )
+                    ) && IsEmpty(
+                        Filter(
+                            colStepOutcomes,
+                            OutcomeValue = 'Inspection Outcome'.'N/A'
+                        )
+                    ),
+                   IfError( Patch(
+                        'Area Inspections',
+                        gblLastInspection,
+                        {Outcome: 'Inspection Outcome'.OK}
+                    ),Blank()),
+                    IfError(Patch(
+                        'Area Inspections',
+                        gblLastInspection,
+                        {Outcome: 'Inspection Outcome'.Issue}
+                    ),Blank())
+                );
+                If(
+                    !IsBlank(gblRecordSettings.'Parameter (Notification Channel Id)') && gblRecordSettings.'Is Enabled Notifications?' = 'Is Enabled Notifications? (Area Inspection Settings)'.Yes,
+                    If(
+                        IsError(
+                            MicrosoftTeams.PostMessageToChannelV3(
+                                gblPlannerGroupId,
+                                gblRecordSettings.'Parameter (Notification Channel Id)',// gblParamChannelId,
+                                {
+                                    content: Concatenate(
+                                        With(
+                                            {
+                                                varDefault: "A new " & Lower(gblWorkType) & " has been submitted!",
+                                                varOOBTextId: "_translateCommon__" & gblWorkType & "Submitted"
+                                            },
+                                            With(
+                                                {
+                                                    varLocalizedText: LookUp(
+                                                        colLocalization,
+                                                        OOBTextID = varOOBTextId,
+                                                        LocalizedText
+                                                    )
+                                                },
+                                                Coalesce(
+                                                    varLocalizedText,
+                                                    varDefault
+                                                )
+                                            )
+                                        ),
+                                //"A new " & Lower(gblWorkType) & " has been submitted!",
+                                        "<br></br>",
+                                        "<b>" & With(
+                                            {
+                                                varDefault: "For the Location:",
+                                                varOOBTextId: "_translateCommon__InspectionForLocation"
+                                            },
+                                            With(
+                                                {
+                                                    varLocalizedText: LookUp(
+                                                        colLocalization,
+                                                        OOBTextID = varOOBTextId,
+                                                        LocalizedText
+                                                    )
+                                                },
+                                                Coalesce(
+                                                    varLocalizedText,
+                                                    varDefault
+                                                )
+                                            )
+                                        ) & " " & "</b>",
+                                //"<b>For the Location: </b>",
+                                        gblLastInspection.Location.Name
+                                    ),
+                                    contentType: "html"
+                                },
+                                {subject: gblLastInspection.Name}
+                            )
+                        ),
+                        Notify(
+                            With(
+                                {
+                                    varDefault: "You do not have access to the channel where inspection notifications are posted. Please contact your manager",
+                                    varOOBTextId: "_translateCommon__NoAccessToChannel"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            ),
+                            NotificationType.Warning
+                        )
+                    )
+                );
+                
+            //update inspection's Ended On
+            IfError(Patch(
+                    'Area Inspections',
+                    gblLastInspection,
+                    {
+                        'Review Status Code': 'Area Inspection Review Status Code'.'Pending review',
+                        'Ended On': Now()
+                    }
+                ),Blank());
+                
+            //code to retain state when switchin Teams tabs
+            Clear(colLastInspectionSteps);
+                Clear(colStepDetails);
+                Clear(colStepOutcomes);
+                Clear(colImages);
+                Clear(colSelectedLocation);
+                SaveData(
+                    colLastInspection,
+                    "colLastInspection"
+                );
+                SaveData(
+                    colLastInspectionSteps,
+                    "colLastInspectionSteps"
+                );
+                SaveData(
+                    colStepDetails,
+                    "colStepDetails"
+                );
+                SaveData(
+                    colStepOutcomes,
+                    "colStepOutcomes"
+                );
+                SaveData(
+                    colImages,
+                    "colImages"
+                );
+                SaveData(
+                    colSelectedLocation,
+                    "colSelectedLocation"
+                );
+                
+            //variable to control navigation to the home screen from the confirmation screen after all data has been patched
+            Set(
+                    gblInspectionPatchComplete,
+                    true
+                ),
+            //global variable to ensure new inspection is not created when navigating back to the Checklist Steps screen
+                Set(
+                    gblBackNav,
+                    true
+                );
+                
+            //to keep instrutions collapsed when the user navigates back to the Checklist Steps screen
+            Set(
+                    gblExpandVar,
+                    false
+                );
+                
+            //use the selected record of the gallery to set the focus on the relevant record on the Checklist Steps screen
+            Set(
+                    gblFocusStep,
+                    Last(galChecklistStepsReview.AllItems).'Checklist Step'.'Area Inspection Checklist Step'
+                );
+                Reset(galInspectionSteps);
+                Set(
+                    gblFocusStep,
+                    First(galChecklistStepsReview.AllItems).'Checklist Step'.'Area Inspection Checklist Step'
+                );
+                Reset(galInspectionSteps);
+                Navigate(
+                    'Checklist Steps Screen',
+                    ScreenTransition.Fade
+                )
+            );
+            Clear(colAreaPlannerTasks);
+        PressedBorderColor: =gblAppStyles.ButtonPrimary.PressedBorderColor
+        PressedColor: =gblAppStyles.ButtonPrimary.PressedColor
+        PressedFill: =gblAppStyles.ButtonPrimary.PressedFill
+        RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+        RadiusBottomRight: =gblAppStyles.ButtonPrimary.RadiusBottomRight
+        RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+        RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+        Size: =gblAppStyles.ButtonPrimary.Size
+        Text: |-
+            =If(
+                IsEmpty(
+                    Filter(
+                        colStepOutcomes,
+                        IsBlank(OutcomeValue)
+                    )
+                ),
+                //"Submit " & Lower(gblWorkType),
+                With(
+                    {
+                        varDefault: "Submit " & Lower(gblWorkType),
+                        varOOBTextId: "_translateCommon_Submit" & gblWorkType
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                ),
+                //"Continue " & Lower(gblWorkType)
+                With(
+                    {
+                        varDefault: "Continue " & Lower(gblWorkType),
+                        varOOBTextId: "_translateCommon_Continue" & gblWorkType
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            )
+        Tooltip: =Self.Text
+        Width: |-
+            =Switch(
+                'Review Screen'.Size,
+                ScreenSize.ExtraLarge,
+                Max(
+                    Parent.Width * .2,
+                    400
+                ),
+                ScreenSize.Large,
+                Max(
+                    Parent.Width * .2,
+                    350
+                ),
+                ScreenSize.Medium,
+                Max(
+                    Parent.Width * .2,
+                    300
+                ),
+                ScreenSize.Small,
+                Parent.Width - (2*28),
+                Parent.Width - (2*28)
+            )
+        X: |-
+            =Switch(
+                'Review Screen'.Size,
+                ScreenSize.ExtraLarge,
+                Parent.Width - Self.Width - 28,
+                ScreenSize.Large,
+                Parent.Width - Self.Width - 28,
+                ScreenSize.Medium,
+                Parent.Width - Self.Width - 28,
+                ScreenSize.Small,
+                28,
+                28
+            )
+        Y: |-
+            =Switch(
+                'Review Screen'.Size,
+                ScreenSize.ExtraLarge,
+                35,
+                ScreenSize.Large,
+                35, 
+                ScreenSize.Medium,
+                35, 
+                ScreenSize.Small,
+                Parent.Height - Self.Height-28,
+                Parent.Height - Self.Height-28
+            )
+        ZIndex: =3
+
+    imgAreaImageReview As image:
+        AccessibleLabel: |-
+            =With({varDefault:"Image For Selected " & areaLabel,varOOBTextId:"imgAreaImageReview__loc_Text",varParam0:areaLabel},With({varLocalizedText:LookUp(colLocalization,OOBTextID=varOOBTextId,LocalizedText)},If(IsBlankOrError(varParam0),Coalesce(varLocalizedText,varDefault),Coalesce(Substitute(varLocalizedText,"{0}",Text(varParam0)),varDefault))))
+        DisplayMode: =DisplayMode.View
+        Fill: =gblAppStyles.Gallery.Fill
+        Height: =Self.Width/2
+        Image: |-
+            =If(
+                IsBlank(LookUp('Area Inspection Locations', 'Area Inspection Location' = gblLocID).'Primary Image'.Full),
+                areaInspectionDefaultImage,
+                LookUp('Area Inspection Locations', 'Area Inspection Location' = gblLocID).'Primary Image'.Full
+            )
+            /*
+            If(
+                IsBlank(gblSelectedLocation.'Primary Image'.Full),
+                areaInspectionDefaultImage,
+                gblSelectedLocation.'Primary Image'.Full
+            )
+            */
+        ImagePosition: =ImagePosition.Fill
+        RadiusBottomLeft: =10
+        RadiusBottomRight: =10
+        RadiusTopLeft: =10
+        RadiusTopRight: =10
+        Tooltip: =Self.AccessibleLabel
+        Width: |-
+            =Switch(
+                'Review Screen'.Size,
+                ScreenSize.ExtraLarge,
+                Parent.Width/3,
+                ScreenSize.Large,
+                Parent.Width/3,
+                ScreenSize.Medium,
+                Parent.Width-Self.X*2,
+                ScreenSize.Small,
+                Parent.Width-Self.X*2,
+                Parent.Width-Self.X*2
+            )
+        X: =28
+        Y: =131
+        ZIndex: =4
+
+    btnBackToInspectionForms As button:
+        Align: =Align.Left
+        BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+        BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+        Color: =gblAppStyles.ButtonTransparent.Color
+        DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+        DisabledColor: =gblAppStyles.ButtonTransparent.DisabledColor
+        DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+        Fill: =gblAppStyles.ButtonTransparent.Fill
+        FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+        FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+        Font: =Font.'Segoe UI'
+        Height: =73
+        HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+        HoverColor: =gblAppStyles.ButtonTransparent.HoverColor
+        HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+        OnSelect: |-
+            =If(
+                gblSkipFormNav,
+                Navigate(
+                    'Items Screen',
+                    ScreenTransition.Fade
+                ),
+                Navigate(
+                    'Forms Screen',
+                    ScreenTransition.Fade
+                )
+            );
+            Set(
+                gblBackNav,
+                true
+            );
+            /*
+            Navigate(
+                'Forms Screen',
+                ScreenTransition.Fade
+            )
+            */
+        PaddingLeft: =28
+        PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+        PressedColor: =gblAppStyles.ButtonTransparent.PressedColor
+        PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+        RadiusBottomLeft: =gblAppStyles.ButtonTransparent.RadiusBottomLeft
+        RadiusBottomRight: =gblAppStyles.ButtonTransparent.RadiusBottomRight
+        RadiusTopLeft: =gblAppStyles.ButtonTransparent.RadiusTopLeft
+        RadiusTopRight: =gblAppStyles.ButtonTransparent.RadiusTopRight
+        Size: =gblAppStyles.ButtonTransparent.Size
+        Text: |-
+            =/*
+            If(
+                gblSkipFormNav,
+                "Back to " & Lower(areaTypeLabel) & "s",
+                "Back to " & Lower(gblWorkType) & " forms"
+            )
+            */
+            
+            If(
+                gblSkipFormNav,
+                //"Back to " & Lower(areaTypeLabel) & "s",
+                With({varDefault:"Back to " & Lower(areaTypeLabel) & "s",varOOBTextId:"_translateCommon_BackToAreas",varParam0:Lower(areaTypeLabel)},With({varLocalizedText:LookUp(colLocalization,OOBTextID=varOOBTextId,LocalizedText)},If(IsBlankOrError(varParam0),Coalesce(varLocalizedText,varDefault),Coalesce(Substitute(varLocalizedText,"{0}",Text(varParam0)),varDefault)))),
+                //"Back to " & Lower(gblWorkType) & " checklist"
+                With({varDefault: "Back to " & Lower(gblWorkType) & " checklist",varOOBTextId: "_translateCommon_BackTo" & gblWorkType & "Forms"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+            )
+        Tooltip: =Self.Text
+        Width: =640
+        ZIndex: =6
+
+    lblInspectionOverview As label:
+        BorderColor: =gblAppStyles.Label.BorderColor
+        BorderThickness: =gblAppStyles.Label.BorderThickness
+        Color: =gblAppStyles.Label.Color
+        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+        DisabledColor: =gblAppStyles.Label.DisabledColor
+        DisabledFill: =gblAppStyles.Label.DisabledFill
+        Fill: =gblAppStyles.Label.Fill
+        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+        Font: =Font.'Segoe UI'
+        FontWeight: =FontWeight.Semibold
+        Height: =50
+        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+        HoverColor: =gblAppStyles.Label.HoverColor
+        HoverFill: =gblAppStyles.Label.HoverFill
+        PaddingLeft: =28
+        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+        PressedColor: =gblAppStyles.Label.PressedColor
+        PressedFill: =gblAppStyles.Label.PressedFill
+        Size: =gblAppStyles.Label.Size.ExtraLarge
+        Text: |-
+            =//gblWorkType & " overview" //"Inspection overview"
+            
+            With({varDefault: gblWorkType & " overview",varOOBTextId: "_translateCommon_" & gblWorkType & "OverviewHeader"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+        Width: =640
+        Y: =65
+        ZIndex: =7
+
+    btnStepCountReview As button:
+        BorderThickness: =0
+        Color: |-
+            =If(
+                Text(CountRows(colFormChecklistSteps)) = Text(
+                    CountIf(
+                        colStepOutcomes,
+                        !IsBlank(OutcomeValue)
+                    )
+                ),
+                gblAppStyles.ButtonPrimary.Color,
+                gblAppStyles.ButtonSecondary.Color
+            )
+        DisabledColor: =Self.Color
+        DisabledFill: =Self.Fill
+        DisplayMode: =DisplayMode.Disabled
+        Fill: |-
+            =If(
+                Text(CountRows(colFormChecklistSteps)) = Text(
+                    CountIf(
+                        colStepOutcomes,
+                        !IsBlank(OutcomeValue)
+                    )
+                ),
+                If(
+                    gblThemeHiCo,
+                    gblAppColors.HighContrastDisabled,
+                    gblThemeDark,
+                    gblAppColors.MessagesDarkWebSuccessIcon,
+                    gblAppColors.MessagesDefaultWebSuccessIcon
+                ),
+                gblAppStyles.ButtonSecondary.Fill
+            )
+        FocusedBorderThickness: =1
+        Font: =Font.'Segoe UI'
+        Height: =52
+        HoverColor: =Self.Color
+        HoverFill: =Self.Fill
+        OnSelect: =
+        PressedFill: =Self.Fill
+        RadiusBottomLeft: =gblAppStyles.ButtonSecondary.RadiusBottomLeft
+        RadiusBottomRight: =gblAppStyles.ButtonSecondary.RadiusBottomRight
+        RadiusTopLeft: =gblAppStyles.ButtonSecondary.RadiusTopLeft
+        RadiusTopRight: =gblAppStyles.ButtonSecondary.RadiusTopRight
+        Size: =gblAppStyles.Label.Size.Medium
+        Text: |-
+            =//Concatenate(Text(CountIf(colStepOutcomes,!IsBlank(OutcomeValue))),"/",Text(CountRows(colStepOutcomes))," complete")
+            
+            With({varDefault:Concatenate(Text(CountIf(colStepOutcomes,!IsBlank(OutcomeValue))),"/",Text(CountRows(colStepOutcomes))," complete"),varOOBTextId:"_translateCommon_NumberOfTasksCompleted",varParam0:Concatenate(Text(CountIf(colStepOutcomes,!IsBlank(OutcomeValue))),"/",Text(CountRows(colStepOutcomes)))},With({varLocalizedText:LookUp(colLocalization,OOBTextID=varOOBTextId,LocalizedText)},If(IsBlankOrError(varParam0),Coalesce(varLocalizedText,varDefault),Coalesce(Substitute(varLocalizedText,"{0}",Text(varParam0)),varDefault))))
+        Tooltip: =Self.Text
+        Width: =225
+        X: =45
+        Y: =imgAreaImageReview.Y+imgAreaImageReview.Height - Self.Height-20
+        ZIndex: =8
+

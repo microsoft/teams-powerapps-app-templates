@@ -1,0 +1,1585 @@
+"'Add Topic Screen' As screen":
+    Fill: =gblAppStyles.Background.Fill
+    OnVisible: |
+        =Reset(galCoverIcons_AddTopic);
+        Reset(rdoCoverType_AddTopic);
+        Reset(txtTitle_AddTopic);
+        Reset(txtDescription_AddTopic);
+        Reset(galCovers_AddTopic);
+        SetFocus(txtTitle_AddTopic);
+
+    conAddTopic As groupContainer:
+        DisplayMode: =DisplayMode.Edit
+        Height: =Parent.Height
+        LayoutAlignItems: =LayoutAlignItems.Start
+        LayoutDirection: =LayoutDirection.Horizontal
+        LayoutJustifyContent: =LayoutJustifyContent.Start
+        LayoutMode: =LayoutMode.Manual
+        LayoutOverflowX: =LayoutOverflow.Hide
+        LayoutOverflowY: =LayoutOverflow.Hide
+        Width: =Parent.Width
+        ZIndex: =1
+
+        cnvAddTopic As fluidGrid.fluidGridWithBlankCard:
+            BorderThickness: =0
+            Height: =Parent.Height - Self.Y
+            Width: =Parent.Width
+            X: =0*1
+            Y: =0*1
+            ZIndex: =1
+
+            dtcAddTopic As dataCard:
+                BorderColor: =RGBA(0, 0, 0, 1)
+                BorderStyle: =BorderStyle.Solid
+                BorderThickness: =0
+                DisplayMode: =DisplayMode.Edit
+                Fill: =RGBA(0, 0, 0, 0)
+                Height: |-
+                    =If(
+                        rdoCoverType_AddTopic.Selected.Value = "Image",
+                        galCovers_AddTopic.Y + galCovers_AddTopic.Height + btnSave_AddTopic.Height + 60,
+                        galCoverIcons_AddTopic.Y + galCoverIcons_AddTopic.Height + btnSave_AddTopic.Height + 60
+                    )
+                Width: =Parent.Width
+                X: =0*1
+                Y: =0*1
+                ZIndex: =1
+
+                lblAnnounce_Topics As label:
+                    Height: =0
+                    Live: =Live.Assertive
+                    Text: =locScreenReaderAnnouncedText
+                    Width: =0
+                    X: =Parent.Width - Self.Width
+                    Y: =Parent.Height - Self.Height
+                    ZIndex: =1
+
+                galCoverIcons_AddTopic As gallery.galleryVertical:
+                    AccessibleLabel: ="Gallery of cover icons"
+                    Default: =First(Self.AllItems)
+                    FocusedBorderThickness: =1
+                    Height: |-
+                        =60 * RoundUp(
+                            CountRows(Self.AllItems) / Coalesce(
+                                RoundDown(
+                                    Self.Width / 60,
+                                    0
+                                ),
+                                1
+                            ),
+                            0
+                        )
+                    Items: =colStockIcons
+                    Layout: =Layout.Vertical
+                    OnSelect: |-
+                        =UpdateContext({locDefaultBoardCoverIcon: ThisItem})
+                    TabIndex: |-
+                        =If(
+                            Self.Visible,
+                            1,
+                            -1
+                        )
+                    TemplatePadding: =0
+                    TemplateSize: =60
+                    Visible: =lblIconBackgroundColor_AddTopic.Visible
+                    Width: |-
+                        =If(
+                            'Add Topic Screen'.Size = ScreenSize.ExtraLarge || 'Add Topic Screen'.Size = ScreenSize.Large,
+                            Min(Parent.Width / 2, 600),
+                            Parent.Width - Self.X*2
+                        )
+                    WrapCount: =RoundDown(Self.Width / 60, 0)
+                    X: =20*1
+                    Y: =lblIconHeader_AddTopic.Y + lblIconHeader_AddTopic.Height + 10
+                    ZIndex: =2
+
+                    btnIconBackground_AddTopic As button:
+                        BorderColor: |-
+                            =If(
+                                ThisItem.Url = locDefaultBoardCoverIcon.Url,
+                                gblAppStyles.ButtonSecondary.FocusedBorderColor,
+                                Transparent
+                            )
+                        Color: =Transparent
+                        DisabledBorderColor: =Transparent
+                        DisabledColor: =gblAppStyles.ButtonBackground.DisabledColor
+                        DisabledFill: =Transparent
+                        Fill: |-
+                            =If(
+                                !IsBlank(locDefaultBoardCoverColor),
+                                ColorValue(locDefaultBoardCoverColor.Color),
+                                Transparent
+                            )
+                        FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                        FocusedBorderThickness: =2
+                        Font: =Font.'Segoe UI'
+                        Height: =Self.Width
+                        HoverBorderColor: =gblAppStyles.ButtonBackground.HoverBorderColor
+                        HoverColor: =Transparent
+                        HoverFill: =Self.Fill
+                        OnSelect: =Select(Parent)
+                        PressedBorderColor: =gblAppStyles.ButtonBackground.PressedBorderColor
+                        PressedColor: =Transparent
+                        PressedFill: =Self.Fill
+                        RadiusBottomLeft: =4
+                        RadiusBottomRight: =4
+                        RadiusTopLeft: =4
+                        RadiusTopRight: =4
+                        Size: =gblAppStyles.ButtonBackground.Size
+                        TabIndex: |-
+                            =If(
+                                Self.Visible,
+                                0,
+                                -1
+                            )
+                        Text: |-
+                            =With(
+                                {
+                                    varDefault: "Click to select the icon",
+                                    varOOBTextId: "btnIconBackground_AddTopic__locText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            ) & " " & 
+                            Right(ThisItem.Url, Len(Text(ThisItem.Url))-24)
+                        Tooltip: =Self.Text
+                        Width: =32
+                        X: =2*1
+                        Y: =2*1
+                        ZIndex: =1
+
+                    imgIcon_AddTopic As image:
+                        AccessibleLabel: |-
+                            =With(
+                                {
+                                    varDefault: "Selected icon",
+                                    varOOBTextId: "imgIcon_AddTopic__locAccessibleText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        Height: =32
+                        Image: =ThisItem.Url
+                        OnSelect: =Select(Parent)
+                        PaddingBottom: =4
+                        PaddingLeft: =4
+                        PaddingRight: =4
+                        PaddingTop: =4
+                        Tooltip: =Self.AccessibleLabel
+                        Width: =32
+                        X: =btnIconBackground_AddTopic.X + (btnIconBackground_AddTopic.Width - Self.Width) / 2
+                        Y: =btnIconBackground_AddTopic.Y + (btnIconBackground_AddTopic.Height - Self.Height) / 2
+                        ZIndex: =2
+
+                lblIconHeader_AddTopic As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Select an icon",
+                                varOOBTextId: "lblIconHeader_AddTopic__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Tooltip: =Self.Text
+                    Visible: =lblIconBackgroundColor_AddTopic.Visible
+                    Width: =lblHeader_AddTopic.Width
+                    Wrap: =false
+                    X: =20*1
+                    Y: =galCoverColors_AddTopic.Y + galCoverColors_AddTopic.Height + 10
+                    ZIndex: =3
+
+                galCoverColors_AddTopic As gallery.galleryVertical:
+                    AccessibleLabel: ="Gallery of cover colors"
+                    BorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                    Default: =locDefaultBoardCoverColor
+                    FocusedBorderThickness: =1
+                    Height: |-
+                        =60 * RoundUp(
+                            CountRows(Self.AllItems) / Coalesce(
+                                RoundDown(
+                                    Self.Width / 60,
+                                    0
+                                ),
+                                1
+                            ),
+                            0
+                        )
+                    Items: |-
+                        =If(
+                            gblThemeDark,
+                            Sort(
+                                Filter(
+                                    colTopicCoverColors,
+                                    Theme = "dark"
+                                ),
+                                Base,
+                                Ascending
+                            ),
+                            Sort(
+                                Filter(
+                                    colTopicCoverColors,
+                                    Theme = "default"
+                                ),
+                                Base,
+                                Ascending
+                            )
+                        )
+                    Layout: =Layout.Vertical
+                    OnSelect: |-
+                        =UpdateContext({locDefaultBoardCoverColor: ThisItem})
+                    TabIndex: =If(Self.Visible,1,-1)
+                    TemplatePadding: =0
+                    TemplateSize: =60
+                    Visible: =lblIconBackgroundColor_AddTopic.Visible
+                    Width: |-
+                        =If(
+                            'Add Topic Screen'.Size = ScreenSize.ExtraLarge || 'Add Topic Screen'.Size = ScreenSize.Large,
+                            Min(Parent.Width / 2, 600),
+                            Parent.Width - Self.X*2
+                        )
+                    WrapCount: |-
+                        =RoundDown(
+                            Self.Width / 60,
+                            0
+                        )
+                    X: =20*1
+                    Y: =lblIconBackgroundColor_AddTopic.Y + lblIconBackgroundColor_AddTopic.Height + 10
+                    ZIndex: =4
+
+                    btnCoverColor_AddTopic As button:
+                        BorderColor: |-
+                            =If(
+                                ThisItem.Color = locDefaultBoardCoverColor.Color,
+                                gblAppStyles.ButtonSecondary.FocusedBorderColor,
+                                Transparent
+                            )
+                        Color: =Transparent
+                        DisabledBorderColor: =Transparent
+                        DisabledColor: =gblAppStyles.ButtonBackground.DisabledColor
+                        DisabledFill: =Transparent
+                        Fill: =ColorValue(ThisItem.Color)
+                        FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                        FocusedBorderThickness: =2
+                        Font: =Font.'Segoe UI'
+                        Height: =Self.Width
+                        HoverBorderColor: =gblAppStyles.ButtonBackground.HoverBorderColor
+                        HoverColor: =Transparent
+                        HoverFill: =Self.Fill
+                        OnSelect: =Select(Parent)
+                        PressedBorderColor: =gblAppStyles.ButtonBackground.PressedBorderColor
+                        PressedColor: =Transparent
+                        PressedFill: =Self.Fill
+                        RadiusBottomLeft: =4
+                        RadiusBottomRight: =4
+                        RadiusTopLeft: =4
+                        RadiusTopRight: =4
+                        Size: =gblAppStyles.ButtonBackground.Size
+                        TabIndex: |-
+                            =If(
+                                Self.Visible,
+                                0,
+                                -1
+                            )
+                        Text: |-
+                            =With(
+                                {
+                                    varDefault: "Click to select the color",
+                                    varOOBTextId: "btnCoverColor_AddTopic__locText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            ) & " " & ThisItem.Color
+                        Tooltip: =Self.Text
+                        Width: =32
+                        X: =2*1
+                        Y: =2*1
+                        ZIndex: =3
+
+                    imgColorSelected_AddTopic As image:
+                        AccessibleLabel: |-
+                            =With(
+                                {
+                                    varDefault: "Selected color",
+                                    varOOBTextId: "imgColorSelected_AddTopic__locAccessibleText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        Height: =btnCoverColor_AddTopic.Height
+                        Image: |
+                            =With(
+                                {
+                                    varImageRecord: LookUp(
+                                        staticIcons,
+                                        staticIconName = "Check"
+                                    ),
+                                    varColor: If(
+                                        Self.DisplayMode = DisplayMode.Disabled,
+                                        gblAppStyles.Icons.DisabledColor,
+                                        If(
+                                            gblThemeHiCo,
+                                            "00EBFD",
+                                            gblThemeDark,
+                                            "9EA2FF",
+                                            "33344A"
+                                        )
+                                    )
+                                },
+                                With(
+                                    {
+                                        varImageData: Concatenate(
+                                            "data:image/svg+xml;utf8, ",
+                                            EncodeUrl(
+                                                Concatenate(
+                                                    "<svg viewBox='",
+                                                    varImageRecord.staticIconViewbox,
+                                                    "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                    varImageRecord.staticIconPath,
+                                                    "' fill='#",
+                                                    varColor,
+                                                    "'/></svg>"
+                                                )
+                                            )
+                                        )
+                                    },
+                                    varImageData
+                                )
+                            )
+                        OnSelect: =Select(Parent)
+                        PaddingBottom: |-
+                            =If(
+                                'Add Topic Screen'.Size = ScreenSize.ExtraLarge || 'Add Topic Screen'.Size = ScreenSize.Large,
+                                8,
+                                4
+                            )
+                        PaddingLeft: |-
+                            =If(
+                                'Add Topic Screen'.Size = ScreenSize.ExtraLarge || 'Add Topic Screen'.Size = ScreenSize.Large,
+                                8,
+                                4
+                            )
+                        PaddingRight: |-
+                            =If(
+                                'Add Topic Screen'.Size = ScreenSize.ExtraLarge || 'Add Topic Screen'.Size = ScreenSize.Large,
+                                8,
+                                4
+                            )
+                        PaddingTop: |-
+                            =If(
+                                'Add Topic Screen'.Size = ScreenSize.ExtraLarge || 'Add Topic Screen'.Size = ScreenSize.Large,
+                                8,
+                                4
+                            )
+                        Tooltip: =Self.AccessibleLabel
+                        Visible: =ThisItem.Color = locDefaultBoardCoverColor.Color 
+                        Width: =btnCoverColor_AddTopic.Width
+                        X: =btnCoverColor_AddTopic.X + (btnCoverColor_AddTopic.Width - Self.Width) / 2
+                        Y: =btnCoverColor_AddTopic.Y + (btnCoverColor_AddTopic.Height - Self.Height) / 2
+                        ZIndex: =4
+
+                lblIconBackgroundColor_AddTopic As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Select a background color",
+                                varOOBTextId: "lblIconBackgroundColor_AddTopic__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Tooltip: =Self.Text
+                    Visible: =rdoCoverType_AddTopic.Selected.Value = "Icon"
+                    Width: =lblHeader_AddTopic.Width
+                    Wrap: =false
+                    X: =20*1
+                    Y: =rdoCoverType_AddTopic.Y + rdoCoverType_AddTopic.Height + 20
+                    ZIndex: =5
+
+                galCovers_AddTopic As gallery.galleryHorizontal:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "List of stock images for a project",
+                                varOOBTextId: "galProjectCovers__locAccessibleText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    BorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                    Default: ={}//If(IsBlank(LookUp(colStockImages,appStockImage=LookUp(Projects,Project=gblProject.Project).'Cover Icon')),{},LookUp(colStockImages,appStockImage=LookUp(Projects,Project=gblProject.Project,'Cover Icon')))
+                    Fill: =gblAppStyles.Background.Fill
+                    FocusedBorderThickness: =2
+                    Height: =(imgCover_AddTopic.Height + 10) * 3
+                    ItemAccessibleLabel: |-
+                        =If(
+                            ThisItem.IsSelected,
+                            With(
+                                {
+                                    varDefault: "Selected",
+                                    varOOBTextId: "galSelected_Announcement"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            ),
+                            With(
+                                {
+                                    varDefault: "Not selected",
+                                    varOOBTextId: "galNotSelected_Announcement"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        )
+                    Items: |-
+                        =Sort(
+                            colStockImages,
+                            ID,
+                            Ascending
+                        )
+                    OnSelect: |+
+                        =UpdateContext(
+                            {
+                                locCoverImageSelected: true,
+                                locCustomImageSelected: false
+                            }
+                        );
+                        
+                    TabIndex: |-
+                        =If(
+                            Self.Visible,
+                            1,
+                            -1
+                        )
+                    TemplateFill: =Transparent
+                    TemplatePadding: =0
+                    TemplateSize: =Self.Width / 5
+                    Visible: =rdoCoverType_AddTopic.Selected.Value = "Image"
+                    Width: =lblHeader_AddTopic.Width
+                    WrapCount: =3
+                    X: =20*1
+                    Y: =rdoCoverType_AddTopic.Y + rdoCoverType_AddTopic.Height + 10
+                    ZIndex: =6
+
+                    btnCoverBackground_AddTopic As button:
+                        BorderColor: =Transparent
+                        Color: =gblAppStyles.ButtonBackground.Color
+                        DisabledBorderColor: =Transparent
+                        DisabledColor: =gblAppStyles.ButtonBackground.DisabledColor
+                        DisabledFill: |-
+                            =If(
+                                locCustomImageSelected,
+                                If(
+                                    IsBlank(ThisItem.appStockImage),
+                                    gblAppStyles.ButtonPrimary.Fill,
+                                    Transparent
+                                ),
+                                If(
+                                    ThisItem.IsSelected,
+                                    gblAppStyles.ButtonPrimary.Fill,
+                                    Transparent
+                                )
+                            )
+                        Fill: |-
+                            =If(
+                                locCustomImageSelected,
+                                If(
+                                    IsBlank(ThisItem.appStockImage),
+                                    gblAppStyles.ButtonPrimary.Fill,
+                                    Transparent
+                                ),
+                                If(
+                                    ThisItem.IsSelected,
+                                    gblAppStyles.ButtonPrimary.Fill,
+                                    Transparent
+                                )
+                            )
+                        FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                        FocusedBorderThickness: =2
+                        Font: =Font.'Segoe UI'
+                        Height: =imgCover_AddTopic.Height + 4
+                        HoverBorderColor: =gblAppStyles.ButtonBackground.HoverBorderColor
+                        HoverColor: =gblAppStyles.ButtonBackground.HoverColor
+                        HoverFill: =gblAppStyles.ButtonBackground.HoverFill
+                        OnSelect: |-
+                            =Select(Parent);UpdateContext({locScreenReaderAnnouncedText:If(locScreenReaderAnnouncedText ="Image selected","image selected","Image selected")})
+                        PressedBorderColor: =gblAppStyles.ButtonBackground.PressedBorderColor
+                        PressedColor: =gblAppStyles.ButtonBackground.PressedColor
+                        PressedFill: =gblAppStyles.ButtonBackground.PressedFill
+                        RadiusBottomLeft: =4
+                        RadiusBottomRight: =4
+                        RadiusTopLeft: =4
+                        RadiusTopRight: =4
+                        Size: =gblAppStyles.ButtonBackground.Size
+                        TabIndex: |-
+                            =If(
+                                !IsBlank(ThisItem.appStockImage),
+                                If(
+                                    Self.Visible,
+                                    0,
+                                    -1
+                                )
+                            )
+                        Text: |-
+                            =With(
+                                {
+                                    varDefault: "Click to select this stock image",
+                                    varOOBTextId: "btnCoverBackground_AddTopic__locText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            ) & "Cover Image" & ThisItem.IDN
+                        Tooltip: =Self.Text
+                        Visible: =!IsBlank(ThisItem.appStockImage)
+                        Width: =imgCover_AddTopic.Width + 4
+                        X: =3
+                        Y: =3
+                        ZIndex: =1
+
+                    imgCover_AddTopic As image:
+                        AccessibleLabel: |-
+                            =With(
+                                {
+                                    varDefault: "Click to select this stock image",
+                                    varOOBTextId: "imgCover_AddTopic__locAccessibleText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            ) & " Cover Image " & ThisItem.IDN
+                        BorderColor: =Transparent
+                        BorderThickness: =1
+                        Fill: |-
+                            =If(
+                                IsBlank(ThisItem.appStockImage),
+                                gblAppStyles.ButtonSecondary.Fill,
+                                Transparent
+                            )
+                        Height: =60*1
+                        HoverBorderColor: =gblAppStyles.ButtonPrimary.Fill
+                        HoverFill: =Black
+                        Image: |-
+                            =Coalesce(
+                                ThisItem.appStockImage,
+                                addCoverImage_AddTopic.Media
+                            )
+                        ImagePosition: =ImagePosition.Fill
+                        OnSelect: |-
+                            =UpdateContext(
+                                {
+                                    locCustomImageSelected: false,
+                                    locCoverImageSelected: true
+                                }
+                            );
+                            UpdateContext({locScreenReaderAnnouncedText:If(locScreenReaderAnnouncedText="Image Selected","image selected","Image Selected")})
+                        PressedBorderColor: =ColorFade(Self.HoverBorderColor, -20%)
+                        RadiusBottomLeft: =4
+                        RadiusBottomRight: =4
+                        RadiusTopLeft: =4
+                        RadiusTopRight: =4
+                        TabIndex: |-
+                            =If(
+                                true,
+                                -1,
+                                0
+                            )
+                        Tooltip: =Self.AccessibleLabel
+                        Width: =Parent.TemplateWidth - (Self.X * 2)
+                        X: =5*1
+                        Y: =5*1
+                        ZIndex: =2
+
+                    addCoverImage_AddTopic As addMedia:
+                        AccessibleLabel: |-
+                            =With(
+                                {
+                                    varDefault: "Click to add your own image for this Topic",
+                                    varOOBTextId: "addCoverImage_AddTopic__locText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+                        BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+                        ChangePictureText: |-
+                            =With(
+                                {
+                                    varDefault: "Update",
+                                    varOOBTextId: "addProjectCoverImage__locChangePictureText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        Color: =gblAppStyles.ButtonSecondary.Color
+                        DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+                        DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+                        Fill: =gblAppStyles.ButtonSecondary.Fill
+                        FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        FontWeight: =FontWeight.Normal
+                        Height: =imgCover_AddTopic.Height
+                        HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+                        HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+                        HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+                        OnChange: =
+                        OnSelect: |-
+                            =UpdateContext(
+                                {
+                                    locCustomImageSelected: true,
+                                    locCoverImageSelected: true
+                                }
+                            )
+                        Padding: =4
+                        PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+                        PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+                        PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+                        Size: =gblAppStyles.Label.Size.Small
+                        TabIndex: |-
+                            =If(
+                                Self.Visible,
+                                0,
+                                -1
+                            )
+                        Text: |-
+                            ="+ " & With(
+                                {
+                                    varDefault: "Add new",
+                                    varOOBTextId: "addCoverImage_AddTopic__locText"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextID = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        Tooltip: =Self.AccessibleLabel
+                        Visible: =rdoCoverType_AddTopic.Selected.Value = "Image" && IsBlank(ThisItem.appStockImage)
+                        Width: =galCovers_AddTopic.TemplateWidth - 10
+                        X: =imgCover_AddTopic.X 
+                        Y: =imgCover_AddTopic.Y 
+                        ZIndex: =3
+
+                rdoCoverType_AddTopic As radio:
+                    AccessibleLabel: |
+                        =With(
+                            {
+                                varDefault: "Radio button to choose the cover type",
+                                varOOBTextId: "rdoCoverType_AddTopic__locAccessibleText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    BorderColor: =gblAppStyles.Radio.BorderColor
+                    BorderThickness: =gblAppStyles.Radio.BorderThickness
+                    Color: =gblAppStyles.Radio.Color
+                    Default: ="Image"
+                    DisabledBorderColor: =gblAppStyles.Radio.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Radio.DisabledColor
+                    DisabledFill: =gblAppStyles.Radio.DisabledFill
+                    Fill: =gblAppStyles.Radio.Fill
+                    FocusedBorderColor: =gblAppStyles.Radio.FocusedBorderColor
+                    FocusedBorderThickness: =1//gblAppStyles.Radio.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HoverColor: =gblAppStyles.Radio.HoverColor
+                    HoverFill: =gblAppStyles.Radio.HoverFill
+                    Items: =["Image", "Icon"]
+                    Layout: =Layout.Horizontal
+                    OnSelect: |
+                        =Reset(galCoverIcons_AddTopic);
+                        Reset(galCovers_AddTopic);
+                        Reset(addCoverImage_AddTopic);
+                        UpdateContext({locDefaultBoardCoverColor: First(galCoverColors_AddTopic.AllItems)});
+                        UpdateContext({locDefaultBoardCoverIcon: First(galCoverIcons_AddTopic.AllItems)});
+                        UpdateContext(
+                            {
+                                locDefaultBoardCoverColor: If(
+                                    gblThemeDark || gblThemeDark,
+                                    LookUp(
+                                        colTopicCoverColors,
+                                        Base = 1 && Theme = "dark"
+                                    ),
+                                    LookUp(
+                                        colTopicCoverColors,
+                                        Base = 1 && Theme = "default"
+                                    )
+                                )
+                            }
+                        );
+                        Reset(galCoverColors_AddTopic);
+                    PaddingBottom: =0
+                    PaddingTop: =0
+                    PressedColor: =gblAppStyles.Radio.PressedColor
+                    PressedFill: =gblAppStyles.Radio.PressedFill
+                    RadioBackgroundFill: =gblAppStyles.Radio.RadioBackgroundFill
+                    RadioBorderColor: =gblAppStyles.Radio.RadioBorderSelectionColor
+                    RadioSelectionFill: =gblAppStyles.Radio.RadioSelectionFill
+                    RadioSize: =25
+                    Size: =gblAppStyles.Radio.Size
+                    TabIndex: =1
+                    Tooltip: =Self.AccessibleLabel
+                    Width: |-
+                        =Max(
+                            Parent.Width / 2,
+                            300
+                        )
+                    X: =20*1 - 10
+                    Y: =lblCoverHeader_AddTopic.Y + lblCoverHeader_AddTopic.Height + 10
+                    ZIndex: =7
+
+                lblCoverHeader_AddTopic As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Topic cover",
+                                varOOBTextId: "lblCoverHeader_AddTopic__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Tooltip: =Self.Text
+                    Width: =lblHeader_AddTopic.Width
+                    Wrap: =false
+                    X: =20*1
+                    Y: =txtDescription_AddTopic.Y + txtDescription_AddTopic.Height + 20
+                    ZIndex: =8
+
+                txtDescription_AddTopic As text:
+                    AccessibleLabel: ="Required" & Self.HintText
+                    BorderColor: =gblAppStyles.TextInput.BorderColor
+                    BorderThickness: =gblAppStyles.TextInput.BorderThickness
+                    Color: =gblAppStyles.TextInput.Color
+                    Default: =""
+                    DisabledBorderColor: =gblAppStyles.TextInput.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.TextInput.DisabledColor
+                    DisabledFill: =gblAppStyles.TextInput.DisabledFill
+                    Fill: =gblAppStyles.TextInput.Fill
+                    FocusedBorderColor: =gblAppStyles.TextInput.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.TextInput.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*4
+                    HintText: |-
+                        =With(
+                            {
+                                varDefault: "Tell everyone what this topic is about",
+                                varOOBTextId: "txtDescription_AddTopic__locHintText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    HoverBorderColor: =gblAppStyles.TextInput.HoverBorderColor
+                    HoverColor: =gblAppStyles.TextInput.HoverColor
+                    HoverFill: =gblAppStyles.TextInput.HoverFill
+                    Mode: =TextMode.MultiLine
+                    PressedBorderColor: =gblAppStyles.TextInput.PressedBorderColor
+                    PressedColor: =gblAppStyles.TextInput.PressedColor
+                    PressedFill: =gblAppStyles.TextInput.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.TextInput.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.TextInput.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.TextInput.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.TextInput.RadiusTopRight
+                    Size: =gblAppStyles.TextInput.Size
+                    TabIndex: =1
+                    Tooltip: =Self.HintText
+                    Width: =lblHeader_AddTopic.Width
+                    X: =lblDescription_AddTopic.X
+                    Y: =lblDescription_AddTopic.Y + lblDescription_AddTopic.Height
+                    ZIndex: =9
+
+                lblDescription_AddTopic As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Description *",
+                                varOOBTextId: "lblDescription_AddTopic__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Tooltip: =Self.Text
+                    Width: =lblHeader_AddTopic.Width
+                    Wrap: =false
+                    X: =20*1
+                    Y: =txtTitle_AddTopic.Y + txtTitle_AddTopic.Height + 20
+                    ZIndex: =10
+
+                txtTitle_AddTopic As text:
+                    AccessibleLabel: ="Required" & Self.HintText
+                    BorderColor: =gblAppStyles.TextInput.BorderColor
+                    BorderThickness: =gblAppStyles.TextInput.BorderThickness
+                    Color: =gblAppStyles.TextInput.Color
+                    Default: =""
+                    DisabledBorderColor: =gblAppStyles.TextInput.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.TextInput.DisabledColor
+                    DisabledFill: =gblAppStyles.TextInput.DisabledFill
+                    Fill: =gblAppStyles.TextInput.Fill
+                    FocusedBorderColor: =gblAppStyles.TextInput.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.TextInput.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HintText: |-
+                        =With(
+                            {
+                                varDefault: "Add a title",
+                                varOOBTextId: "txtTitle_AddTopic__locHintText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    HoverBorderColor: =gblAppStyles.TextInput.HoverBorderColor
+                    HoverColor: =gblAppStyles.TextInput.HoverColor
+                    HoverFill: =gblAppStyles.TextInput.HoverFill
+                    PressedBorderColor: =gblAppStyles.TextInput.PressedBorderColor
+                    PressedColor: =gblAppStyles.TextInput.PressedColor
+                    PressedFill: =gblAppStyles.TextInput.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.TextInput.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.TextInput.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.TextInput.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.TextInput.RadiusTopRight
+                    Size: =gblAppStyles.TextInput.Size
+                    TabIndex: =1
+                    Tooltip: =Self.HintText
+                    Width: =lblHeader_AddTopic.Width
+                    X: =lblTitle_AddTopic.X
+                    Y: =lblTitle_AddTopic.Y + lblTitle_AddTopic.Height
+                    ZIndex: =11
+
+                lblTitle_AddTopic As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Title *",
+                                varOOBTextId: "lblTitle_AddTopic__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Tooltip: =Self.Text
+                    Width: =lblHeader_AddTopic.Width
+                    Wrap: =false
+                    X: =20*1
+                    Y: =lblHeader_AddTopic.Y + lblHeader_AddTopic.Height + 20
+                    ZIndex: =12
+
+                lblHeader_AddTopic As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Bold
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Role: =TextRole.Heading1
+                    Size: =gblAppStyles.Label.Size.Large
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Add topic",
+                                varOOBTextId: "lblHeader_AddTopic__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Tooltip: =Self.Text
+                    Width: |-
+                        =If(
+                            'Add Topic Screen'.Size = ScreenSize.ExtraLarge || 'Add Topic Screen'.Size = ScreenSize.Large,
+                            Parent.Width/2,
+                            Parent.Width - Self.X*2
+                        )
+                    Wrap: =false
+                    X: =20*1
+                    Y: =lblBack_AddTopic.Y + lblBack_AddTopic.Height + 20
+                    ZIndex: =13
+
+                btnSave_AddTopic As button:
+                    BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+                    BorderThickness: =gblAppStyles.ButtonPrimary.BorderThickness
+                    Color: =gblAppStyles.ButtonPrimary.Color
+                    DisabledBorderColor: =gblAppStyles.ButtonPrimary.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.ButtonPrimary.DisabledColor
+                    DisabledFill: =gblAppStyles.ButtonPrimary.DisabledFill
+                    DisplayMode: |-
+                        =If(
+                            IsBlank(txtTitle_AddTopic.Text) || IsBlank(txtDescription_AddTopic.Text) || (rdoCoverType_AddTopic.Selected.Value = "Image" && ((IsBlank(galCovers_AddTopic.Selected) && IsBlank(addCoverImage_AddTopic.Media)) || (IsBlank(galCovers_AddTopic.Selected) && IsBlank(addCoverImage_AddTopic.Media)))) || (rdoCoverType_AddTopic.Selected.Value = "Icon" && (IsBlank(locDefaultBoardCoverColor) || IsBlank(locDefaultBoardCoverIcon))),
+                            DisplayMode.Disabled,
+                            DisplayMode.Edit
+                        )
+                    Fill: =gblAppStyles.ButtonPrimary.Fill
+                    FocusedBorderColor: =gblAppStyles.ButtonPrimary.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.ButtonPrimary.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Bold
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.ButtonPrimary.HoverBorderColor
+                    HoverColor: =gblAppStyles.ButtonPrimary.HoverColor
+                    HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+                    OnSelect: |-
+                        =IfError(
+                            Patch(
+                                'Discussion Topics',
+                                Defaults('Discussion Topics'),
+                                {
+                                    Name: txtTitle_AddTopic.Text,
+                                    Description: txtDescription_AddTopic.Text,
+                                    'Cover Image': If(
+                                        locCoverImageSelected && locCustomImageSelected && rdoCoverType_AddTopic.Selected.Value = "Image",
+                                        {
+                                            Name: addCoverImage_AddTopic.FileName,
+                                            Value: addCoverImage_AddTopic.Media,
+                                            Full: addCoverImage_AddTopic.Media
+                                        }
+                                    ),
+                                    'Cover Stock': If(
+                                        locCoverImageSelected && !locCustomImageSelected && rdoCoverType_AddTopic.Selected.Value = "Image",
+                                        galCovers_AddTopic.Selected.appStockImage
+                                    ),
+                                    'Cover Icon': If(
+                                        rdoCoverType_AddTopic.Selected.Value = "Icon",
+                                        locDefaultBoardCoverIcon.Url
+                                    ),
+                                    'Cover Color': If(
+                                        rdoCoverType_AddTopic.Selected.Value = "Icon",
+                                        If(
+                                            !(gblThemeDark || gblThemeHiCo),
+                                            locDefaultBoardCoverColor.Color,
+                                            LookUp(
+                                                colTopicCoverColors,
+                                                Base = locDefaultBoardCoverColor.Base && Theme = "default",
+                                                Color
+                                            )
+                                        )
+                                    ),
+                                    'Cover Color Dark': If(
+                                        rdoCoverType_AddTopic.Selected.Value = "Icon",
+                                        If(
+                                            gblThemeDark || gblThemeHiCo,
+                                            locDefaultBoardCoverColor.Color,
+                                            LookUp(
+                                                colTopicCoverColors,
+                                                Base = locDefaultBoardCoverColor.Base && Theme = "dark",
+                                                Color
+                                            )
+                                        )
+                                    )
+                                }
+                            ),
+                            Notify(
+                                "Error patching Discussion Topic",
+                                NotificationType.Error
+                            )
+                        );
+                        UpdateContext(
+                            {
+                                locScreenReaderAnnouncedText: If(
+                                    locScreenReaderAnnouncedText = "Saved successfully",
+                                    "saved successfully",
+                                    "Saved successfully"
+                                )
+                            }
+                        );
+                        Notify(
+                            "Saved successfully",
+                            NotificationType.Success
+                        );
+                        Navigate(
+                            'Topics Screen',
+                            ScreenTransition.Fade
+                        )
+                    PressedBorderColor: =gblAppStyles.ButtonPrimary.PressedBorderColor
+                    PressedColor: =gblAppStyles.ButtonPrimary.PressedColor
+                    PressedFill: =gblAppStyles.ButtonPrimary.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.ButtonPrimary.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+                    Size: =gblAppStyles.ButtonPrimary.Size
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Save",
+                                varOOBTextId: "btnSave_AddTopic__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Tooltip: =Self.Text
+                    Width: =100*1
+                    X: |-
+                        =If(
+                            'Add Topic Screen'.Size = ScreenSize.ExtraLarge || 'Add Topic Screen'.Size = ScreenSize.Large,
+                            Parent.Width - Self.Width - 20,
+                            Parent.Width - Self.Width - 20
+                        )
+                    Y: |-
+                        =If(
+                            'Add Topic Screen'.Size = ScreenSize.ExtraLarge || 'Add Topic Screen'.Size = ScreenSize.Large,
+                            lblBack_AddTopic.Y,
+                            Parent.Height - Self.Height - 20
+                        )
+                    ZIndex: =14
+
+                btnCancel_AddTopic As button:
+                    BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+                    BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+                    Color: =gblAppStyles.ButtonSecondary.Color
+                    DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+                    DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+                    Fill: =gblAppStyles.ButtonSecondary.Fill
+                    FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+                    HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+                    HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+                    OnSelect: |-
+                        =Navigate(
+                            'Topics Screen',
+                            ScreenTransition.Fade
+                        )
+                    PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+                    PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+                    PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.ButtonSecondary.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.ButtonSecondary.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.ButtonSecondary.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.ButtonSecondary.RadiusTopRight
+                    Size: =gblAppStyles.ButtonSecondary.Size
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Cancel",
+                                varOOBTextId: "btnCancel_AddTopic__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Tooltip: =Self.Text
+                    Width: =100*1
+                    X: =Parent.Width - btnSave_AddTopic.Width - Self.Width - 20*2
+                    Y: =btnSave_AddTopic.Y
+                    ZIndex: =15
+
+                imgBack_AddTopic As image:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "Click to go back",
+                                varOOBTextId: "imgBack_About__locAccessibleText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    BorderColor: =gblAppStyles.ButtonPrimary.Fill
+                    DisabledFill: |-
+                        =With(
+                            {
+                                varImageIsCategory: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Back"
+                                ).staticIconIsCategory
+                            },
+                            If(
+                                varImageIsCategory,
+                                gblAppStyles.Icons.DisabledFill_Category,
+                                Transparent
+                            )
+                        )
+                    Fill: |-
+                        =With(
+                            {
+                                varImageIsCategory: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Back"
+                                ).staticIconIsCategory
+                            },
+                            If(
+                                varImageIsCategory,
+                                gblAppStyles.Icons.Fill_Category,
+                                Transparent
+                            )
+                        )
+                    Height: =22*1
+                    Image: |
+                        =With(
+                            {
+                                varImageRecord: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Back"
+                                ),
+                                varColor: If(
+                                    Self.DisplayMode = DisplayMode.Disabled,
+                                    gblAppStyles.Icons.DisabledColor,
+                                    gblAppStyles.Icons.Color
+                                )
+                            },
+                            With(
+                                {
+                                    varImageData: Concatenate(
+                                        "data:image/svg+xml;utf8, ",
+                                        EncodeUrl(
+                                            Concatenate(
+                                                "<svg viewBox='",
+                                                varImageRecord.staticIconViewbox,
+                                                "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                varImageRecord.staticIconPath,
+                                                "' fill='#",
+                                                varColor,
+                                                "'/></svg>"
+                                            )
+                                        )
+                                    )
+                                },
+                                varImageData
+                            )
+                        )
+                    OnSelect: |-
+                        =Navigate(
+                            'Topics Screen',
+                            ScreenTransition.Fade
+                        )
+                    RadiusBottomLeft: =5
+                    RadiusBottomRight: =5
+                    RadiusTopLeft: =5
+                    RadiusTopRight: =5
+                    TabIndex: =0
+                    Tooltip: =Self.AccessibleLabel
+                    Width: =22*1
+                    X: |-
+                        =If(
+                            'Add Topic Screen'.Size = ScreenSize.ExtraLarge || 'Add Topic Screen'.Size = ScreenSize.Large,
+                            20 * 1,
+                            ('Add Topic Screen'.Width - If(
+                                'Add Topic Screen'.Size = ScreenSize.ExtraLarge || 'Add Topic Screen'.Size = ScreenSize.Large,
+                                400,
+                                'Add Topic Screen'.Width - 20
+                            )) / 2
+                        )
+                    Y: =lblBack_AddTopic.Y + (lblBack_AddTopic.Height - Self.Height) / 2 + 1
+                    ZIndex: =16
+
+                lblBack_AddTopic As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =40*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: |-
+                        =Navigate(
+                            'Topics Screen',
+                            ScreenTransition.Fade
+                        )
+                    PaddingBottom: =0
+                    PaddingTop: =0
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    TabIndex: |-
+                        =If(
+                            true,
+                            -1,
+                            0
+                        )
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Back",
+                                varOOBTextId: "lblBack_About__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Tooltip: =Self.Text
+                    Width: =150*1
+                    X: =imgBack_AddTopic.X + imgBack_AddTopic.Width
+                    Y: =20*1
+                    ZIndex: =17
+

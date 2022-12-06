@@ -1,0 +1,1444 @@
+"'FAQs Screen' As screen":
+    Fill: =gblAppStyles.Background.Fill
+    LoadingSpinner: =LoadingSpinner.Data
+    LoadingSpinnerColor: =gblAppStyles.ButtonPrimary.Fill
+
+    cnvFAQs As fluidGrid.fluidGridWithBlankCard:
+        BorderThickness: =0
+        Height: =Parent.Height - Self.Y
+        Width: =Parent.Width
+        X: =0*0
+        Y: =conFAQS_Actions.Y + conFAQS_Actions.Height
+        ZIndex: =1
+
+        dtcFAQs_NonFeatured As dataCard:
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            BorderThickness: =0
+            DisplayMode: =DisplayMode.Edit
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =Parent.Height - Self.Y
+            Width: =Parent.Width
+            X: =0
+            Y: =1
+            ZIndex: =1
+
+            galFAQs_Categories As gallery.variableTemplateHeightGallery:
+                AccessibleLabel: |-
+                    =With(
+                        {
+                            varDefault: "Featured FAQs",
+                            varOOBTextId: "galFAQs_Featured__AccessibleLabel"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                BorderColor: =RGBA(0, 0, 0, 0)
+                Height: =Parent.Height
+                ItemAccessibleLabel: |-
+                    =With(
+                        {
+                            varDefault: If(
+                                ThisItem.IsSelected,
+                                "Selected",
+                                "Not selected"
+                            ),
+                            varOOBTextId: If(
+                                ThisItem.IsSelected,
+                                "galFAQs_Categories_Items__AccessibleLabel_selected",
+                                "galFAQs_Categories_Items__AccessibleLabel_notselected"
+                            )
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                Items: =SortByColumns('Bulletin FAQ Categories',"msft_name")
+                Layout: =Layout.Vertical
+                LoadingSpinner: =LoadingSpinner.Data
+                LoadingSpinnerColor: =gblAppStyles.ButtonPrimary.Fill
+                ShowScrollbar: =false
+                TabIndex: =If(true,-1,0)
+                TemplatePadding: =0
+                TemplateSize: =140
+                Width: =Parent.Width
+                X: =0*0
+                Y: =0*0
+                ZIndex: =1
+
+                lblGalFAQs_Categories_Category_ZeroState As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: |
+                        =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =48
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =
+                    PaddingBottom: =0
+                    PaddingLeft: =0
+                    PaddingRight: =0
+                    PaddingTop: =0
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: |-
+                        =With(
+                            {
+                                varOOBTextId: "lblGalFAQs_Categories_Category_ZeroState__Text",
+                                varDefault: "No results"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Width: =Parent.Width - (2* gblPadding.Page)
+                    Wrap: =false
+                    X: =gblPadding.Page
+                    Y: =galFAQs_NonFeatured.Y
+                    ZIndex: =1
+
+                lblGalFAQs_Categories_Category_Name As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: |
+                        =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Bold
+                    Height: =20
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =
+                    PaddingBottom: =0
+                    PaddingLeft: =0
+                    PaddingRight: =0
+                    PaddingTop: =0
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: =ThisItem.Name
+                    Width: =Parent.Width - (2* gblPadding.Page)
+                    Wrap: =false
+                    X: =gblPadding.Page
+                    Y: =0*0
+                    ZIndex: =2
+
+                galFAQs_NonFeatured As gallery.galleryVertical:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "FAQs for " & ThisItem.Name & " category",
+                                varOOBTextId: "galFAQs_NonFeatured__AccessibleLabel",
+                                varParam0: ThisItem.Name
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                If(
+                                    IsBlankOrError(varParam0),
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    ),
+                                    Coalesce(
+                                        Substitute(
+                                            varLocalizedText,
+                                            "{0}",
+                                            Text(varParam0)
+                                        ),
+                                        varDefault
+                                    )
+                                )
+                            )
+                        )
+                    BorderColor: =RGBA(0, 0, 0, 0)
+                    Fill: =gblAppStyles.Background.Fill
+                    Height: |-
+                        =((RoundUp(
+                            CountRows(Self.AllItems) / (Max(
+                                'FAQs Screen'.Size - 2,
+                                1
+                            )),
+                            0
+                        )) * (Self.TemplateHeight + Self.TemplatePadding)) + Self.TemplatePadding
+                    ItemAccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: If(
+                                    ThisItem.IsSelected,
+                                    "Selected",
+                                    "Not selected"
+                                ),
+                                varOOBTextId: If(
+                                    ThisItem.IsSelected,
+                                    "galFAQs_NonFeatured_Items__AccessibleLabel_selected",
+                                    "galFAQs_NonFeatured_Items__AccessibleLabel_notselected"
+                                )
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Items: |-
+                        =Search(
+                            ThisItem.'Bulletin FAQs',
+                            txtFAQs_Header_Search.Text,
+                            "msft_name"
+                        )
+                        /*
+                        // Filter of data source, which is less performant, but can be used
+                        Filter(
+                                'Bulletin FAQs',
+                                'Bulletin FAQs'[@Category].'Bulletin FAQ Category' = ThisItem.'Bulletin FAQ Category'
+                            )
+                        */
+                    Layout: =Layout.Vertical
+                    LoadingSpinner: =LoadingSpinner.Data
+                    LoadingSpinnerColor: =gblAppStyles.ButtonPrimary.Fill
+                    OnSelect: |-
+                        =// Multiple Toggles, due to how auto-height is set
+                        UpdateContext({locRecordFAQ: LookUp('Bulletin FAQs', 'Bulletin FAQ' = ThisItem.'Bulletin FAQ')});
+                        UpdateContext({locVisibleDialog: true});
+                        UpdateContext({locVisibleDialog: false});
+                        UpdateContext({locVisibleDialog: true});
+                        // Set Focus
+                        SetFocus(btnFAQDetail_Cancel);
+                        SetFocus(btnFAQDetail_Cancel);
+                    ShowScrollbar: =false
+                    TabIndex: =If(true,-1,0)
+                    TemplatePadding: =20
+                    TemplateSize: =64
+                    Width: =Parent.Width
+                    WrapCount: =Max('FAQs Screen'.Size - 2,1)
+                    X: =0*0
+                    Y: =lblGalFAQs_Categories_Category_Name.Y + lblGalFAQs_Categories_Category_Name.Height
+                    ZIndex: =3
+
+                    btnGalFAQs_NonFeatured_Background As button:
+                        BorderColor: =gblAppStyles.ButtonBackground.BorderColor
+                        BorderThickness: =gblAppStyles.ButtonBackground.BorderThickness
+                        Color: =gblAppStyles.ButtonBackground.Color
+                        DisabledBorderColor: =gblAppStyles.ButtonBackground.DisabledBorderColor
+                        DisabledColor: =Transparent
+                        DisabledFill: =gblAppStyles.ButtonSecondary.Fill
+                        DisplayMode: =DisplayMode.Disabled
+                        Fill: =gblAppStyles.ButtonBackground.Fill
+                        FocusedBorderColor: =gblAppStyles.ButtonBackground.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.ButtonBackground.FocusedBorderThickness
+                        Height: =Parent.TemplateHeight
+                        HoverBorderColor: =gblAppStyles.ButtonBackground.HoverBorderColor
+                        HoverColor: =gblAppStyles.ButtonBackground.HoverColor
+                        HoverFill: =gblAppStyles.ButtonBackground.HoverFill
+                        OnSelect: =
+                        PressedBorderColor: =gblAppStyles.ButtonBackground.PressedBorderColor
+                        PressedColor: =gblAppStyles.ButtonBackground.PressedColor
+                        PressedFill: =gblAppStyles.ButtonBackground.PressedFill
+                        RadiusBottomLeft: =gblAppStyles.ButtonBackground.RadiusBottomLeft
+                        RadiusBottomRight: =gblAppStyles.ButtonBackground.RadiusBottomRight
+                        RadiusTopLeft: =gblAppStyles.ButtonBackground.RadiusTopLeft
+                        RadiusTopRight: =gblAppStyles.ButtonBackground.RadiusTopRight
+                        Size: =gblAppStyles.ButtonBackground.Size
+                        Text: =ThisItem.Question
+                        Tooltip: =ThisItem.Question
+                        Width: =Parent.TemplateWidth
+                        X: =0*0
+                        Y: =0*0
+                        ZIndex: =2
+
+                    lblGalFAQs_NonFeatured_Question As label:
+                        BorderColor: =gblAppStyles.Label.BorderColor
+                        BorderThickness: =gblAppStyles.Label.BorderThickness
+                        Color: =gblAppStyles.Label.Color
+                        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                        DisabledColor: |
+                            =gblAppStyles.Label.DisabledColor
+                        DisabledFill: =gblAppStyles.Label.DisabledFill
+                        DisplayMode: =DisplayMode.View
+                        Fill: =gblAppStyles.Label.Fill
+                        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        FontWeight: =FontWeight.Semibold
+                        Height: =btnGalFAQs_NonFeatured_Background.Height
+                        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                        HoverColor: =gblAppStyles.Label.HoverColor
+                        HoverFill: =gblAppStyles.Label.HoverFill
+                        OnSelect: =Select(Parent)
+                        PaddingBottom: =4
+                        PaddingLeft: =12
+                        PaddingRight: =0
+                        PaddingTop: =4
+                        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                        PressedColor: =gblAppStyles.Label.PressedColor
+                        PressedFill: =gblAppStyles.Label.PressedFill
+                        Size: =gblAppStyles.Label.Size.Medium
+                        Text: =ThisItem.Question
+                        Width: =imgGalFAQs_NonFeatured_Launch.X - Self.X
+                        Wrap: =false
+                        X: =btnGalFAQs_NonFeatured_Background.X
+                        Y: =btnGalFAQs_NonFeatured_Background.Y
+                        ZIndex: =3
+
+                    imgGalFAQs_NonFeatured_Launch As image:
+                        AccessibleLabel: |-
+                            =With(
+                                {
+                                    varDefault: "Click to view FAQ",
+                                    varOOBTextId: "imgGalFAQs_NonFeatured_Launch__AccessibleLabel"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextId = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        AutoDisableOnSelect: =false
+                        BorderColor: =RGBA(0, 0, 0, 0)
+                        DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                        DisabledFill: =Transparent
+                        DisplayMode: =DisplayMode.Disabled
+                        Height: =64
+                        HoverFill: =gblAppStyles.Gallery.HoverFill
+                        Image: |-
+                            =With(
+                                {
+                                    varImageRecord: LookUp(
+                                        staticIcons,
+                                        staticIconName = "Open Task"
+                                    ),
+                                    varColor: gblAppStyles.Icons.Color
+                                },
+                                With(
+                                    {
+                                        varImageData: Concatenate(
+                                            "data:image/svg+xml;utf8, ",
+                                            EncodeUrl(
+                                                Concatenate(
+                                                    "<svg viewBox='",
+                                                    varImageRecord.staticIconViewbox,
+                                                    "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                    varImageRecord.staticIconPath,
+                                                    "' fill='#",
+                                                    varColor,
+                                                    "'/></svg>"
+                                                )
+                                            )
+                                        )
+                                    },
+                                    varImageData
+                                )
+                            )
+                        OnSelect: =Select(Parent)
+                        PaddingBottom: =22
+                        PaddingLeft: =12
+                        PaddingRight: =12
+                        PaddingTop: =22
+                        Tooltip: =Self.AccessibleLabel
+                        Width: =44
+                        X: =Parent.TemplateWidth - Self.Width
+                        Y: =0*0
+                        ZIndex: =5
+
+                    btnGalFAQs_NonFeatured_Select As button:
+                        BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                        BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+                        Color: =Transparent
+                        DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.ButtonTransparent.DisabledColor
+                        DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                        Fill: =gblAppStyles.ButtonTransparent.Fill
+                        FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        Height: =Parent.TemplateHeight
+                        HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                        HoverColor: =Transparent
+                        HoverFill: =gblAppStyles.Gallery.HoverFill
+                        OnSelect: =Select(Parent)
+                        PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                        PressedColor: =Transparent
+                        PressedFill: =gblAppStyles.Gallery.PressedFill
+                        RadiusBottomLeft: =gblAppStyles.ButtonTransparent.RadiusBottomLeft
+                        RadiusBottomRight: =gblAppStyles.ButtonTransparent.RadiusBottomRight
+                        RadiusTopLeft: =gblAppStyles.ButtonTransparent.RadiusTopLeft
+                        RadiusTopRight: =gblAppStyles.ButtonTransparent.RadiusTopRight
+                        Size: =gblAppStyles.ButtonTransparent.Size
+                        TabIndex: =If(locVisibleDialog,-1,0)
+                        Text: =ThisItem.Question
+                        Tooltip: |-
+                            =With(
+                                {
+                                    varDefault: "Click to view this FAQ",
+                                    varOOBTextId: "btnGalFAQs_NonFeatured_Select__Tooltip"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextId = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        Width: =Parent.TemplateWidth//imgGalFAQs_NonFeatured_Launch.X - Self.X
+                        ZIndex: =6
+
+        dtcFAQs_Featured As dataCard.blankCard:
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            DisplayMode: =DisplayMode.Edit
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =100
+            Width: =Parent.Width
+            X: =0
+            Y: =0
+            ZIndex: =3
+
+            galFAQs_Featured As gallery.galleryVertical:
+                AccessibleLabel: |-
+                    =With(
+                        {
+                            varDefault: "FAQs",
+                            varOOBTextId: "galFAQs_Categories__AccessibleLabel"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                BorderColor: =RGBA(0, 0, 0, 0)
+                Fill: =gblAppStyles.Background.Fill
+                Height: |-
+                    =((RoundUp(
+                        CountRows(Self.AllItems) / (Max(
+                            'FAQs Screen'.Size - 2,
+                            1
+                        )),
+                        0
+                    )) * (Self.TemplateHeight + Self.TemplatePadding)) + Self.TemplatePadding
+                ItemAccessibleLabel: |-
+                    =With(
+                        {
+                            varDefault: If(
+                                ThisItem.IsSelected,
+                                "Selected",
+                                "Not selected"
+                            ),
+                            varOOBTextId: If(
+                                ThisItem.IsSelected,
+                                "galFAQs_Featured_Items__AccessibleLabel_selected",
+                                "galFAQs_Featured_Items__AccessibleLabel_notselected"
+                            )
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                Items: |-
+                    =Filter(
+                        'Bulletin FAQs',
+                        'Bulletin FAQs (Views)'.'Featured Bulletin FAQs'
+                    )
+                    /*
+                    // Use this code, to allow searching of Featured Bulletin FAQs. Otherwise nested filter/search is not as performant.
+                    Search(
+                        Filter(
+                            'Bulletin FAQs',
+                            'Bulletin FAQs (Views)'.'Featured Bulletin FAQs'
+                        ),
+                        txtFAQs_Header_Search.Text,
+                        "msft_name"
+                    )
+                    */
+                Layout: =Layout.Vertical
+                LoadingSpinner: =LoadingSpinner.Data
+                LoadingSpinnerColor: =gblAppStyles.ButtonPrimary.Fill
+                OnSelect: |-
+                    =// Multiple Toggles, due to how auto-height is set
+                    UpdateContext({locRecordFAQ: ThisItem});
+                    UpdateContext({locVisibleDialog: true});
+                    UpdateContext({locVisibleDialog: false});
+                    UpdateContext({locVisibleDialog: true});
+                    // Set Focus
+                    SetFocus(btnFAQDetail_Cancel);
+                    SetFocus(btnFAQDetail_Cancel);
+                ShowScrollbar: =false
+                TabIndex: =If(true,-1,0)
+                TemplatePadding: =20
+                TemplateSize: =64
+                Width: =Parent.Width
+                WrapCount: |-
+                    =Max(
+                        'FAQs Screen'.Size - 2,
+                        1
+                    )
+                X: =0*0
+                Y: =lblGalFAQs_Featured_Header.Y + lblGalFAQs_Featured_Header.Height
+                ZIndex: =1
+
+                btnGalFAQs_Featured_Background As button:
+                    BorderColor: =gblAppStyles.ButtonBackground.BorderColor
+                    BorderThickness: =gblAppStyles.ButtonBackground.BorderThickness
+                    Color: =gblAppStyles.ButtonBackground.Color
+                    DisabledBorderColor: =gblAppStyles.ButtonBackground.DisabledBorderColor
+                    DisabledColor: =Transparent
+                    DisabledFill: =gblAppStyles.ButtonSecondary.Fill
+                    DisplayMode: =DisplayMode.Disabled
+                    Fill: =gblAppStyles.ButtonBackground.Fill
+                    FocusedBorderColor: =gblAppStyles.ButtonBackground.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.ButtonBackground.FocusedBorderThickness
+                    Height: =Parent.TemplateHeight
+                    HoverBorderColor: =gblAppStyles.ButtonBackground.HoverBorderColor
+                    HoverColor: =gblAppStyles.ButtonBackground.HoverColor
+                    HoverFill: =gblAppStyles.ButtonBackground.HoverFill
+                    OnSelect: =
+                    PressedBorderColor: =gblAppStyles.ButtonBackground.PressedBorderColor
+                    PressedColor: =gblAppStyles.ButtonBackground.PressedColor
+                    PressedFill: =gblAppStyles.ButtonBackground.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.ButtonBackground.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.ButtonBackground.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.ButtonBackground.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.ButtonBackground.RadiusTopRight
+                    Size: =gblAppStyles.ButtonBackground.Size
+                    Text: =ThisItem.Question
+                    Tooltip: =ThisItem.Question
+                    Width: =Parent.TemplateWidth
+                    X: =0*0
+                    Y: =0*0
+                    ZIndex: =2
+
+                lblGalFAQs_Featured_Question As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: |
+                        =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    DisplayMode: =DisplayMode.View
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =btnGalFAQs_Featured_Background.Height
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =Select(Parent)
+                    PaddingBottom: =4
+                    PaddingLeft: =12
+                    PaddingRight: =0
+                    PaddingTop: =4
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: =ThisItem.Question
+                    Width: =imgGalFAQs_Featured_Launch.X - Self.X
+                    Wrap: =false
+                    X: =btnGalFAQs_Featured_Background.X
+                    Y: =btnGalFAQs_Featured_Background.Y
+                    ZIndex: =3
+
+                imgGalFAQs_Featured_Launch As image:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "Click to view FAQ",
+                                varOOBTextId: "imgGalFAQs_Featured_Launch__AccessibleLabel"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    AutoDisableOnSelect: =false
+                    BorderColor: =RGBA(0, 0, 0, 0)
+                    DisabledBorderColor: =RGBA(0, 0, 0, 0)
+                    DisabledFill: =Transparent
+                    DisplayMode: =DisplayMode.Disabled
+                    Fill: =Transparent
+                    Height: =64
+                    HoverFill: =gblAppStyles.Gallery.HoverFill
+                    Image: |-
+                        =With(
+                            {
+                                varImageRecord: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Open Task"
+                                ),
+                                varColor: gblAppStyles.Icons.Color
+                            },
+                            With(
+                                {
+                                    varImageData: Concatenate(
+                                        "data:image/svg+xml;utf8, ",
+                                        EncodeUrl(
+                                            Concatenate(
+                                                "<svg viewBox='",
+                                                varImageRecord.staticIconViewbox,
+                                                "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                varImageRecord.staticIconPath,
+                                                "' fill='#",
+                                                varColor,
+                                                "'/></svg>"
+                                            )
+                                        )
+                                    )
+                                },
+                                varImageData
+                            )
+                        )
+                    OnSelect: =Select(Parent)
+                    PaddingBottom: =22
+                    PaddingLeft: =12
+                    PaddingRight: =12
+                    PaddingTop: =22
+                    Tooltip: =Self.AccessibleLabel
+                    Width: =44
+                    X: =Parent.TemplateWidth - Self.Width
+                    Y: =0*0
+                    ZIndex: =5
+
+                btnGalFAQs_Featured_Select As button:
+                    BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+                    BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+                    Color: =Transparent
+                    DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.ButtonTransparent.DisabledColor
+                    DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+                    Fill: =gblAppStyles.ButtonTransparent.Fill
+                    FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =Parent.TemplateHeight
+                    HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+                    HoverColor: =Transparent
+                    HoverFill: =gblAppStyles.Gallery.HoverFill
+                    OnSelect: =Select(Parent)
+                    PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+                    PressedColor: =Transparent
+                    PressedFill: =gblAppStyles.Gallery.PressedFill
+                    RadiusBottomLeft: =gblAppStyles.ButtonTransparent.RadiusBottomLeft
+                    RadiusBottomRight: =gblAppStyles.ButtonTransparent.RadiusBottomRight
+                    RadiusTopLeft: =gblAppStyles.ButtonTransparent.RadiusTopLeft
+                    RadiusTopRight: =gblAppStyles.ButtonTransparent.RadiusTopRight
+                    Size: =gblAppStyles.ButtonTransparent.Size
+                    TabIndex: =If(locVisibleDialog,-1,0)
+                    Text: =ThisItem.Question
+                    Tooltip: |-
+                        =With(
+                            {
+                                varDefault: "Click to view this FAQ",
+                                varOOBTextId: "btnGalFAQs_Featured_Select__Tooltip"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextId = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Width: =Parent.TemplateWidth//imgGalFAQs_Featured_Launch.X - Self.X
+                    ZIndex: =6
+
+            lblGalFAQs_Featured_Header As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: |
+                    =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                DisplayMode: =DisplayMode.View
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Bold
+                Height: =20
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                OnSelect: =
+                PaddingBottom: =0
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: |-
+                    =With(
+                        {
+                            varOOBTextId: "lblGalFAQs_Featured_Header__Text",
+                            varDefault: "Featured"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                Width: =Parent.Width - (2* gblPadding.Page)
+                Wrap: =false
+                X: =gblPadding.Page
+                Y: =0*0
+                ZIndex: =2
+
+    conFAQS_Actions As groupContainer:
+        Height: |-
+            =Switch(
+                'FAQs Screen'.Size,
+                ScreenSize.Small,
+                52,
+                80
+            )
+        Width: |
+            =Switch(
+                'FAQs Screen'.Size,
+                ScreenSize.Small,
+                Parent.Width,
+                Max(280,Parent.Width * .3)
+            )
+        X: |-
+            =Switch(
+                'FAQs Screen'.Size,
+                ScreenSize.Small,
+                0*0,
+                Parent.Width - Self.Width
+            )
+        Y: |-
+            =Switch(
+                'FAQs Screen'.Size,
+                ScreenSize.Small,
+                conFAQS_Header.Y + conFAQS_Header.Height,
+                comHeader_FAQs.Height
+            )
+        ZIndex: =2
+
+        txtFAQs_Header_Search As text:
+            AccessibleLabel: |-
+                =With(
+                    {
+                        varDefault: "Text input control to find FAQs",
+                        varOOBTextId: "txtFAQs_Header_Search__AccessibleLabel"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            BorderColor: =gblAppStyles.TextInput.BorderColor
+            BorderThickness: =gblAppStyles.TextInput.BorderThickness
+            Color: =gblAppStyles.TextInput.Color
+            Default: =""
+            DelayOutput: =true
+            DisabledBorderColor: =gblAppStyles.TextInput.DisabledBorderColor
+            DisabledColor: =gblAppStyles.TextInput.DisabledColor
+            DisabledFill: =gblAppStyles.TextInput.DisabledFill
+            Fill: =gblAppStyles.TextInput.Fill
+            FocusedBorderColor: =gblAppStyles.TextInput.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.TextInput.FocusedBorderThickness
+            Font: ='Segoe UI'
+            Height: =32
+            HintText: |-
+                =With(
+                    {
+                        varDefault: "Find FAQs",
+                        varOOBTextId: "txtFAQs_Header_Search__HintText"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            HoverBorderColor: =gblAppStyles.TextInput.HoverBorderColor
+            HoverColor: =gblAppStyles.TextInput.HoverColor
+            HoverFill: =gblAppStyles.TextInput.HoverFill
+            OnChange: =
+            PaddingBottom: =4
+            PaddingLeft: =8
+            PaddingRight: =8
+            PaddingTop: =4
+            PressedBorderColor: =gblAppStyles.TextInput.PressedBorderColor
+            PressedColor: =gblAppStyles.TextInput.PressedColor
+            PressedFill: =gblAppStyles.TextInput.PressedFill
+            RadiusBottomLeft: =gblAppStyles.TextInput.RadiusBottomLeft
+            RadiusBottomRight: =gblAppStyles.TextInput.RadiusBottomRight
+            RadiusTopLeft: =gblAppStyles.TextInput.RadiusTopLeft
+            RadiusTopRight: =gblAppStyles.TextInput.RadiusTopRight
+            Size: =gblAppStyles.TextInput.Size
+            TabIndex: =If(locVisibleDialog,-1,0)
+            Tooltip: =Self.HintText
+            Width: =Parent.Width - (2 * gblPadding.Page)
+            X: =Parent.Width - Self.Width - gblPadding.Page
+            Y: |-
+                =Switch(
+                    'FAQs Screen'.Size,
+                    ScreenSize.Small,
+                    0,
+                    (Parent.Height - Self.Height) / 2
+                )
+            ZIndex: =1
+
+        imgFAQs_Header_Search As image:
+            AccessibleLabel: |-
+                =With(
+                    {
+                        varDefault: "Search icon for FAQs",
+                        varOOBTextId: "imgFAQs_Header_Search__AccessibleLabel"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            BorderColor: =RGBA(0, 0, 0, 0)
+            DisabledFill: |-
+                =With(
+                    {
+                        varImageIsCategory: LookUp(
+                            staticIcons,
+                            staticIconName = "Search"
+                        ).staticIconIsCategory
+                    },
+                    If(
+                        varImageIsCategory,
+                        gblAppStyles.Icons.DisabledFill_Category,
+                        Transparent
+                    )
+                )
+            Fill: |-
+                =With(
+                    {
+                        varImageIsCategory: LookUp(
+                            staticIcons,
+                            staticIconName = "Search"
+                        ).staticIconIsCategory
+                    },
+                    If(
+                        varImageIsCategory,
+                        gblAppStyles.Icons.Fill_Category,
+                        Transparent
+                    )
+                )
+            Height: =32
+            Image: |-
+                =With(
+                    {
+                        varImageRecord: LookUp(
+                            staticIcons,
+                            staticIconName = "Search"
+                        ),
+                        varColor: If(
+                            Self.DisplayMode = DisplayMode.Disabled,
+                            gblAppStyles.Icons.DisabledColor,
+                            gblAppStyles.Icons.Color_Gray
+                        )
+                    },
+                    With(
+                        {
+                            varImageData: Concatenate(
+                                "data:image/svg+xml;utf8, ",
+                                EncodeUrl(
+                                    Concatenate(
+                                        "<svg viewBox='",
+                                        varImageRecord.staticIconViewbox,
+                                        "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                        varImageRecord.staticIconPath,
+                                        "' fill='#",
+                                        varColor,
+                                        "'/></svg>"
+                                    )
+                                )
+                            )
+                        },
+                        varImageData
+                    )
+                )
+            OnSelect: =SetFocus(txtFAQs_Header_Search)
+            PaddingBottom: =6
+            PaddingLeft: =6
+            PaddingRight: =6
+            PaddingTop: =6
+            RadiusBottomLeft: =5
+            RadiusBottomRight: =5
+            RadiusTopLeft: =5
+            RadiusTopRight: =5
+            TabIndex: =If(true,-1,0)
+            Tooltip: =Self.AccessibleLabel
+            Transparency: =If(Self.DisplayMode = DisplayMode.Disabled,0.75,0)
+            Width: =32
+            X: =(txtFAQs_Header_Search.X + txtFAQs_Header_Search.Width) - Self.Width
+            Y: =txtFAQs_Header_Search.Y
+            ZIndex: =2
+
+    conFAQS_Header As groupContainer:
+        Height: =80*1
+        Width: |-
+            =Switch(
+                'FAQs Screen'.Size,
+                ScreenSize.Small,
+                Parent.Width,
+                conFAQS_Actions.X - Self.X
+            )
+        X: =0*0
+        Y: =comHeader_FAQs.Y + comHeader_FAQs.Height
+        ZIndex: =3
+
+        lblFAQs_Header_Subtitle As label:
+            BorderColor: =gblAppStyles.Label.BorderColor
+            BorderThickness: =gblAppStyles.Label.BorderThickness
+            Color: =gblAppStyles.Label.Color
+            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+            DisabledColor: |
+                =gblAppStyles.Label.DisabledColor
+            DisabledFill: =gblAppStyles.Label.DisabledFill
+            DisplayMode: =DisplayMode.View
+            Fill: =gblAppStyles.Label.Fill
+            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            Height: =20
+            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+            HoverColor: =gblAppStyles.Label.HoverColor
+            HoverFill: =gblAppStyles.Label.HoverFill
+            OnSelect: =
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+            PressedColor: =gblAppStyles.Label.PressedColor
+            PressedFill: =gblAppStyles.Label.PressedFill
+            Size: =gblAppStyles.Label.Size.Medium
+            Text: |-
+                =With(
+                    {
+                        varOOBTextId: "lblFAQs_Header_Subtitle__Text",
+                        varDefault: "Got questions? We’ve got answers."
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            Width: =Parent.Width - (2* gblPadding.Page)
+            Wrap: =false
+            X: =lblFAQs_Header_Title.X
+            Y: =lblFAQs_Header_Title.Y + lblFAQs_Header_Title.Height
+            ZIndex: =1
+
+        lblFAQs_Header_Title As label:
+            BorderColor: =gblAppStyles.Label.BorderColor
+            BorderThickness: =gblAppStyles.Label.BorderThickness
+            Color: =gblAppStyles.Label.Color
+            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+            DisabledColor: |
+                =gblAppStyles.Label.DisabledColor
+            DisabledFill: =gblAppStyles.Label.DisabledFill
+            DisplayMode: =DisplayMode.View
+            Fill: =gblAppStyles.Label.Fill
+            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            FontWeight: =FontWeight.Bold
+            Height: =20
+            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+            HoverColor: =gblAppStyles.Label.HoverColor
+            HoverFill: =gblAppStyles.Label.HoverFill
+            OnSelect: =
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+            PressedColor: =gblAppStyles.Label.PressedColor
+            PressedFill: =gblAppStyles.Label.PressedFill
+            Role: =TextRole.Heading1
+            Size: =gblAppStyles.Label.Size.Medium
+            Text: |-
+                =With(
+                    {
+                        varOOBTextId: "lblFAQs_Header_Title__Text",
+                        varDefault: "FAQs"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextId = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            Width: =Parent.Width - (2* gblPadding.Page)
+            Wrap: =false
+            X: =gblPadding.Page
+            Y: =gblPadding.Page
+            ZIndex: =2
+
+    comHeader_FAQs As comHeader:
+        Fill: =comHeader_FAQs.inputStyles.Background.Fill
+        Height: =60*1
+        inputAboutIcon: |-
+            =With(
+                {
+                    varImageRecord: LookUp(
+                        staticIcons,
+                        staticIconName = If(
+                            App.ActiveScreen = 'About Screen',
+                            "Info filled",
+                            "Info"
+                        )
+                    ),
+                    varColor: gblAppStyles.Icons.Color
+                },
+                With(
+                    {
+                        varImageData: Concatenate(
+                            "data:image/svg+xml;utf8, ",
+                            EncodeUrl(
+                                Concatenate(
+                                    "<svg viewBox='",
+                                    varImageRecord.staticIconViewbox,
+                                    "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                    varImageRecord.staticIconPath,
+                                    "' fill='#",
+                                    varColor,
+                                    "'/></svg>"
+                                )
+                            )
+                        )
+                    },
+                    varImageData
+                )
+            )
+        inputAboutScreen: ='About Screen'
+        inputColors: =gblAppColors
+        inputDarkTheme: =gblThemeDark
+        inputDisableTabbing: =locVisibleDialog
+        inputFullHeader: ='FAQs Screen'.Size > 1
+        inputHeaderIcon: =Icon_Bulletins
+        inputHeaderSettings: =gblAppMenu.Bulletins
+        inputHighContrastTheme: =gblThemeHiCo
+        inputMenuItem1: =gblAppMenu.Home
+        inputMenuItem2: =gblAppMenu.FAQs
+        inputMenuItem3: =gblAppMenu.LinksContacts
+        inputMenuItem4: =
+        inputMenuItem5: =
+        inputSettingsIcon: =
+        inputSettingsScreen: =
+        inputStyles: =gblAppStyles
+        Width: =Parent.Width
+        X: =0*0
+        Y: =0*0
+        ZIndex: =4
+
+    conFAQS_ModalDialog As groupContainer:
+        Fill: =gblAppStyles.Dialogs.Fill
+        Height: =Parent.Height
+        Visible: =locVisibleDialog
+        Width: =Parent.Width
+        X: =0*0
+        Y: =0*0
+        ZIndex: =5
+
+        conModal_FAQs_Details As groupContainer:
+            Height: =Parent.Height
+            Width: =Parent.Width
+            X: =0*0
+            Y: =0*0
+            ZIndex: =3
+
+            lblModalDialog_FAQs_Details_Cancel As label:
+                FocusedBorderThickness: =0.1
+                Height: =Parent.Height
+                OnSelect: |-
+                    =UpdateContext({locVisibleDialog: false})
+                TabIndex: =If(true,-1,0)
+                Text: =""
+                Tooltip: |-
+                    =With(
+                        {
+                            varOOBTextId: "lblModalDialog_FAQs_Details_Cancel__Tooltip",
+                            varDefault: "Click to close the dialog window"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    staticLocalizations,
+                                    OOBTextId = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                Width: =Parent.Width
+                X: =0*0
+                Y: =0*0
+                ZIndex: =1
+
+            cnvFAQs_Details As fluidGrid.fluidGridWithBlankCard:
+                BorderThickness: =0
+                Height: =Parent.Height - (2* gblPadding.Page)
+                Width: =Min(Parent.Width - (2*gblPadding.Page), 700)
+                X: =(Parent.Width - Self.Width) / 2
+                Y: =Max((Parent.Height - dtcFAQs_Details.Height) / 2,gblPadding.Page)
+                ZIndex: =2
+
+                dtcFAQs_Details As dataCard:
+                    BorderColor: =RGBA(0, 0, 0, 1)
+                    BorderStyle: =BorderStyle.Solid
+                    BorderThickness: =0
+                    DisplayMode: =DisplayMode.Edit
+                    Fill: =Transparent
+                    Height: =100
+                    Width: =Parent.Width
+                    X: =0
+                    Y: =1
+                    ZIndex: =1
+
+                    btnFAQDetail_Background As button:
+                        BorderColor: =gblAppStyles.ButtonBackground.BorderColor
+                        BorderThickness: =gblAppStyles.ButtonBackground.BorderThickness
+                        Color: =gblAppStyles.ButtonBackground.Color
+                        DisabledBorderColor: =gblAppStyles.ButtonBackground.DisabledBorderColor
+                        DisabledColor: =Transparent
+                        DisabledFill: =gblAppStyles.ButtonSecondary.Fill
+                        DisplayMode: =DisplayMode.Disabled
+                        Fill: =gblAppStyles.ButtonBackground.Fill
+                        FocusedBorderColor: =gblAppStyles.ButtonBackground.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.ButtonBackground.FocusedBorderThickness
+                        Height: =btnFAQDetail_Cancel.Y + btnFAQDetail_Cancel.Height + gblPadding.Page
+                        HoverBorderColor: =gblAppStyles.ButtonBackground.HoverBorderColor
+                        HoverColor: =gblAppStyles.ButtonBackground.HoverColor
+                        HoverFill: =gblAppStyles.ButtonBackground.HoverFill
+                        OnSelect: =
+                        PressedBorderColor: =gblAppStyles.ButtonBackground.PressedBorderColor
+                        PressedColor: =gblAppStyles.ButtonBackground.PressedColor
+                        PressedFill: =gblAppStyles.ButtonBackground.PressedFill
+                        RadiusBottomLeft: =gblAppStyles.ButtonBackground.RadiusBottomLeft
+                        RadiusBottomRight: =gblAppStyles.ButtonBackground.RadiusBottomRight
+                        RadiusTopLeft: =gblAppStyles.ButtonBackground.RadiusTopLeft
+                        RadiusTopRight: =gblAppStyles.ButtonBackground.RadiusTopRight
+                        Size: =gblAppStyles.ButtonBackground.Size
+                        Text: =locRecordFAQ.Question
+                        Tooltip: =Self.Text
+                        Width: =Parent.Width
+                        X: =0*0
+                        Y: =0*0
+                        ZIndex: =1
+
+                    btnFAQDetail_Cancel As button:
+                        AutoDisableOnSelect: =false
+                        BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+                        BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+                        Color: =gblAppStyles.ButtonSecondary.Color
+                        DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+                        DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+                        DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+                        Fill: =gblAppStyles.ButtonSecondary.Fill
+                        FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        Height: =32
+                        HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+                        HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+                        HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+                        OnSelect: |-
+                            =UpdateContext({locVisibleDialog: false});
+                        PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+                        PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+                        PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+                        RadiusBottomLeft: =gblAppStyles.ButtonSecondary.RadiusBottomLeft
+                        RadiusBottomRight: =gblAppStyles.ButtonSecondary.RadiusBottomRight
+                        RadiusTopLeft: =gblAppStyles.ButtonSecondary.RadiusTopLeft
+                        RadiusTopRight: =gblAppStyles.ButtonSecondary.RadiusTopRight
+                        Size: =gblAppStyles.ButtonSecondary.Size
+                        TabIndex: =If(locVisibleDialog,0,-1)
+                        Text: |-
+                            =With(
+                                {
+                                    varDefault: "Close",
+                                    varOOBTextId: "btnFAQDetail_Cancel__Text"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextId = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        Tooltip: |-
+                            =With(
+                                {
+                                    varDefault: "Click to close this FAQ",
+                                    varOOBTextId: "btnFAQDetail_Cancel__Tooltip"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextId = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        Width: =96
+                        X: =Parent.Width - Self.Width - gblPadding.Page
+                        Y: =htmFAQDetail_Answer.Y + htmFAQDetail_Answer.Height + gblPadding.Page
+                        ZIndex: =2
+
+                    htmFAQDetail_Answer As htmlViewer:
+                        AutoHeight: =true
+                        Color: =gblAppStyles.Label.Color
+                        Fill: =gblAppStyles.ButtonSecondary.Fill
+                        Font: =Font.'Segoe UI'
+                        Height: =312
+                        HtmlText: =locRecordFAQ.Answer
+                        PaddingBottom: =0
+                        PaddingLeft: =0
+                        PaddingRight: =0
+                        PaddingTop: =0
+                        Size: =gblAppStyles.Label.Size.Medium
+                        Tooltip: |-
+                            =With(
+                                {
+                                    varOOBTextId: "htmFAQDetail_Answer__Tooltip",
+                                    varDefault: "The answer for this FAQ"
+                                },
+                                With(
+                                    {
+                                        varLocalizedText: LookUp(
+                                            colLocalization,
+                                            OOBTextId = varOOBTextId,
+                                            LocalizedText
+                                        )
+                                    },
+                                    Coalesce(
+                                        varLocalizedText,
+                                        varDefault
+                                    )
+                                )
+                            )
+                        Width: =Parent.Width - Self.X - gblPadding.Page
+                        X: =20
+                        Y: =lblFAQDetail_Question.Y + lblFAQDetail_Question.Height
+                        ZIndex: =3
+
+                    lblFAQDetail_Question As label:
+                        BorderColor: =gblAppStyles.Label.BorderColor
+                        BorderThickness: =gblAppStyles.Label.BorderThickness
+                        Color: =gblAppStyles.Label.Color
+                        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                        DisabledColor: |
+                            =gblAppStyles.Label.DisabledColor
+                        DisabledFill: =gblAppStyles.Label.DisabledFill
+                        DisplayMode: =DisplayMode.View
+                        Fill: =gblAppStyles.Label.Fill
+                        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                        Font: =Font.'Segoe UI'
+                        FontWeight: =FontWeight.Bold
+                        Height: =48
+                        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                        HoverColor: =gblAppStyles.Label.HoverColor
+                        HoverFill: =gblAppStyles.Label.HoverFill
+                        OnSelect: =
+                        PaddingBottom: =0
+                        PaddingLeft: =0
+                        PaddingRight: =0
+                        PaddingTop: =0
+                        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                        PressedColor: =gblAppStyles.Label.PressedColor
+                        PressedFill: =gblAppStyles.Label.PressedFill
+                        Size: =gblAppStyles.Label.Size.Large
+                        Text: =locRecordFAQ.Question
+                        Width: =Parent.Width - (2* gblPadding.Page)
+                        Wrap: =false
+                        X: =gblPadding.Page
+                        Y: =gblPadding.Page
+                        ZIndex: =4
+

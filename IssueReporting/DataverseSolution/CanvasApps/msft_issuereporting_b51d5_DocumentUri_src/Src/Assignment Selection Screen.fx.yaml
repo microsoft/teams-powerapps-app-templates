@@ -1,0 +1,712 @@
+"'Assignment Selection Screen' As screen":
+    Fill: =gblAppStyles.Background.Fill
+    OnVisible: =SetFocus(txtAssignment_SearchUser);
+
+    lblAssignIssues_ZeroState_NoPeopleInstructions As label:
+        Align: =Align.Center
+        BorderColor: =gblAppStyles.Label.BorderColor
+        BorderThickness: =gblAppStyles.Label.BorderThickness
+        Color: =gblAppStyles.Label.Color
+        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+        DisabledColor: =gblAppStyles.Label.DisabledColor
+        DisabledFill: =gblAppStyles.Label.DisabledFill
+        DisplayMode: =DisplayMode.View
+        Fill: =gblAppStyles.Label.Fill
+        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+        Font: =Font.'Segoe UI'
+        Height: =48
+        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+        HoverColor: =gblAppStyles.Label.HoverColor
+        HoverFill: =gblAppStyles.Label.HoverFill
+        PaddingLeft: =20
+        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+        PressedColor: =gblAppStyles.Label.PressedColor
+        PressedFill: =gblAppStyles.Label.PressedFill
+        Size: =gblAppStyles.Label.Size.Medium
+        Text: |-
+            =With(
+                {
+                    varDefault: "Try a different name.",
+                    varOOBTextId: "lblAssignIssues_ZeroState_NoPeopleInstructions__locText",
+                    varParam0: Blank(),
+                    varParam1: Blank(),
+                    varParam2: Blank()
+                },
+                With(
+                    {
+                        varLocalizedText: LookUp(
+                            staticLocalizations,
+                            OOBTextId = varOOBTextId,
+                            LocalizedText
+                        )
+                    },
+                    If(
+                        IsBlankOrError(varParam0),
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        ),
+                        Coalesce(
+                            Substitute(
+                                Substitute(
+                                    Substitute(
+                                        varLocalizedText,
+                                        "{0}",
+                                        Text(varParam0)
+                                    ),
+                                    "{1}",
+                                    Text(varParam1)
+                                ),
+                                "{2}",
+                                Text(varParam2)
+                            ),
+                            varDefault
+                        )
+                    )
+                )
+            )
+        Visible: =!IsBlank(txtAssignment_SearchUser.Text)
+        Width: =imgAssignIssues_ZeroState_Search.Width
+        X: =imgAssignIssues_ZeroState_Search.X
+        Y: =lblAssignIssues_ZeroState_Search.Y + lblAssignIssues_ZeroState_Search.Height
+        ZIndex: =1
+
+    imgAssignIssues_ZeroState_NoPeople As image:
+        AccessibleLabel: =lblAssignIssues_ZeroState_NoPeopleInstructions.Text
+        DisplayMode: =DisplayMode.View
+        Height: =240
+        Image: =Image_ZeroState_People_NoResults
+        Visible: =!IsBlank(txtAssignment_SearchUser.Text)
+        Width: =Parent.Width - (2*Self.X)
+        X: =txtAssignment_SearchUser.X
+        Y: =txtAssignment_SearchUser.Y + txtAssignment_SearchUser.Height + 64
+        ZIndex: =2
+
+    lblAssignIssues_ZeroState_NoPeople As label:
+        Align: =Align.Center
+        BorderColor: =gblAppStyles.Label.BorderColor
+        BorderThickness: =gblAppStyles.Label.BorderThickness
+        Color: =gblAppStyles.Label.Color
+        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+        DisabledColor: =gblAppStyles.Label.DisabledColor
+        DisabledFill: =gblAppStyles.Label.DisabledFill
+        DisplayMode: =DisplayMode.View
+        Fill: =gblAppStyles.Label.Fill
+        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+        Font: =Font.'Segoe UI'
+        FontWeight: =FontWeight.Semibold
+        Height: =48
+        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+        HoverColor: =gblAppStyles.Label.HoverColor
+        HoverFill: =gblAppStyles.Label.HoverFill
+        PaddingLeft: =20
+        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+        PressedColor: =gblAppStyles.Label.PressedColor
+        PressedFill: =gblAppStyles.Label.PressedFill
+        Size: =gblAppStyles.Label.Size.Large
+        Text: |-
+            =With(
+                {
+                    varDefault: "No results",
+                    varOOBTextId: "lblAssignIssues_ZeroState_NoPeople__locText",
+                    varParam0: Blank(),
+                    varParam1: Blank(),
+                    varParam2: Blank()
+                },
+                With(
+                    {
+                        varLocalizedText: LookUp(
+                            staticLocalizations,
+                            OOBTextId = varOOBTextId,
+                            LocalizedText
+                        )
+                    },
+                    If(
+                        IsBlankOrError(varParam0),
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        ),
+                        Coalesce(
+                            Substitute(
+                                Substitute(
+                                    Substitute(
+                                        varLocalizedText,
+                                        "{0}",
+                                        Text(varParam0)
+                                    ),
+                                    "{1}",
+                                    Text(varParam1)
+                                ),
+                                "{2}",
+                                Text(varParam2)
+                            ),
+                            varDefault
+                        )
+                    )
+                )
+            )
+        Visible: =!IsBlank(txtAssignment_SearchUser.Text)
+        Width: =imgAssignIssues_ZeroState_NoPeople.Width
+        X: =imgAssignIssues_ZeroState_NoPeople.X
+        Y: =imgAssignIssues_ZeroState_NoPeople.Y + imgAssignIssues_ZeroState_NoPeople.Height + 16
+        ZIndex: =3
+
+    lblAssignIssues_ZeroState_SearchInstructions As label:
+        Align: =Align.Center
+        BorderColor: =gblAppStyles.Label.BorderColor
+        BorderThickness: =gblAppStyles.Label.BorderThickness
+        Color: =gblAppStyles.Label.Color
+        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+        DisabledColor: =gblAppStyles.Label.DisabledColor
+        DisabledFill: =gblAppStyles.Label.DisabledFill
+        DisplayMode: =DisplayMode.View
+        Fill: =gblAppStyles.Label.Fill
+        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+        Font: =Font.'Segoe UI'
+        Height: =48
+        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+        HoverColor: =gblAppStyles.Label.HoverColor
+        HoverFill: =gblAppStyles.Label.HoverFill
+        PaddingLeft: =20
+        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+        PressedColor: =gblAppStyles.Label.PressedColor
+        PressedFill: =gblAppStyles.Label.PressedFill
+        Size: =gblAppStyles.Label.Size.Medium
+        Text: |-
+            =With(
+                {
+                    varDefault: "Type in the search box above.",
+                    varOOBTextId: "lblAssignIssues_ZeroState_SearchInstructions__locText",
+                    varParam0: Blank(),
+                    varParam1: Blank(),
+                    varParam2: Blank()
+                },
+                With(
+                    {
+                        varLocalizedText: LookUp(
+                            staticLocalizations,
+                            OOBTextId = varOOBTextId,
+                            LocalizedText
+                        )
+                    },
+                    If(
+                        IsBlankOrError(varParam0),
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        ),
+                        Coalesce(
+                            Substitute(
+                                Substitute(
+                                    Substitute(
+                                        varLocalizedText,
+                                        "{0}",
+                                        Text(varParam0)
+                                    ),
+                                    "{1}",
+                                    Text(varParam1)
+                                ),
+                                "{2}",
+                                Text(varParam2)
+                            ),
+                            varDefault
+                        )
+                    )
+                )
+            )
+        Visible: =IsBlank(txtAssignment_SearchUser.Text)
+        Width: =imgAssignIssues_ZeroState_Search.Width
+        X: =imgAssignIssues_ZeroState_Search.X
+        Y: =lblAssignIssues_ZeroState_Search.Y + lblAssignIssues_ZeroState_Search.Height
+        ZIndex: =4
+
+    imgAssignIssues_ZeroState_Search As image:
+        AccessibleLabel: =lblAssignIssues_ZeroState_Search.Text
+        DisplayMode: =DisplayMode.View
+        Height: =240
+        Image: =Image_ZeroState_People
+        Visible: =IsBlank(txtAssignment_SearchUser.Text)
+        Width: =Parent.Width - (2*Self.X)
+        X: =txtAssignment_SearchUser.X
+        Y: =txtAssignment_SearchUser.Y + txtAssignment_SearchUser.Height + 64
+        ZIndex: =5
+
+    lblAssignIssues_ZeroState_Search As label:
+        Align: =Align.Center
+        BorderColor: =gblAppStyles.Label.BorderColor
+        BorderThickness: =gblAppStyles.Label.BorderThickness
+        Color: =gblAppStyles.Label.Color
+        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+        DisabledColor: =gblAppStyles.Label.DisabledColor
+        DisabledFill: =gblAppStyles.Label.DisabledFill
+        DisplayMode: =DisplayMode.View
+        Fill: =gblAppStyles.Label.Fill
+        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+        Font: =Font.'Segoe UI'
+        FontWeight: =FontWeight.Semibold
+        Height: =48
+        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+        HoverColor: =gblAppStyles.Label.HoverColor
+        HoverFill: =gblAppStyles.Label.HoverFill
+        PaddingLeft: =20
+        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+        PressedColor: =gblAppStyles.Label.PressedColor
+        PressedFill: =gblAppStyles.Label.PressedFill
+        Size: =gblAppStyles.Label.Size.Large
+        Text: |-
+            =With(
+                {
+                    varDefault: "Search for a user",
+                    varOOBTextId: "lblAssignIssues_ZeroState_Search__locText",
+                    varParam0: Blank(),
+                    varParam1: Blank(),
+                    varParam2: Blank()
+                },
+                With(
+                    {
+                        varLocalizedText: LookUp(
+                            staticLocalizations,
+                            OOBTextId = varOOBTextId,
+                            LocalizedText
+                        )
+                    },
+                    If(
+                        IsBlankOrError(varParam0),
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        ),
+                        Coalesce(
+                            Substitute(
+                                Substitute(
+                                    Substitute(
+                                        varLocalizedText,
+                                        "{0}",
+                                        Text(varParam0)
+                                    ),
+                                    "{1}",
+                                    Text(varParam1)
+                                ),
+                                "{2}",
+                                Text(varParam2)
+                            ),
+                            varDefault
+                        )
+                    )
+                )
+            )
+        Visible: =IsBlank(txtAssignment_SearchUser.Text)
+        Width: =imgAssignIssues_ZeroState_Search.Width
+        X: =imgAssignIssues_ZeroState_Search.X
+        Y: =imgAssignIssues_ZeroState_Search.Y + imgAssignIssues_ZeroState_Search.Height + 16
+        ZIndex: =6
+
+    galAssignUser As gallery.galleryVertical:
+        AccessibleLabel: |-
+            =With(
+                {
+                    varDefault: "Gallery of search results of user to assign to this task",
+                    varOOBTextId: "galAssignUser__locAccessibleLabel",
+                    varParam0: Blank(),
+                    varParam1: Blank(),
+                    varParam2: Blank()
+                },
+                With(
+                    {
+                        varLocalizedText: LookUp(
+                            staticLocalizations,
+                            OOBTextId = varOOBTextId,
+                            LocalizedText
+                        )
+                    },
+                    If(
+                        IsBlankOrError(varParam0),
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        ),
+                        Coalesce(
+                            Substitute(
+                                Substitute(
+                                    Substitute(
+                                        varLocalizedText,
+                                        "{0}",
+                                        Text(varParam0)
+                                    ),
+                                    "{1}",
+                                    Text(varParam1)
+                                ),
+                                "{2}",
+                                Text(varParam2)
+                            ),
+                            varDefault
+                        )
+                    )
+                )
+            )
+        Fill: =gblAppStyles.Background.Fill
+        Height: =Parent.Height - Self.Y
+        Items: |-
+            =If(
+                IsBlank(txtAssignment_SearchUser.Text),
+                Blank(),
+                Filter(
+                    Microsoft365Users.SearchUser({searchTerm: txtAssignment_SearchUser.Text}),
+                    Not(UserPrincipalName in colCdsIssueAssignments.appEmailAddress)
+                )
+            )
+        Layout: =Layout.Vertical
+        OnSelect: |-
+            =UpdateContext({locBlockUserEntry: true});
+            UpdateContext({locUserPrincipalName: ThisItem.UserPrincipalName});
+            If(
+                Not(locUserPrincipalName in colUserProfiles.appRef),
+                With(
+                    {varProfile: Microsoft365Users.UserProfileV2(locUserPrincipalName)},
+                    Collect(
+                        colUserProfiles,
+                        {
+                            appRef: varProfile.id,
+                            appEmail: locUserPrincipalName,
+                            appImg: Microsoft365Users.UserPhotoV2(locUserPrincipalName),
+                            appDisplayName: varProfile.displayName
+                        }
+                    )
+                )
+            );
+            Collect(
+                colCdsIssueAssignments,
+                {appEmailAddress: locUserPrincipalName}
+            );
+            Navigate(
+                'Issue Report Screen',
+                ScreenTransition.Fade
+            );
+            UpdateContext({locBlockUserEntry: false});
+            Reset(txtAssignment_SearchUser);
+        TabIndex: |-
+            =If(
+                true,
+                -1
+            )
+        TemplateSize: =64
+        Visible: =!IsEmpty(Self.AllItems)
+        Width: =txtAssignment_SearchUser.Width
+        X: =txtAssignment_SearchUser.X
+        Y: =txtAssignment_SearchUser.Y + txtAssignment_SearchUser.Height + gblPadding.Page
+        ZIndex: =7
+
+        lblAssignUser_DisplayName As label:
+            BorderColor: =gblAppStyles.Label.BorderColor
+            BorderThickness: =gblAppStyles.Label.BorderThickness
+            Color: =gblAppStyles.Label.Color
+            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+            DisabledColor: =gblAppStyles.Label.DisabledColor
+            DisabledFill: =gblAppStyles.Label.DisabledFill
+            Fill: =gblAppStyles.Label.Fill
+            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            Height: =Parent.TemplateHeight * .6
+            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+            HoverColor: =gblAppStyles.Label.HoverColor
+            HoverFill: =gblAppStyles.Label.HoverFill
+            OnSelect: =Select(Parent)
+            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+            PressedColor: =gblAppStyles.Label.PressedColor
+            PressedFill: =gblAppStyles.Label.PressedFill
+            Size: =gblAppStyles.Label.Size.Medium
+            Text: =ThisItem.DisplayName
+            Width: =Parent.TemplateWidth - Self.X
+            Wrap: =false
+            X: =(2 * btnAssignUser_Initials.X) + btnAssignUser_Initials.Width
+            Y: =0*0
+            ZIndex: =2
+
+        shpAssignUser_Divider As rectangle:
+            Fill: =gblAppStyles.Dividers.Elements
+            Height: =1
+            OnSelect: =Select(Parent)
+            Width: =lblAssignUser_JobTitle.Width
+            X: =lblAssignUser_JobTitle.X
+            Y: =Parent.TemplateHeight - Self.Height
+            ZIndex: =4
+
+        btnAssignUser_Initials As button:
+            BorderThickness: =0
+            Color: =gblAppStyles.ButtonPrimary.Color
+            DisabledBorderColor: =Transparent
+            DisabledFill: =Transparent
+            Fill: =gblAppStyles.ButtonPrimary.Fill
+            Font: =Font.'Segoe UI'
+            Height: =If(Self.Visible,48,0)
+            HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+            OnSelect: =
+            PaddingBottom: =4
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            RadiusBottomLeft: =36
+            RadiusBottomRight: =36
+            RadiusTopLeft: =36
+            RadiusTopRight: =36
+            Size: =gblAppStyles.ButtonPrimary.Size
+            TabIndex: |-
+                =If(
+                    true,
+                    -1
+                )
+            Text: =Left(ThisItem.GivenName,1) & Left(ThisItem.Surname,1)
+            Visible: =false
+            Width: =If(Self.Visible,48,0)
+            X: =Self.Y
+            Y: =If(Self.Visible,(Parent.TemplateHeight -Self.Height) / 2,0)
+            ZIndex: =6
+
+        lblAssignUser_JobTitle As label:
+            BorderColor: =gblAppStyles.Label.BorderColor
+            BorderThickness: =gblAppStyles.Label.BorderThickness
+            Color: =gblAppStyles.Label.Color
+            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+            DisabledColor: =gblAppStyles.Label.DisabledColor
+            DisabledFill: =gblAppStyles.Label.DisabledFill
+            Fill: =gblAppStyles.Label.Fill
+            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            Height: =Parent.TemplateHeight - Self.Y
+            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+            HoverColor: =gblAppStyles.Label.HoverColor
+            HoverFill: =gblAppStyles.Label.HoverFill
+            OnSelect: =Select(Parent)
+            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+            PressedColor: =gblAppStyles.Label.PressedColor
+            PressedFill: =gblAppStyles.Label.PressedFill
+            Size: =gblAppStyles.Label.Size.Small
+            Text: =ThisItem.JobTitle
+            Width: =Parent.TemplateWidth - Self.X
+            Wrap: =false
+            X: =lblAssignUser_DisplayName.X
+            Y: =lblAssignUser_DisplayName.Height
+            ZIndex: =7
+
+        btnCampaignStatsTopIdeas_Select As button:
+            BorderColor: =Transparent
+            BorderThickness: =0
+            Color: =Transparent
+            DisabledBorderColor: =Self.BorderColor
+            DisabledFill: =Self.Fill
+            Fill: =RGBA(0, 0, 0, 0)
+            FocusedBorderColor: =gblAppStyles.ButtonPrimary.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.ButtonPrimary.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            Height: =Parent.TemplateHeight
+            HoverColor: =Self.Color
+            HoverFill: =gblAppStyles.Gallery.HoverFill
+            OnSelect: =Select(Parent)
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            PressedColor: =Self.Color
+            PressedFill: =gblAppStyles.Gallery.PressedFill
+            RadiusBottomLeft: =4
+            RadiusBottomRight: =4
+            RadiusTopLeft: =0
+            RadiusTopRight: =0
+            Size: =12
+            Text: =Blank()
+            Tooltip: =ThisItem.DisplayName
+            Width: =Parent.TemplateWidth
+            X: =Parent.TemplateWidth * 0
+            Y: =Parent.TemplateHeight * 0
+            ZIndex: =8
+
+    txtAssignment_SearchUser As text:
+        AccessibleLabel: |-
+            =With(
+                {
+                    varDefault: "Search for a user to assign to this issue" ,
+                    varOOBTextId: "txtAssignment_SearchUser__locAccessibleLabel",
+                    varParam0: Blank(),
+                    varParam1: Blank(),
+                    varParam2: Blank()
+                },
+                With(
+                    {
+                        varLocalizedText: LookUp(
+                            staticLocalizations,
+                            OOBTextId = varOOBTextId,
+                            LocalizedText
+                        )
+                    },
+                    If(
+                        IsBlankOrError(varParam0),
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        ),
+                        Coalesce(
+                            Substitute(
+                                Substitute(
+                                    Substitute(
+                                        varLocalizedText,
+                                        "{0}",
+                                        Text(varParam0)
+                                    ),
+                                    "{1}",
+                                    Text(varParam1)
+                                ),
+                                "{2}",
+                                Text(varParam2)
+                            ),
+                            varDefault
+                        )
+                    )
+                )
+            )
+        BorderColor: =gblAppStyles.TextInput.BorderColor
+        BorderThickness: =gblAppStyles.TextInput.BorderThickness
+        Color: =gblAppStyles.TextInput.Color
+        Default: =
+        DelayOutput: =true
+        DisabledBorderColor: =gblAppStyles.TextInput.DisabledBorderColor
+        DisabledColor: =gblAppStyles.TextInput.DisabledColor
+        DisabledFill: =gblAppStyles.TextInput.DisabledFill
+        Fill: =gblAppStyles.TextInput.Fill
+        FocusedBorderColor: =gblAppStyles.TextInput.FocusedBorderColor
+        FocusedBorderThickness: =gblAppStyles.TextInput.FocusedBorderThickness
+        Font: ='Segoe UI'
+        Height: =64
+        HintText: |-
+            =With(
+                {
+                    varDefault: "Enter name",
+                    varOOBTextId: "txtAssignment_SearchUser__locHintText",
+                    varParam0: Blank(),
+                    varParam1: Blank(),
+                    varParam2: Blank()
+                },
+                With(
+                    {
+                        varLocalizedText: LookUp(
+                            staticLocalizations,
+                            OOBTextId = varOOBTextId,
+                            LocalizedText
+                        )
+                    },
+                    If(
+                        IsBlankOrError(varParam0),
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        ),
+                        Coalesce(
+                            Substitute(
+                                Substitute(
+                                    Substitute(
+                                        varLocalizedText,
+                                        "{0}",
+                                        Text(varParam0)
+                                    ),
+                                    "{1}",
+                                    Text(varParam1)
+                                ),
+                                "{2}",
+                                Text(varParam2)
+                            ),
+                            varDefault
+                        )
+                    )
+                )
+            )
+        HoverBorderColor: =gblAppStyles.TextInput.HoverBorderColor
+        HoverColor: =gblAppStyles.TextInput.HoverColor
+        HoverFill: =gblAppStyles.TextInput.HoverFill
+        PaddingBottom: =4
+        PaddingLeft: =8
+        PaddingRight: =8
+        PaddingTop: =4
+        PressedBorderColor: =gblAppStyles.TextInput.PressedBorderColor
+        PressedColor: =gblAppStyles.TextInput.PressedColor
+        PressedFill: =gblAppStyles.TextInput.PressedFill
+        RadiusBottomLeft: =gblAppStyles.TextInput.RadiusBottomLeft
+        RadiusBottomRight: =gblAppStyles.TextInput.RadiusBottomRight
+        RadiusTopLeft: =gblAppStyles.TextInput.RadiusTopLeft
+        RadiusTopRight: =gblAppStyles.TextInput.RadiusTopRight
+        Size: =gblAppStyles.TextInput.Size
+        Width: =Parent.Width - Self.X - gblPadding.Page
+        X: =gblPadding.Page
+        Y: =comMobileHeader_Assignment.Height + comMobileHeader_Assignment.Y + gblPadding.Page
+        ZIndex: =8
+
+    comMobileHeader_Assignment As comMobileHeader:
+        inputBackColor: =gblAppStyles.Icons.Color
+        inputHeaderText: |-
+            =With(
+                {
+                    varDefault: "Back to issue",
+                    varOOBTextId: "_translateCommon__Backtoissue",
+                    varParam0: Blank(),
+                    varParam1: Blank(),
+                    varParam2: Blank()
+                },
+                With(
+                    {
+                        varLocalizedText: LookUp(
+                            staticLocalizations,
+                            OOBTextId = varOOBTextId,
+                            LocalizedText
+                        )
+                    },
+                    If(
+                        IsBlankOrError(varParam0),
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        ),
+                        Coalesce(
+                            Substitute(
+                                Substitute(
+                                    Substitute(
+                                        varLocalizedText,
+                                        "{0}",
+                                        Text(varParam0)
+                                    ),
+                                    "{1}",
+                                    Text(varParam1)
+                                ),
+                                "{2}",
+                                Text(varParam2)
+                            ),
+                            varDefault
+                        )
+                    )
+                )
+            )
+        inputHeaderTextColor: =gblAppStyles.ButtonTransparent.Color
+        inputHeaderTextHoverColor: =gblAppStyles.ButtonTransparent.HoverColor
+        inputHeaderTextPressedColor: =gblAppStyles.ButtonTransparent.PressedColor
+        inputHeaderTextSize: =gblAppStyles.Label.Size.Large
+        inputNavigateToScreen: ='Issue Report Screen'
+        X: =0*0
+        Y: =0*0
+        ZIndex: =9
+
+    lblBlockEntry_AssignUser As label:
+        Fill: =RGBA(0, 0, 0, .1)
+        Font: =Font.'Segoe UI'
+        Height: =Parent.Height
+        Size: =21
+        Text: =""
+        Visible: =locBlockUserEntry
+        Width: =Parent.Width
+        X: =0*0
+        Y: =0*0
+        ZIndex: =10
+

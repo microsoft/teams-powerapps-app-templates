@@ -1,0 +1,232 @@
+"'Level 2 Step 1: Items Screen' As screen":
+    Fill: =gblAppStyles.Background.Fill
+
+    btnGoToOverview_ItemsScreen As button:
+        BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+        BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+        Color: =gblAppStyles.ButtonSecondary.Color
+        DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+        DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+        DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+        Fill: =gblAppStyles.ButtonSecondary.Fill
+        FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+        FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+        Font: =Font.'Segoe UI'
+        Height: =32*1
+        HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+        HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+        HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+        OnSelect: |-
+            =Navigate(
+                'Overview Screen',
+                ScreenTransition.Fade
+            )
+        PaddingLeft: |-
+            =If(
+                IsBlank(Param("tenantId")),
+                5,
+                25
+            )
+        PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+        PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+        PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+        RadiusBottomLeft: =gblAppStyles.ButtonSecondary.RadiusBottomLeft
+        RadiusBottomRight: =gblAppStyles.ButtonSecondary.RadiusBottomRight
+        RadiusTopLeft: =gblAppStyles.ButtonSecondary.RadiusTopLeft
+        RadiusTopRight: =gblAppStyles.ButtonSecondary.RadiusTopRight
+        Size: =gblAppStyles.ButtonSecondary.Size
+        Text: ="Back to overview"
+        Tooltip: =Self.Text
+        Width: =155
+        X: =Parent.Width - Self.Width - 20 - 20
+        Y: =40*1
+        ZIndex: =2
+
+    htmPlayInstruction_ItemsScreen As htmlViewer:
+        BorderColor: =gblAppStyles.HTML.BorderColor
+        BorderThickness: =gblAppStyles.HTML.BorderThickness
+        Color: =gblAppStyles.ButtonPrimary.Color
+        DisabledBorderColor: =gblAppStyles.HTML.DisabledBorderColor
+        DisabledFill: =gblAppStyles.HTML.DisabledFill
+        Fill: =gblAppStyles.ButtonPrimary.Fill
+        Font: =Font.'Segoe UI'
+        Height: =32
+        HoverBorderColor: =gblAppStyles.HTML.HoverBorderColor
+        HtmlText: |-
+            ="
+            <div style='width: 100%; overflow: hidden;'>
+             
+                
+                <div style='float: left; padding-left: 1em'>
+                    Play this app with <strong>&lt;F5&gt;</strong> or the play button in the top right corner to interact with the screen
+                </div>
+                <div style='clear: both'></div>
+              
+                
+            
+            </div>
+              "
+        PaddingLeft: =0
+        Size: =gblAppStyles.HTML.Size.Medium
+        Visible: =IsBlank(Param("tenantId"))
+        Width: =600
+        X: =btnGoToOverview_ItemsScreen.X - Self.Width - 20
+        Y: =btnGoToOverview_ItemsScreen.Y
+        ZIndex: =3
+
+    lblHeader_ItemsScreen As label:
+        Align: =Align.Center
+        BorderColor: =gblAppStyles.Label.BorderColor
+        BorderThickness: =gblAppStyles.Label.BorderThickness
+        Color: =gblAppStyles.Label.Color
+        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+        DisabledColor: =gblAppStyles.Label.DisabledColor
+        DisabledFill: =gblAppStyles.Label.DisabledFill
+        Fill: =gblAppStyles.Label.Fill
+        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+        Font: =Font.'Segoe UI'
+        FontWeight: =FontWeight.Semibold
+        Height: =32*1
+        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+        HoverColor: =gblAppStyles.Label.HoverColor
+        HoverFill: =gblAppStyles.Label.HoverFill
+        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+        PressedColor: =gblAppStyles.Label.PressedColor
+        PressedFill: =gblAppStyles.Label.PressedFill
+        Size: =gblAppStyles.Label.Size.Large
+        Text: |-
+            ="Level 2 Step 1: Items screen"
+        Tooltip: =Self.Text
+        Width: =Parent.Width - Self.X*2
+        Wrap: =false
+        X: =0*1
+        Y: =imgLogo_ItemsScreen.Y + imgLogo_ItemsScreen.Height
+        ZIndex: =4
+
+    imgLogo_ItemsScreen As image:
+        Height: =300
+        Image: =Screen
+        Width: =300
+        X: =(Parent.Width - Self.Width) / 2
+        Y: =(Parent.Height - Self.Height) / 2 - 100
+        ZIndex: =5
+
+    lblDetails_ItemsScreen As label:
+        Align: =Align.Center
+        AutoHeight: =true
+        BorderColor: =gblAppStyles.Label.BorderColor
+        BorderThickness: =gblAppStyles.Label.BorderThickness
+        Color: =gblAppStyles.Label.Color
+        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+        DisabledColor: =gblAppStyles.Label.DisabledColor
+        DisabledFill: =gblAppStyles.Label.DisabledFill
+        Fill: =gblAppStyles.Label.Fill
+        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+        Font: =Font.'Segoe UI'
+        Height: =32*1
+        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+        HoverColor: =gblAppStyles.Label.HoverColor
+        HoverFill: =gblAppStyles.Label.HoverFill
+        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+        PressedColor: =gblAppStyles.Label.PressedColor
+        PressedFill: =gblAppStyles.Label.PressedFill
+        Size: =gblAppStyles.Label.Size.Medium
+        Text: |-
+            ="Create your first screen that displays all items.
+            
+            Follow guided instructions to finish the step."
+        Tooltip: =Self.Text
+        Width: =300*1
+        X: =(Parent.Width - Self.Width) / 2
+        Y: =lblHeader_ItemsScreen.Y + lblHeader_ItemsScreen.Height
+        ZIndex: =6
+
+    btnViewInstructions_ItemsScreen As button:
+        BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+        BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+        Color: =gblAppStyles.ButtonSecondary.Color
+        DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+        DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+        DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+        Fill: =gblAppStyles.ButtonSecondary.Fill
+        FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+        FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+        Font: =Font.'Segoe UI'
+        Height: =32*1
+        HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+        HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+        HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+        OnSelect: |-
+            =Launch(
+                "aka.ms/TeamsHowToLevel2Step1",
+                {},
+                LaunchTarget.New
+            )
+        PaddingLeft: =25
+        PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+        PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+        PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+        RadiusBottomLeft: =gblAppStyles.ButtonSecondary.RadiusBottomLeft
+        RadiusBottomRight: =gblAppStyles.ButtonSecondary.RadiusBottomRight
+        RadiusTopLeft: =gblAppStyles.ButtonSecondary.RadiusTopLeft
+        RadiusTopRight: =gblAppStyles.ButtonSecondary.RadiusTopRight
+        Size: =gblAppStyles.ButtonSecondary.Size
+        Text: ="View insturctions"
+        Tooltip: =Self.Text
+        Width: =175
+        X: =(Parent.Width - Self.Width) / 2
+        Y: =lblDetails_ItemsScreen.Y + lblDetails_ItemsScreen.Height + 20
+        ZIndex: =7
+
+    imgViewInstructions_ItemsScreen As image:
+        AccessibleLabel: |-
+            =With(
+                {
+                    varDefault: "Preview icon",
+                    varOOBTextId: "_translatecommon_imgPreviewApp__locAccessibleText"
+                },
+                With(
+                    {
+                        varLocalizedText: LookUp(
+                            colLocalization,
+                            OOBTextID = varOOBTextId,
+                            LocalizedText
+                        )
+                    },
+                    Coalesce(
+                        varLocalizedText,
+                        varDefault
+                    )
+                )
+            )
+        Height: =32
+        Image: |-
+            =If(
+                gblThemeDark || gblThemeHiCo,
+                View_Dark,
+                View_Default
+            )
+        OnSelect: |-
+            =Launch(
+                "aka.ms/TeamsHowToLevel2Step1",
+                {},
+                LaunchTarget.New
+            )
+        PaddingBottom: =8
+        PaddingLeft: =8
+        PaddingRight: =8
+        PaddingTop: =8
+        TabIndex: |-
+            =If(
+                true,
+                -1,
+                0
+            )
+        Tooltip: =Self.AccessibleLabel
+        Width: =32
+        X: =btnViewInstructions_ItemsScreen.X + 10
+        Y: =btnViewInstructions_ItemsScreen.Y
+        ZIndex: =8
+

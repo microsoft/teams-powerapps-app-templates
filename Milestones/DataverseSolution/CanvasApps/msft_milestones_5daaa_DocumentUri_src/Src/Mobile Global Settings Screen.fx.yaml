@@ -1,0 +1,732 @@
+"'Mobile Global Settings Screen' As screen":
+    Fill: =gblAppStyles.Background.Fill
+    LoadingSpinner: =LoadingSpinner.Data
+    LoadingSpinnerColor: |-
+        =If(
+            gblThemeHiCo,
+            gblAppColors.HighContrastHyperlinks,
+            gblThemeDark,
+            gblAppColors.TeamsDarkPrimary,
+            gblAppColors.TeamsDefaultPrimary
+        )
+    OnVisible: |-
+        =//set focus start
+        UpdateContext({locSetFocusTimerStart: false});
+        UpdateContext({locSetFocusControlTarget: "btnMobileGlobalSettingsBackToSettings"});
+        UpdateContext({locSetFocusTimerStart: true});
+        //set focus end
+
+    tmrSetFocus_MobileGlobalSettings As timer:
+        AutoStart: =locSetFocusTimerStart
+        Color: =RGBA(0, 0, 0, 0)
+        Duration: =100
+        Fill: =RGBA(0, 0, 0, 0)
+        Height: =0
+        HoverFill: =Transparent
+        OnTimerEnd: |
+            =Switch(
+                locSetFocusControlTarget,
+                "btnMobileGlobalSettingsBackToSettings",
+                SetFocus(btnMobileGlobalSettingsBackToSettings)
+            );
+        OnTimerStart: =
+        Size: =0
+        TabIndex: =-1
+        Width: =0
+        X: =Parent.Width - Self.Width
+        Y: =Parent.Height - Self.Height
+        ZIndex: =1
+
+    lblAnnounce_MobileGlobalSettings As label:
+        DisplayMode: =DisplayMode.Disabled
+        Font: =Font.'Segoe UI'
+        Height: =0*0
+        Live: =Live.Assertive
+        PaddingBottom: =0
+        PaddingLeft: =0
+        PaddingRight: =0
+        PaddingTop: =0
+        Text: =locScreenReaderAnnouncedText //this text is announced by screen readers, when the variable is updated
+        Visible: =false
+        Width: =0*0
+        X: =Parent.Width - Self.Width
+        Y: =Parent.Height - Self.Height
+        ZIndex: =2
+
+    conMobileGlobalSettings As groupContainer:
+        Fill: =gblAppStyles.Background.Fill
+        Height: =Parent.Height - Self.Y
+        Width: =Parent.Width
+        Y: =conMobileGlobalSettingsNav.Y + conMobileGlobalSettingsNav.Height
+        ZIndex: =3
+
+        "galMobileGlobalSettings As gallery.'BrowseLayout_Vertical_OneTextVariant_ver4.0'":
+            AccessibleLabel: |-
+                =With(
+                    {
+                        varDefault: "List of global settings",
+                        varOOBTextId: "galMobileGlobalSettings__locAccessibleText"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            BorderColor: =Transparent
+            Default: ={}
+            Fill: =Transparent
+            FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+            FocusedBorderThickness: =2
+            Height: =Parent.Height - Self.Y 
+            ItemAccessibleLabel: |-
+                =If(
+                    ThisItem.IsSelected,
+                    With(
+                        {
+                            varDefault: "Selected",
+                            varOOBTextId: "galSelected_Announcement"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    ),
+                    With(
+                        {
+                            varDefault: "Not selected",
+                            varOOBTextId: "galNotSelected_Announcement"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                )
+            Items: |-
+                =Table(
+                    {
+                        Name: With(
+                            {
+                                varDefault: "Category",
+                                varOOBTextId: "lblGlobalSettingsCategoryHeader__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        ),
+                        Icon: With(
+                            {
+                                varImageRecord: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Category"
+                                ),
+                                varColor: If(
+                                    Self.DisplayMode = DisplayMode.Disabled,
+                                    gblAppStyles.Icons.DisabledColor,
+                                    gblAppStyles.Icons.Color
+                                )
+                            },
+                            With(
+                                {
+                                    varImageData: Concatenate(
+                                        "data:image/svg+xml;utf8, ",
+                                        EncodeUrl(
+                                            Concatenate(
+                                                "<svg viewBox='",
+                                                varImageRecord.staticIconViewbox,
+                                                "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                varImageRecord.staticIconPath,
+                                                "' fill='#",
+                                                varColor,
+                                                "'/></svg>"
+                                            )
+                                        )
+                                    )
+                                },
+                                varImageData
+                            )
+                        )
+                    },
+                    {
+                        Name: With(
+                            {
+                                varDefault: "Priority",
+                                varOOBTextId: "lblGlobalSettingsPriorityHeader__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        ),
+                        Icon: With(
+                            {
+                                varImageRecord: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Priority"
+                                ),
+                                varColor: If(
+                                    Self.DisplayMode = DisplayMode.Disabled,
+                                    gblAppStyles.Icons.DisabledColor,
+                                    gblAppStyles.Icons.Color
+                                )
+                            },
+                            With(
+                                {
+                                    varImageData: Concatenate(
+                                        "data:image/svg+xml;utf8, ",
+                                        EncodeUrl(
+                                            Concatenate(
+                                                "<svg viewBox='",
+                                                varImageRecord.staticIconViewbox,
+                                                "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                varImageRecord.staticIconPath,
+                                                "' fill='#",
+                                                varColor,
+                                                "'/></svg>"
+                                            )
+                                        )
+                                    )
+                                },
+                                varImageData
+                            )
+                        )
+                    },
+                    {
+                        Name: With(
+                            {
+                                varDefault: "Status",
+                                varOOBTextId: "lblGlobalSettingsStatusHeader__locText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        ),
+                        Icon: With(
+                            {
+                                varImageRecord: LookUp(
+                                    staticIcons,
+                                    staticIconName = "Status"
+                                ),
+                                varColor: If(
+                                    Self.DisplayMode = DisplayMode.Disabled,
+                                    gblAppStyles.Icons.DisabledColor,
+                                    gblAppStyles.Icons.Color
+                                )
+                            },
+                            With(
+                                {
+                                    varImageData: Concatenate(
+                                        "data:image/svg+xml;utf8, ",
+                                        EncodeUrl(
+                                            Concatenate(
+                                                "<svg viewBox='",
+                                                varImageRecord.staticIconViewbox,
+                                                "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                                varImageRecord.staticIconPath,
+                                                "' fill='#",
+                                                varColor,
+                                                "'/></svg>"
+                                            )
+                                        )
+                                    )
+                                },
+                                varImageData
+                            )
+                        )
+                    }
+                )
+            Layout: =Layout.Vertical
+            LoadingSpinner: =App.ActiveScreen.LoadingSpinner
+            OnSelect: |-
+                =Switch(
+                    ThisItem.Name,
+                    With(
+                        {
+                            varDefault: "Category",
+                            varOOBTextId: "lblGlobalSettingsCategoryHeader__locText"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    ),
+                    Navigate(
+                        'Mobile Category Settings Screen',
+                        ScreenTransition.Fade
+                    ),
+                    With(
+                        {
+                            varDefault: "Priority",
+                            varOOBTextId: "lblGlobalSettingsPriorityHeader__locText"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    ),
+                    Navigate(
+                        'Mobile Priority Settings Screen',
+                        ScreenTransition.Fade
+                    ),
+                    With(
+                        {
+                            varDefault: "Status",
+                            varOOBTextId: "lblGlobalSettingsStatusHeader__locText"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    ),
+                    Navigate(
+                        'Mobile Status Settings Screen',
+                        ScreenTransition.Fade
+                    )
+                )
+            TabIndex: =0
+            TemplateFill: =Transparent
+            TemplatePadding: =0
+            TemplateSize: =55
+            Width: =Parent.Width
+            X: =0*0
+            Y: =lblMobileGlobalSettings.Y + lblMobileGlobalSettings.Height + 20
+            ZIndex: =2
+
+            btnMobileGlobalSettings_Background As button:
+                BorderColor: =Transparent
+                BorderThickness: =0
+                Color: =Transparent
+                DisabledColor: =RGBA(0, 0, 0, 0)
+                DisabledFill: =Self.Fill
+                DisplayMode: =Parent.DisplayMode
+                Fill: =RGBA(0, 0, 0, 0)
+                FocusedBorderThickness: =1
+                Font: =Font.'Segoe UI'
+                Height: =55*1
+                HoverColor: =RGBA(0, 0, 0, 0)
+                HoverFill: =Self.Fill
+                OnSelect: =Select(Parent)
+                PaddingRight: =5.83
+                PaddingTop: =5.83
+                PressedColor: =Transparent
+                PressedFill: =Self.Fill
+                RadiusBottomLeft: =0
+                RadiusBottomRight: =0
+                RadiusTopLeft: =0
+                RadiusTopRight: =0
+                Size: =gblAppStyles.ButtonTransparent.Size
+                TabIndex: |-
+                    =If(
+                        true,
+                        -1,
+                        0
+                    )
+                Text: |-
+                    =With(
+                        {
+                            varDefault: "Background button for settings",
+                            varOOBTextId: "btnMobileGlobalSettings_Background__locText"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                Width: =Parent.Width
+                X: =1*0
+                Y: =0*0
+                ZIndex: =1
+
+            lblMobileGlobalSettings_Name As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: |-
+                    =If(
+                        gblThemeHiCo,
+                        gblAppStyles.Label.Color,
+                        gblAppStyles.Label.DisabledColor
+                    )
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                DisplayMode: =Parent.DisplayMode
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Normal
+                Height: =55*1
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                OnSelect: =Select(Parent)
+                PaddingBottom: =0
+                PaddingLeft: =0
+                PaddingRight: =0.00
+                PaddingTop: =0.00
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: =ThisItem.Name
+                Tooltip: =Self.Text
+                Width: =Parent.Width - Self.X - imgMobileGlobalSettingSelect.Width
+                Wrap: =false
+                X: =imgMobileGlobalSettingIcon.X + imgMobileGlobalSettingIcon.Width
+                Y: =0*1
+                ZIndex: =2
+
+            shpMobileGlobalSettingSeparator As rectangle:
+                Fill: =gblAppStyles.Dividers.Background     
+                Height: =1
+                OnSelect: =Select(Parent)
+                Width: =Parent.TemplateWidth - Self.X
+                X: =1*20
+                Y: =Parent.TemplateHeight - 1
+                ZIndex: =3
+
+            imgMobileGlobalSettingIcon As image:
+                Height: =55
+                Image: =ThisItem.Icon
+                OnSelect: =Select(Parent)
+                PaddingBottom: =16
+                PaddingLeft: =16
+                PaddingRight: =16
+                PaddingTop: =16
+                Tooltip: =Self.AccessibleLabel
+                Width: =60
+                ZIndex: =4
+
+            imgMobileGlobalSettingSelect As image:
+                Height: =55
+                Image: |-
+                    =With(
+                        {
+                            varImageRecord: LookUp(
+                                staticIcons,
+                                staticIconName = "Back"
+                            ),
+                            varColor: If(
+                                Self.DisplayMode = DisplayMode.Disabled,
+                                gblAppStyles.Icons.DisabledColor,
+                                gblAppStyles.Icons.Color
+                            )
+                        },
+                        With(
+                            {
+                                varImageData: Concatenate(
+                                    "data:image/svg+xml;utf8, ",
+                                    EncodeUrl(
+                                        Concatenate(
+                                            "<svg viewBox='",
+                                            varImageRecord.staticIconViewbox,
+                                            "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                            varImageRecord.staticIconPath,
+                                            "' fill='#",
+                                            varColor,
+                                            "'/></svg>"
+                                        )
+                                    )
+                                )
+                            },
+                            varImageData
+                        )
+                    )
+                ImageRotation: =ImageRotation.Rotate180
+                OnSelect: =Select(Parent)
+                PaddingBottom: =16
+                PaddingLeft: =16
+                PaddingRight: =16
+                PaddingTop: =16
+                Tooltip: =Self.AccessibleLabel
+                Width: =60
+                X: =Parent.Width-Self.Width
+                ZIndex: =5
+
+            btnMobileGlobalSettings_Foreground As button:
+                BorderThickness: =0
+                Color: =RGBA(0, 0, 0, 0)
+                DisabledColor: =RGBA(0, 0, 0, 0)
+                DisabledFill: =Self.Fill
+                Fill: =gblAppStyles.ButtonTransparent.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                FocusedBorderThickness: =2
+                Height: =55*1 - 2
+                HoverColor: =RGBA(0, 0, 0, 0)
+                HoverFill: =gblAppStyles.Gallery.HoverFill
+                OnSelect: =Select(Parent)
+                PaddingRight: =5.83
+                PaddingTop: =5.83
+                PressedColor: =Transparent
+                PressedFill: =gblAppStyles.Gallery.PressedFill
+                RadiusBottomLeft: =0
+                RadiusBottomRight: =0
+                RadiusTopLeft: =0
+                RadiusTopRight: =0
+                Size: =17.48
+                Text: |-
+                    =With(
+                        {
+                            varDefault: "Click to select the setting",
+                            varOOBTextId: "btnMobileGlobalSettings_Foreground__locText"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                Width: =Parent.Width - 2
+                X: =0*0 + 1
+                Y: =0*0 + 1
+                ZIndex: =6
+
+        lblMobileGlobalSettings As label:
+            BorderColor: =gblAppStyles.Label.BorderColor
+            BorderThickness: =gblAppStyles.Label.BorderThickness
+            Color: =gblAppStyles.Label.Color
+            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+            DisabledColor: =gblAppStyles.Label.DisabledColor
+            DisabledFill: =gblAppStyles.Label.DisabledFill
+            Fill: =gblAppStyles.Label.Fill
+            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            FontWeight: =FontWeight.Bold
+            Height: =40*1
+            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+            HoverColor: =gblAppStyles.Label.HoverColor
+            HoverFill: =gblAppStyles.Label.HoverFill
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingTop: =0
+            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+            PressedColor: =gblAppStyles.Label.PressedColor
+            PressedFill: =gblAppStyles.Label.PressedFill
+            Role: =TextRole.Heading1
+            Size: =gblAppStyles.Label.Size.Large
+            Text: |-
+                =With(
+                    {
+                        varDefault: "Settings",
+                        varOOBTextId: "lblHeader_Settings__locText"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            Tooltip: =Self.Text
+            Width: =Parent.Width - Self.X
+            X: =1*20
+            Y: =2*1
+            ZIndex: =3
+
+    conMobileGlobalSettingsNav As groupContainer:
+        Height: =48
+        Width: =Parent.Width
+        Y: =0*1
+        ZIndex: =4
+
+        btnMobileGlobalSettingsBackToSettings As button:
+            Align: =Align.Left
+            BorderColor: =gblAppStyles.ButtonTransparent.BorderColor
+            BorderThickness: =gblAppStyles.ButtonTransparent.BorderThickness
+            Color: =gblAppStyles.ButtonTransparent.Color
+            DisabledBorderColor: =gblAppStyles.ButtonTransparent.DisabledBorderColor
+            DisabledColor: =gblAppStyles.ButtonTransparent.DisabledColor
+            DisabledFill: =gblAppStyles.ButtonTransparent.DisabledFill
+            Fill: =gblAppStyles.ButtonTransparent.Fill
+            FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            Height: =32*1
+            HoverBorderColor: =gblAppStyles.ButtonTransparent.HoverBorderColor
+            HoverColor: =gblAppStyles.ButtonTransparent.HoverColor
+            HoverFill: =gblAppStyles.ButtonTransparent.HoverFill
+            OnSelect: |-
+                =//screen reader start
+                UpdateContext(
+                    {
+                        locScreenReaderAnnouncedText: With(
+                            {
+                                varAnnouncedText: With(
+                                    {
+                                        varDefault: "Navigating back to settings",
+                                        varOOBTextId: "btnBackToSettings_Announcement"
+                                    },
+                                    With(
+                                        {
+                                            varLocalizedText: LookUp(
+                                                colLocalization,
+                                                OOBTextID = varOOBTextId,
+                                                LocalizedText
+                                            )
+                                        },
+                                        Coalesce(
+                                            varLocalizedText,
+                                            varDefault
+                                        )
+                                    )
+                                )
+                            },
+                            If(
+                                locScreenReaderAnnouncedText = varAnnouncedText,
+                                Concatenate(
+                                    varAnnouncedText,
+                                    " "
+                                ),
+                                varAnnouncedText
+                            )
+                        )
+                    }
+                );
+                //screen reader end
+                Navigate(
+                    'Mobile Settings Screen',
+                    ScreenTransition.Fade
+                )
+            PaddingLeft: =0
+            PressedBorderColor: =gblAppStyles.ButtonTransparent.PressedBorderColor
+            PressedColor: =gblAppStyles.ButtonTransparent.PressedColor
+            PressedFill: =gblAppStyles.ButtonTransparent.PressedFill
+            RadiusBottomLeft: =gblAppStyles.ButtonTransparent.RadiusBottomLeft
+            RadiusBottomRight: =gblAppStyles.ButtonTransparent.RadiusBottomRight
+            RadiusTopLeft: =gblAppStyles.ButtonTransparent.RadiusTopLeft
+            RadiusTopRight: =gblAppStyles.ButtonTransparent.RadiusTopRight
+            Size: =gblAppStyles.ButtonTransparent.Size
+            Text: |-
+                =With(
+                    {
+                        varDefault: "Back to settings",
+                        varOOBTextId: "_translateCommon_BackToSettings"
+                    },
+                    With(
+                        {
+                            varLocalizedText: LookUp(
+                                colLocalization,
+                                OOBTextID = varOOBTextId,
+                                LocalizedText
+                            )
+                        },
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        )
+                    )
+                )
+            Tooltip: =Self.Text
+            Width: =Parent.Width - Self.X * 2
+            X: =20
+            Y: =9
+            ZIndex: =1
+

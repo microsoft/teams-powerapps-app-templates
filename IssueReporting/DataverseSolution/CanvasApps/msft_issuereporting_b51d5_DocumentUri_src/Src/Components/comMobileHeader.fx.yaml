@@ -1,0 +1,115 @@
+comMobileHeader As CanvasComponent:
+    Fill: =Transparent
+    Height: =If(Param("hostClientType") in ["web","desktop"] Or (Param("hostClientType") = "ios" And App.Width > 800),120,80)
+    inputBackColor: =1234//gblAppStyles.Icons.Color
+    inputDesktopBack: =Param("hostClientType") in ["web","desktop"] Or (Param("hostClientType") = "ios" And App.Width > 800)
+    inputHeaderText: ="Text"
+    inputHeaderTextColor: =RGBA(0, 0, 0, 1)
+    inputHeaderTextHoverColor: =RGBA(0, 0, 0, 1)
+    inputHeaderTextPressedColor: =RGBA(0, 0, 0, 1)
+    inputHeaderTextSize: =18//gblAppStyles.Label.Size.Medium
+    inputNavigateToScreen: =App.ActiveScreen
+    inputNavigation: =true
+    Width: =App.Width
+    X: =0
+    Y: =0
+    ZIndex: =1
+
+    lblMobileHeader As label:
+        BorderColor: =RGBA(2, 0, 110, 1)
+        Color: =comMobileHeader.inputHeaderTextColor
+        Fill: =Transparent
+        FocusedBorderThickness: =1
+        Font: =Font.'Segoe UI'
+        FontWeight: =FontWeight.Semibold
+        Height: =44
+        HoverColor: =comMobileHeader.inputHeaderTextHoverColor
+        OnSelect: =Navigate(comMobileHeader.inputNavigateToScreen,ScreenTransition.Fade)
+        PaddingLeft: =0
+        PressedColor: =comMobileHeader.inputHeaderTextPressedColor
+        Size: =Parent.inputHeaderTextSize
+        TabIndex: =
+        Text: =comMobileHeader.inputHeaderText
+        Visible: =!Parent.inputDesktopBack
+        Width: =Parent.Width - (2 * Self.X)
+        X: =20*1
+        Y: =(Parent.Height - Self.Height) / 2
+        ZIndex: =1
+
+    imgCampaignDetailControls_Back As image:
+        AutoDisableOnSelect: =false
+        DisabledFill: |
+            =
+                    Transparent
+        Fill: =Transparent
+        Height: =btnCampaignDetailControls_Back.Height
+        Image: |-
+            =With(
+                {
+                    varImageRecord: LookUp(
+                        staticIcons,
+                        staticIconName = "Back"
+                    ),
+                    varColor: Parent.inputBackColor
+                },
+                With(
+                    {
+                        varImageData: Concatenate(
+                            "data:image/svg+xml;utf8, ",
+                            EncodeUrl(
+                                Concatenate(
+                                    "<svg viewBox='",
+                                    varImageRecord.staticIconViewbox,
+                                    "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                    varImageRecord.staticIconPath,
+                                    "' fill='#",
+                                    varColor,
+                                    "'/></svg>"
+                                )
+                            )
+                        )
+                    },
+                    varImageData
+                )
+            )
+        OnSelect: =
+        Visible: =Parent.inputDesktopBack
+        Width: =32
+        X: =btnCampaignDetailControls_Back.X
+        Y: =btnCampaignDetailControls_Back.Y
+        ZIndex: =2
+
+    btnCampaignDetailControls_Back As button:
+        Align: =Align.Left
+        AutoDisableOnSelect: =false
+        BorderColor: =Transparent
+        BorderThickness: =0
+        Color: =Parent.inputHeaderTextColor
+        DisabledBorderColor: =Self.BorderColor
+        DisabledColor: =Self.Color
+        DisabledFill: =Transparent
+        Fill: =Transparent
+        FocusedBorderColor: =Parent.inputHeaderTextPressedColor
+        FocusedBorderThickness: =0.25
+        Font: =Font.'Segoe UI'
+        Height: =44
+        HoverBorderColor: =Parent.inputHeaderTextHoverColor
+        HoverColor: =Parent.inputHeaderTextHoverColor
+        HoverFill: =Self.Fill
+        OnSelect: =Navigate(comMobileHeader.inputNavigateToScreen,ScreenTransition.Fade)
+        PaddingLeft: =40
+        PressedBorderColor: =Parent.inputHeaderTextPressedColor
+        PressedColor: =Parent.inputHeaderTextPressedColor
+        PressedFill: =Self.Fill
+        RadiusBottomLeft: =4
+        RadiusBottomRight: =4
+        RadiusTopLeft: =4
+        RadiusTopRight: =4
+        Size: =Parent.inputHeaderTextSize
+        Text: =comMobileHeader.inputHeaderText
+        Visible: =Parent.inputDesktopBack
+        Width: =Parent.Width - (2 * Self.X)
+        X: =20*1
+        Y: =(Parent.Height - Self.Height) / 2
+        ZIndex: =3
+

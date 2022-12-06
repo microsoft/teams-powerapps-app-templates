@@ -1,0 +1,36 @@
+comZeroState As CanvasComponent:
+    Fill: =Transparent
+    Height: =640
+    inputImage: =SampleImage
+    inputSizePercent: =65
+    inputTextColor: =RGBA(0, 0, 0, 1)
+    inputTextToDisplay: ="Text"
+    Width: =640
+    X: =0
+    Y: =0
+    ZIndex: =1
+
+    imgZeroState As image:
+        Height: =Parent.Height * (comZeroState.inputSizePercent / 100)
+        Image: =comZeroState.inputImage
+        PaddingBottom: =8
+        PaddingLeft: =8
+        PaddingRight: =8
+        PaddingTop: =8
+        Tooltip: =comZeroState.inputTextToDisplay
+        Width: =Parent.Width * (comZeroState.inputSizePercent / 100)
+        X: =(Parent.Width - Self.Width) / 2
+        Y: =(Parent.Height - Self.Height) / 2
+        ZIndex: =1
+
+    lblZeroState As label:
+        Align: =Align.Center
+        Color: =comZeroState.inputTextColor
+        Font: =Font.'Segoe UI'
+        Size: =11
+        Text: =comZeroState.inputTextToDisplay
+        Width: =Parent.Width
+        X: =0*0
+        Y: =imgZeroState.Y + imgZeroState.Height
+        ZIndex: =2
+

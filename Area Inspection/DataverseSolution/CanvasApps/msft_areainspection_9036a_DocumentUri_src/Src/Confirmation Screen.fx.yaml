@@ -1,0 +1,660 @@
+"'Confirmation Screen' As screen":
+    Fill: =gblAppStyles.Background.Fill
+    LoadingSpinner: =LoadingSpinner.Data
+    LoadingSpinnerColor: |-
+        =If(
+            gblThemeHiCo,
+            gblAppColors.HighContrastHyperlinks,
+            gblThemeDark,
+            gblAppColors.TeamsDarkPrimary,
+            gblAppColors.TeamsDefaultPrimary
+        )
+    OnVisible: |-
+        =UpdateContext({locScreenReadersubmit:!locScreenReadersubmit})
+
+    imgConfirmation As image:
+        AccessibleLabel: ="Confirmation Image for submittion"
+        Height: =270
+        Image: =submittedInspection
+        ImagePosition: =If(gblAppMobileOnDesktop ,ImagePosition.Fill, ImagePosition.Fit)
+        Visible: =gblInspectionPatchComplete
+        Width: =320
+        X: =If(gblAppMobileOnDesktop , 0, (Parent.Width-Self.Width)/2)
+        Y: =27
+        ZIndex: =1
+
+    btnReturnToHomeHidden As button:
+        Align: =Align.Left
+        BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+        BorderThickness: =gblAppStyles.ButtonPrimary.BorderThickness
+        Color: =gblAppStyles.ButtonPrimary.Color
+        DisabledBorderColor: =gblAppStyles.ButtonPrimary.DisabledBorderColor
+        DisabledColor: =gblAppStyles.ButtonPrimary.DisabledColor
+        DisabledFill: =gblAppStyles.ButtonPrimary.DisabledFill
+        Fill: =gblAppStyles.ButtonPrimary.Fill
+        FocusedBorderColor: =gblAppStyles.ButtonPrimary.FocusedBorderColor
+        FocusedBorderThickness: =gblAppStyles.ButtonPrimary.FocusedBorderThickness
+        Font: =Font.'Segoe UI'
+        Height: =73
+        HoverBorderColor: =gblAppStyles.ButtonPrimary.HoverBorderColor
+        HoverColor: =gblAppStyles.ButtonPrimary.HoverColor
+        HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+        OnSelect: |+
+            =Navigate('Welcome Screen', ScreenTransition.Fade); 
+            
+        PaddingLeft: =28
+        PressedBorderColor: =gblAppStyles.ButtonPrimary.PressedBorderColor
+        PressedColor: =gblAppStyles.ButtonPrimary.PressedColor
+        PressedFill: =gblAppStyles.ButtonPrimary.PressedFill
+        RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+        RadiusBottomRight: =gblAppStyles.ButtonPrimary.RadiusBottomRight
+        RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+        RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+        Size: =gblAppStyles.ButtonPrimary.Size
+        Text: ="Back to home"
+        Visible: =false
+        Width: =640
+        ZIndex: =2
+
+    lblConfirmationText As label:
+        Align: =If(gblAppMobileOnDesktop, Align.Left, Align.Center)
+        AutoHeight: =true
+        BorderColor: =gblAppStyles.Label.BorderColor
+        BorderThickness: =gblAppStyles.Label.BorderThickness
+        Color: =gblAppStyles.Label.Color
+        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+        DisabledColor: =gblAppStyles.Label.DisabledColor
+        DisabledFill: =gblAppStyles.Label.DisabledFill
+        Fill: =gblAppStyles.Label.Fill
+        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+        Font: =Font.'Segoe UI'
+        Height: =76
+        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+        HoverColor: =gblAppStyles.Label.HoverColor
+        HoverFill: =gblAppStyles.Label.HoverFill
+        PaddingLeft: =If(gblAppMobileOnDesktop, 28, 5)
+        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+        PressedColor: =gblAppStyles.Label.PressedColor
+        PressedFill: =gblAppStyles.Label.PressedFill
+        Size: =gblAppStyles.Label.Size.Large
+        Text: |-
+            =//"Great job, " & gblCurrUser.'First Name' & "!" & If(!gblAppMobileOnDesktop, Char(10) ) & " Your " & Lower(gblWorkType) & " has been submitted." 
+            With(
+                {
+                    varDefault: "Great job, " & gblCurrUser.'First Name' & "!" & If(
+                        !gblAppMobileOnDesktop,
+                        Char(10)
+                    ) & " Your " & Lower(gblWorkType) & " has been submitted.",
+                    varOOBTextId: "_translateCommon_" & gblWorkType & "Confirmation",
+                    varParam0: gblCurrUser.'First Name' /*& "!"*/& If(
+                        !gblAppMobileOnDesktop,
+                        Char(10)
+                    )
+                },
+                With(
+                    {
+                        varLocalizedText: LookUp(
+                            colLocalization,
+                            OOBTextID = varOOBTextId,
+                            LocalizedText
+                        )
+                    },
+                    If(
+                        IsBlankOrError(varParam0),
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        ),
+                        Coalesce(
+                            Substitute(
+                                varLocalizedText,
+                                "{0}",
+                                Text(varParam0)
+                            ),
+                            varDefault
+                        )
+                    )
+                )
+            )
+        Visible: =gblInspectionPatchComplete
+        Width: =Parent.Width
+        X: =If(gblAppMobileOnDesktop, imgConfirmation.X+imgConfirmation.Width, 0)
+        Y: |-
+            =If(
+                gblAppMobileOnDesktop,
+                imgConfirmation.Y + (imgConfirmation.Height / 2 - Self.Height/2),
+                imgConfirmation.Y + imgConfirmation.Height
+            )
+        ZIndex: =3
+
+    lblMoreInspections As label:
+        BorderColor: =gblAppStyles.Label.BorderColor
+        BorderThickness: =gblAppStyles.Label.BorderThickness
+        Color: =gblAppStyles.Label.Color
+        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+        DisabledColor: =gblAppStyles.Label.DisabledColor
+        DisabledFill: =gblAppStyles.Label.DisabledFill
+        Fill: =gblAppStyles.Label.Fill
+        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+        Font: =Font.'Segoe UI'
+        FontWeight: =FontWeight.Semibold
+        Height: =50
+        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+        HoverColor: =gblAppStyles.Label.HoverColor
+        HoverFill: =gblAppStyles.Label.HoverFill
+        PaddingLeft: =28
+        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+        PressedColor: =gblAppStyles.Label.PressedColor
+        PressedFill: =gblAppStyles.Label.PressedFill
+        Size: =gblAppStyles.Label.Size.Large
+        Text: |-
+            =//"More " & Lower(galAreas.Selected.'Location Type'.Name) &  " " & Lower(gblWorkType) & "s" 
+            With(
+                {
+                    varDefault: "More " & Lower(gblSelectedLocation.'Location Type'.Name) & " " & Lower(gblWorkType) & "s",
+                    varOOBTextId: "_translateCommon_More" & gblWorkType & "s",
+                    varParam0: Lower(gblSelectedLocation.'Location Type'.Name)
+                },
+                With(
+                    {
+                        varLocalizedText: LookUp(
+                            colLocalization,
+                            OOBTextID = varOOBTextId,
+                            LocalizedText
+                        )
+                    },
+                    If(
+                        IsBlankOrError(varParam0),
+                        Coalesce(
+                            varLocalizedText,
+                            varDefault
+                        ),
+                        Coalesce(
+                            Substitute(
+                                varLocalizedText,
+                                "{0}",
+                                Text(varParam0)
+                            ),
+                            varDefault
+                        )
+                    )
+                )
+            )
+        Width: =Parent.Width
+        Y: =424
+        ZIndex: =4
+
+    btnReturnToHome As button:
+        BorderThickness: =0
+        Color: =gblAppStyles.ButtonPrimary.Color
+        DisabledColor: =gblAppStyles.ButtonPrimary.DisabledColor
+        DisabledFill: =gblAppStyles.ButtonPrimary.DisabledFill
+        DisplayMode: =DisplayMode.Edit //If(gblInspectionPatchComplete, DisplayMode.Edit , DisplayMode.Disabled)
+        Fill: =gblAppStyles.ButtonPrimary.Fill
+        FocusedBorderThickness: =1
+        Font: =Font.'Segoe UI'
+        Height: =70
+        HoverBorderColor: =Self.BorderColor
+        HoverColor: =Self.Color
+        HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+        OnSelect: |
+            =//variable to control updating of inspection count when a user navigates to the Welcome screen
+            Set(
+                gblUpdateInspectionCount,
+                true
+            );
+            Navigate(
+                'Welcome Screen',
+                ScreenTransition.Fade
+            );
+        PressedBorderColor: =Self.BorderColor
+        PressedColor: =Self.Color
+        PressedFill: =gblAppStyles.ButtonPrimary.PressedFill
+        RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+        RadiusBottomRight: =gblAppStyles.ButtonPrimary.RadiusBottomRight
+        RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+        RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+        Size: =gblAppStyles.ButtonPrimary.Size
+        Text: |-
+            =With({varDefault: "Return to home",varOOBTextId: "_translateCommon_ReturnToHome"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+        Tooltip: =Self.Text
+        Width: |-
+            =Switch(
+                'Confirmation Screen'.Size,
+                ScreenSize.ExtraLarge,
+                Max(
+                    Parent.Width * .2,
+                    400
+                ),
+                ScreenSize.Large,
+                Max(
+                    Parent.Width * .2,
+                    350
+                ),
+                ScreenSize.Medium,
+                Max(
+                    Parent.Width * .2,
+                    300
+                ),
+                ScreenSize.Small,
+                Parent.Width - (2*28),
+                Parent.Width - (2*28)
+            )
+        X: |-
+            =Switch(
+                'Confirmation Screen'.Size,
+                ScreenSize.ExtraLarge,
+                Parent.Width - Self.Width - 28,
+                ScreenSize.Large,
+                Parent.Width - Self.Width - 28,
+                ScreenSize.Medium,
+                Parent.Width - Self.Width - 28,
+                ScreenSize.Small,
+                28,
+                28
+            )
+        Y: |-
+            =Switch(
+                'Confirmation Screen'.Size,
+                ScreenSize.ExtraLarge,
+                35,
+                ScreenSize.Large,
+                35,
+                ScreenSize.Medium,
+                35,
+                ScreenSize.Small,
+                Parent.Height - Self.Height-28,
+                Parent.Height - Self.Height-28
+            )
+        ZIndex: =6
+
+    "galAreas_MoreInspections As gallery.'BrowseLayout_Vertical_OneTextVariant_ver4.0'":
+        AccessibleLabel: |-
+            =With({varDefault:"List Of Similar " & areaLabel & "s",varOOBTextId:"galAreas_MoreInspections__loc_Text",varParam0:areaLabel},With({varLocalizedText:LookUp(colLocalization,OOBTextID=varOOBTextId,LocalizedText)},If(IsBlankOrError(varParam0),Coalesce(varLocalizedText,varDefault),Coalesce(Substitute(varLocalizedText,"{0}",Text(varParam0)),varDefault))))
+        Fill: =gblAppStyles.Gallery.Fill  
+        Height: =If(gblAppMobileOnDesktop, Parent.Height-Self.Y, Parent.Height-Self.Y-btnReturnToHome.Height - 42)   //550
+        Items: |-
+            =Sort(
+                Filter(
+                    'Area Inspection Locations',
+                    'Location Type'.Name = gblSelectedLocation.'Location Type'.Name || 'Location Type'.'Menu Label' = gblSelectedLocation.'Location Type'.'Menu Label'
+                ),
+                Name,
+                Ascending
+            )
+        Layout: =Layout.Vertical
+        LoadingSpinner: =LoadingSpinner.Data
+        OnSelect: |-
+            =Set(
+                gblSkipFormNav,
+                false
+            );
+            If(
+                lblCountMoreInspectionsForms.Text = Text(1),
+                Set(
+                    gblSelectedChecklist,
+                    First(galAreaMoreInspectionsForms.AllItems)
+                );
+                //if the area type has only 1 form, set that form as the current form
+            Set(
+                    gblSelectedLocation,
+                    ThisItem
+                );
+                
+            //get checklist steps, for global Form reference
+            ClearCollect(
+                    colFormChecklistSteps,
+                    Filter(
+                        'Area Inspection Checklist Steps',
+                        Checklist.'Area Inspection Checklist' = gblSelectedChecklist.msft_areainspection_checklistid
+                    )
+                );
+                
+            //build local collection
+            Clear(colNewInspectionSteps);
+                ForAll(
+                    colFormChecklistSteps,
+                    Collect(
+                        colNewInspectionSteps,
+                        {
+                            appName: Name,
+                            appImage: Image
+                        }
+                    )
+                );
+                Clear(colChecklistSteps);
+                ForAll(
+                    gblSelectedChecklist.msft_msft_areainspection_checklist_msft_areainspection_checkliststep_areainspection_checklistid,
+                    Collect(
+                        colChecklistSteps,
+                        {Value: 'Area Inspection Checklist Step'}
+                    )
+                );
+                Set(
+                    gblSkipFormNav,//set this to true to navigate back to the assets screen from the summary screen
+                    true
+                );
+                Navigate(
+                    'Overview Screen',//if the area type has only 1 form, navigate to the summary screen
+                    ScreenTransition.Fade
+                ),
+                Set(
+                    gblSelectedLocation,
+                    ThisItem
+                );
+                Set(
+                    gblLocationType,
+                    LookUp(
+                        'Area Inspection Location Types',
+                        'Area Inspection Location Types'[@msft_areainspection_locationtypeid] = gblSelectedLocation.msft_areainspection_locationtypeid.'Area Inspection Location Type'
+                    )
+                );
+                Navigate(
+                    'Forms Screen',//if the asset type has more than 1 form, navigate to the form screen
+                    ScreenTransition.Fade
+                )
+            )
+        ShowScrollbar: =gblAppMobileOnDesktop
+        TabIndex: =0
+        TemplatePadding: =0
+        TemplateSize: =108
+        Visible: =CountRows(galAreas_MoreInspections.AllItems) > 0
+        Width: =Parent.Width
+        Y: =474
+        ZIndex: =7
+
+        lblAreaMoreInspectionsName As label:
+            BorderColor: =gblAppStyles.Label.BorderColor
+            BorderThickness: =gblAppStyles.Label.BorderThickness
+            Color: =gblAppStyles.Label.Color
+            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+            DisabledColor: =gblAppStyles.Label.DisabledColor
+            DisabledFill: =gblAppStyles.Label.DisabledFill
+            Fill: =gblAppStyles.Label.Fill
+            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+            HoverColor: =gblAppStyles.Label.HoverColor
+            HoverFill: =gblAppStyles.Label.HoverFill
+            OnSelect: =Select(Parent)
+            PaddingBottom: =2
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+            PressedColor: =gblAppStyles.Label.PressedColor
+            PressedFill: =gblAppStyles.Label.PressedFill
+            Size: =gblAppStyles.Label.Size.Large
+            Text: =ThisItem.Name
+            Width: =Parent.Width - imgAreaMoreInspectionsSelect.Width - Self.X
+            X: =108
+            Y: =20
+            ZIndex: =1
+
+        shpAreaMoreInspectionsTypeSeparator As rectangle:
+            Fill: =gblAppStyles.Dividers.Background 
+            Height: =1
+            OnSelect: =Select(Parent)
+            Width: =Parent.TemplateWidth - 80
+            X: =80
+            Y: =Parent.TemplateHeight - 1
+            ZIndex: =3
+
+        imgAreaMoreInspectionsTypeLogo As image:
+            AccessibleLabel: ="Image for more inspections type logo"
+            Fill: =Transparent //gblColorPalet.gblColorLightPurple
+            Height: =60
+            Image: =ThisItem.'Location Type'.Icon
+            OnSelect: =Select(Parent)
+            Tooltip: =Self.AccessibleLabel
+            Width: =60
+            X: =28
+            Y: =24
+            ZIndex: =4
+
+        lblAreaMoreInspectionsTypeName As label:
+            BorderColor: =gblAppStyles.Label.BorderColor
+            BorderThickness: =gblAppStyles.Label.BorderThickness
+            Color: =gblAppStyles.Label.Color
+            DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+            DisabledColor: =gblAppStyles.Label.DisabledColor
+            DisabledFill: =gblAppStyles.Label.DisabledFill
+            Fill: =gblAppStyles.Label.Fill
+            FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+            Font: =Font.'Segoe UI'
+            FontWeight: =FontWeight.Normal
+            Height: =35
+            HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+            HoverColor: =gblAppStyles.Label.HoverColor
+            HoverFill: =gblAppStyles.Label.HoverFill
+            OnSelect: =Select(Parent)
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+            PressedColor: =gblAppStyles.Label.PressedColor
+            PressedFill: =gblAppStyles.Label.PressedFill
+            Size: =gblAppStyles.Label.Size.Medium
+            Text: =ThisItem.'Location Type'.Name
+            VerticalAlign: =VerticalAlign.Top
+            Width: =Parent.Width - imgAreaMoreInspectionsSelect.Width - Self.X
+            X: =108
+            Y: =60
+            ZIndex: =5
+
+        imgAreaMoreInspectionsSelect As image:
+            AccessibleLabel: ="Image for selecting more inspections"
+            Height: =60
+            Image: |-
+                =With(
+                    {
+                        varImageRecord: LookUp(
+                            staticIcons,
+                            staticIconName = "Back"
+                        ),
+                        varColor: If(
+                            Self.DisplayMode = DisplayMode.Disabled,
+                            gblAppStyles.Icons.DisabledColor,
+                            gblAppStyles.Icons.Color
+                        )
+                    },
+                    With(
+                        {
+                            varImageData: Concatenate(
+                                "data:image/svg+xml;utf8, ",
+                                EncodeUrl(
+                                    Concatenate(
+                                        "<svg viewBox='",
+                                        varImageRecord.staticIconViewbox,
+                                        "' xmlns='http://www.w3.org/2000/svg'><path d='",
+                                        varImageRecord.staticIconPath,
+                                        "' fill='#",
+                                        varColor,
+                                        "'/></svg>"
+                                    )
+                                )
+                            )
+                        },
+                        varImageData
+                    )
+                )
+            ImageRotation: =ImageRotation.Rotate180
+            OnSelect: =Select(Parent)
+            PaddingBottom: =16
+            PaddingLeft: =16
+            PaddingRight: =16
+            PaddingTop: =16
+            Tooltip: =Self.AccessibleLabel
+            Width: =60
+            X: =If(gblAppMobileOnDesktop,  Parent.Width-Self.Width-30, Parent.Width-Self.Width)
+            Y: =24
+            ZIndex: =6
+
+        lblCountMoreInspectionsForms As label:
+            Color: =gblAppStyles.Label.Color
+            Font: =Font.'Segoe UI'
+            FontWeight: =FontWeight.Normal
+            Height: =60
+            OnSelect: =Select(Parent)
+            PaddingBottom: =0
+            PaddingLeft: =0
+            PaddingRight: =0
+            PaddingTop: =0
+            Size: =14
+            Text: =CountRows(galAreaMoreInspectionsForms.AllItems)
+            VerticalAlign: =VerticalAlign.Top
+            Visible: =false
+            Width: =179
+            X: =366
+            Y: =18
+            ZIndex: =7
+
+        "galAreaMoreInspectionsForms As gallery.'BrowseLayout_Vertical_TwoTextOneImageVariant_ver4.0'":
+            AccessibleLabel: ="Hidden list of forms"
+            Height: =72
+            Items: =ThisItem.'Location Type'.'Area Inspection Checklists'
+            Layout: =Layout.Vertical
+            TabIndex: |-
+                =If(
+                    true,
+                    -1,
+                    0
+                )
+            TemplatePadding: =0
+            TemplateSize: =Min(160, Self.Height - 60)
+            Visible: =false
+            Width: =600
+            X: =40
+            Y: =24
+            ZIndex: =8
+
+            lblAreaMoreInspectionsFormName As label:
+                Height: =12
+                OnSelect: =Select(Parent)
+                PaddingBottom: =0
+                PaddingLeft: =0
+                PaddingRight: =0
+                PaddingTop: =0
+                Text: =ThisItem.Name
+                VerticalAlign: =VerticalAlign.Top
+                Width: =50
+                ZIndex: =2
+
+        btnAreaMoreInspectionsForeground As button:
+            BorderThickness: =0
+            Color: =RGBA(0, 0, 0, 0)
+            DisabledColor: =RGBA(0, 0, 0, 0)
+            Fill: =RGBA(0, 0, 0, 0)
+            FocusedBorderColor: =gblAppStyles.ButtonTransparent.FocusedBorderColor
+            FocusedBorderThickness: =gblAppStyles.ButtonTransparent.FocusedBorderThickness
+            Height: =108
+            HoverColor: =RGBA(0, 0, 0, 0)
+            HoverFill: =Self.Fill
+            OnSelect: =Select(Parent)
+            PressedFill: =Self.Fill
+            Size: =24
+            Text: |-
+                =With({varDefault:"Click To Select The " & areaLabel,varOOBTextId:"_translateCommon_ClickToSelectTheArea",varParam0:areaLabel},With({varLocalizedText:LookUp(colLocalization,OOBTextID=varOOBTextId,LocalizedText)},If(IsBlankOrError(varParam0),Coalesce(varLocalizedText,varDefault),Coalesce(Substitute(varLocalizedText,"{0}",Text(varParam0)),varDefault))))
+            Tooltip: =Self.Text
+            Width: =Parent.Width
+            ZIndex: =9
+
+    lblSubmittingInspection As label:
+        AutoHeight: =true
+        BorderColor: =gblAppStyles.Label.BorderColor
+        BorderThickness: =gblAppStyles.Label.BorderThickness
+        Color: =gblAppStyles.Label.Color
+        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+        DisabledColor: =gblAppStyles.Label.DisabledColor
+        DisabledFill: =gblAppStyles.Label.DisabledFill
+        Fill: =gblAppStyles.Label.Fill
+        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+        Font: =Font.'Segoe UI'
+        FontWeight: =FontWeight.Semibold
+        Height: =76
+        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+        HoverColor: =gblAppStyles.Label.HoverColor
+        HoverFill: =gblAppStyles.Label.HoverFill
+        PaddingLeft: =28
+        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+        PressedColor: =gblAppStyles.Label.PressedColor
+        PressedFill: =gblAppStyles.Label.PressedFill
+        Size: =gblAppStyles.Label.Size.Medium
+        Text: |-
+            =//"Submitting " & Lower(gblWorkType) & " report" 
+            With({varDefault: "Submitting " & Lower(gblWorkType) & " report" ,varOOBTextId: "_translateCommon_Submitting" & gblWorkType},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+        Visible: =!gblInspectionPatchComplete
+        Width: =Parent.Width
+        Y: =142
+        ZIndex: =8
+
+    lblWaitingForSubmission As label:
+        AutoHeight: =true
+        BorderColor: =gblAppStyles.Label.BorderColor
+        BorderThickness: =gblAppStyles.Label.BorderThickness
+        Color: =gblAppStyles.Label.Color
+        DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+        DisabledColor: =gblAppStyles.Label.DisabledColor
+        DisabledFill: =gblAppStyles.Label.DisabledFill
+        Fill: =gblAppStyles.Label.Fill
+        FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+        FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+        Font: =Font.'Segoe UI'
+        Height: =76
+        HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+        HoverColor: =gblAppStyles.Label.HoverColor
+        HoverFill: =gblAppStyles.Label.HoverFill
+        PaddingLeft: =28
+        PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+        PressedColor: =gblAppStyles.Label.PressedColor
+        PressedFill: =gblAppStyles.Label.PressedFill
+        Size: =gblAppStyles.Label.Size.Medium
+        Text: |-
+            =//"This may take a while. Please keep the app open..." 
+            With({varDefault: "This may take a while. Please keep the app open... ",varOOBTextId: "_translateCommon_WaitingForSubmission"},With({varLocalizedText: LookUp(colLocalization,OOBTextID = varOOBTextId,LocalizedText)},Coalesce(varLocalizedText,varDefault)))
+        Visible: =!gblInspectionPatchComplete
+        Width: =Parent.Width
+        Y: =213
+        ZIndex: =9
+
+    shpBlankProgressBar As rectangle:
+        Fill: =gblAppStyles.ButtonPrimary.DisabledFill
+        Height: =8
+        Visible: =!gblInspectionPatchComplete
+        Width: =Parent.Width - Self.X*2
+        X: =28
+        Y: =193
+        ZIndex: =10
+
+    shpFillProgressBar As rectangle:
+        Fill: =gblAppStyles.ButtonPrimary.Fill
+        Height: =8
+        Visible: =!gblInspectionPatchComplete
+        Width: =0.0097*tmrProgressBar.Value //0.0292*Timer1.Value
+        X: =28
+        Y: =193
+        ZIndex: =11
+
+    tmrProgressBar As timer:
+        AutoStart: =true
+        Height: =70
+        Reset: =gblInspectionPatchComplete
+        Visible: =false
+        Width: =280
+        X: =40
+        Y: =40
+        ZIndex: =12
+
+    lblConfirmationScreen As label:
+        Height: =0
+        Live: =Live.Assertive
+        Size: =21
+        Text: =If(locScreenReadersubmit,"submitting inspection","Submitting Inspection")
+        Width: =0
+        ZIndex: =13
+

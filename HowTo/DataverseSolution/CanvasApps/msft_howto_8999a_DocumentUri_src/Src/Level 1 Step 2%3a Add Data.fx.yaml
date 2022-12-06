@@ -1,0 +1,1565 @@
+"'Level 1 Step 2: Add Data' As screen":
+    Fill: =gblAppStyles.Background.Fill
+
+    cnvSampleData As fluidGrid.fluidGridWithBlankCard:
+        BorderThickness: =0
+        Height: =Parent.Height - Self.Y
+        Width: =Parent.Width
+        X: =0*1
+        Y: =0*1
+        ZIndex: =1
+
+        dtcSampleData As dataCard:
+            BorderColor: =RGBA(0, 0, 0, 1)
+            BorderStyle: =BorderStyle.Solid
+            BorderThickness: =0
+            DisplayMode: =DisplayMode.Edit
+            Fill: =RGBA(0, 0, 0, 0)
+            Height: =btnSampleDataBackground.Y + btnSampleDataBackground.Height + 20
+            Width: =Parent.Width
+            X: =0
+            Y: =0
+            ZIndex: =1
+
+            btnSampleDataBackground As button:
+                BorderThickness: =1
+                Color: =Transparent
+                DisabledBorderColor: =Self.BorderColor
+                DisabledColor: =Self.Color
+                DisabledFill: =Self.Fill
+                Fill: |-
+                    =If(
+                        gblThemeDark,
+                        gblAppColors.NeutralWebGray220,
+                        gblThemeHiCo,
+                        Black,
+                        White
+                    )
+                FocusedBorderThickness: =1
+                Font: =Font.'Segoe UI'
+                Height: |-
+                    =Max('Level 1 Step 2: Add Data'.Height - Self.Y *2, galProjectCovers.Y + galProjectCovers.Height + 10)
+                HoverBorderColor: =Self.BorderColor
+                HoverColor: =Self.Color
+                HoverFill: =Self.Fill
+                PressedBorderColor: =Self.BorderColor
+                PressedColor: =Self.Color
+                PressedFill: =Self.Fill
+                RadiusBottomLeft: =8
+                RadiusBottomRight: =8
+                RadiusTopLeft: =8
+                RadiusTopRight: =8
+                Size: =gblAppStyles.ButtonTransparent.Size
+                Text: |-
+                    =With(
+                        {
+                            varDefault: "Background button for the topic",
+                            varOOBTextId: "btnTopicBackground__locText"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                Tooltip: =Self.Text
+                Visible: =false
+                Width: =Parent.Width - Self.X*2
+                X: =20*1
+                Y: =20*1
+                ZIndex: =1
+
+            lblSampleDataHeader As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Semibold
+                Height: =32*1
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Large
+                Text: ="Add data"
+                Tooltip: =Self.Text
+                Visible: =false
+                Width: =Parent.Width - Self.X*2
+                Wrap: =false
+                X: =btnSampleDataBackground.X + 20
+                Y: =btnSampleDataBackground.Y + 20
+                ZIndex: =2
+
+            htmSampleDataDesc As htmlViewer:
+                AutoHeight: =true
+                Font: =Font.'Segoe UI'
+                HtmlText: |-
+                    ="<p>This screen has been created to allow you to add and edit sample data to the tables from within the app. You can add and edit items and item types from this screen.</p>
+                    "
+                Width: =Parent.Width - Self.X*2
+                X: =lblSampleDataHeader.X
+                Y: =btnViewInstructions_SampleData.Y + btnViewInstructions_SampleData.Height + 100
+                ZIndex: =3
+
+            galSampleDataItems As gallery.galleryVertical:
+                AccessibleLabel: ="Gallery of items"
+                BorderColor: =Transparent
+                DisplayMode: =If(locAddNewRecord, DisplayMode.Disabled, DisplayMode.Edit)
+                Height: =btnSampleDataBackground.Y + btnSampleDataBackground.Height - Self.Y - 20
+                Items: =Items
+                Layout: =Layout.Vertical
+                OnSelect: |-
+                    =UpdateContext({locCoverImageUpdated: false}); Reset(galProjectCovers)
+                TabIndex: =0
+                TemplateFill: =If(ThisItem.IsSelected, gblAppStyles.Gallery.SelectedItem, Transparent)
+                TemplateSize: =46
+                Visible: =rdoSampleDataType.Selected.Value = "Items"
+                Width: =230
+                X: =htmSampleDataDesc.X 
+                Y: =btnAddNewSampleData.Y + btnAddNewSampleData.Height + 20
+                ZIndex: =5
+
+                lblSampleDataItemName As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =Select(Parent)
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: =ThisItem.Name
+                    Tooltip: =Self.Text
+                    Width: =150*1
+                    Wrap: =false
+                    X: =8
+                    Y: =8
+                    ZIndex: =1
+
+            btnGoToOverview_SampleData As button:
+                BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+                BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+                Color: =gblAppStyles.ButtonSecondary.Color
+                DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+                DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+                DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+                Fill: =gblAppStyles.ButtonSecondary.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =32*1
+                HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+                HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+                HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+                OnSelect: |-
+                    =Navigate(
+                        'Overview Screen',
+                        ScreenTransition.Fade
+                    )
+                PaddingLeft: |-
+                    =If(
+                        IsBlank(Param("tenantId")),
+                        5,
+                        25
+                    )
+                PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+                PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+                PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+                RadiusBottomLeft: =gblAppStyles.ButtonSecondary.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.ButtonSecondary.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.ButtonSecondary.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.ButtonSecondary.RadiusTopRight
+                Size: =gblAppStyles.ButtonSecondary.Size
+                Text: ="Back to overview"
+                Tooltip: =Self.Text
+                Width: =155
+                X: =Parent.Width - Self.Width - 20 - 20
+                Y: =40*1
+                ZIndex: =6
+
+            galProjectCovers As gallery.galleryHorizontal:
+                AccessibleLabel: |-
+                    =With(
+                        {
+                            varDefault: "List of stock images for a project",
+                            varOOBTextId: "galProjectCovers__locAccessibleText"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                BorderColor: =Transparent
+                Default: =If(locAddNewRecord, {}, galSampleDataItems.Selected.Image)
+                Fill: =gblAppStyles.Background.Fill
+                FocusedBorderThickness: =2
+                Height: =130
+                ItemAccessibleLabel: |-
+                    =If(
+                        ThisItem.IsSelected,
+                        With(
+                            {
+                                varDefault: "Selected",
+                                varOOBTextId: "galSelected_Announcement"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        ),
+                        With(
+                            {
+                                varDefault: "Not selected",
+                                varOOBTextId: "galNotSelected_Announcement"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    )
+                Items: =colStockImages
+                OnSelect: |
+                    =UpdateContext(
+                        {
+                            //locCoverImageSelected: true,
+                            //locCoverColorSelected: false,
+                            //locCoverChanged: true,
+                            locCustomImageSelected: false
+                        }
+                    );
+                    UpdateContext({locCoverImageUpdated: true}); 
+                TabIndex: =0
+                TemplateFill: =Transparent
+                TemplatePadding: =0
+                TemplateSize: =130
+                Visible: =rdoSampleDataType.Selected.Value = "Items"
+                Width: =130*4
+                X: =lblISampleDataItemHeader.X
+                Y: =lblISampleDataItemImageSelectorHeader.Y + lblISampleDataItemImageSelectorHeader.Height
+                ZIndex: =7
+
+                btnProjectCoverBackground As button:
+                    BorderColor: |-
+                        =If(
+                            ThisItem.appStockImage = LookUp(
+                                colStockImages,
+                                appStockImage = galSampleDataItems.Selected.Image.Full
+                            ).appStockImage,
+                            Black,
+                            Transparent
+                        )
+                    Color: =gblAppStyles.ButtonBackground.Color
+                    DisabledBorderColor: =Transparent
+                    DisabledColor: =gblAppStyles.ButtonBackground.DisabledColor
+                    DisabledFill: |-
+                        =If(
+                            locCustomImageSelected,
+                            If(
+                                IsBlank(ThisItem.appStockImage),
+                                gblAppStyles.ButtonPrimary.Fill,
+                                Transparent
+                            ),
+                            If(
+                                ThisItem.IsSelected,
+                                gblAppStyles.ButtonPrimary.Fill,
+                                Transparent
+                            )
+                        )
+                    Fill: |-
+                        =If(
+                            ThisItem.IsSelected,
+                            gblAppStyles.ButtonPrimary.Fill,
+                            Transparent
+                        )
+                    FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                    FocusedBorderThickness: =2
+                    Font: =Font.'Segoe UI'
+                    Height: =imgProjectCover.Height + 4
+                    HoverBorderColor: =gblAppStyles.ButtonBackground.HoverBorderColor
+                    HoverColor: =gblAppStyles.ButtonBackground.HoverColor
+                    HoverFill: =gblAppStyles.ButtonBackground.HoverFill
+                    OnSelect: =Select(Parent)
+                    PressedBorderColor: =gblAppStyles.ButtonBackground.PressedBorderColor
+                    PressedColor: =gblAppStyles.ButtonBackground.PressedColor
+                    PressedFill: =gblAppStyles.ButtonBackground.PressedFill
+                    RadiusBottomLeft: =4
+                    RadiusBottomRight: =4
+                    RadiusTopLeft: =4
+                    RadiusTopRight: =4
+                    Size: =gblAppStyles.ButtonBackground.Size
+                    Text: |-
+                        =With(
+                            {
+                                varDefault: "Click to select this stock image",
+                                varOOBTextId: "imgProjectCover__locAccessibleText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    Tooltip: =Self.Text
+                    Visible: =!IsBlank(ThisItem.appStockImage)
+                    Width: =imgProjectCover.Width + 4
+                    X: =imgProjectCover.X - 2
+                    Y: =2
+                    ZIndex: =1
+
+                imgProjectCover As image:
+                    AccessibleLabel: |-
+                        =With(
+                            {
+                                varDefault: "Click to select this stock image",
+                                varOOBTextId: "imgProjectCover__locAccessibleText"
+                            },
+                            With(
+                                {
+                                    varLocalizedText: LookUp(
+                                        colLocalization,
+                                        OOBTextID = varOOBTextId,
+                                        LocalizedText
+                                    )
+                                },
+                                Coalesce(
+                                    varLocalizedText,
+                                    varDefault
+                                )
+                            )
+                        )
+                    BorderColor: =Transparent
+                    BorderThickness: =1
+                    Fill: |-
+                        =If(
+                            IsBlank(ThisItem.appStockImage),
+                            gblAppStyles.ButtonSecondary.Fill,
+                            Transparent
+                        )
+                    Height: =Self.Width
+                    HoverBorderColor: =gblAppStyles.ButtonPrimary.Fill
+                    HoverFill: =Black
+                    Image: |-
+                        =Coalesce(
+                            ThisItem.appStockImage,
+                            addProjectCoverImage.Media
+                        )
+                    ImagePosition: =ImagePosition.Fill
+                    OnSelect: |
+                        =Select(Parent);
+                        UpdateContext(
+                            {
+                                locCustomImageSelected: false
+                            }
+                        );
+                    PressedBorderColor: =ColorFade(Self.HoverBorderColor, -20%)
+                    RadiusBottomLeft: =4
+                    RadiusBottomRight: =4
+                    RadiusTopLeft: =4
+                    RadiusTopRight: =4
+                    TabIndex: |-
+                        =If(
+                            true,
+                            -1,
+                            0
+                        )
+                    Tooltip: =Self.AccessibleLabel
+                    Width: =120
+                    X: =5
+                    Y: =4
+                    ZIndex: =2
+
+            addProjectCoverImage As addMedia:
+                AccessibleLabel: |-
+                    =With(
+                        {
+                            varDefault: "Click to add your own image for this project",
+                            varOOBTextId: "addProjectCoverImage__locAccessibleText"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+                BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+                ChangePictureText: |-
+                    =With(
+                        {
+                            varDefault: "Update",
+                            varOOBTextId: "addProjectCoverImage__locChangePictureText"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                Color: =gblAppStyles.ButtonSecondary.Color
+                DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+                DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+                DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+                Fill: =gblAppStyles.ButtonSecondary.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Normal
+                Height: =120
+                HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+                HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+                HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+                OnChange: |
+                    =//UpdateContext({locCoverChanged: true});
+                OnSelect: |-
+                    =/*
+                    UpdateContext(
+                        {
+                            locCustomImageSelected: true,
+                            locCoverImageSelected: true,
+                            locCoverColorSelected: false
+                        }
+                    )
+                    */
+                Padding: =4
+                PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+                PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+                PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+                Reset: =locResetAddPicture
+                Size: =gblAppStyles.Label.Size.Small
+                Text: |-
+                    ="+ " & With(
+                        {
+                            varDefault: "Add new",
+                            varOOBTextId: "addProjectCoverImage__locText"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                Tooltip: =Self.Text
+                Visible: =rdoSampleDataType.Selected.Value = "Items"
+                Width: =galProjectCovers.TemplateWidth - 8
+                X: =galProjectCovers.X + imgProjectCover.X
+                Y: =galProjectCovers.Y + imgProjectCover.Y
+                ZIndex: =8
+
+            btnSubmitSampleDataImages As button:
+                BorderColor: =gblAppStyles.ButtonPrimary.BorderColor
+                BorderThickness: =gblAppStyles.ButtonPrimary.BorderThickness
+                Color: =gblAppStyles.ButtonPrimary.Color
+                DisabledBorderColor: =gblAppStyles.ButtonPrimary.DisabledBorderColor
+                DisabledColor: =gblAppStyles.ButtonPrimary.DisabledColor
+                DisabledFill: =gblAppStyles.ButtonPrimary.DisabledFill
+                Fill: =gblAppStyles.ButtonPrimary.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonPrimary.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonPrimary.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =32*1
+                HoverBorderColor: =gblAppStyles.ButtonPrimary.HoverBorderColor
+                HoverColor: =gblAppStyles.ButtonPrimary.HoverColor
+                HoverFill: =gblAppStyles.ButtonPrimary.HoverFill
+                OnSelect: |-
+                    =If(
+                        rdoSampleDataType.Selected.Value = "Items",
+                        If(
+                            locAddNewRecord,
+                            If(
+                                IsError(
+                                    Patch(
+                                        Items,
+                                        Defaults(Items),
+                                        {
+                                            Name: txtSampleDataItemName.Text,
+                                            Quantity: Value(txtSampleDataItemQuantity.Text),
+                                            Description: txtSampleDataItemDescription.Text,
+                                            Item: drpSampleDataItemType.Selected.'Item Type',
+                                            Image: If(
+                                                locCustomImageSelected,
+                                                {
+                                                    Name: addProjectCoverImage.FileName,
+                                                    Value: addProjectCoverImage.Media,
+                                                    Full: addProjectCoverImage.Media
+                                                },
+                                                {
+                                                    Name: galProjectCovers.Selected.appStockImage,
+                                                    Value: galProjectCovers.Selected.appStockImage,
+                                                    Full: galProjectCovers.Selected.appStockImage
+                                                }
+                                            )
+                                        }
+                                    )
+                                ),
+                                Notify(
+                                    "Item record not created",
+                                    NotificationType.Error
+                                )
+                            ),
+                            If(
+                                IsError(
+                                    Patch(
+                                        Items,
+                                        galSampleDataItems.Selected,
+                                        {
+                                            Name: txtSampleDataItemName.Text,
+                                            Quantity: Value(txtSampleDataItemQuantity.Text),
+                                            Description: txtSampleDataItemDescription.Text,
+                                            'Item Type': drpSampleDataItemType.Selected,
+                                            Image: If(
+                                                locCustomImageSelected,
+                                                {
+                                                    Name: addProjectCoverImage.FileName,
+                                                    Value: addProjectCoverImage.Media,
+                                                    Full: addProjectCoverImage.Media
+                                                },
+                                                If(
+                                                    locCoverImageUpdated,
+                                                    {
+                                                        Name: galProjectCovers.Selected.appStockImage,
+                                                        Value: galProjectCovers.Selected.appStockImage,
+                                                        Full: galProjectCovers.Selected.appStockImage
+                                                    },
+                                                    galSampleDataItems.Selected.Image
+                                                )
+                                            )
+                                        }
+                                    )
+                                ),
+                                Notify(
+                                    "Item record not updated",
+                                    NotificationType.Error
+                                )
+                            )
+                        )
+                    );
+                    If(
+                        rdoSampleDataType.Selected.Value = "Item types",
+                        If(
+                            locAddNewRecord,
+                            If(
+                                IsError(
+                                    Patch(
+                                        'Item Types',
+                                        Defaults('Item Types'),
+                                        {
+                                            Name: txtSampleDataItemName.Text,
+                                            'Checkout Address': txtSampleDataCheckOutAddress.Text,
+                                            'Checkout Admin': txtSampleDataCheckOutAdminEmail.Text
+                                        }
+                                    )
+                                ),
+                                Notify(
+                                    "Item record not created",
+                                    NotificationType.Error
+                                )
+                            ),
+                            If(
+                                IsError(
+                                    Patch(
+                                        'Item Types',
+                                        galSampleDataItemTypes.Selected,
+                                        {
+                                            Name: txtSampleDataItemName.Text,
+                                            'Checkout Address': txtSampleDataCheckOutAddress.Text,
+                                            'Checkout Admin': txtSampleDataCheckOutAdminEmail.Text
+                                        }
+                                    )
+                                ),
+                                Notify(
+                                    "Item record not updated",
+                                    NotificationType.Error
+                                )
+                            )
+                        )
+                    );
+                    UpdateContext({locResetAddPicture: false});
+                    UpdateContext({locResetAddPicture: true})
+                PressedBorderColor: =gblAppStyles.ButtonPrimary.PressedBorderColor
+                PressedColor: =gblAppStyles.ButtonPrimary.PressedColor
+                PressedFill: =gblAppStyles.ButtonPrimary.PressedFill
+                RadiusBottomLeft: =gblAppStyles.ButtonPrimary.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.ButtonPrimary.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.ButtonPrimary.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.ButtonPrimary.RadiusTopRight
+                Size: =gblAppStyles.ButtonPrimary.Size
+                Text: ="Save"
+                Tooltip: =Self.Text
+                Width: =120
+                X: =btnSampleDataBackground.X + btnSampleDataBackground.Width - Self.Width - 20
+                Y: =rdoSampleDataType.Y + rdoSampleDataType.Height + 10
+                ZIndex: =14
+
+            rdoSampleDataType As radio:
+                AccessibleLabel: ="radio"
+                BorderColor: =gblAppStyles.Radio.BorderColor
+                BorderThickness: =gblAppStyles.Radio.BorderThickness
+                Color: =gblAppStyles.Radio.Color
+                Default: ="Items"
+                DisabledBorderColor: =gblAppStyles.Radio.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Radio.DisabledColor
+                DisabledFill: =gblAppStyles.Radio.DisabledFill
+                Fill: =gblAppStyles.Radio.Fill
+                FocusedBorderColor: =gblAppStyles.Radio.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Radio.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =32*1
+                HoverColor: =gblAppStyles.Radio.HoverColor
+                HoverFill: =gblAppStyles.Radio.HoverFill
+                Items: =["Items", "Item types"]
+                Layout: =Layout.Horizontal
+                PaddingBottom: =0
+                PaddingTop: =0
+                PressedColor: =gblAppStyles.Radio.PressedColor
+                PressedFill: =gblAppStyles.Radio.PressedFill
+                RadioBackgroundFill: =gblAppStyles.Radio.RadioBackgroundFill
+                RadioBorderColor: =gblAppStyles.Radio.RadioBorderSelectionColor
+                RadioSelectionFill: =gblAppStyles.Radio.RadioSelectionFill
+                RadioSize: =25
+                Size: =gblAppStyles.Radio.Size
+                Width: =500*1
+                X: =40
+                Y: =htmSampleDataDesc.Y + htmSampleDataDesc.Height
+                ZIndex: =15
+
+            lblISampleDataItemHeader As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =32*1
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: ="Name"
+                Tooltip: =Self.Text
+                Visible: =rdoSampleDataType.Selected.Value = "Items"
+                Width: =rdoSampleDataType.Width
+                Wrap: =false
+                X: =galSampleDataItems.X + galSampleDataItems.Width + 10
+                Y: =galSampleDataItems.Y
+                ZIndex: =16
+
+            drpSampleDataItemType As dropdown:
+                AccessibleLabel: ="dropdown"
+                BorderColor: =gblAppStyles.Dropdown.BorderColor
+                BorderThickness: =gblAppStyles.Dropdown.BorderThickness
+                ChevronBackground: =gblAppStyles.Background.Fill
+                ChevronDisabledBackground: =gblAppStyles.Dropdown.ChevronDisabledBackground
+                ChevronDisabledFill: =gblAppStyles.Dropdown.ChevronDisabledFill
+                ChevronFill: =gblAppStyles.Dropdown.ChevronFill
+                ChevronHoverBackground: =Self.ChevronBackground
+                ChevronHoverFill: =Self.ChevronFill
+                Color: =gblAppStyles.Dropdown.Color
+                Default: |-
+                    =If(
+                        locAddNewRecord,
+                        Blank(),
+                        galSampleDataItems.Selected.'Item Type'.Name
+                    )
+                DisabledBorderColor: =gblAppStyles.Dropdown.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Dropdown.DisabledColor
+                DisabledFill: =gblAppStyles.Dropdown.DisabledFill
+                Fill: =gblAppStyles.Dropdown.Fill
+                FocusedBorderColor: =gblAppStyles.Dropdown.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Dropdown.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =32*1
+                HoverBorderColor: =gblAppStyles.Dropdown.HoverBorderColor
+                HoverColor: =gblAppStyles.Dropdown.HoverColor
+                HoverFill: =gblAppStyles.Dropdown.HoverFill
+                Items: ='Item Types'
+                PressedBorderColor: =gblAppStyles.Dropdown.PressedBorderColor
+                PressedColor: =gblAppStyles.Dropdown.PressedColor
+                PressedFill: =gblAppStyles.Dropdown.PressedFill
+                SelectionColor: =gblAppStyles.Dropdown.SelectionColor
+                SelectionFill: =gblAppStyles.Dropdown.SelectionFill
+                Size: =gblAppStyles.Dropdown.Size
+                Visible: =rdoSampleDataType.Selected.Value = "Items"
+                Width: =rdoSampleDataType.Width
+                X: =lblISampleDataItemHeader.X
+                Y: =lblISampleDataItemTypeHeader.Y + lblISampleDataItemTypeHeader.Height
+                ZIndex: =17
+
+            lblISampleDataItemTypeHeader As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =32*1
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: ="Item type"
+                Tooltip: =Self.Text
+                Visible: =rdoSampleDataType.Selected.Value = "Items"
+                Width: =rdoSampleDataType.Width
+                Wrap: =false
+                X: =lblISampleDataItemHeader.X
+                Y: =txtSampleDataItemName.Y + txtSampleDataItemName.Height + 20
+                ZIndex: =18
+
+            txtSampleDataItemName As text:
+                AccessibleLabel: =Self.HintText
+                BorderColor: =gblAppStyles.TextInput.BorderColor
+                BorderThickness: =gblAppStyles.TextInput.BorderThickness
+                Color: =gblAppStyles.TextInput.Color
+                Default: |-
+                    =If(
+                        locAddNewRecord,
+                        Blank(),
+                        galSampleDataItems.Selected.Name
+                    )
+                DisabledBorderColor: =gblAppStyles.TextInput.DisabledBorderColor
+                DisabledColor: =gblAppStyles.TextInput.DisabledColor
+                DisabledFill: =gblAppStyles.TextInput.DisabledFill
+                Fill: =gblAppStyles.TextInput.Fill
+                FocusedBorderColor: =gblAppStyles.TextInput.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.TextInput.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =32*1
+                HintText: ="Enter name here"
+                HoverBorderColor: =gblAppStyles.TextInput.HoverBorderColor
+                HoverColor: =gblAppStyles.TextInput.HoverColor
+                HoverFill: =gblAppStyles.TextInput.HoverFill
+                PressedBorderColor: =gblAppStyles.TextInput.PressedBorderColor
+                PressedColor: =gblAppStyles.TextInput.PressedColor
+                PressedFill: =gblAppStyles.TextInput.PressedFill
+                RadiusBottomLeft: =gblAppStyles.TextInput.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.TextInput.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.TextInput.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.TextInput.RadiusTopRight
+                Size: =gblAppStyles.TextInput.Size
+                Tooltip: =Self.HintText
+                Visible: =rdoSampleDataType.Selected.Value = "Items"
+                Width: =rdoSampleDataType.Width
+                X: =lblISampleDataItemHeader.X
+                Y: =lblISampleDataItemHeader.Y + lblISampleDataItemHeader.Height
+                ZIndex: =19
+
+            lblISampleDataItemQuantityHeader As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =32*1
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: ="Quantity"
+                Tooltip: =Self.Text
+                Visible: =rdoSampleDataType.Selected.Value = "Items"
+                Width: =rdoSampleDataType.Width
+                Wrap: =false
+                X: =lblISampleDataItemHeader.X
+                Y: =drpSampleDataItemType.Y + drpSampleDataItemType.Height + 20
+                ZIndex: =20
+
+            txtSampleDataItemQuantity As text:
+                AccessibleLabel: =Self.HintText
+                BorderColor: =gblAppStyles.TextInput.BorderColor
+                BorderThickness: =gblAppStyles.TextInput.BorderThickness
+                Color: =gblAppStyles.TextInput.Color
+                Default: |-
+                    =If(
+                        locAddNewRecord,
+                        Blank(),
+                        galSampleDataItems.Selected.Quantity
+                    )
+                DisabledBorderColor: =gblAppStyles.TextInput.DisabledBorderColor
+                DisabledColor: =gblAppStyles.TextInput.DisabledColor
+                DisabledFill: =gblAppStyles.TextInput.DisabledFill
+                Fill: =gblAppStyles.TextInput.Fill
+                FocusedBorderColor: =gblAppStyles.TextInput.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.TextInput.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Format: =TextFormat.Number
+                Height: =32*1
+                HintText: ="Enter quantity here"
+                HoverBorderColor: =gblAppStyles.TextInput.HoverBorderColor
+                HoverColor: =gblAppStyles.TextInput.HoverColor
+                HoverFill: =gblAppStyles.TextInput.HoverFill
+                PressedBorderColor: =gblAppStyles.TextInput.PressedBorderColor
+                PressedColor: =gblAppStyles.TextInput.PressedColor
+                PressedFill: =gblAppStyles.TextInput.PressedFill
+                RadiusBottomLeft: =gblAppStyles.TextInput.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.TextInput.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.TextInput.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.TextInput.RadiusTopRight
+                Size: =gblAppStyles.TextInput.Size
+                Tooltip: =Self.HintText
+                Visible: =rdoSampleDataType.Selected.Value = "Items"
+                Width: =rdoSampleDataType.Width
+                X: =lblISampleDataItemHeader.X
+                Y: =lblISampleDataItemQuantityHeader.Y + lblISampleDataItemQuantityHeader.Height
+                ZIndex: =21
+
+            lblISampleDataItemDescriptionHeader As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =32*1
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: ="Description"
+                Tooltip: =Self.Text
+                Visible: =rdoSampleDataType.Selected.Value = "Items"
+                Width: =rdoSampleDataType.Width
+                Wrap: =false
+                X: =lblISampleDataItemHeader.X
+                Y: =txtSampleDataItemQuantity.Y + txtSampleDataItemQuantity.Height + 20
+                ZIndex: =22
+
+            txtSampleDataItemDescription As text:
+                AccessibleLabel: =Self.HintText
+                BorderColor: =gblAppStyles.TextInput.BorderColor
+                BorderThickness: =gblAppStyles.TextInput.BorderThickness
+                Color: =gblAppStyles.TextInput.Color
+                Default: |-
+                    =If(
+                        locAddNewRecord,
+                        Blank(),
+                        galSampleDataItems.Selected.Description
+                    )
+                DisabledBorderColor: =gblAppStyles.TextInput.DisabledBorderColor
+                DisabledColor: =gblAppStyles.TextInput.DisabledColor
+                DisabledFill: =gblAppStyles.TextInput.DisabledFill
+                Fill: =gblAppStyles.TextInput.Fill
+                FocusedBorderColor: =gblAppStyles.TextInput.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.TextInput.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =32*2
+                HintText: ="Enter description here"
+                HoverBorderColor: =gblAppStyles.TextInput.HoverBorderColor
+                HoverColor: =gblAppStyles.TextInput.HoverColor
+                HoverFill: =gblAppStyles.TextInput.HoverFill
+                Mode: =TextMode.MultiLine
+                PressedBorderColor: =gblAppStyles.TextInput.PressedBorderColor
+                PressedColor: =gblAppStyles.TextInput.PressedColor
+                PressedFill: =gblAppStyles.TextInput.PressedFill
+                RadiusBottomLeft: =gblAppStyles.TextInput.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.TextInput.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.TextInput.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.TextInput.RadiusTopRight
+                Size: =gblAppStyles.TextInput.Size
+                Tooltip: =Self.HintText
+                Visible: =rdoSampleDataType.Selected.Value = "Items"
+                Width: =rdoSampleDataType.Width
+                X: =lblISampleDataItemHeader.X
+                Y: =lblISampleDataItemDescriptionHeader.Y + lblISampleDataItemDescriptionHeader.Height
+                ZIndex: =23
+
+            lblISampleDataItemImageSelectorHeader As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =32*1
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: ="Image selector"
+                Tooltip: =Self.Text
+                Visible: =rdoSampleDataType.Selected.Value = "Items"
+                Width: =rdoSampleDataType.Width
+                Wrap: =false
+                X: =lblISampleDataItemHeader.X
+                Y: =txtSampleDataItemDescription.Y + txtSampleDataItemDescription.Height + 20
+                ZIndex: =24
+
+            imgSampleDataItemImage As image:
+                BorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                Height: =174
+                Image: |-
+                    =If(
+                        locAddNewRecord,
+                        SampleImage,
+                        galSampleDataItems.Selected.Image.Full
+                    )
+                Visible: =rdoSampleDataType.Selected.Value = "Items"
+                Width: =213
+                X: =lblISampleDataItemImageHeader.X
+                Y: =lblISampleDataItemImageHeader.Y + lblISampleDataItemImageHeader.Height
+                ZIndex: =25
+
+            lblISampleDataItemImageHeader As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =32*1
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: ="Image"
+                Tooltip: =Self.Text
+                Visible: =rdoSampleDataType.Selected.Value = "Items"
+                Width: =rdoSampleDataType.Width
+                Wrap: =false
+                X: =lblISampleDataItemHeader.X + lblISampleDataItemHeader.Width + 20
+                Y: =lblISampleDataItemHeader.Y
+                ZIndex: =26
+
+            btnCancelSampleData As button:
+                BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+                BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+                Color: =gblAppStyles.ButtonSecondary.Color
+                DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+                DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+                DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+                Fill: =gblAppStyles.ButtonSecondary.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =32*1
+                HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+                HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+                HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+                OnSelect: |-
+                    =UpdateContext({locAddNewRecord: false})
+                PaddingLeft: |-
+                    =If(
+                        IsBlank(Param("tenantId")),
+                        5,
+                        25
+                    )
+                PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+                PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+                PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+                RadiusBottomLeft: =gblAppStyles.ButtonSecondary.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.ButtonSecondary.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.ButtonSecondary.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.ButtonSecondary.RadiusTopRight
+                Size: =gblAppStyles.ButtonSecondary.Size
+                Text: ="Cancel"
+                Tooltip: =Self.Text
+                Width: =120
+                X: =Parent.Width - Self.Width - btnSubmitSampleDataImages.Width - 60
+                Y: =btnSubmitSampleDataImages.Y
+                ZIndex: =27
+
+            btnAddNewSampleData As button:
+                BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+                BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+                Color: =gblAppStyles.ButtonSecondary.Color
+                DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+                DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+                DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+                Fill: =gblAppStyles.ButtonSecondary.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =32*1
+                HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+                HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+                HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+                OnSelect: |-
+                    =UpdateContext({locAddNewRecord: true})
+                PaddingLeft: =20
+                PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+                PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+                PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+                RadiusBottomLeft: =gblAppStyles.ButtonSecondary.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.ButtonSecondary.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.ButtonSecondary.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.ButtonSecondary.RadiusTopRight
+                Size: =gblAppStyles.ButtonSecondary.Size
+                Text: ="Add new"
+                Tooltip: =Self.Text
+                Width: =120
+                X: =rdoSampleDataType.X
+                Y: =rdoSampleDataType.Y + rdoSampleDataType.Height + 10
+                ZIndex: =28
+
+            shpAddNewSampleData As icon.Add:
+                Height: =btnAddNewSampleData.Height
+                Icon: =Icon.Add
+                PaddingBottom: =6
+                PaddingLeft: =6
+                PaddingRight: =6
+                PaddingTop: =6
+                Width: =Self.Height
+                X: =btnAddNewSampleData.X + 6
+                Y: =btnAddNewSampleData.Y
+                ZIndex: =29
+
+            lblSampleDataItemTypeNameHeader As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =32*1
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: ="Name"
+                Tooltip: =Self.Text
+                Visible: =rdoSampleDataType.Selected.Value = "Item types"
+                Width: =rdoSampleDataType.Width
+                Wrap: =false
+                X: =galSampleDataItems.X + galSampleDataItems.Width + 10
+                Y: =galSampleDataItems.Y
+                ZIndex: =30
+
+            txtSampleDataItemTypeName As text:
+                AccessibleLabel: =Self.HintText
+                BorderColor: =gblAppStyles.TextInput.BorderColor
+                BorderThickness: =gblAppStyles.TextInput.BorderThickness
+                Color: =gblAppStyles.TextInput.Color
+                Default: |-
+                    =If(
+                        locAddNewRecord,
+                        Blank(),
+                        galSampleDataItemTypes.Selected.Name
+                    )
+                DisabledBorderColor: =gblAppStyles.TextInput.DisabledBorderColor
+                DisabledColor: =gblAppStyles.TextInput.DisabledColor
+                DisabledFill: =gblAppStyles.TextInput.DisabledFill
+                Fill: =gblAppStyles.TextInput.Fill
+                FocusedBorderColor: =gblAppStyles.TextInput.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.TextInput.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =32*1
+                HintText: ="Enter name here"
+                HoverBorderColor: =gblAppStyles.TextInput.HoverBorderColor
+                HoverColor: =gblAppStyles.TextInput.HoverColor
+                HoverFill: =gblAppStyles.TextInput.HoverFill
+                PressedBorderColor: =gblAppStyles.TextInput.PressedBorderColor
+                PressedColor: =gblAppStyles.TextInput.PressedColor
+                PressedFill: =gblAppStyles.TextInput.PressedFill
+                RadiusBottomLeft: =gblAppStyles.TextInput.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.TextInput.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.TextInput.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.TextInput.RadiusTopRight
+                Size: =gblAppStyles.TextInput.Size
+                Tooltip: =Self.HintText
+                Visible: =rdoSampleDataType.Selected.Value = "Item types"
+                Width: =rdoSampleDataType.Width
+                X: =lblSampleDataItemTypeNameHeader.X
+                Y: =lblSampleDataItemTypeNameHeader.Y + lblSampleDataItemTypeNameHeader.Height
+                ZIndex: =31
+
+            galSampleDataItemTypes As gallery.galleryVertical:
+                AccessibleLabel: ="Gallery of items"
+                BorderColor: =Transparent
+                DisplayMode: =If(locAddNewRecord, DisplayMode.Disabled, DisplayMode.Edit)
+                Height: =btnSampleDataBackground.Y + btnSampleDataBackground.Height - Self.Y - 20
+                Items: ='Item Types'
+                Layout: =Layout.Vertical
+                OnSelect: =Reset(galProjectCovers)
+                TabIndex: =0
+                TemplateFill: =If(ThisItem.IsSelected, gblAppStyles.Gallery.SelectedItem, Transparent)
+                TemplateSize: =46
+                Visible: =rdoSampleDataType.Selected.Value = "Item types"
+                Width: =230
+                X: =htmSampleDataDesc.X 
+                Y: =btnAddNewSampleData.Y + btnAddNewSampleData.Height + 20
+                ZIndex: =32
+
+                lblSampleDataItemTypeName As label:
+                    BorderColor: =gblAppStyles.Label.BorderColor
+                    BorderThickness: =gblAppStyles.Label.BorderThickness
+                    Color: =gblAppStyles.Label.Color
+                    DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                    DisabledColor: =gblAppStyles.Label.DisabledColor
+                    DisabledFill: =gblAppStyles.Label.DisabledFill
+                    Fill: =gblAppStyles.Label.Fill
+                    FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                    FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                    Font: =Font.'Segoe UI'
+                    Height: =32*1
+                    HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                    HoverColor: =gblAppStyles.Label.HoverColor
+                    HoverFill: =gblAppStyles.Label.HoverFill
+                    OnSelect: =Select(Parent)
+                    PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                    PressedColor: =gblAppStyles.Label.PressedColor
+                    PressedFill: =gblAppStyles.Label.PressedFill
+                    Size: =gblAppStyles.Label.Size.Medium
+                    Text: =ThisItem.Name
+                    Tooltip: =Self.Text
+                    Width: =150*1
+                    Wrap: =false
+                    X: =8
+                    Y: =8
+                    ZIndex: =1
+
+            lblSampleDataCheckOutAdminEmailHeader As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =32*1
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: ="Checkout admin email"
+                Tooltip: =Self.Text
+                Visible: =rdoSampleDataType.Selected.Value = "Item types"
+                Width: =rdoSampleDataType.Width
+                Wrap: =false
+                X: =galSampleDataItems.X + galSampleDataItems.Width + 10
+                Y: =txtSampleDataItemTypeName.Y + txtSampleDataItemTypeName.Height + 20
+                ZIndex: =33
+
+            txtSampleDataCheckOutAdminEmail As text:
+                AccessibleLabel: =Self.HintText
+                BorderColor: =gblAppStyles.TextInput.BorderColor
+                BorderThickness: =gblAppStyles.TextInput.BorderThickness
+                Color: =gblAppStyles.TextInput.Color
+                Default: |-
+                    =If(
+                        locAddNewRecord,
+                        Blank(),
+                        galSampleDataItemTypes.Selected.'Checkout Admin'
+                    )
+                DisabledBorderColor: =gblAppStyles.TextInput.DisabledBorderColor
+                DisabledColor: =gblAppStyles.TextInput.DisabledColor
+                DisabledFill: =gblAppStyles.TextInput.DisabledFill
+                Fill: =gblAppStyles.TextInput.Fill
+                FocusedBorderColor: =gblAppStyles.TextInput.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.TextInput.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =32*1
+                HintText: ="Enter checkout admin email here"
+                HoverBorderColor: =gblAppStyles.TextInput.HoverBorderColor
+                HoverColor: =gblAppStyles.TextInput.HoverColor
+                HoverFill: =gblAppStyles.TextInput.HoverFill
+                PressedBorderColor: =gblAppStyles.TextInput.PressedBorderColor
+                PressedColor: =gblAppStyles.TextInput.PressedColor
+                PressedFill: =gblAppStyles.TextInput.PressedFill
+                RadiusBottomLeft: =gblAppStyles.TextInput.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.TextInput.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.TextInput.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.TextInput.RadiusTopRight
+                Size: =gblAppStyles.TextInput.Size
+                Tooltip: =Self.HintText
+                Visible: =rdoSampleDataType.Selected.Value = "Item types"
+                Width: =rdoSampleDataType.Width
+                X: =lblSampleDataCheckOutAdminEmailHeader.X
+                Y: =lblSampleDataCheckOutAdminEmailHeader.Y + lblSampleDataCheckOutAdminEmailHeader.Height
+                ZIndex: =34
+
+            lblSampleDataCheckOutAddressHeader As label:
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =32*1
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: ="Checkout address"
+                Tooltip: =Self.Text
+                Visible: =rdoSampleDataType.Selected.Value = "Item types"
+                Width: =rdoSampleDataType.Width
+                Wrap: =false
+                X: =galSampleDataItems.X + galSampleDataItems.Width + 10
+                Y: =txtSampleDataCheckOutAdminEmail.Y + txtSampleDataCheckOutAdminEmail.Height + 20
+                ZIndex: =35
+
+            txtSampleDataCheckOutAddress As text:
+                AccessibleLabel: =Self.HintText
+                BorderColor: =gblAppStyles.TextInput.BorderColor
+                BorderThickness: =gblAppStyles.TextInput.BorderThickness
+                Color: =gblAppStyles.TextInput.Color
+                Default: |-
+                    =If(
+                        locAddNewRecord,
+                        Blank(),
+                        galSampleDataItemTypes.Selected.'Checkout Address'
+                    )
+                DisabledBorderColor: =gblAppStyles.TextInput.DisabledBorderColor
+                DisabledColor: =gblAppStyles.TextInput.DisabledColor
+                DisabledFill: =gblAppStyles.TextInput.DisabledFill
+                Fill: =gblAppStyles.TextInput.Fill
+                FocusedBorderColor: =gblAppStyles.TextInput.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.TextInput.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =32*1
+                HintText: ="Enter checkout address here"
+                HoverBorderColor: =gblAppStyles.TextInput.HoverBorderColor
+                HoverColor: =gblAppStyles.TextInput.HoverColor
+                HoverFill: =gblAppStyles.TextInput.HoverFill
+                PressedBorderColor: =gblAppStyles.TextInput.PressedBorderColor
+                PressedColor: =gblAppStyles.TextInput.PressedColor
+                PressedFill: =gblAppStyles.TextInput.PressedFill
+                RadiusBottomLeft: =gblAppStyles.TextInput.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.TextInput.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.TextInput.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.TextInput.RadiusTopRight
+                Size: =gblAppStyles.TextInput.Size
+                Tooltip: =Self.HintText
+                Visible: =rdoSampleDataType.Selected.Value = "Item types"
+                Width: =rdoSampleDataType.Width
+                X: =lblSampleDataCheckOutAddressHeader.X
+                Y: =lblSampleDataCheckOutAddressHeader.Y + lblSampleDataCheckOutAddressHeader.Height
+                ZIndex: =36
+
+            htmPlayInstruction_SampleData As htmlViewer:
+                BorderColor: =gblAppStyles.HTML.BorderColor
+                BorderThickness: =gblAppStyles.HTML.BorderThickness
+                Color: =gblAppStyles.ButtonPrimary.Color
+                DisabledBorderColor: =gblAppStyles.HTML.DisabledBorderColor
+                DisabledFill: =gblAppStyles.HTML.DisabledFill
+                Fill: =gblAppStyles.ButtonPrimary.Fill
+                Font: =Font.'Segoe UI'
+                Height: =32
+                HoverBorderColor: =gblAppStyles.HTML.HoverBorderColor
+                HtmlText: |-
+                    ="
+                    <div style='width: 100%; overflow: hidden;'>
+                     
+                        
+                        <div style='float: left; padding-left: 1em'>
+                            Play this app with <strong>&lt;F5&gt;</strong> or the play button in the top right corner to interact with the screen
+                        </div>
+                        <div style='clear: both'></div>
+                      
+                        
+                    
+                    </div>
+                      "
+                PaddingLeft: =0
+                Size: =gblAppStyles.HTML.Size.Medium
+                Visible: =IsBlank(Param("tenantId"))
+                Width: =600
+                X: =btnGoToOverview_SampleData.X - Self.Width - 20
+                Y: =btnGoToOverview_SampleData.Y
+                ZIndex: =37
+
+            lblHeader_SampleData As label:
+                Align: =Align.Center
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                FontWeight: =FontWeight.Semibold
+                Height: =32*1
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Large
+                Text: |-
+                    ="Level 1 Step 2: Sample data"
+                Tooltip: =Self.Text
+                Width: =Parent.Width - Self.X*2
+                Wrap: =false
+                X: =0*1
+                Y: =imgLogo_SampleData.Y + imgLogo_SampleData.Height
+                ZIndex: =38
+
+            imgLogo_SampleData As image:
+                Height: =300
+                Image: ='Data Model'
+                Width: =300
+                X: =(Parent.Width - Self.Width) / 2
+                Y: =134*1
+                ZIndex: =39
+
+            lblDetails_SampleData As label:
+                Align: =Align.Center
+                AutoHeight: =true
+                BorderColor: =gblAppStyles.Label.BorderColor
+                BorderThickness: =gblAppStyles.Label.BorderThickness
+                Color: =gblAppStyles.Label.Color
+                DisabledBorderColor: =gblAppStyles.Label.DisabledBorderColor
+                DisabledColor: =gblAppStyles.Label.DisabledColor
+                DisabledFill: =gblAppStyles.Label.DisabledFill
+                Fill: =gblAppStyles.Label.Fill
+                FocusedBorderColor: =gblAppStyles.Label.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.Label.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =32*1
+                HoverBorderColor: =gblAppStyles.Label.HoverBorderColor
+                HoverColor: =gblAppStyles.Label.HoverColor
+                HoverFill: =gblAppStyles.Label.HoverFill
+                PressedBorderColor: =gblAppStyles.Label.PressedBorderColor
+                PressedColor: =gblAppStyles.Label.PressedColor
+                PressedFill: =gblAppStyles.Label.PressedFill
+                Size: =gblAppStyles.Label.Size.Medium
+                Text: |-
+                    ="Easily get started with sample data. Add or delete items. You can update the data anytime.
+                    
+                    Follow guided instructions to finish the step."
+                Tooltip: =Self.Text
+                Width: =300*1
+                X: =(Parent.Width - Self.Width) / 2
+                Y: =lblHeader_SampleData.Y + lblHeader_SampleData.Height
+                ZIndex: =40
+
+            btnViewInstructions_SampleData As button:
+                BorderColor: =gblAppStyles.ButtonSecondary.BorderColor
+                BorderThickness: =gblAppStyles.ButtonSecondary.BorderThickness
+                Color: =gblAppStyles.ButtonSecondary.Color
+                DisabledBorderColor: =gblAppStyles.ButtonSecondary.DisabledBorderColor
+                DisabledColor: =gblAppStyles.ButtonSecondary.DisabledColor
+                DisabledFill: =gblAppStyles.ButtonSecondary.DisabledFill
+                Fill: =gblAppStyles.ButtonSecondary.Fill
+                FocusedBorderColor: =gblAppStyles.ButtonSecondary.FocusedBorderColor
+                FocusedBorderThickness: =gblAppStyles.ButtonSecondary.FocusedBorderThickness
+                Font: =Font.'Segoe UI'
+                Height: =32*1
+                HoverBorderColor: =gblAppStyles.ButtonSecondary.HoverBorderColor
+                HoverColor: =gblAppStyles.ButtonSecondary.HoverColor
+                HoverFill: =gblAppStyles.ButtonSecondary.HoverFill
+                OnSelect: |-
+                    =Launch(
+                        "aka.ms/TeamsHowToLevel1Step2",
+                        {},
+                        LaunchTarget.New
+                    )
+                PaddingLeft: =25
+                PressedBorderColor: =gblAppStyles.ButtonSecondary.PressedBorderColor
+                PressedColor: =gblAppStyles.ButtonSecondary.PressedColor
+                PressedFill: =gblAppStyles.ButtonSecondary.PressedFill
+                RadiusBottomLeft: =gblAppStyles.ButtonSecondary.RadiusBottomLeft
+                RadiusBottomRight: =gblAppStyles.ButtonSecondary.RadiusBottomRight
+                RadiusTopLeft: =gblAppStyles.ButtonSecondary.RadiusTopLeft
+                RadiusTopRight: =gblAppStyles.ButtonSecondary.RadiusTopRight
+                Size: =gblAppStyles.ButtonSecondary.Size
+                Text: ="View insturctions"
+                Tooltip: =Self.Text
+                Width: =175
+                X: =(Parent.Width - Self.Width) / 2
+                Y: =lblDetails_SampleData.Y + lblDetails_SampleData.Height + 20
+                ZIndex: =41
+
+            imgViewInstructions_SampleData As image:
+                AccessibleLabel: |-
+                    =With(
+                        {
+                            varDefault: "Preview icon",
+                            varOOBTextId: "_translatecommon_imgPreviewApp__locAccessibleText"
+                        },
+                        With(
+                            {
+                                varLocalizedText: LookUp(
+                                    colLocalization,
+                                    OOBTextID = varOOBTextId,
+                                    LocalizedText
+                                )
+                            },
+                            Coalesce(
+                                varLocalizedText,
+                                varDefault
+                            )
+                        )
+                    )
+                Height: =32
+                Image: |-
+                    =If(
+                        gblThemeDark || gblThemeHiCo,
+                        View_Dark,
+                        View_Default
+                    )
+                OnSelect: |-
+                    =Launch(
+                        "aka.ms/TeamsHowToLevel1Step2",
+                        {},
+                        LaunchTarget.New
+                    )
+                PaddingBottom: =8
+                PaddingLeft: =8
+                PaddingRight: =8
+                PaddingTop: =8
+                TabIndex: |-
+                    =If(
+                        true,
+                        -1,
+                        0
+                    )
+                Tooltip: =Self.AccessibleLabel
+                Width: =32
+                X: =btnViewInstructions_SampleData.X + 10
+                Y: =btnViewInstructions_SampleData.Y
+                ZIndex: =42
+
