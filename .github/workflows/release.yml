@@ -21,18 +21,6 @@ jobs:
       run: .\PowerApps-Language-Tooling\build.cmd
     - name: Prepare output folder
       run: mkdir buildoutput
-    - name: Pack Milestones
-      run: |
-            cd Milestones
-            ..\PowerApps-Language-Tooling\bin\Debug\PASopa\PASopa.exe -pack .\DataverseSolution\CanvasApps\msft_milestones_5daaa.msapp .\DataverseSolution\CanvasApps\msft_milestones_5daaa_DocumentUri_src\
-            powershell rm -r DataverseSolution\CanvasApps\msft_milestones_5daaa_DocumentUri_src\
-            powershell Compress-Archive DataverseSolution\* DataverseSolution.zip
-            powershell Compress-Archive TeamsCustomApp\* TeamsCustomApp.zip
-            mkdir Milestones
-            move DataverseSolution.zip Milestones
-            move TeamsCustomApp.zip Milestones
-            powershell Move-Item -Path Milestones -Destination ..\buildoutput
-            cd ..
     - name: Pack Area Inspection
       run: |
             cd "Area Inspection"
@@ -47,7 +35,19 @@ jobs:
             mkdir "Area Inspection"
             move DataverseSolution.zip "Area Inspection"
             move TeamsCustomApp.zip "Area Inspection"
-            powershell Move-Item -Path "Area Inspection" -Destination ..\buildoutput
+            powershell Move-Item -Path ".\Area Inspection\" -Destination ..\buildoutput
+            cd ..
+    - name: Pack Milestones
+      run: |
+            cd Milestones
+            ..\PowerApps-Language-Tooling\bin\Debug\PASopa\PASopa.exe -pack .\DataverseSolution\CanvasApps\msft_milestones_5daaa.msapp .\DataverseSolution\CanvasApps\msft_milestones_5daaa_DocumentUri_src\
+            powershell rm -r DataverseSolution\CanvasApps\msft_milestones_5daaa_DocumentUri_src\
+            powershell Compress-Archive DataverseSolution\* DataverseSolution.zip
+            powershell Compress-Archive TeamsCustomApp\* TeamsCustomApp.zip
+            mkdir Milestones
+            move DataverseSolution.zip Milestones
+            move TeamsCustomApp.zip Milestones
+            powershell Move-Item -Path Milestones -Destination ..\buildoutput
             cd ..
     - name: Pack outputs
       run: |
