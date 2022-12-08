@@ -25,13 +25,29 @@ jobs:
       run: |
             cd Milestones
             ..\PowerApps-Language-Tooling\bin\Debug\PASopa\PASopa.exe -pack .\DataverseSolution\CanvasApps\msft_milestones_5daaa.msapp .\DataverseSolution\CanvasApps\msft_milestones_5daaa_DocumentUri_src\
+            powershell rm -r DataverseSolution\CanvasApps\msft_milestones_5daaa_DocumentUri_src\
             powershell Compress-Archive DataverseSolution\* DataverseSolution.zip
             powershell Compress-Archive TeamsCustomApp\* TeamsCustomApp.zip
-            powershell rm -r DataverseSolution\CanvasApps\msft_milestones_5daaa_DocumentUri_src\
             mkdir Milestones
             move DataverseSolution.zip Milestones
             move TeamsCustomApp.zip Milestones
             powershell Move-Item -Path Milestones -Destination ..\buildoutput
+            cd ..
+    - name: Pack Area Inspection
+      run: |
+            cd "Area Insepction"
+            ..\PowerApps-Language-Tooling\bin\Debug\PASopa\PASopa.exe -pack .\DataverseSolution\CanvasApps\msft_areainspection_9036a.msapp .\DataverseSolution\CanvasApps\msft_areainspection_9036a_DocumentUri_src\
+            ..\PowerApps-Language-Tooling\bin\Debug\PASopa\PASopa.exe -pack .\DataverseSolution\CanvasApps\msft_areainspectionmanager_a6427.msapp .\DataverseSolution\CanvasApps\msft_areainspectionmanager_a6427_DocumentUri_src\
+            ..\PowerApps-Language-Tooling\bin\Debug\PASopa\PASopa.exe -pack .\DataverseSolution\CanvasApps\msft_reviewinspections_1dd45.msapp .\DataverseSolution\CanvasApps\msft_reviewinspections_1dd45_DocumentUri_src\
+            powershell rm -r DataverseSolution\CanvasApps\msft_areainspection_9036a_DocumentUri_src\
+            powershell rm -r DataverseSolution\CanvasApps\msft_areainspectionmanager_a6427_DocumentUri_src\
+            powershell rm -r DataverseSolution\CanvasApps\msft_reviewinspections_1dd45_DocumentUri_src\
+            powershell Compress-Archive DataverseSolution\* DataverseSolution.zip
+            powershell Compress-Archive TeamsCustomApp\* TeamsCustomApp.zip
+            mkdir "Area Insepction"
+            move DataverseSolution.zip "Area Insepction"
+            move TeamsCustomApp.zip "Area Insepction"
+            powershell Move-Item -Path "Area Insepction" -Destination ..\buildoutput
             cd ..
     - name: Pack outputs
       run: |
