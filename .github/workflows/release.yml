@@ -35,7 +35,7 @@ jobs:
             cd ..
     - name: Pack Area Inspection
       run: |
-            cd "Area Insepction"
+            cd "Area Inspection"
             ..\PowerApps-Language-Tooling\bin\Debug\PASopa\PASopa.exe -pack .\DataverseSolution\CanvasApps\msft_areainspection_9036a.msapp .\DataverseSolution\CanvasApps\msft_areainspection_9036a_DocumentUri_src\
             ..\PowerApps-Language-Tooling\bin\Debug\PASopa\PASopa.exe -pack .\DataverseSolution\CanvasApps\msft_areainspectionmanager_a6427.msapp .\DataverseSolution\CanvasApps\msft_areainspectionmanager_a6427_DocumentUri_src\
             ..\PowerApps-Language-Tooling\bin\Debug\PASopa\PASopa.exe -pack .\DataverseSolution\CanvasApps\msft_reviewinspections_1dd45.msapp .\DataverseSolution\CanvasApps\msft_reviewinspections_1dd45_DocumentUri_src\
@@ -44,10 +44,10 @@ jobs:
             powershell rm -r DataverseSolution\CanvasApps\msft_reviewinspections_1dd45_DocumentUri_src\
             powershell Compress-Archive DataverseSolution\* DataverseSolution.zip
             powershell Compress-Archive TeamsCustomApp\* TeamsCustomApp.zip
-            mkdir "Area Insepction"
-            move DataverseSolution.zip "Area Insepction"
-            move TeamsCustomApp.zip "Area Insepction"
-            powershell Move-Item -Path "Area Insepction" -Destination ..\buildoutput
+            mkdir "Area Inspection"
+            move DataverseSolution.zip "Area Inspection"
+            move TeamsCustomApp.zip "Area Inspection"
+            powershell Move-Item -Path "Area Inspection" -Destination ..\buildoutput
             cd ..
     - name: Pack outputs
       run: |
