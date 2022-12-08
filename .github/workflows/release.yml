@@ -77,6 +77,44 @@ jobs:
             move TeamsCustomApp.zip "Employee Ideas"
             move "Employee Ideas" ..\buildoutput
             cd ..
+    - name: Pack HowTo
+      run: |
+            cd "HowTo"
+            ..\PowerApps-Language-Tooling\bin\Debug\PASopa\PASopa.exe -pack .\DataverseSolution\CanvasApps\msft_howto_8999a.msapp .\DataverseSolution\CanvasApps\msft_howto_8999a_DocumentUri_src\
+            powershell rm -r DataverseSolution\CanvasApps\msft_howto_8999a_DocumentUri_src\
+            powershell Compress-Archive DataverseSolution\* DataverseSolution.zip
+            powershell Compress-Archive TeamsCustomApp\* TeamsCustomApp.zip
+            mkdir "HowTo"
+            move DataverseSolution.zip "HowTo"
+            move TeamsCustomApp.zip "HowTo"
+            move "HowTo" ..\buildoutput
+            cd ..
+    - name: Pack IssueReporting
+      run: |
+            cd "IssueReporting"
+            ..\PowerApps-Language-Tooling\bin\Debug\PASopa\PASopa.exe -pack .\DataverseSolution\CanvasApps\msft_issuereporting_b51d5.msapp .\DataverseSolution\CanvasApps\msft_issuereporting_b51d5_DocumentUri_src\
+            ..\PowerApps-Language-Tooling\bin\Debug\PASopa\PASopa.exe -pack .\DataverseSolution\CanvasApps\msft_manageissues_14672.msapp .\DataverseSolution\CanvasApps\msft_manageissues_14672_DocumentUri_src\
+            powershell rm -r DataverseSolution\CanvasApps\msft_issuereporting_b51d5_DocumentUri_src\
+            powershell rm -r DataverseSolution\CanvasApps\msft_manageissues_14672_DocumentUri_src\
+            powershell Compress-Archive DataverseSolution\* DataverseSolution.zip
+            powershell Compress-Archive TeamsCustomApp\* TeamsCustomApp.zip
+            mkdir "IssueReporting"
+            move DataverseSolution.zip "IssueReporting"
+            move TeamsCustomApp.zip "IssueReporting"
+            move "IssueReporting" ..\buildoutput
+            cd ..
+    - name: Pack GetConnected
+      run: |
+            cd "GetConnected"
+            ..\PowerApps-Language-Tooling\bin\Debug\PASopa\PASopa.exe -pack .\DataverseSolution\CanvasApps\msft_getconnected_c1367.msapp .\DataverseSolution\CanvasApps\msft_getconnected_c1367_DocumentUri_src\
+            powershell rm -r DataverseSolution\CanvasApps\msft_getconnected_c1367_DocumentUri_src\
+            powershell Compress-Archive DataverseSolution\* DataverseSolution.zip
+            powershell Compress-Archive TeamsCustomApp\* TeamsCustomApp.zip
+            mkdir "GetConnected"
+            move DataverseSolution.zip "GetConnected"
+            move TeamsCustomApp.zip "GetConnected"
+            move "GetConnected" ..\buildoutput
+            cd ..
     - name: Pack Milestones
       run: |
             cd Milestones
@@ -88,6 +126,30 @@ jobs:
             move DataverseSolution.zip Milestones
             move TeamsCustomApp.zip Milestones
             powershell Move-Item -Path Milestones -Destination ..\buildoutput
+            cd ..
+    - name: Pack Perspectives
+      run: |
+            cd "Perspectives"
+            ..\PowerApps-Language-Tooling\bin\Debug\PASopa\PASopa.exe -pack .\DataverseSolution\CanvasApps\msft_perspectives_a1249.msapp .\DataverseSolution\CanvasApps\msft_perspectives_a1249_DocumentUri_src\
+            powershell rm -r DataverseSolution\CanvasApps\msft_perspectives_a1249_DocumentUri_src\
+            powershell Compress-Archive DataverseSolution\* DataverseSolution.zip
+            powershell Compress-Archive TeamsCustomApp\* TeamsCustomApp.zip
+            mkdir "Perspectives"
+            move DataverseSolution.zip "Perspectives"
+            move TeamsCustomApp.zip "Perspectives"
+            move "Perspectives" ..\buildoutput
+            cd ..
+    - name: Pack ProfilePlus
+      run: |
+            cd "ProfilePlus"
+            ..\PowerApps-Language-Tooling\bin\Debug\PASopa\PASopa.exe -pack .\DataverseSolution\CanvasApps\msft_profile_20ce1.msapp .\DataverseSolution\CanvasApps\msft_profile_20ce1_DocumentUri_src\
+            powershell rm -r DataverseSolution\CanvasApps\msft_profile_20ce1_DocumentUri_src\
+            powershell Compress-Archive DataverseSolution\* DataverseSolution.zip
+            powershell Compress-Archive TeamsCustomApp\* TeamsCustomApp.zip
+            mkdir "ProfilePlus"
+            move DataverseSolution.zip "ProfilePlus"
+            move TeamsCustomApp.zip "ProfilePlus"
+            move "ProfilePlus" ..\buildoutput
             cd ..
     - name: Pack outputs
       run: |
