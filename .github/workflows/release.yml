@@ -1,4 +1,4 @@
-name: Build
+name: BuildAndRelease
 
 on:
   push:
@@ -25,16 +25,17 @@ jobs:
       run: |
             cd Milestones
             ..\PowerApps-Language-Tooling\bin\Debug\PASopa\PASopa.exe -pack .\DataverseSolution\CanvasApps\msft_milestones_5daaa.msapp .\DataverseSolution\CanvasApps\msft_milestones_5daaa_DocumentUri_src\
-            powershell rm DataverseSolution\CanvasApps\msft_milestones_5daaa_DocumentUri_src\
             powershell Compress-Archive DataverseSolution\* DataverseSolution.zip
             powershell Compress-Archive TeamsCustomApp\* TeamsCustomApp.zip
             mkdir Milestones
             move DataverseSolution.zip Milestones
             move TeamsCustomApp.zip Milestones
-            powershell Move-Item -Path Milestones -Destination buildoutput
+            powershell Move-Item -Path Milestones -Destination ..\buildoutput
             cd ..
     - name: Pack outputs
-      run: powershell Compress-Archive buildoutput\* AppPackages.zip
+      run: |
+            powershell Compress-Archive buildoutput\* AppPackages.zip
+            dir
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
