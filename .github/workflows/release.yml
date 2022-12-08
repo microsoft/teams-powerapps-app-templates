@@ -23,7 +23,8 @@ jobs:
       run: mkdir buildoutput
     - name: Pack Milestones
       run: |
-            .\PowerApps-Language-Tooling\bin\Debug\PASopa\PASopa.exe -pack .\DataverseSolution\CanvasApps\msft_milestones_5daaa.msapp .\DataverseSolution\CanvasApps\msft_milestones_5daaa_DocumentUri_src\
+            cd Milestones
+            ..\PowerApps-Language-Tooling\bin\Debug\PASopa\PASopa.exe -pack .\DataverseSolution\CanvasApps\msft_milestones_5daaa.msapp .\DataverseSolution\CanvasApps\msft_milestones_5daaa_DocumentUri_src\
             powershell rm DataverseSolution\CanvasApps\msft_milestones_5daaa_DocumentUri_src\
             powershell Compress-Archive DataverseSolution\* DataverseSolution.zip
             powershell Compress-Archive TeamsCustomApp\* TeamsCustomApp.zip
@@ -31,6 +32,7 @@ jobs:
             move DataverseSolution.zip Milestones
             move TeamsCustomApp.zip Milestones
             powershell Move-Item -Path Milestones -Destination buildoutput
+            cd ..
     - name: Pack outputs
       run: powershell Compress-Archive buildoutput\* AppPackages.zip
     - name: Create Release
