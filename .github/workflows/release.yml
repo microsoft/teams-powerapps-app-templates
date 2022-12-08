@@ -37,6 +37,46 @@ jobs:
             move TeamsCustomApp.zip "Area Inspection"
             move "Area Inspection" ..\buildoutput
             cd ..
+    - name: Pack Boards
+      run: |
+            cd "Boards"
+            ..\PowerApps-Language-Tooling\bin\Debug\PASopa\PASopa.exe -pack .\DataverseSolution\CanvasApps\msft_boards_d2409.msapp .\DataverseSolution\CanvasApps\msft_boards_d2409_DocumentUri_src\
+            powershell rm -r DataverseSolution\CanvasApps\msft_boards_d2409_DocumentUri_src\
+            powershell Compress-Archive DataverseSolution\* DataverseSolution.zip
+            powershell Compress-Archive TeamsCustomApp\* TeamsCustomApp.zip
+            mkdir "Boards"
+            move DataverseSolution.zip "Boards"
+            move TeamsCustomApp.zip "Boards"
+            move "Boards" ..\buildoutput
+            cd ..
+    - name: Pack Bulletins
+      run: |
+            cd "Bulletins"
+            ..\PowerApps-Language-Tooling\bin\Debug\PASopa\PASopa.exe -pack .\DataverseSolution\CanvasApps\msft_bulletins_15705.msapp .\DataverseSolution\CanvasApps\msft_bulletins_15705_DocumentUri_src\
+            ..\PowerApps-Language-Tooling\bin\Debug\PASopa\PASopa.exe -pack .\DataverseSolution\CanvasApps\msft_managebulletins_c25aa.msapp .\DataverseSolution\CanvasApps\msft_managebulletins_c25aa_DocumentUri_src\
+            powershell rm -r DataverseSolution\CanvasApps\msft_bulletins_15705_DocumentUri_src\
+            powershell rm -r DataverseSolution\CanvasApps\msft_managebulletins_c25aa_DocumentUri_src\
+            powershell Compress-Archive DataverseSolution\* DataverseSolution.zip
+            powershell Compress-Archive TeamsCustomApp\* TeamsCustomApp.zip
+            mkdir "Bulletins"
+            move DataverseSolution.zip "Bulletins"
+            move TeamsCustomApp.zip "Bulletins"
+            move "Bulletins" ..\buildoutput
+            cd ..
+    - name: Pack Employee Ideas
+      run: |
+            cd "Employee Ideas"
+            ..\PowerApps-Language-Tooling\bin\Debug\PASopa\PASopa.exe -pack .\DataverseSolution\CanvasApps\msft_employeeideas_955d7.msapp .\DataverseSolution\CanvasApps\msft_employeeideas_955d7_DocumentUri_src\
+            ..\PowerApps-Language-Tooling\bin\Debug\PASopa\PASopa.exe -pack .\DataverseSolution\CanvasApps\msft_employeeideasmanager_f172c.msapp .\DataverseSolution\CanvasApps\msft_employeeideasmanager_f172c_DocumentUri_src\
+            powershell rm -r DataverseSolution\CanvasApps\msft_employeeideas_955d7_DocumentUri_src\
+            powershell rm -r DataverseSolution\CanvasApps\msft_employeeideasmanager_f172c_DocumentUri_src\
+            powershell Compress-Archive DataverseSolution\* DataverseSolution.zip
+            powershell Compress-Archive TeamsCustomApp\* TeamsCustomApp.zip
+            mkdir "Employee Ideas"
+            move DataverseSolution.zip "Employee Ideas"
+            move TeamsCustomApp.zip "Employee Ideas"
+            move "Employee Ideas" ..\buildoutput
+            cd ..
     - name: Pack Milestones
       run: |
             cd Milestones
