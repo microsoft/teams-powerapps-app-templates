@@ -56,6 +56,9 @@ Quickly find out about people in your organization.
 
 Connect with people in your organization with similar skills.
 
+## Installation
+To install the app, you can download the app package from this repo's release. Then upload the package as a teams custom app or import the app as a solution to your Power Apps environment. Refer to [installation guide](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/README.md) for details.
+
 ## Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
