@@ -45,4 +45,41 @@ Below are the steps for uploading sample app 'Milestones' as a Teams custom app.
 
 
 ## Import the solution to Power Apps environment<a name="p2"></a>
+Below are the steps for import sample app 'Boards' as a dataverse solution. You can use similar steps to install other sample apps.
+You need to have a [Power Apps Teams environment](https://learn.microsoft.com/en-us/power-platform/admin/about-teams-environment) as a prerequisite.
+
+1. Browse to the Releases section of github repository 
+
+![image](https://user-images.githubusercontent.com/84343636/210909295-2cd818b2-c77a-4176-9a8b-f0f76b816956.png)
+
+
+2. Review the assets for latest release and download the 'AppPackages.zip' file 
+
+![image](https://user-images.githubusercontent.com/84343636/210909692-0a65cf3d-7065-4ee3-ac1d-0269d6aac177.png)
+
+3. Extract the zip file and go to 'Boards' folder, find the file 'DataverseSolution.zip'
+![image](https://user-images.githubusercontent.com/84343636/210960158-e1c8f9c3-1821-43b7-bd95-63fa51adb858.png)
+
+4. Open Teams. Go to the Power Apps app within Teams (Install the app from Teams app store if needed) 
+![03](https://user-images.githubusercontent.com/84343636/210960240-224a9a54-5bd6-40a7-9b09-07af23847027.jpeg)
+
+5. Browse to the Teams team environment where you’d like to import the solution. Select See All. 
+![04](https://user-images.githubusercontent.com/84343636/210960269-fec54f92-8d0f-44bc-85b2-1182f6414534.jpeg)
+
+6. Click the “Import” button. 
+![05](https://user-images.githubusercontent.com/84343636/210960307-3f03e9f4-8833-4884-bfae-09bfd7a09c81.jpeg)
+
+7. Browse to the Dataverse Solution file downloaded in step3 and click Next. 
+![image](https://user-images.githubusercontent.com/84343636/210960530-6d5ac726-1b77-48f3-935d-4ef7312d5b3a.png)
+
+8. Select the components you want to import (recommended you select all) and click on Import 
+![07](https://user-images.githubusercontent.com/84343636/210960585-cfbebdb2-82e7-4873-9171-697d7b9e0e87.jpeg)
+
+The import process will start in background. Import might take a while, you can continue with other activities
+
+9. After solution import, you can view the app's content in 'Installed Apps' - 'See all'
+![image](https://user-images.githubusercontent.com/84343636/210960714-6c0e86a0-0673-47f4-96b0-b0fdba1bbe11.png)
+
+10. You can use 'Add to teams' to add the canvas app as a tab in your teams. Refer to [this link](https://learn.microsoft.com/en-us/power-apps/teams/embed-teams-app) for detailed instruction.
+![image](https://user-images.githubusercontent.com/84343636/210961683-a46ee0e6-b21d-405d-82ac-a71dbd887519.png)
 
