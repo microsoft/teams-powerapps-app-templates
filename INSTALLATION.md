@@ -67,9 +67,11 @@ You need to have a [Power Apps Teams environment](https://learn.microsoft.com/en
 ![04](https://user-images.githubusercontent.com/84343636/210960269-fec54f92-8d0f-44bc-85b2-1182f6414534.jpeg)
 
 6. Click the “Import” button. 
+
 ![05](https://user-images.githubusercontent.com/84343636/210960307-3f03e9f4-8833-4884-bfae-09bfd7a09c81.jpeg)
 
 7. Browse to the Dataverse Solution file downloaded in step3 and click Next. 
+
 ![image](https://user-images.githubusercontent.com/84343636/210960530-6d5ac726-1b77-48f3-935d-4ef7312d5b3a.png)
 
 8. Select the components you want to import (recommended you select all) and click on Import 
