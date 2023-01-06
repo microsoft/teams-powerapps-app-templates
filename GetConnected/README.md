@@ -1,9 +1,10 @@
-# Bulletins App Template
+# Get Connected App Template
 
-| [Documentation](https://learn.microsoft.com/en-us/power-apps/teams/bulletins) | [Installation guide](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/INSTALLATION.md)
+| [Documentation](https://learn.microsoft.com/en-us/power-apps/teams/get-connected) | [Installation guide](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/INSTALLATION.md)
 | ---- | ---- |
 
-The Bulletins sample app for Microsoft Teams provides a central location for all company communication such as broadcasts, memos, announcements, and company news. 
+The Get connected sample app for Microsoft Teams provides a simple way to connect with people in your organization having similar skills.
+
 ## Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a

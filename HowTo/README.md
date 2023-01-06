@@ -1,9 +1,15 @@
-# Bulletins App Template
+# HowTo App Template
 
-| [Documentation](https://learn.microsoft.com/en-us/power-apps/teams/bulletins) | [Installation guide](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/INSTALLATION.md)
+| [Documentation](https://learn.microsoft.com/en-us/power-apps/teams/how-to) | [Installation guide](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/INSTALLATION.md)
 | ---- | ---- |
 
-The Bulletins sample app for Microsoft Teams provides a central location for all company communication such as broadcasts, memos, announcements, and company news. 
+The How-to template app for Microsoft Teams provides a simple way to learn how to be a Power Apps maker by walking you step-by-step through designing data model, screens, and connecting screens together to build a complete Power Apps asset checkout solution.
+Benefits of using the How-to app:
+- Understand the basics of Power Apps.
+- Learn how to build apps in Teams.
+- Share the asset checkout app you build with colleagues in Teams.
+- Become a Maker
+
 ## Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a

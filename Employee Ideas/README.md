@@ -1,9 +1,21 @@
-# Bulletins App Template
+# Employee Ideas App Template
 
-| [Documentation](https://learn.microsoft.com/en-us/power-apps/teams/bulletins) | [Installation guide](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/INSTALLATION.md)
+| [Documentation](https://learn.microsoft.com/en-us/power-apps/teams/employee-ideas) | [Installation guide](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/INSTALLATION.md)
 | ---- | ---- |
 
-The Bulletins sample app for Microsoft Teams provides a central location for all company communication such as broadcasts, memos, announcements, and company news. 
+Employee ideas app is used by the Teams users to perform the following activities:
+
+- Set up and configure an idea campaign (a category for grouping ideas around common themes).
+- Configure a standard submission form that employees need to submit for each idea.
+- Review idea campaigns, and manage the list of campaigns and ideas.
+- Edit and delete campaigns.
+- Review leaderboards of ideas.
+- Vote for and share prioritized ideas.
+- Submit ideas for a campaign.
+- View other team members' ideas.
+- Vote on the most-liked ideas.
+- Review how their own idea is performing compared to others within a campaign.
+
 ## Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
