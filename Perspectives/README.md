@@ -1,24 +1,16 @@
-## Overview
+# Perspectives App Template
 
-The Perspectives app is a place to listen and be heard in your organization. A simple search-and-browse experience makes it easy to find interesting discussions, whether you’re looking to share your perspective or tap into the collective knowledge of your team. The most relevant content rises to the top when team members upvote a response or the discussion’s creator flags one as “Recommended.” The app can be used for employee engagement, diversity and inclusion efforts, support systems, process Q&As, and more. Refer [here](https://aka.ms/TeamsPerspectivesDocs) for more detailed view of the feature.
+| [Documentation](https://learn.microsoft.com/en-us/power-apps/teams/perspectives) | [Installation guide](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/INSTALLATION.md)
+| ---- | ---- |
 
-Perspectives is a template application built on the [Datatverse for Teams](https://powerapps.microsoft.com/en-us/blog/reshape-the-future-of-work-with-microsoft-dataverse-for-teams-now-generally-available/) on the Power Platform. Once installed, it can be [customized and extended](https://docs.microsoft.com/en-us/powerapps/teams/customize-sample-apps) by the installer of the application.
+The Perspectives sample app template for Microsoft Teams provides a simple way to add topics and extend the topics with Q&A where anyone in the organization can have a perspective about the topics, and have a discussion about them in Teams.
 
-## Installing
+Benefits of using the Perspectives app:
 
-Detailed documentation for installation can be found in the [Documents](https://github.com/OfficeDev/microsoft-teams-apps-perspectives/tree/main/Documentation) folder. There are two ways to install the solution:
-
-**_Recommended_: Install in Teams**
-
-**This is the easiest and quickest method to get started with this app template.** The provisioning is fully automated once the process starts and may take upto 2 - 3 minutes. You will get the option to chose which Teams team you'd like to install this application in. Refer to these [easy step-by-step instructions](https://github.com/OfficeDev/microsoft-teams-apps-perspectives/blob/main/Documentation/Perspectives%20-%20Install%20in%20Teams/Perspectives%20-%20Install%20in%20Teams.md) on how to get started with Perspectives app.
-
-If this is the first Power Apps in the team, a new Dataverse for Teams environment will be provisioned, the app installed, automatically shared with all members of the team and tabbed to the channel you had picked in the first step. You will be able to [edit the app](https://docs.microsoft.com/en-us/powerapps/teams/customize-sample-apps) after installation by going to the Power Apps app.
-
-Note that this provisions the 'managed' solution in the Teams environment. This means that you can take advantage of any future updates being made to the application by reinstalling the application (follow same steps as original installation).
-
-**Import the solution as unmanaged:**
-
-This option is for advanced makers already familiar with solutions and environments concepts in Dataverse. You can import the solution into Dataverse for Teams or Dataverse as unmanaged. By doing so, you get an unmanaged solution and will be able to make changes to all components of the application -- including underlying tables. Note that you will not be able to take advantage of future upgrades when importing solution as unmanaged.
+- Create discussions.
+- Interact with colleagues.
+- Find interesting discussions.
+- Flag recommended discussions.
 
 ## Contributing
 

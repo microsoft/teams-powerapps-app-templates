@@ -1,16 +1,7 @@
----
-page_type: sample
-languages:
-- PowerApps
-products:
-- office-teams
-urlFragment: microsoft-teams-app-milestones
----
-
 # Milestones App Template
 
-| [Documentation](https://docs.microsoft.com/en-us/powerapps/teams/milestones) | [Deployment guide]() | [Architecture]() |
-| ---- | ---- | ---- |
+| [Documentation](https://learn.microsoft.com/en-us/power-apps/teams/milestones) | [Installation guide](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/INSTALLATION.md)
+| ---- | ---- |
 
 This can be viewed as the PowerApps version of the Azure-based [Great Ideas](https://github.com/OfficeDev/microsoft-teams-apps-greatideas).
 

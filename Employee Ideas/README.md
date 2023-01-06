@@ -1,14 +1,20 @@
-# Inspection App Template
+# Employee Ideas App Template
 
-| [Documentation](https://learn.microsoft.com/en-us/power-apps/teams/inspection) | [Installation guide](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/INSTALLATION.md)
+| [Documentation](https://learn.microsoft.com/en-us/power-apps/teams/employee-ideas) | [Installation guide](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/INSTALLATION.md)
 | ---- | ---- |
 
-The Inspection solution for Microsoft Teams is a general inspection app that can be used to inspect anything from a location—such as a retail store or manufacturing plant—to assets and equipment, such as vehicles and machines. There are two apps in this solution, each intended for different kinds of users.
+Employee ideas app is used by the Teams users to perform the following activities:
 
-### Key features
-* **Inspection:** Enables front line workers to inspect an asset or area to manage quality of products and services or maintain safety at workplace
-* **Communication:** Facilitates communication between team members to address issues found during inspection
-* **Reporting:** Provides simple reports for managers to expedite issue resolution and highlight trends
+- Set up and configure an idea campaign (a category for grouping ideas around common themes).
+- Configure a standard submission form that employees need to submit for each idea.
+- Review idea campaigns, and manage the list of campaigns and ideas.
+- Edit and delete campaigns.
+- Review leaderboards of ideas.
+- Vote for and share prioritized ideas.
+- Submit ideas for a campaign.
+- View other team members' ideas.
+- Vote on the most-liked ideas.
+- Review how their own idea is performing compared to others within a campaign.
 
 ## Contributing
 

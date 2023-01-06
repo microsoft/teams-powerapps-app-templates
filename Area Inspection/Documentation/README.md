@@ -1,1 +1,0 @@
-: This folder will have documentation and other documentation files.

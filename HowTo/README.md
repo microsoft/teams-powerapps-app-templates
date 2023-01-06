@@ -1,14 +1,14 @@
-# Inspection App Template
+# HowTo App Template
 
-| [Documentation](https://learn.microsoft.com/en-us/power-apps/teams/inspection) | [Installation guide](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/INSTALLATION.md)
+| [Documentation](https://learn.microsoft.com/en-us/power-apps/teams/how-to) | [Installation guide](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/INSTALLATION.md)
 | ---- | ---- |
 
-The Inspection solution for Microsoft Teams is a general inspection app that can be used to inspect anything from a location—such as a retail store or manufacturing plant—to assets and equipment, such as vehicles and machines. There are two apps in this solution, each intended for different kinds of users.
-
-### Key features
-* **Inspection:** Enables front line workers to inspect an asset or area to manage quality of products and services or maintain safety at workplace
-* **Communication:** Facilitates communication between team members to address issues found during inspection
-* **Reporting:** Provides simple reports for managers to expedite issue resolution and highlight trends
+The How-to template app for Microsoft Teams provides a simple way to learn how to be a Power Apps maker by walking you step-by-step through designing data model, screens, and connecting screens together to build a complete Power Apps asset checkout solution.
+Benefits of using the How-to app:
+- Understand the basics of Power Apps.
+- Learn how to build apps in Teams.
+- Share the asset checkout app you build with colleagues in Teams.
+- Become a Maker
 
 ## Contributing
 
