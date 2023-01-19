@@ -40,7 +40,7 @@ To change labels used in the app:
 1. Select the **Manage inspections** tab in Teams.
 
 1. Select ![App settings to customize experience.]() from the upper-right corner.
-![image](https://user-images.githubusercontent.com/84343636/210909295-2cd818b2-c77a-4176-9a8b-f0f76b816956.png)
+![image](media/inspection/teams-settings.png)
 
 1. Select **Customize experience** on the left pane.
 
@@ -50,7 +50,7 @@ To change labels used in the app:
 
 1. Select **Save** to save the changes to label setup.
 
-    ![Customize experience.](media/inspection/customize-experience.jpg "Customize experience")
+    ![image](media/inspection/customize-experience.png)
 
 ## Manage inspections app
 
