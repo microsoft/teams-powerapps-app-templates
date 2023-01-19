@@ -36,17 +36,17 @@ Once the app is installed, you can then customize the app using the following st
 
 1. Search for and select **Power Apps**.
 
-    ![Search for Power Apps](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentations/media/customize-inspections/search_powerapps.png "Search for Power Apps")
+    ![Search for Power Apps](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentation/media/customize-inspections/search_powerapps.png "Search for Power Apps")
 
 1. Right-click on **Power Apps**, and select **Pin** to lock the app to the left-pane so it's easy to locate the app later.
 
-    ![Power Apps Icon](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentations/media/customize-inspections/power-apps-icon.png "Power Apps Icon")
+    ![Power Apps Icon](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentation/media/customize-inspections/power-apps-icon.png "Power Apps Icon")
 
 1. We recommended that you “pop out” Power Apps so that if you need to go somewhere else in Teams, you won’t lose your app configuration. To pop out the Power Apps app, right-click on Power Apps, and select **Pop out app**.
 
 1. Now that you've loaded the Power Apps app, select **Build**.
 
-    ![Build Tab](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentations/media/customize-inspections/build-tab.png "Build Tab")
+    ![Build Tab](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentation/media/customize-inspections/build-tab.png "Build Tab")
 
     This screen will show all the teams that have Power Apps installed in them.
 
@@ -58,17 +58,17 @@ Once the app is installed, you can then customize the app using the following st
 
 1. Select **See more** in the **Inspection** tile.
 
-    ![Inspection tile](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentations/media/customize-inspections/inspection-tile.png "Inspection Tile")
+    ![Inspection tile](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentation/media/customize-inspections/inspection-tile.png "Inspection Tile")
 
     You'll see all apps, tables, flows, and chatbots in the team.
 
-    ![Inspection Objects](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentations/media/customize-inspections/inspection-app-details.png "Inspection Objects")
+    ![Inspection Objects](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentation/media/customize-inspections/inspection-app-details.png "Inspection Objects")
 
 ## Extend the Inspection data model
 
 If you're modifying or adding any fields to your app, you'll want to first update or add these columns in their Dataverse tables. In this section, we'll explore the data model for Inspection app and how to modify it in Power Apps in Teams. Below is the data model for Inspection app.
 
-![Inspections App Data Model](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentations/media/customize-inspections/data-model.png "Inspections App Data Model")
+![Inspections App Data Model](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentation/media/customize-inspections/data-model.png "Inspections App Data Model")
 
 Before modifying the fields, you need to first decide where the fields you want to add should go. What are the users doing when they should see or interact with these fields?
 
@@ -98,11 +98,11 @@ To understand the Inspection data model, there are two primary table groups in I
 
 From the list of apps, chatbots, flows, and tables, select the **Inspection** app.
 
-![Inspection Objects with Inspection highlighted](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentations/media/customize-inspections/inspection-objects-inspection-highlighted.png "Inspection Objects with Inspection highlighted")
+![Inspection Objects with Inspection highlighted](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentation/media/customize-inspections/inspection-objects-inspection-highlighted.png "Inspection Objects with Inspection highlighted")
 
 Now that Inspection is open in Power Apps in Teams, select the **Tree View**.
 
-![Inspection Tree View](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentations/media//customize-inspections/inspection-tree-view.png "Inspection Tree View")
+![Inspection Tree View](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentation/media//customize-inspections/inspection-tree-view.png "Inspection Tree View")
 
 From the Tree View, you can see the screens included in the app. Selecting the arrow to the left of a screen will expand the contents of the screen, giving you access to the components of the screen, including galleries, buttons, text labels, and text input controls.
 
@@ -137,13 +137,13 @@ Now let’s look at the screens in the **Manage inspections** app. This screen i
 
 1. Select **Manage inspections** in the **Area Inspection** tile.
 
-    ![Manage Inspection Tile](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentations/media/customize-inspections/manage-inspection-tile.png "Manage Inspection Tile")
+    ![Manage Inspection Tile](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentation/media/customize-inspections/manage-inspection-tile.png "Manage Inspection Tile")
 
 1. Manage inspections will open in the designer.
 
 1. Select the **Tree view** and review the screens in the Manage inspections app.
 
-    ![Manage Inspection Tree View](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentations/media/customize-inspections/manage-inspections-tree-view.png "Manage Inspection Tile")
+    ![Manage Inspection Tree View](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentation/media/customize-inspections/manage-inspections-tree-view.png "Manage Inspection Tile")
 
 The following are the screens in the Manage Inspections app:
 
@@ -172,13 +172,13 @@ Now let’s look at the screens in the **Review inspections** app. This screen i
 
 1. Select **Review inspections** in the **Area Inspection** tile.
 
-    ![Review Inspection Tile](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentations/media/customize-inspections/review-inspection-tile.png "Review Inspection Tile")
+    ![Review Inspection Tile](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentation/media/customize-inspections/review-inspection-tile.png "Review Inspection Tile")
 
 1. Review inspections will open in the designer.
 
 1. Select the **Tree view** and review the screens in the Review inspections app.
 
-    ![Review Inspection Tree View](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentations/media/customize-inspections/review-inspection-tree-view.png)
+    ![Review Inspection Tree View](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentation/media/customize-inspections/review-inspection-tree-view.png)
 
 The following are the screens in the Review inspections app:
 
@@ -213,15 +213,15 @@ If you want to change inspection steps, such as removing tasks, images, or other
 
 When you're done making modifications to the apps, select **Save** to save your changes.
 
-![Save Changes](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentations/media/customize-inspections/save-changes.png "Save Changes")
+![Save Changes](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentation/media/customize-inspections/save-changes.png "Save Changes")
 
 - To preview your changes, select the **Preview**. The app launches in preview mode, where you can test the user experience when running the app. Press **Escape** on your keyboard or select the **X** in the upper-right corner when you're done with the preview.
 
-    ![Top right corner X](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentations/media/customize-inspections/top-right-corner-x.png "Top right corner X")
+    ![Top right corner X](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentation/media/customize-inspections/top-right-corner-x.png "Top right corner X")
 
 - To publish your app changes, select **Publish to Teams**. Publishing the app makes your changes visible to users of the app. A dialog will open confirming that you want to publish.
 
-    ![Confirm Publishing the App](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentations/media/customize-inspections/inspection-publish-confirm.png "Confirm Publishing the App")
+    ![Confirm Publishing the App](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentation/media/customize-inspections/inspection-publish-confirm.png "Confirm Publishing the App")
 
 - To change app settings, such as icon and background color, select **Edit details**.
 
@@ -229,7 +229,7 @@ When you're done making modifications to the apps, select **Save** to save your 
 
 - On the next screen, confirm the channel you want the app to appear. You can add to other channels in the Team by pressing the **+** button.
 
-    ![Add to Channel](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentations/media/customize-inspections/add-to-channel.png "Add to Channel")
+    ![Add to Channel](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentation/media/customize-inspections/add-to-channel.png "Add to Channel")
 
 - To complete publishing your changes, select **Save and close**.
 
@@ -240,19 +240,19 @@ Before modifying the Inspection app, note the following considerations.
 - Where are my table customizations?
   Columns and tables added by you'll go to **Built by this team** section of the Power Apps app. You can also add new tables in the **See all** area.
 
-    ![Built by this team](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentations/media/customize-inspections/built-by-this-team.png "Built by this team")
+    ![Built by this team](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentation/media/customize-inspections/built-by-this-team.png "Built by this team")
 
 - Changes made to an app will be added as a new version of the app. If you get a new version from store, your customizations won't be overridden. You'll get a new version that has the latest features, but the new version won't be published.
 
-    ![Install new version](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentations/media/customize-inspections/install-new-version.png "Install new version")
+    ![Install new version](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentation/media/customize-inspections/install-new-version.png "Install new version")
 
     After upgrading the solution, your current app version will still be "Live". The updated version of the app is available from the version history of the app.
     
-    ![Inspection App Details](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentations/media/customize-inspections/inspection-app-details.png "Inspection App Details")
+    ![Inspection App Details](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentation/media/customize-inspections/inspection-app-details.png "Inspection App Details")
     
     Selecting **Details** from the app list will display the versions of the app and allow you to publish the new version.
     
-    ![Inspection Versions](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentations/media/customize-inspections/inspection-versions.png "Inspection Versions")
+    ![Inspection Versions](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentation/media/customize-inspections/inspection-versions.png "Inspection Versions")
     
     You can choose to publish the new version or keep using the older one.
 

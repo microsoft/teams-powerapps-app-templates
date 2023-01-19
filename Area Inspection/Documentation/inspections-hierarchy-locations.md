@@ -39,7 +39,7 @@ To complete this lesson, we'd need the ability to log in into Microsoft Teams th
 
 1. Add a few sample records in the table, and select **Close.**
 
-    ![Store Table](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentations/media/extend-inspections-add-hierarchy-to-locations/store-table.png "Store Table")
+    ![Store Table](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentation/media/extend-inspections-add-hierarchy-to-locations/store-table.png "Store Table")
 
 ### Update Items screen
 
@@ -301,7 +301,7 @@ Update the formula for the following controls to allow the Items screen to show 
     , Store: gblSelectedStore
     ```
 
-    ![Add Store to the Patch function](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentations/media/extend-inspections-add-hierarchy-to-locations/add-store-to-patch.png "Add Store to the Patch function")
+    ![Add Store to the Patch function](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentation/media/extend-inspections-add-hierarchy-to-locations/add-store-to-patch.png "Add Store to the Patch function")
 
 ### Update the Welcome Screen navigation
 
@@ -318,13 +318,13 @@ Update the formula for the following controls to allow the Items screen to show 
    );
    ```
 
-    ![Navigate to Store Selection screen](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentations/media/extend-inspections-add-hierarchy-to-locations/code-to-navigate-to-store-selection-screen.png "Navigate to Store Selection screen")
+    ![Navigate to Store Selection screen](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentation/media/extend-inspections-add-hierarchy-to-locations/code-to-navigate-to-store-selection-screen.png "Navigate to Store Selection screen")
 
 ### Publish the Inspections app
 
 All the changes to the Inspections app are completed. The app can now be published by selecting the **Publish to Teams** button on the top-right.
 
-![Publish to Teams](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentations/media/extend-inspections-add-hierarchy-to-locations/publish-to-teams.png "Publish to Teams")
+![Publish to Teams](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentation/media/extend-inspections-add-hierarchy-to-locations/publish-to-teams.png "Publish to Teams")
 
 ## Edit the Review Inspections app
 
@@ -452,7 +452,7 @@ All the changes to the Inspections app are completed. The app can now be publish
 
 1. The screen displays the store name.
 
-    ![Store showing on Location screen](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentations/media/extend-inspections-add-hierarchy-to-locations/test-result-store-on-location-screen.png "Store showing on Location screen")
+    ![Store showing on Location screen](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentation/media/extend-inspections-add-hierarchy-to-locations/test-result-store-on-location-screen.png "Store showing on Location screen")
 
 ### See also
 
