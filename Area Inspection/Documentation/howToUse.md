@@ -58,7 +58,7 @@ To change labels used in the app:
 
 1. Select **Save** to save the changes to label setup.
 
-    ![Customize experience.](media/inspection/customize-experience.png "Customize experience")
+    ![Customize experience.](media/inspection/customize-experience.jpg "Customize experience")
 
 ## Manage inspections app
 
