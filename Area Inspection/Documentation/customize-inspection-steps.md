@@ -18,13 +18,13 @@ To complete this lesson, we'd need the ability to sign-in to Microsoft Teams tha
 1. Select the team where the Inspections app is installed.
 1. Select Inspections to open the app in the editor.
 
-    ![Open Inspection app](https://github.com/microsoft/teams-powerapps-app-templates/tree/main/Area%20Inspection/Documentations/media/customize-inspection-steps/open-inspection-app.png "Open Inspection app")
+    ![Open Inspection app](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentations/media/customize-inspection-steps/open-inspection-app.png "Open Inspection app")
 
 1. Select the tree view from the left-pane.
 
 1. Select to open the Items screen.
 
-    ![Items Screen](https://github.com/microsoft/teams-powerapps-app-templates/tree/main/Area%20Inspection/Documentations/media/customize-inspection-steps/items-screen.png "Items Screen")
+    ![Items Screen](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentations/media/customize-inspection-steps/items-screen.png "Items Screen")
 
 1. Press **Alt** key on the keyboard, and select Ambient or Backstage to open the record. The Food Inspection checklists page opens.
 
@@ -32,21 +32,21 @@ To complete this lesson, we'd need the ability to sign-in to Microsoft Teams tha
 
 1. Press **Alt** key on the keyboard, and select **Begin Inspection**. The Inspection list screen opens.
 
-    ![Inspection List Screen](https://github.com/microsoft/teams-powerapps-app-templates/tree/main/Area%20Inspection/Documentations/media/customize-inspection-steps/inspection-list-screen.png "Inspection List Screen")
+    ![Inspection List Screen](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentations/media/customize-inspection-steps/inspection-list-screen.png "Inspection List Screen")
 
 1. This article explains the following scenarios:
 
    - [Hide the Add details section](#hide-the-add-details-section)
 
-      ![Hide Add Details Section](https://github.com/microsoft/teams-powerapps-app-templates/tree/main/Area%20Inspection/Documentations/media/customize-inspection-steps/hide-add-details-section.png "Hide Add Details Section")
+      ![Hide Add Details Section](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentations/media/customize-inspection-steps/hide-add-details-section.png "Hide Add Details Section")
 
    - [Hide just the Photo option](#hide-the-photo-option)
 
-      ![Hide Photo Option](https://github.com/microsoft/teams-powerapps-app-templates/tree/main/Area%20Inspection/Documentations/media/customize-inspection-steps/hide-photo-option.png "Hide Photo Option")
+      ![Hide Photo Option](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentations/media/customize-inspection-steps/hide-photo-option.png "Hide Photo Option")
 
    - [Hide the Task option](#hide-the-task-option)
 
-      ![Hide Task Option](https://github.com/microsoft/teams-powerapps-app-templates/tree/main/Area%20Inspection/Documentations/media/customize-inspection-steps/hide-task-option.png)
+      ![Hide Task Option](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentations/media/customize-inspection-steps/hide-task-option.png)
 
 ## Hide the Add Details section
 
@@ -54,17 +54,17 @@ Hiding the Add Details section includes more than just setting the Visible prope
 
 1. Set the **Visible** property for the **Add details** label, and the other labels (Photo, Note, and Task) and their icons to "False".
 
-    ![Add Details Label visibility False](https://github.com/microsoft/teams-powerapps-app-templates/tree/main/Area%20Inspection/Documentations/media/customize-inspection-steps/lbladddetails-visible-false.png "Add Details Label")
+    ![Add Details Label visibility False](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentations/media/customize-inspection-steps/lbladddetails-visible-false.png "Add Details Label")
 
-    ![Photo Container grpPhoto visibility False](https://github.com/microsoft/teams-powerapps-app-templates/tree/main/Area%20Inspection/Documentations/media/customize-inspection-steps/photo-visible-false.png "Photo Container grpPhoto visibility False")
+    ![Photo Container grpPhoto visibility False](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentations/media/customize-inspection-steps/photo-visible-false.png "Photo Container grpPhoto visibility False")
 
 1. Set the **Visible** property for **grpNote**, **grpTask**, and **grpPhoto** to "False".
 
-    ![All icons visibility False](https://github.com/microsoft/teams-powerapps-app-templates/tree/main/Area%20Inspection/Documentations/media/customize-inspection-steps/all-icons-visible-false.png "All icons visibility False")
+    ![All icons visibility False](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentations/media/customize-inspection-steps/all-icons-visible-false.png "All icons visibility False")
 
 1. We'll also need to shrink the white space containing the Photo, Note, and Task buttons to avoid wasting any extra space. Select **btnActionBackground** control from the tree view, select somewhere on the white space to highlight the box space.
 
-    ![Adjust Button Background](https://github.com/microsoft/teams-powerapps-app-templates/tree/main/Area%20Inspection/Documentations/media/customize-inspection-steps/adjust-button-background.png "Adjust Button Background")
+    ![Adjust Button Background](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentations/media/customize-inspection-steps/adjust-button-background.png "Adjust Button Background")
 
 1. Open the **Height** property of the control, and comment the existing formula with `//` at the beginning of each line.
 
@@ -74,7 +74,7 @@ Hiding the Add Details section includes more than just setting the Visible prope
     btnOK.Y + btnOK.Height - Self.Y + 20
     ```
 
-    ![Adjust Button Height](https://github.com/microsoft/teams-powerapps-app-templates/tree/main/Area%20Inspection/Documentations/media/customize-inspection-steps/adjust-button-height.png "Adjust Button Height")
+    ![Adjust Button Height](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentations/media/customize-inspection-steps/adjust-button-height.png "Adjust Button Height")
 
 The white space shrinks, and leaves no extra space hiding the entire **Add Details** section.
 
@@ -84,7 +84,7 @@ This scenario requires to revert all the changes made above. And then, we'll hav
 
 1. To hide the Photo option, select **grpPhoto** from the tree view, and set **Visible** property to "False".
 
-    ![Photo visibility set to False](https://github.com/microsoft/teams-powerapps-app-templates/tree/main/Area%20Inspection/Documentations/media/customize-inspection-steps/set-grpphoto-visible-false.png "Photo visibility set to False")
+    ![Photo visibility set to False](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentations/media/customize-inspection-steps/set-grpphoto-visible-false.png "Photo visibility set to False")
 
 1. The Note option needs to move to the left in place of the Photo option. Copy the X property of the Photo Icon and paste it in the X property of the Note icon (notice that the label also moves along with the icon&mdash;this is because the Note label’s X property is dependent on the Note icon’s X property, and changes accordingly thus leaving no empty spaces – the Task option also reacts similarly).
 
@@ -92,7 +92,7 @@ This scenario requires to revert all the changes made above. And then, we'll hav
     btnImageBackground.X+18
     ```
 
-    ![Adjust X position of Note icon](https://github.com/microsoft/teams-powerapps-app-templates/tree/main/Area%20Inspection/Documentations/media/customize-inspection-steps/adjust-note-icon-x.png "Adjust X position of Note icon")
+    ![Adjust X position of Note icon](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentations/media/customize-inspection-steps/adjust-note-icon-x.png "Adjust X position of Note icon")
 
 ## Hide the Task Option
 
@@ -100,7 +100,7 @@ This scenario requires to revert all the changes made above. With this scenario,
 
 Change the **Visible** property for **grpTask** to "False".
 
-![Task visibility set to False](https://github.com/microsoft/teams-powerapps-app-templates/tree/main/Area%20Inspection/Documentations/media/customize-inspection-steps/set-grptask-visible-false.png "Task visibility set to False")
+![Task visibility set to False](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentations/media/customize-inspection-steps/set-grptask-visible-false.png "Task visibility set to False")
 
 ## Publish the Inspection app
 
@@ -108,15 +108,15 @@ All the changes to the Inspection app are completed.
 
 1. Select **Publish to Teams** on the top-right.
 
-    ![Publish to Teams](https://github.com/microsoft/teams-powerapps-app-templates/tree/main/Area%20Inspection/Documentations/media/customize-inspection-steps/publish-to-teams.png "Publish to Teams")
+    ![Publish to Teams](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentations/media/customize-inspection-steps/publish-to-teams.png "Publish to Teams")
 
 1. Select **Next**.
 
-    ![Confirm publishing to Teams](https://github.com/microsoft/teams-powerapps-app-templates/tree/main/Area%20Inspection/Documentations/media/customize-inspection-steps/confirm-publishing-to-teams.png "Confirm publishing to Teams")
+    ![Confirm publishing to Teams](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentations/media/customize-inspection-steps/confirm-publishing-to-teams.png "Confirm publishing to Teams")
 
 1. Select **Save and close**.
 
-    ![Add app to Channel](https://github.com/microsoft/teams-powerapps-app-templates/tree/main/Area%20Inspection/Documentations/media/customize-inspection-steps/add-to-channel.png "Add app to Channel")
+    ![Add app to Channel](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentations/media/customize-inspection-steps/add-to-channel.png "Add app to Channel")
 
 ## Test the app
 
