@@ -40,7 +40,7 @@ To change labels used in the app:
 1. Select the **Manage inspections** tab in Teams.
 
 1. Select ![App settings to customize experience.]() from the upper-right corner.
-![image](media/inspection/teams-settings.png)
+![image](https://github.com/MicrosoftDocs/powerapps-docs/blob/main/powerapps-docs/teams/media/boards/board-search.png)
 
 1. Select **Customize experience** on the left pane.
 
@@ -50,7 +50,7 @@ To change labels used in the app:
 
 1. Select **Save** to save the changes to label setup.
 
-    ![image](media/inspection/customize-experience.png)
+    ![image](https://github.com/MicrosoftDocs/powerapps-docs/blob/main/powerapps-docs/teams/media/boards/board-search.png)
 
 ## Manage inspections app
 
