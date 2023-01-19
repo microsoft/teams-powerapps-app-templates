@@ -38,31 +38,31 @@ This process begins by opening the app in the **Power Apps** app. You may have P
 
 1. Type **Power Apps** in the search field.
 
-    ![Search for Power Apps](https://github.com/microsoft/teams-powerapps-app-templates/tree/main/Area%20Inspection/Documentations/media/deploy-inspection-as-a-broad-distribution-app/search-power-apps.png "Search for Power Apps")
+    ![Search for Power Apps](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentation/media/deploy-inspection-as-a-broad-distribution-app/search-power-apps.png "Search for Power Apps")
 
 1. Select the Power Apps app from the list to open the app. Power Apps will open inside of teams.
 
 1. We recommend that you “pop out” Power Apps so that you won’t lose your app configuration as you move across applications. To pop out the Power Apps app, right-click on the Power Apps logo and select **Pop out app**.
 
-    ![Pop-out app](https://github.com/microsoft/teams-powerapps-app-templates/tree/main/Area%20Inspection/Documentations/media/deploy-inspection-as-a-broad-distribution-app/pop-out-app.png "Pop out app")
+    ![Pop-out app](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentation/media/deploy-inspection-as-a-broad-distribution-app/pop-out-app.png "Pop out app")
 
 1. Right-click on the **Power Apps** logo, and select **Pin** to lock the app to the side menu so it's easy to get to in the future.
 
-    ![Power apps icon](https://github.com/microsoft/teams-powerapps-app-templates/tree/main/Area%20Inspection/Documentations/media/deploy-inspection-as-a-broad-distribution-app/select-power-apps-icon.png "Power apps icon")
+    ![Power apps icon](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentation/media/deploy-inspection-as-a-broad-distribution-app/select-power-apps-icon.png "Power apps icon")
 
 1. Now that you've loaded the Power Apps app, select **Build**.
 
-    ![Build tab](https://github.com/microsoft/teams-powerapps-app-templates/tree/main/Area%20Inspection/Documentations/media/deploy-inspection-as-a-broad-distribution-app/build-tab.png "Build tab")
+    ![Build tab](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentation/media/deploy-inspection-as-a-broad-distribution-app/build-tab.png "Build tab")
 
 1. This screen will show all the teams that have Power Apps installed in them. Select the team that contain the app you want to share. Select **Share with colleagues**.
 
-    ![Share with colleagues](https://github.com/microsoft/teams-powerapps-app-templates/tree/main/Area%20Inspection/Documentations/media/deploy-inspection-as-a-broad-distribution-app/share-with-colleagues.png "Share with colleagues")
+    ![Share with colleagues](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentation/media/deploy-inspection-as-a-broad-distribution-app/share-with-colleagues.png "Share with colleagues")
 
 1. Enter an AD security group or a different team with which you would like to share access to the app.
 
 1. Set the **on/off** toggle to **on** for **Inspection**.
 
-    ![Set security group on for Inspection](https://github.com/microsoft/teams-powerapps-app-templates/tree/main/Area%20Inspection/Documentations/media/deploy-inspection-as-a-broad-distribution-app/set-security-group-on-for-inspection.png "Set security group on for Inspection")
+    ![Set security group on for Inspection](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentation/media/deploy-inspection-as-a-broad-distribution-app/set-security-group-on-for-inspection.png "Set security group on for Inspection")
 
 1. Select **Save**.
 
@@ -72,19 +72,19 @@ Understanding and assigning permissions to tables are vital to ensure proper sec
 
 - **Full Access** – Allows end users to see and edit all records in the table.
 
-    ![Full access feature](https://github.com/microsoft/teams-powerapps-app-templates/tree/main/Area%20Inspection/Documentations/media/deploy-inspection-as-a-broad-distribution-app/full-access.png "Full access feature")
+    ![Full access feature](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentation/media/deploy-inspection-as-a-broad-distribution-app/full-access.png "Full access feature")
 
 - **Collaborate** – Allows end users to see all records, but they can only edit their own records.
 
-    ![Collaborate feature](https://github.com/microsoft/teams-powerapps-app-templates/tree/main/Area%20Inspection/Documentations/media/deploy-inspection-as-a-broad-distribution-app/collaborate.png "Collaborate feature")
+    ![Collaborate feature](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentation/media/deploy-inspection-as-a-broad-distribution-app/collaborate.png "Collaborate feature")
 
 - **Reference** – Provides a read-only view of data for end users.
 
-    ![Reference feature](https://github.com/microsoft/teams-powerapps-app-templates/tree/main/Area%20Inspection/Documentations/media/deploy-inspection-as-a-broad-distribution-app/reference.png "Reference feature")
+    ![Reference feature](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentation/media/deploy-inspection-as-a-broad-distribution-app/reference.png "Reference feature")
 
 - **Private** – Allows end users to only view and edit their own data.
 
-    ![Private feature](https://github.com/microsoft/teams-powerapps-app-templates/tree/main/Area%20Inspection/Documentations/media/deploy-inspection-as-a-broad-distribution-app/private.png "Private feature")
+    ![Private feature](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentation/media/deploy-inspection-as-a-broad-distribution-app/private.png "Private feature")
 
 ### Granting permissions to the tables
 
@@ -101,13 +101,13 @@ colleagues outside of the team:
 
 1. Select **See All** in the **Area Inspection** tile.
 
-    ![See all option for Installed apps](https://github.com/microsoft/teams-powerapps-app-templates/tree/main/Area%20Inspection/Documentations/media/deploy-inspection-as-a-broad-distribution-app/see-all-option-for-installed-apps.png "See all option for Installed apps")
+    ![See all option for Installed apps](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentation/media/deploy-inspection-as-a-broad-distribution-app/see-all-option-for-installed-apps.png "See all option for Installed apps")
 
 1. Select **Tables** from the solution components bar.
 
 1. Select the tables listed individually then **Manage Permissions.**
 
-    ![Manage permissions](https://github.com/microsoft/teams-powerapps-app-templates/tree/main/Area%20Inspection/Documentations/media/deploy-inspection-as-a-broad-distribution-app/manage-permissions.png "Manage permissions")
+    ![Manage permissions](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentation/media/deploy-inspection-as-a-broad-distribution-app/manage-permissions.png "Manage permissions")
 
 1. Select the security group with which the app was shared. The initial permission will show none. Select the desired permission and select **Save.**
 
@@ -152,17 +152,17 @@ So now that you've shared Inspection with colleagues outside of your team, here'
 
 1. When the app information screen appears, select **Add** to add the app to the main teams app menu.
 
-    ![Built for your org](https://github.com/microsoft/teams-powerapps-app-templates/tree/main/Area%20Inspection/Documentations/media/deploy-inspection-as-a-broad-distribution-app/built-for-your-org.png "Built for your org")
+    ![Built for your org](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentation/media/deploy-inspection-as-a-broad-distribution-app/built-for-your-org.png "Built for your org")
 
 1. After adding the app to the Teams app menu, select the icon for the app to open it full screen in Teams.
 
 1. If you want to make the app always appear in the app menu so you can easily find it, right-click on the Inspection button on the app menu and select **Pin**.
 
-    ![Pin the app](https://github.com/microsoft/teams-powerapps-app-templates/tree/main/Area%20Inspection/Documentations/media/deploy-inspection-as-a-broad-distribution-app/pin-the-app-option.png "Pin the app")
+    ![Pin the app](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentation/media/deploy-inspection-as-a-broad-distribution-app/pin-the-app-option.png "Pin the app")
 
 1. If you would prefer to add the app to another team, select the drop-down by the **Add** button and select **Add to a team**.
 
-    ![Add app to a team](https://github.com/microsoft/teams-powerapps-app-templates/tree/main/Area%20Inspection/Documentations/media/deploy-inspection-as-a-broad-distribution-app/add-to-team.png "Add app to a team")
+    ![Add app to a team](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentation/media/deploy-inspection-as-a-broad-distribution-app/add-to-team.png "Add app to a team")
 
 ## Limitation
 
