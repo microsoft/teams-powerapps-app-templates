@@ -26,15 +26,6 @@ Watch this video for a demonstration of this app.
 > [!NOTE]
 > Before you can use this app, you may be asked for your permissions to use the connection. More information: [Allow connections in sample apps](use-sample-apps-from-teams-store.md#step-1---allow-connections)
 
-## Prerequisites
-
-Before using this app:
-
-1. Install the app.
-2. Set up the app for the first use.
-
-For details about the above steps, go to [Use sample apps from the Teams store](use-sample-apps-from-teams-store.md).
-
 ## Label setup
 
 The labels describing the items being inspected and their associated types can
@@ -48,7 +39,7 @@ To change labels used in the app:
 
 1. Select the **Manage inspections** tab in Teams.
 
-1. Select ![App settings to customize experience.](media/inspection/teams-settings.png "App settings to customize experience") from the upper-right corner.
+1. Select ![App settings to customize experience.](/media/inspection/teams-settings.png "App settings to customize experience") from the upper-right corner.
 
 1. Select **Customize experience** on the left pane.
 
