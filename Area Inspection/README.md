@@ -1,6 +1,6 @@
 # Inspection App Template
 
-| [Documentation](https://learn.microsoft.com/en-us/power-apps/teams/inspection) | [Installation guide](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/INSTALLATION.md)
+| [Documentation](Documentation/README.md) | [Installation guide](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/INSTALLATION.md)
 | ---- | ---- |
 
 The Inspection solution for Microsoft Teams is a general inspection app that can be used to inspect anything from a location—such as a retail store or manufacturing plant—to assets and equipment, such as vehicles and machines. There are two apps in this solution, each intended for different kinds of users.
