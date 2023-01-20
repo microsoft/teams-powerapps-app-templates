@@ -1,6 +1,6 @@
 # Employee Ideas App Template
 
-| [Documentation](Documentation/README.me) | [Installation guide](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/INSTALLATION.md)
+| [Documentation](Documentation/README.md) | [Installation guide](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/INSTALLATION.md)
 | ---- | ---- |
 
 Employee ideas app is used by the Teams users to perform the following activities:
