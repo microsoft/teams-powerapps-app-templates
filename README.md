@@ -1,10 +1,8 @@
-# Power Apps Teams Sample Apps
+# Power Apps Teams Sample App Templates
 
-Sample apps that were created by using [Power Apps](https://learn.microsoft.com/en-us/power-apps/powerapps-overview) are available in the Teams. You can select the sample app that best fits your business requirement and quickly install it to get started. After you install the sample app, you can go to the team that you added the app to and use the tabs for the app. Sample apps created with Power Apps and published to the Teams can consist of multiple components such as apps, flows, and tables.
+Sample app templates that were created by using [Power Apps](https://learn.microsoft.com/en-us/power-apps/powerapps-overview) are available in the Teams. You can select the sample app that best fits your business requirement and quickly install it to get started. After you install the sample app, you can go to the team that you added the app to and use the tabs for the app. Sample app templates created with Power Apps and published to the Teams can consist of multiple components such as apps, flows, and tables.
 
-Refer to [this link](https://learn.microsoft.com/en-us/power-apps/teams/use-sample-apps-from-teams-store) for more information on Power Apps sample apps in Teams.
-
-This repo has 10 sample apps:
+This repo has 10 sample app templates:
 
 ### [Boards](https://aka.ms/Boards)
 ![image](https://user-images.githubusercontent.com/84343636/210890199-754cb955-c403-4913-b9ae-5a206ef48c46.png)
