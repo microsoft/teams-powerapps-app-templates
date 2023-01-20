@@ -4,7 +4,7 @@
 The Bulletins Power App Template for Teams provides a central location for all company communication such as broadcasts, memos, announcements, and company news. The app allows you to create, categorize, bookmark, search, and read bulletin posts.
 
 Watch this video to add "Notify me" settings to category:
-> [!VIDEO https://www.microsoft.com/videoplayer/embed/RWLxVs]
+> [VIDEO https://www.microsoft.com/videoplayer/embed/RWLxVs]
 
 The Bulletins app solution consists of two apps:
 
@@ -24,7 +24,7 @@ In this article, we'll learn how to add functionality where the user can select 
 
 When users are busy, excessive notifications can be a distraction. Users want to know when relevant announcements and news are posted, but they don’t want to be distracted by the noise of information about areas that don’t apply to them. By allowing users to opt in to notifications, they can subscribe to the areas that are relevant for them, and be notified about what matter most to them.
 
-> [!NOTE]
+> [NOTE]
 > Before you proceed, review [customize Bulletins app](customize-bulletins.md).
 
 ## Prerequisites

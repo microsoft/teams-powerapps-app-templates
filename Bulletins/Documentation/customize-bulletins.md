@@ -7,7 +7,7 @@ Before you can customize the app, you must install it from the Teams store. You 
 Once the app is installed, you can then customize the app using the following steps:
 
 Watch this video to learn how to customize Bulletins app:
-> [!VIDEO https://www.microsoft.com/videoplayer/embed/RWLkvS]
+> [VIDEO https://www.microsoft.com/videoplayer/embed/RWLkvS]
 
 ## Open Power Apps app in Teams
 

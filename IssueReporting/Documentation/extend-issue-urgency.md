@@ -4,7 +4,7 @@
 As a user of the Issue reporting sample app for Microsoft Teams, you may want to modify the logic of how reported issues are create in Planner. We've included many of the standard fields in Planner in the standard app, but based on your specific requirements, you may want to make further changes.
 
 Watch this video to learn how to add urgency flag to reported issues:
-> [!VIDEO https://www.microsoft.com/videoplayer/embed/RWLkWO]
+> [VIDEO https://www.microsoft.com/videoplayer/embed/RWLkWO]
 
 ## Create tasks in app vs using Power Automate
 
@@ -48,7 +48,7 @@ The outcome of this exercise will include:
 
 In this step, we'll update the Issue reporting app to add a checkbox to flag urgent tasks. This process assumes that you've installed the Issue reporting template app in Teams and configured it to use Microsoft Planner/Tasks.
 
-> [!TIP]
+> [TIP]
 > For architecture details of the app and the data model, see [Issue reporting architecture](issue-reporting-architecture.md).
 
 1. Open the Power Apps app in Teams.
@@ -119,7 +119,7 @@ In this section we'll be creating a flow and replacing the app logic that create
 
 1. In the formula bar, select the OnSelect formula. Copy the formula and paste in a notepad. This will help you retrieve it when you need it.
 
-    > [!NOTE]
+    > [NOTE]
     > The reason we're copying the formula is because when we add a flow to the button, the formula will be cleared. We want to be sure that we copy the formula so we can restore it after we have linked the flow to the app.
 
 1. In the top menu, select the three horizontal dots and select **Power Automate**.
@@ -138,7 +138,7 @@ In this section we'll be creating a flow and replacing the app logic that create
 
    ![Rename the flow](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/IssueReporting/Documentation/media/extend-issue-urgency/rename-flow.png "Rename the flow")
 
-    > [!NOTE]
+    > [NOTE]
     > In the following steps, we'll set values to **Ask in PowerApps**. When you set a value in a Power Automate flow that is triggered from Power Apps to **Ask in PowerApps**, a parameter is created in your flow and Power Apps will pass a value to this parameter when the flow is called from an app.
 
     ![Ask in PowerApps step](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/IssueReporting/Documentation/media/extend-issue-urgency/ask-in-power-apps.png "Ask in PowerApps step")
@@ -151,7 +151,7 @@ In this section we'll be creating a flow and replacing the app logic that create
 
 1. Rename the compose step **Category**.
 
-    > [!NOTE]
+    > [NOTE]
     > Always rename your compose steps before setting their value to **Ask in Power Apps** so that the parameter created will include the appropriate name, rather than a generic name.
 
 1. Select the dynamic content panel and select the **Ask in PowerApps** action.
@@ -199,7 +199,7 @@ In this section we'll be creating a flow and replacing the app logic that create
 
 1. Select **Issue Reports**  for the table.
 
-    > [!NOTE]
+    > [NOTE]
     > The Issue Reports table includes two lookup fields. When populating lookup fields, you must enter the value as **table name(record ID)**. The two compose steps added earlier will contain the record ID’s for the category and the template. To enter these values, type the entity name with parenthesis, then inside the parenthesis, select the appropriate value from the dynamic content pane.
 
 1. Enter the following values in this step:
@@ -237,7 +237,7 @@ In this section we'll be creating a flow and replacing the app logic that create
 
     ![Select Create Planner Task flow](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/IssueReporting/Documentation/media/extend-issue-urgency/create-planner-task-flow.png "Create Planner Task flow from flow list")
 
-    > [!NOTE]
+    > [NOTE]
     > Selecting a flow will associate this flow with the Power Apps and also clear your OnSelect property&mdash;this is why we copied the formula contents earlier in this lesson.
 
 1. In your backup copy of the original OnSelect formula, we now want to remove the section that creates the planner task since it now is handled by flow. First, remove this section:
@@ -252,7 +252,7 @@ In this section we'll be creating a flow and replacing the app logic that create
     Set(gblPlannerTask,CreatePlannerTask.Run(gblPlannerGroupId,gblPlannerPlanId,locNewTask.appTitle,locPlannerBucketForTask,locNewTask.appStart,locNewTask.appDue,locNewTask.appAssignments,Checkbox1.Checked,locNewTask.appDescription,gblRecordCategory.'Issue Report Category',gblRecordTemplate.'Issue Report Template'));
     ```
 
-    > [!NOTE]
+    > [NOTE]
     > The CreatePlannerTask.Run() formula triggers the Create Planner Task flow, and the values in the parenthesis are the values passed to the parameters in the flow created when we added the **Ask in PowerApps** value.
     >
     > The order in which these are specified are based on the order in which you added them to the flow—if you added them in the order specified, this formula will work. If you did not add them in the same order, intellisense will guide you in the proper field order. The variables we are specifying in the formula like locNewTask.appTitle are context variables set earlier in the OnSelect formula.

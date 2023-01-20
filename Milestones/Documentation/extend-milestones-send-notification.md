@@ -7,7 +7,7 @@ The Milestones sample app for Microsoft Teams allows users to track progress of 
 In this article, we'll learn how to create a Power Automate flow to send an adaptive card notification to the Team (in which the app is installed) when work item status changes.
 
 Watch this video to learn how to configure notification to the Team when work item status is updated in the Milestones sample app:
-> [!VIDEO https://www.microsoft.com/videoplayer/embed/RWLkWN]
+> [VIDEO https://www.microsoft.com/videoplayer/embed/RWLkWN]
 
 ## Prerequisites
 
@@ -99,7 +99,7 @@ To complete this exercise, we would need the ability to log in into Teams that w
     - Type - "String"
     - Value - leave blank - will be added later.
 
-    > [!NOTE]
+    > [NOTE]
     > After adding a new step, you may see a warning in the flow checker. This warning is expected because the flow is called from a Power Apps app, and adding a new step to a flow called from a Power Apps app may break the connection with the app. Later in the exercise, we'll replace the connection to the flow to fix this warning.
 
 1. For the **Review Work Item Link** action, we'll use the link to the app. To find this link, open the team where the Milestones app is installed, and copy the link for tab in which the app is installed. You can copy the link to the tab by opening the tab, then selecting **...** (ellipses) in the upper right corner.
@@ -132,7 +132,7 @@ To complete this exercise, we would need the ability to log in into Teams that w
      - Channel - General
      - Adaptive Card - Paste the following JSON code:
 
-        > [!NOTE]
+        > [NOTE]
         > The following JSON code contains dynamic references to values from previous flow steps. These should automatically resolve to the correct reference, but if they do not, manually update them with the correct reference. For example, @{outputs('Get_Work_Item_Status_record')?['body/msft_name']} references the name column from the Get Work Item Status step.
     
          ```

@@ -3,7 +3,7 @@
 The Bulletins sample app for Microsoft Teams provides a central location for all company communication such as broadcasts, memos, announcements, and company news. The app allows you to create, categorize, bookmark, search, and read bulletin posts.
 
 Watch this video to learn how to customize apps for end user to add notification preferences:
-> [!VIDEO https://www.microsoft.com/videoplayer/embed/RWLn9F]
+> [VIDEO https://www.microsoft.com/videoplayer/embed/RWLn9F]
 
 The Bulletins app solution consists of two apps:
 
@@ -21,7 +21,7 @@ The Bulletins app solution consists of two apps:
 
 In this article, we'll learn how to enable users to set notification preferences per category for which they want to get notified when new bulletins get added.
 
-> [!NOTE]
+> [NOTE]
 > Before you proceed, review [customize Bulletins app](customize-bulletins.md).
 
 ## Prerequisites

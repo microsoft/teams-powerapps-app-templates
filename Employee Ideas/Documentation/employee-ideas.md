@@ -19,9 +19,9 @@ Employee ideas app is used by the Teams users to perform the following activitie
 - Review how their own idea is performing compared to others within a campaign.
 
 Watch this video for a demonstration of this app.
-> [!VIDEO https://www.microsoft.com/videoplayer/embed/RE4LK0d]
+> [VIDEO https://www.microsoft.com/videoplayer/embed/RE4LK0d]
 
-> [!NOTE]
+> [NOTE]
 > - Before you can use this app, you may be asked for your permissions to use the connection. More information: [Allow connections in sample apps](use-sample-apps-from-teams-store.md#step-1---allow-connections)
 > - This app is available in three different Teams themes: Default, Dark and High contrast. When you [change the theme in Teams](https://support.microsoft.com/en-us/office/change-settings-in-teams-b506e8f1-1a96-4cf1-8c6b-b6ed4f424bc7), the app automatically updates to match the selected theme. More information: [Get the Teams theme using the Teams integration object](use-teams-integration-object.md#get-the-teams-theme)
 
@@ -73,12 +73,12 @@ To add campaigns:
 1. Enter the campaign details such as campaign name, description, campaign
     start and end date, and a cover image.
 
-    > [!TIP]
+    > [TIP]
     > Cover image can be chosen from a set of available image templates.
 
 1. Add idea questions.
 
-    > [!NOTE]
+    > [NOTE]
     > - By default, there are 2 questions.
     > - The response type for each question can be of text format, or a rating (1 being the lowest, 5 being the highest).
     > - Users can also:

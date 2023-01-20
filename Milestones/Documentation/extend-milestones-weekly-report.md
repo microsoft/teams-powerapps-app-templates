@@ -22,7 +22,7 @@ The Milestones sample app allows users to create milestones for a team and track
 In this article, we'll learn how to create a Power Automate flow to send a project weekly report to the person who created the project with the work items listed along with their status.
 
 Watch this video to learn how to send weekly report on project status from Milestones app:
-> [!VIDEO https://www.microsoft.com/videoplayer/embed/RWLiBU]
+> [VIDEO https://www.microsoft.com/videoplayer/embed/RWLiBU]
 
 ## Prerequisites
 
@@ -66,7 +66,7 @@ To complete this exercise, we'd need the ability to log in into Teams that will 
 
     - Expand Query – "msft_WorkItemStatus_id(\$select=msft_name)"
 
-> [!NOTE]
+> [NOTE]
 > As soon as we select the Project ID in the Filter Rows field, the flow would put the List Work Items step into an Apply to Each container in which we would add more steps that would be needed.
 
 1. Create HTML table – renamed to Create HTML table – Work Items.

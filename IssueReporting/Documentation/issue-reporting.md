@@ -24,9 +24,9 @@ Issue reporting consists of two different apps, one for reporting issues and ano
     - Get a high-level view of the issues and team issues.
 
 Watch this video for a demonstration of this app.
-> [!VIDEO https://www.microsoft.com/videoplayer/embed/RE4MbLW]
+> [VIDEO https://www.microsoft.com/videoplayer/embed/RE4MbLW]
 
-> [!NOTE]
+> [NOTE]
 > Before you can use this app, you may be asked for your permissions to use the connection. More information: [Allow connections in sample apps](use-sample-apps-from-teams-store.md#step-1---allow-connections)
 
 ## Prerequisites
@@ -67,7 +67,7 @@ This app provides the following capabilities:
 
 1. Add **Tasks (Planner)** tab.
 
-    > [!TIP]
+    > [TIP]
     > Give your Planner a distinct name, such as “Issue tasks”. This way, you'll be able to identify the right Planner based on this name. The list of Planner instances inside the app as options shows Planner names, and not the name on the Teams tab for the Planner.
 
 1. Select the **Manage Issues** tab in Teams.
@@ -76,7 +76,7 @@ This app provides the following capabilities:
 
 1. Select the **Tasks (Planner)** instance to integrate the app with Planner.
 
-    > [!NOTE]
+    > [NOTE]
     > Issue reporting requires a Planner tab to be installed before the app can be used. If you didn't add Planner tab, add the tab first and then, reopen the **Manage Issues** app.
 
 1. Select **Continue**.
@@ -165,7 +165,7 @@ To update a category title:
 
     ![Update title inside app.](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/IssueReporting/Documentation/media/issue-reporting/update-title-app.png "Update title inside app")
 
-    > [!NOTE]
+    > [NOTE]
     > The notification bar shows a notification about the title update in Tasks.
 
 ### Delete a category
@@ -298,7 +298,7 @@ To submit a new issue:
 
 1. Enter issue details.
 
-    > [!NOTE]
+    > [NOTE]
     > Some of the issue details are automatically entered.
 
 1. Select **Submit issue**.

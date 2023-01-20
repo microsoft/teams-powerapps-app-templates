@@ -15,7 +15,7 @@ You can use **Share with Colleague** feature to accomplish this. In this case, y
 In this article, we'll explain how to share the app with colleagues outside of the team.
 
 Watch this video to learn how to deploy Employee Ideas app as a broad distribution app:
-> [!VIDEO https://www.microsoft.com/videoplayer/embed/RWLkvR]
+> [VIDEO https://www.microsoft.com/videoplayer/embed/RWLkvR]
 
 ## Prerequisites
 
@@ -26,7 +26,7 @@ You must be an owner of the Team in which the app is installed to share the app.
 1. Share the app with colleagues.
 2. Grant security permissions to the tables used in the app
 
-> [!NOTE]
+> [NOTE]
 > Apps are installed in a team in Microsoft Teams. People who develop and extend the app or managers who manage the ideas app should use the app in a Team. For people who create ideas or users who aren't managers, sharing the app with colleagues outside of the team will enable them to use the app without having to be a member of the Team.
 
 ### Rename the app

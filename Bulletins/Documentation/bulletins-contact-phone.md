@@ -4,7 +4,7 @@
 The Bulletins sample app for Microsoft Teams provides a central location for all company communication such as broadcasts, memos, announcements, and company news. The app allows you to create, categorize, bookmark, search and read bulletin posts.
 
 Watch this video to learn how to add contact phone in links and contacts section:
-> [!VIDEO https://www.microsoft.com/videoplayer/embed/RWLkvV]
+> [VIDEO https://www.microsoft.com/videoplayer/embed/RWLkvV]
 
 The Bulletins app solution consists of two apps:
 
@@ -28,14 +28,14 @@ The Bulletins app provides links to relevant contacts in the organization and ex
 
 By default, there's no phone number to call the person. We'll add the ability to call the person from within the app.
 
-> [!NOTE]
+> [NOTE]
 > Before you proceed, review [customize Bulletins app](customize-bulletins.md).
 
 ## Prerequisites
 
 To complete this lesson, we'd need the ability to login into Teams which will be available as part of select Microsoft 365 subscriptions, and will also need to have the Bulletins app for Teams installed. This app can be installed from <https://aka.ms/TeamsBulletins>. Also, we'd need to complete [Add "notify me" settings to category](bulletins-notify-me.md). We'll use steps followed in that lesson and build up on those in this topic.
 
-> [!NOTE]
+> [NOTE]
 > Follow below steps on both the Bulletins and the Manage Bulletins apps where you want the "Call contact" functionality enabled.
 
 ## Add a Call image media file
@@ -62,14 +62,14 @@ To complete this lesson, we'd need the ability to login into Teams which will be
     | Image | 'call icon' |
     | OnSelect | `Launch("msteams://teams.microsoft.com/l/call/0/0?users="&ThisItem.Email,{},LaunchTarget.New)` |
 
-    > [!NOTE]
+    > [NOTE]
     > This action will launch the Teams call option, and will open a pop-up asking if you'd like to call the contact using Teams.
 
 1. Update the width of the gallery **galLinksContacts_Contacts** as `'Links and Contacts Screen'.Size – 1`.
 
 1. Update the width of the button **btnGalLinksContacts_Contacts_Select** as `imgGalLinksContacts_Contacts_Call.X - Self.X`.
 
-    > [!NOTE]
+    > [NOTE]
     > This button only exists in the **Manage Bulletins** app.
 
 1. Select **Save** to save your changes.

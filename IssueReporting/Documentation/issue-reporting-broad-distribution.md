@@ -4,7 +4,7 @@
 The Issue reporting sample app for Microsoft Teams is designed to make it easy to capture issues with your equipment, facility, or store.
 
 Watch this video to learn how to deploy Issue reporting app as broad distribution app:
-> [!VIDEO https://www.microsoft.com/videoplayer/embed/RWLvkW]
+> [VIDEO https://www.microsoft.com/videoplayer/embed/RWLvkW]
 
 The app addresses the following personas:
 
@@ -29,7 +29,7 @@ You must be an owner of the Team in which the app is installed to share the app.
 1. [Share the app with colleagues](#share-app-with-colleagues)
 1. [Grant security permissions to the tables used in the app](#grant-permissions-to-the-tables)
 
-> [!NOTE]
+> [NOTE]
 > Apps are installed in a Team in Teams. People who develop and extend the app or managers who create or manage the issue forms should use the app in a Team. For people who log issues or users who aren't managers, sharing the app with colleagues outside of the team will enable them to use the app without having to be a member of the Team.
 
 ## Share app with colleagues

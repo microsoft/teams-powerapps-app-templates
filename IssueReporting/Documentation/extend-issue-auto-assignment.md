@@ -8,7 +8,7 @@ But what if you want additional logic to further automate issue assignment?
 Let’s say you want any urgent issues to be automatically assigned to a manager. Power Automate is a great option to automate conditional logic like task creation.
 
 Watch this video to learn how to add business logic for automated task assignment:
-> [!VIDEO https://www.microsoft.com/videoplayer/embed/RWLiBY]
+> [VIDEO https://www.microsoft.com/videoplayer/embed/RWLiBY]
 
 ## Open Power Automate
 
@@ -51,7 +51,7 @@ In this step, we'll add logic to the flow to conditionally assign tasks to manag
 - Using condition step
 - Using an expression
 
-> [!NOTE]
+> [NOTE]
 > Each of the following two expressions modify the flow, you should select one of these methods.
 
 ### Method 1: Use a condition action (For beginners)
@@ -140,7 +140,7 @@ Set the assignment logic using the following steps:
 
     ![Formula to assign to manager](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/IssueReporting/Documentation/media/extend-issue-auto-assignment/priority.png "Formula to assign to manager")
 
-> [!NOTE]
+> [NOTE]
 > If you want to know how to refer to a field value in an expression, add the field to your step, then select **..** in the upper right corner of the step definition, and select **Peek code.** This will reveal the expression syntax for referencing the field value.
 
 ## Test your flow
@@ -155,7 +155,7 @@ Set the assignment logic using the following steps:
 
 1. Verify that the task was assigned to the manager of the person you selected in the app.
 
-    > [!NOTE]
+    > [NOTE]
     > This flow will work if a single assigned to was selected for the task in the Issue reporting app. The selected person must also have a manager defined in Active Directory.
 
 ## Next steps
