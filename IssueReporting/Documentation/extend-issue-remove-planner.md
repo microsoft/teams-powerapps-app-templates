@@ -4,7 +4,7 @@
 In the Issue reporting sample app, you can share the app for broad distribution. When you do this, the users outside of the Microsoft Teams team may not have access to the Planner. If this case is true, creation of tasks will fail because the users submitting the issue.
 
 Watch this video to learn how to remove the Planner dependency for task creation in the Issue reporting sample app:
-> [!VIDEO https://www.microsoft.com/videoplayer/embed/RWLiBZ]
+> [VIDEO https://www.microsoft.com/videoplayer/embed/RWLiBZ]
 
 Issue reporting is heavily dependent on Planner, and the users of the app must have access to the Planner that the app uses to create issues. Planner is referenced in multiple places in the app:
 
@@ -141,7 +141,7 @@ Now that we've removed the current OnSelect formula, we're going to create a flo
 
 1. Rename the compose step **Category**.
 
-    > [!NOTE]
+    > [NOTE]
     > Always rename your compose steps before setting their value to **Ask in Power Apps** so that the parameter created will include the appropriate name, rather than a generic name.
 
 1. Select the dynamic content panel and select the **Ask in PowerApps** action.

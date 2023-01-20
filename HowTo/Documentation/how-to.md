@@ -11,11 +11,11 @@ Benefits of using the How-to app:
 - Share the asset checkout app you build with colleagues in Teams.
 - Become a Maker
 
-> [!NOTE]
+> [NOTE]
 > Before you can use this app, you may be asked for your permissions to use the connection. More information: [**Allow connections in sample apps**](use-sample-apps-from-teams-store.md#step-1---allow-connections)
 > This app is available in three different Teams themes: Default, Dark and High contrast. When you [**change the theme in Teams**](https://support.microsoft.com/office/change-settings-in-teams-b506e8f1-1a96-4cf1-8c6b-b6ed4f424bc7) the app automatically updates to match the selected theme. More information: [**Get the Teams theme using the Teams integration object**](use-teams-integration-object.md#get-the-teams-theme)
 
-> [!IMPORTANT]
+> [IMPORTANT]
 > - This is a preview feature.
 > - Preview features aren’t meant for production use and may have restricted functionality. These features are available before an official release so that customers can get early access and provide feedback.
 
@@ -150,7 +150,7 @@ We'll use the table editable grid to populate the sample data in the app. To use
 
 1. Select **Edit data**.
 
-> [!NOTE]
+> [NOTE]
 > The table editable grid cannot import photos.
 
 The sample data screen includes a gallery that allows you to select items that were created in the previous step, and associate images with them.

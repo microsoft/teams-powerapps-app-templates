@@ -8,11 +8,11 @@ But once the ideas have been submitted and the voting period is over, how should
 
 In this article, we'll learn how to add a **Priority** tag to an idea in the Manage Idea app so that the manager can tag prioritized ideas. We'll also add a label on the idea in the Ideas app to indicate if it was a prioritized idea or not. When done, the manager will be able to mark prioritized ideas in the Manage Ideas app, and users of the ideas app will be able to see that their idea has been prioritized.
 
-> [!NOTE]
+> [NOTE]
 > Before starting with the steps in this article, read [Customize the Employee Ideas app](customize-employee-ideas.md).
 
 Watch this video to learn how to add a tag to mark prioritized ideas:
-> [!VIDEO https://www.microsoft.com/videoplayer/embed/RWLn9D]
+> [VIDEO https://www.microsoft.com/videoplayer/embed/RWLn9D]
 
 ## Prerequisites
 

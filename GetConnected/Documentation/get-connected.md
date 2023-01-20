@@ -5,7 +5,7 @@
 
 In this tutorial, learn about the Get connected app, and how to use it effectively.
 
-> [!IMPORTANT]
+> [IMPORTANT]
 > - This is a preview feature.
 > - Preview features aren’t meant for production use and may have restricted functionality. These features are available before an official release so  that customers can get early access and provide feedback.
 
@@ -20,7 +20,7 @@ Benefits of using the Get connected app:
 - Connect with an expert
 - Find new connections by skills
 
-> [!NOTE]
+> [NOTE]
 > - Before you can use this app, you may be asked for your permissions to use the connection. More information: [**Allow connections in sample  apps**](use-sample-apps-from-teams-store.md#step-1---allow-connections).
 > - This app is available in three different Teams themes: Default, Dark and High contrast. When you [**change the theme in Teams**](https://support.microsoft.com/office/change-settings-in-teams-b506e8f1-1a96-4cf1-8c6b-b6ed4f424bc7),  the app automatically updates to match the selected theme. More information: [**Get the Teams theme using the Teams integration object**](use-teams-integration-object.md#get-the-teams-theme)
 
@@ -56,7 +56,7 @@ Get connected is all about making connections with your colleagues. The Get conn
 
 When you connect with someone new, the system will connect you with someone random from your organization so you can get to know others in your organization. For example, if you're new and don't know many people, you can use Get connected to expand your network of work connections.
 
-> [!NOTE]
+> [NOTE]
 > Get Connected app requires at least three users who have edited their profile in the app, and opted-in to allow meeting colleagues randomly. If an insufficient number of employees have opted-in, you'll have the option to invite colleagues to use the app. For more information, see the [Update profile skills](#update-profile-skills) section.
 
 1. In Teams, go to the team in which Get connected is installed.
@@ -71,7 +71,7 @@ When you connect with someone new, the system will connect you with someone rand
 
 Connecting with a peer will connect you with someone with the same job title as you in Active Directory so you can collaborate and share ideas.
 
-> [!NOTE]
+> [NOTE]
 > Get Connected app requires at least three users who have edited their profile in the app, and opted-in to allow meeting colleagues randomly. If an insufficient number of employees have opted-in, you'll have the option to invite colleagues to use the app. For more information, see the [Update profile skills](#update-profile-skills) section.
 
 1. Open Teams and select the team in which the Get connected app is installed.
@@ -119,7 +119,7 @@ You can also make yourself available to help others with skills in which you hav
 
 1. Select **Save**.
 
-   > [!NOTE]
+   > [NOTE]
    > When you add a skill to your profile, others will see you associated with the skill if you opt-in to helping colleagues learn about a skill. When you view the skill tiles on the main screen, you won't see your profile in skill categories (it displays colleagues with the skill), and you also won't see your profile in the list.
 
 ## Connection by Skills

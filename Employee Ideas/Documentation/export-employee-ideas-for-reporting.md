@@ -4,7 +4,7 @@
 This article covers how to export your ideas data from your Microsoft Teams database to another location so you can archive and report on it.
 
 Watch this video to learn how to export ideas for reporting:
-> [!VIDEO https://www.microsoft.com/videoplayer/embed/RWLkvT]
+> [VIDEO https://www.microsoft.com/videoplayer/embed/RWLkvT]
 
 ## Prerequisites
 
@@ -27,7 +27,7 @@ Some reasons to export data:
   
 - Extract the data so you can report on it.
 
-> [!NOTE]
+> [NOTE]
 > You can use Power BI to report directly on Dataverse for Teams; however, if you want to bring the data into a data lake to more easily combine it with other sources, exporting it may have advantages.
 
 - Archive data to free capacity in your Team database.
@@ -215,7 +215,7 @@ Next, we'll add a step to get the idea records and for each idea, get the campai
     > ![Complete flow.](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Employee%20Ideas/Documentation/media/export-employee-ideas-for-reporting/complete-flow-screenshot.png "Complete flow")
 
 
-    > [!NOTE]
+    > [NOTE]
     > Flow checker may give you a warning recommending that you use an Odata query on the list rows step. Using an Odata query will be advantageous if you have many idea records or want to filter ideas to a subset, such as ideas associated with open campaigns. This warning is not an error, and can be safely ignored. Select the X in the upper right corner to close the flow checker.
     
     > [!div class="mx-imgBorder"]

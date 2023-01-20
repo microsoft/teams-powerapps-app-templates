@@ -7,7 +7,7 @@ The Power Apps templates for Microsoft Teams include many pre-defined columns to
 In this article, we'll learn how to add a new column/field to a work item. For our example, we'll add a new field to capture the effort required for a particular work item. we'll add this field to the **New** and **Edit** Work Item screens for both desktop and mobile.
 
 Watch this video to learn how to add a new column to Milestones sample app to track work items:
-> [!VIDEO https://www.microsoft.com/videoplayer/embed/RWLiBS]
+> [VIDEO https://www.microsoft.com/videoplayer/embed/RWLiBS]
 
 ## Prerequisites
 
@@ -65,7 +65,7 @@ The following changes are required to add the Effort field/column on the Add/Edi
 
 1.  Copy and paste the Category label on the screen. We'll do this step so that the styling of the component is consistent with the other controls in the app.
 
-    > [!NOTE]
+    > [NOTE]
     > A new control can also be added by copying and pasting it from the Hidden Controls Screen. This is helpful because all the styling properties of the control are already set, thus preventing the need to update every styling property.
 
     ![The hidden screen.](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Milestones/Documentation/media/extend-milestones-add-column/hidden-screen.png "The hidden screen")
@@ -134,7 +134,7 @@ Now that we've added the field, we'll add it to the mobile screen.
 
 7.  Set Text property to 'Effort'.
 
-> [!NOTE]
+> [NOTE]
 > We're not accounting for Localization in this document hence keeping the text property set to Effort. Ideally, if the app is localized, we'll have to update the Localization document to include tags in all the languages for the word **Effort**, and then localize this newly added field.
 
 8.  Set X property '80\*1'.
@@ -201,7 +201,7 @@ Now that we've added the field, we'll add it to the mobile screen.
 
 7.  Set Text property to `Effort`.
 
-> [!NOTE] 
+> [NOTE] 
 > We're not accounting for localization in this document hence keeping the text property set to Effort. Ideally, if the app is localized, we'll have to update the localization document to include tags in all the languages for the word **Effort** and then localize this newly added field.
 
 8.  Set X property 'lblMobileAddWorkItemMilestone.X`.
@@ -246,7 +246,7 @@ We've added the new field in the data table and also added it to be displayed on
 
 Work items are also displayed in a list on the main screen of the app in context of a selected project. If you want to make your new field also visible from the project work item list on the main screen, follow these steps.
 
-> [!NOTE]
+> [NOTE]
 > The work items gallery is engineered to be responsive. The header of the gallery uses buttons outside of the gallery. When using buttons outside of a gallery, be aware that the buttons won’t scroll horizontally with the gallery, so you want to limit the number of fields to what will fit in one screen wide without scrolling. We recommended that you replace one of the existing fields rather than adding additional fields to avoid impacting responsiveness or requiring scrolling galleries.
 
 1.  Select **galWorkItems** from the tree view and expand it.

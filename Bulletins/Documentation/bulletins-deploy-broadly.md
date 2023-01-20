@@ -11,7 +11,7 @@ The app addresses the following personas:
 Consider that you want everyone at in your org, department, or location to be able to view bulletins. These users are people outside of the Teams team where the app is installed. In this article, we'll learn how to share the Bulletins app with them.
 
 Watch this video to learn how to deploy Bulletins app as a broad distribution app:
-> [!VIDEO https://www.microsoft.com/videoplayer/embed/RWLxVq]
+> [VIDEO https://www.microsoft.com/videoplayer/embed/RWLxVq]
 
 ## Prerequisites
 

@@ -3,7 +3,7 @@
 The Inspection sample app for Microsoft Teams is designed to make it easy to track and perform inspections of your assets, equipment, facility, or store.
 
 Watch this video to learn how to deploy Inspection app as broad distribution app:
-> [!VIDEO https://www.microsoft.com/videoplayer/embed/RWLxVt]
+> [VIDEO https://www.microsoft.com/videoplayer/embed/RWLxVt]
 
 The inspection solution addresses the following personas:
 
@@ -17,7 +17,7 @@ You want everyone at in your org, department, or a certain location to be able t
 
 The people responsible for managing and reviewing submitted inspections should be added as members of the team where the app is installed, as these apps are designed to be used from within a team.
 
-> [!NOTE]
+> [NOTE]
 > By default, when an issue is logged in an inspection, a task is created in Microsoft Planner in the team in which the app is installed, so you should also share access to the Teams Planner environment with the group for which the app is shared for broad distribution.
 
 ## Prerequisites
@@ -27,7 +27,7 @@ The people responsible for managing and reviewing submitted inspections should b
     - Share the app with colleagues.
     - Grant security permissions to the tables used in the app.
 
-> [!NOTE]
+> [NOTE]
 > Aps are installed inside of a tab in a Teams channel. People who develop and extend the app or managers who create or manage the inspection forms should use the app in a team. For people who complete inspections or users who aren't managers, sharing the app with colleagues outside of the team will enable them to use the app without having to be a member of the team.
 
 ## Sharing App with Colleagues

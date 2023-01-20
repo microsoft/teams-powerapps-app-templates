@@ -28,7 +28,7 @@ You must be an owner of the Teams team in which the app is installed to share th
 
 1. Grant security permissions to the tables used in the app.
 
-> [!NOTE]
+> [NOTE]
 > Apps are installed in a team in Microsoft Teams. People who develop and extend the app or managers who manage the app settings should use the app in a team. For people who use the app or users who are not managers, sharing the app with colleagues outside of the team will enable them to use the app without having to be a member of the team.
 
 ## Sharing app with colleagues

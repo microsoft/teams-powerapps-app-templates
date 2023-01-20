@@ -5,7 +5,7 @@ In this article, you'll be changing the inspection notifications that come from 
 Adaptive cards make notifications more interactive. Posts to channels are great, but they're a one-way communication. Adaptive cards offer more interactive notifications, allowing customization of the message, and the ability to hyperlink to the app or provide the ability to update the app data from the card.
 
 Watch this video to learn how to update inspection notification to use an adaptive card:
-> [!VIDEO https://www.microsoft.com/videoplayer/embed/RWLn9H]
+> [VIDEO https://www.microsoft.com/videoplayer/embed/RWLn9H]
 
 ## Prerequisites
 
@@ -44,7 +44,7 @@ Start with Power Apps personal app in Teams, and locating the Inspection app. Fo
 
 1. For the Review Inspections Link action, we'll the link to the tab the app is in. Open the Review Inspections app in the Teams channel, and select the button in the upper right corner to pop out the app to its own window. From there, you can copy the direct URL to the app. Navigate back to the Power Automate studio. Right-click on the Value field area in the Review Inspection Link action and Paste the link.
 
-    > [!TIP]
+    > [TIP]
     > To learn about creating deep links in Microsoft Teams, see [Create deep link](/microsoftteams/platform/concepts/build-and-test/deep-links).
 
 1. Add a **Post adaptive card in a chat or channel** action. Set the **Post as** value to *User* and the **Post in** value to *Channel*.

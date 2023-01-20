@@ -21,9 +21,9 @@ plant&mdash;to assets and equipment, such as vehicles and machines. There are tw
     - Log an issue when an issue is found during the inspection and assign it to the right person so that it can be resolved quickly.
 
 Watch this video for a demonstration of this app.
-> [!VIDEO https://www.microsoft.com/videoplayer/embed/RE4LRsh]
+> [VIDEO https://www.microsoft.com/videoplayer/embed/RE4LRsh]
 
-> [!NOTE]
+> [NOTE]
 > Before you can use this app, you may be asked for your permissions to use the connection. More information: [Allow connections in sample apps](use-sample-apps-from-teams-store.md#step-1---allow-connections)
 
 ## Prerequisites
@@ -72,7 +72,7 @@ The Manage inspections app gives a manager the following capabilities:
 - [Review submitted inspections](#review-submitted-inspections)
 - [Review inspection insights](#review-inspection-insights)
 
-> [!NOTE]
+> [NOTE]
 > For the example in this tutorial, the items being inspected are referred to as **Location** and **Location types**. This is based around a retail scenario where retail employees inspect sections of a store before opening or closing for the day. These views can differ based on how you've configured your application. For example, when inspecting a fleet of vehicles, the labels might be **Vehicle** and **Vehicle Category**.
 
 ### Configure the app
@@ -90,12 +90,12 @@ To configure the app:
     - If your Teams channel has a Planner tab, select **I've a planner tab**.
     - To continue app configuration without Planner integration, select **I'll set up later**.
 
-        > [!IMPORTANT]
+        > [IMPORTANT]
         > Without Planner integration, the app will still work, but the tasks will not be created during the inspections.    
 
     - To set up the Planner tab first, go back to the Teams channel, set up the Planner tab, and reopen the **Manage inspections** tab.
 
-        > [!TIP]
+        > [TIP]
         > Give your Planner a distinct name, such as “Inspection tasks”. When you select the Planner instance later to configure the **Manage inspections** app, you'll be able to identify the right Planner based on this name. The list of Planner instances inside the app as options shows Planner names, and not the name on the Teams tab for the Planner.
 
     ![Planner integration.](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentation/media/inspection/planner-tab.png "Planner integration")
@@ -104,7 +104,7 @@ To configure the app:
 
 1. If available, select the *Tasks* (Planner) instance to integrate the app with Planner.
 
-    > [!NOTE]
+    > [NOTE]
     > - If you selected **I'll set up later** for Planner integration, you won't be able to select the *Tasks* (Planner) instance.
 
     ![Select Team, Channel and Planner.](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentation/media/inspection/select-planner-channel.png "Select channel and Planner")
@@ -241,7 +241,7 @@ The following table explains dashboard areas in detail.
 
 The Inspection app enables employees to complete a full inspection of the locations.
 
-> [!NOTE]
+> [NOTE]
 > To use the **Inspection** app, select the **Inspection** tab in the Teams channel.
 
 The **Inspection** app provides following capabilities:

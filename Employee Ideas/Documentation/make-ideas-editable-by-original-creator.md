@@ -9,11 +9,11 @@ But what if a user wants to add more details about the idea after they submit th
 
 In this article, we'll learn how to enable the editing of an idea by the original creator of the idea.
 
-> [!NOTE]
+> [NOTE]
 > Before starting with the steps in this article, read [Customize the Employee Ideas app](customize-employee-ideas.md).
 
 Watch this video to learn about how to make ideas editable by original creator:
-> [!VIDEO https://www.microsoft.com/videoplayer/embed/RWMToi]
+> [VIDEO https://www.microsoft.com/videoplayer/embed/RWMToi]
 
 ## Prerequisites
 

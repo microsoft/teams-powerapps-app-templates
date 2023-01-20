@@ -7,7 +7,7 @@ By default, the Inspections app is designed for a single store. But what if you 
 In this article, we'll learn how to update the app to add a hierarchy of stores so that inspections can be performed for different stores.
 
 Watch this video to learn how to add hierarchy to inspection location:
-> [!VIDEO https://www.microsoft.com/videoplayer/embed/RWLkvW]
+> [VIDEO https://www.microsoft.com/videoplayer/embed/RWLkvW]
 
 ## Prerequisites
 

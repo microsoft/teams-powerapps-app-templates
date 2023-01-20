@@ -7,7 +7,7 @@ Before you can customize the app, you must install it from the Teams store. You 
 Once the app is installed, follow the steps in this article to customize the app.
 
 Watch this video to learn how to customize the Employee Ideas app:
-> [!VIDEO https://www.microsoft.com/videoplayer/embed/RWL2Uu]
+> [VIDEO https://www.microsoft.com/videoplayer/embed/RWL2Uu]
 
 ## Opening Power Apps app in Teams
 

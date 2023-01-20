@@ -4,7 +4,7 @@
 In this article, we'll be changing the notifications that come from the Employee Ideas app from HTML-based messages in Teams to adaptive cards in Teams. Currently, Teams notifications are started from within the app and are sent as a message posted to the Teams channel. We'll replace this Teams channel notification with an adaptive card notification that will be initiated using a Power Automate flow.
 
 Watch this video to learn how to replace notifications with adaptive card:
-> [!VIDEO https://www.microsoft.com/videoplayer/embed/RWLn9C]
+> [VIDEO https://www.microsoft.com/videoplayer/embed/RWLn9C]
 
 ## Prerequisites
 
@@ -90,7 +90,7 @@ To get started, let’s create a flow to replace the current notification with a
 
 1. The following sample code is only an example, though you can design your own cards.
 
-    > [!TIP]
+    > [TIP]
     > You can learn more about adaptive cards at <https://adaptivecards.io/> and design their own cards in a
 visual editor at <https://adaptivecards.io/designer/>. 
 
@@ -268,7 +268,7 @@ The adaptive card has a link that should take us back to the Idea record that wa
 
 1. Replace that whole IF condition with the following IF condition (added a few more checks along with the original checks).
 
-    > [!NOTE]
+    > [NOTE]
     > This code is edited to include deep linking to the specific idea record in case the app is opened from the adaptive card. There are a few collections/values that need to be defined before the screen loads if we want it to deep link to the specific idea record directly
 
     ```

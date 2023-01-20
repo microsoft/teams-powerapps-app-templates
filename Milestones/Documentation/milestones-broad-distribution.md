@@ -4,7 +4,7 @@
 The Milestones sample app is designed to make it easy to manage project work items based on Milestones, and track them through the completion.
 
 Watch this video to learn how to deploy Milestone apps as broad distribution app:
-> [!VIDEO https://www.microsoft.com/videoplayer/embed/RWLiBW]
+> [VIDEO https://www.microsoft.com/videoplayer/embed/RWLiBW]
 
 The app addresses the following personas:
 

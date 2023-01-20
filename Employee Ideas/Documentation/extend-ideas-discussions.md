@@ -6,7 +6,7 @@ The Employee Ideas sample app for Microsoft Teams makes it easy to capture ideas
 Currently the Employee Ideas app posts messages to a teams channel when an Idea is submitted. In this article, we'll extend the app to provide a mechanism for users to go to the idea channel message so the can interact and discuss the idea with other users.
 
 Watch this video to learn how to enable users to discuss ideas:
-> [!VIDEO https://www.microsoft.com/videoplayer/embed/RWLxVr]
+> [VIDEO https://www.microsoft.com/videoplayer/embed/RWLxVr]
 
 ## Prerequisites
 
@@ -58,7 +58,7 @@ Now we'll update the button that submits ideas to store the message ID in the **
 
 1. Search for **btnCampaignIdeaControls_Submit** to find the button that will submit an idea.
 
-    > [!NOTE]
+    > [NOTE]
     > This control has an **OnSelect** formula with it that will create the **Employee Idea** record in Dataverse for Teams, and create the Teams message. Copy the formula outside of the app, in case you need to revert any changes.
 
 1. Select the **btnCampaignIdeaControls_Submit** button in the tree view.
@@ -111,7 +111,7 @@ Now we'll update the button that submits ideas to store the message ID in the **
 
 ## Add a button to direct user to discuss idea
 
-> [!NOTE]
+> [NOTE]
 > This app is responsively designed. Follow the steps below to maintain responsive design.
 
 1. In the tree view, search for the **btnCampaignIdeaControls_Votes** control.
@@ -120,7 +120,7 @@ Now we'll update the button that submits ideas to store the message ID in the **
 
 1. Switch back to the **Tree View** panel, and select **Button1**.
 
-    > [!NOTE]
+    > [NOTE]
     > The button should be in the same container as the vote button.
 
 1. Update **Button1** properties:
@@ -135,7 +135,7 @@ Now we'll update the button that submits ideas to store the message ID in the **
 
 1. Set the **OnSelect** property of the button to the following formula:
 
-    > [!NOTE]
+    > [NOTE]
     > The example below uses **msteams:** as the launcher. This launcher can also be **https:**, or dynamically switch to use the appropriate client.
 
     ```powerapps-dot
