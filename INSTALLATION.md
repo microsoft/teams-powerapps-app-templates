@@ -58,8 +58,10 @@ You need to have a [Power Apps Teams environment](https://learn.microsoft.com/en
 4. Open Teams. Go to the Power Apps personal app. If you do not have it installed, install the app from the Teams app store.  
 ![03](https://user-images.githubusercontent.com/84343636/210960240-224a9a54-5bd6-40a7-9b09-07af23847027.jpeg)
 
-5. Browse to the Teams team environment where you’d like to import the solution. Select 'See all'.  
-![04](https://user-images.githubusercontent.com/84343636/210960269-fec54f92-8d0f-44bc-85b2-1182f6414534.jpeg)
+5. Browse to the Teams team environment where you’d like to import the solution. If there are apps in the 'Built by this team' section, select 'See all', and go to Step 6.  
+![04](https://user-images.githubusercontent.com/84343636/210960269-fec54f92-8d0f-44bc-85b2-1182f6414534.jpeg)  
+Otherwise, if there are no apps in this section, click the 'Import your solution' button, and skip to Step 7.
+![image](https://user-images.githubusercontent.com/122298060/213597055-e0f42705-f15f-4c5f-a642-ae4a6dd55f91.png)
 
 6. Click 'Import'.  
 ![05](https://user-images.githubusercontent.com/84343636/210960307-3f03e9f4-8833-4884-bfae-09bfd7a09c81.jpeg)
