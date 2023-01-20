@@ -1,6 +1,6 @@
 # Profile+ App Template
 
-| [Documentation](https://learn.microsoft.com/en-us/power-apps/teams/profile-app) | [Installation guide](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/INSTALLATION.md)
+| [Documentation](Documentation/README.md) | [Installation guide](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/INSTALLATION.md)
 | ---- | ---- |
 
 Profile+ help you quickly look up colleagues, understand org structure and roles, and learn about open positions. The ability to filter by project and expertise creates new opportunities for like-minded people to find one another and connect. You can update your profile right from within Teams and express your personality by adding a video. Once you find someone you’d like to meet or collaborate with, it’s easy to introduce yourself in chat, give that person a call, or schedule a Teams meeting. Refer [here](https://aka.ms/TeamsProfilePlusDocs) for more detailed view of the feature.

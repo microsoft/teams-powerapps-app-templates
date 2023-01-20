@@ -1,6 +1,6 @@
 # Get Connected App Template
 
-| [Documentation](https://learn.microsoft.com/en-us/power-apps/teams/get-connected) | [Installation guide](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/INSTALLATION.md)
+| [Documentation](Documentation/README.md) | [Installation guide](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/INSTALLATION.md)
 | ---- | ---- |
 
 The Get connected sample app for Microsoft Teams provides a simple way to connect with people in your organization having similar skills.

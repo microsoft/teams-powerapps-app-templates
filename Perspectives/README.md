@@ -1,6 +1,6 @@
 # Perspectives App Template
 
-| [Documentation](https://learn.microsoft.com/en-us/power-apps/teams/perspectives) | [Installation guide](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/INSTALLATION.md)
+| [Documentation](Documentation/README.md) | [Installation guide](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/INSTALLATION.md)
 | ---- | ---- |
 
 The Perspectives sample app template for Microsoft Teams provides a simple way to add topics and extend the topics with Q&A where anyone in the organization can have a perspective about the topics, and have a discussion about them in Teams.

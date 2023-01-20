@@ -1,6 +1,6 @@
 # Boards App Template
 
-| [Documentation](https://learn.microsoft.com/en-us/power-apps/teams/boards) | [Installation guide](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/INSTALLATION.md)
+| [Documentation](Documentation/README.md) | [Installation guide](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/INSTALLATION.md)
 | ---- | ---- |
 
 With the Boards app, you and your team can create boards about anything — interests, initiatives, onboarding, etc. You can also post just about anything to a board—images, articles, websites, and even direct links to teams, channels, and specific discussion threads within Microsoft Teams. This flexibility makes sharing ideas and content discovery efficient and seamless. Refer [here](https://aka.ms/TeamsBoardsDocs) for more detailed view of the feature.
