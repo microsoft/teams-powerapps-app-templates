@@ -29,11 +29,10 @@ plant&mdash;to assets and equipment, such as vehicles and machines. There are tw
 
 Before using this app:
 
-1. Find the app in Teams store.
-2. Install the app.
-3. Set up the app for the first use.
+1. Install the app.
+2. Set up the app for the first use.
 
-For details about the above steps, go to [Use sample apps from the Teams store](use-sample-apps-from-teams-store.md).
+For details about the above steps, go to the [App Installation Guide](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/INSTALLATION.md).
 
 ## Label setup
 
