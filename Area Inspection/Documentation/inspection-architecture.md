@@ -1,6 +1,6 @@
-# Understand Inspection sample apps architecture
+# Understand the Inspection sample app template architecture
 
-In this article, you'll learn about the collections and global variables used by the [Inspection](inspection.md) app, and understand how to use them effectively. If you want to learn more about how to install, and use the Inspection sample app instead, go to [Inspection sample apps](inspection.md).
+In this article, you'll learn about the collections and global variables used by the [Inspection](inspection.md) app, and understand how to use them effectively. If you want to learn more about how to install, and use the Inspection sample app template instead, go to [Inspection sample app template](inspection.md).
 
 ## Prerequisites
 
