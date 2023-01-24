@@ -1,4 +1,4 @@
-# Inspection App Template - Documentation
+# Inspection Sample App Template - Documentation
 
 ## How to use
 * [Use Inspection sample app](inspection.md)
