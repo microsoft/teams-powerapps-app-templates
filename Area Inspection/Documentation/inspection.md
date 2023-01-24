@@ -20,8 +20,7 @@ plant&mdash;to assets and equipment, such as vehicles and machines. There are tw
     - Inspect something, such as an asset or an area within a building or other location, in the course of completing their job. The app provides inspection checklists so that multiple locations can be inspected. For example, a store employee can use this app to inspect a section of a retail store to verify that the store is ready to open for the day.
     - Log an issue when an issue is found during the inspection and assign it to the right person so that it can be resolved quickly.
 
-Watch this video for a demonstration of this app.
-> [VIDEO https://www.microsoft.com/videoplayer/embed/RE4LRsh]
+> Watch this video for a demonstration of this app: https://www.microsoft.com/videoplayer/embed/RE4LRsh
 
 > [NOTE]
 > Before you can use this app, you may be asked for your permissions to use the connection. More information: [Allow connections in sample apps](use-sample-apps-from-teams-store.md#step-1---allow-connections)
@@ -330,10 +329,8 @@ After the inspection is submitted, the app takes you to the next screen that sho
 
 ### See also
 
-- [Understand Inspection sample apps architecture](inspection-architecture.md)
-- [Customize Inspection sample app](customize-inspections.md)
-- [Customize sample apps](customize-sample-apps.md)
-- [Sample apps FAQs](sample-apps-faqs.md)
-- [Use sample apps from the Microsoft Teams store](use-sample-apps-from-teams-store.md)
-
-[!INCLUDE[footer-include](../includes/footer-banner.md)]
+- [Understand the Inspection sample app template architecture](inspection-architecture.md)
+- [Customize the Inspection sample app template](customize-inspections.md)
+- [Customize sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/customize-sample-apps)
+- [Frequently Asked Questions (FAQs) for sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)
+- [Use sample app templates in Microsoft Teams store](https://learn.microsoft.com/en-us/power-apps/teams/use-sample-apps)
