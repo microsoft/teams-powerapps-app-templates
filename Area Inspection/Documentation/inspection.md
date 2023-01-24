@@ -1,4 +1,4 @@
-# Inspection sample apps
+# Inspection sample app template
 
 In this tutorial, learn about the Inspection (User) and Manage inspections (Manager) apps, and how to use them effectively.
 
