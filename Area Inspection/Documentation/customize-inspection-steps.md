@@ -1,4 +1,4 @@
-# Inspections App – Customize inspection steps
+# Customize inspection steps
 
 The Inspections sample app allows users to create and perform inspections in the app. There are three apps, one per persona to perform, manage, and review Inspections. The three apps are&mdash;Inspections, Manage Inspections and Review Inspections.
 
