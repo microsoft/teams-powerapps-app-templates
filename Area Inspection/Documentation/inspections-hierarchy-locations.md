@@ -6,12 +6,11 @@ By default, the Inspections app is designed for a single store. But what if you 
 
 In this article, we'll learn how to update the app to add a hierarchy of stores so that inspections can be performed for different stores.
 
-Watch this video to learn how to add hierarchy to inspection location:
-> [VIDEO https://www.microsoft.com/videoplayer/embed/RWLkvW]
+Watch this video to learn how to add hierarchy to inspection location: https://www.microsoft.com/videoplayer/embed/RWLkvW
 
 ## Prerequisites
 
-To complete this lesson, we'd need the ability to log in into Microsoft Teams that will be available as part of select Microsoft 365 subscriptions, and will also need to have the Inspections sample app for Teams installed. This app can be installed from <https://aka.ms/TeamsInspection>.
+To complete this lesson, we'd need the ability to log in into Microsoft Teams that will be available as part of select Microsoft 365 subscriptions, and will also need to have the Inspections sample app for Teams installed. This app can be installed by following these [instructions](../../INSTALLATION.md).
 
 ## Edit the Inspections app
 
@@ -456,10 +455,7 @@ All the changes to the Inspections app are completed. The app can now be publish
 
 ### See also
 
-- [Understand Inspection sample apps architecture](inspection-architecture.md)
-- [Customize Inspection sample app](customize-inspections.md)
-- [Customize sample apps](customize-sample-apps.md)
-- [Sample apps FAQs](sample-apps-faqs.md)
-- [Use sample apps from the Teams store](use-sample-apps-from-teams-store.md)
-
-[!INCLUDE[footer-include](../includes/footer-banner.md)]
+- [Understand Inspection sample app template architecture](inspection-architecture.md)
+- [Customize the Inspection app](customize-inspections.md)
+- [Customize sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/customize-sample-apps)
+- [Frequently Asked Questions (FAQs) for sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)
