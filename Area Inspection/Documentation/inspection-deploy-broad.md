@@ -1,9 +1,8 @@
-# How to deploy Inspection app as a broadly distributed app
+# How to deploy Inspection app as a broad distribution app
 
 The Inspection sample app for Microsoft Teams is designed to make it easy to track and perform inspections of your assets, equipment, facility, or store.
 
-Watch this video to learn how to deploy Inspection app as broad distribution app:
-> [VIDEO https://www.microsoft.com/videoplayer/embed/RWLxVt]
+Watch this video to learn how to deploy Inspection app as a broad distribution app: https://www.microsoft.com/videoplayer/embed/RWLxVt
 
 The inspection solution addresses the following personas:
 
@@ -174,6 +173,3 @@ Currently, Teams apps can only be shared with a single Azure Active Directory gr
 - [Customize Inspection app](customize-inspections.md)
 - [Sample apps FAQs](sample-apps-faqs.md)
 - [Use sample apps from the Teams store](use-sample-apps-from-teams-store.md)
-
-
-[!INCLUDE[footer-include](../includes/footer-banner.md)]
