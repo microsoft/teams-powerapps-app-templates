@@ -25,7 +25,7 @@ Watch this video to learn how to customize the Inspection app:
 
 > [NOTE]
 > Before you can customize the app:
-> 1. You must install it from the Teams store. You can get the app at <https://aka.ms/TeamsInspection>.
+> 1. You must [install](../../INSTALLATION.md) it.
 > 1. Ensure you review and understand the [customization considerations](#customization-considerations).
 
 Once the app is installed, you can then customize the app using the following steps.
@@ -262,8 +262,5 @@ Before modifying the Inspection app, note the following considerations.
 
 ### See also
 
-- [Understand Inspection sample apps architecture](inspection-architecture.md)
-- [Sample apps FAQs](sample-apps-faqs.md)
-- [Use sample apps from the Microsoft Teams store](use-sample-apps-from-teams-store.md)
-
-[!INCLUDE[footer-include](../includes/footer-banner.md)]
+- [Understand Inspection sample app template architecture](inspection-architecture.md)
+- [Frequently Asked Questions (FAQs) for sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)
