@@ -1,11 +1,11 @@
-# Understand Boards sample app architecture (preview)
+# Understand Boards sample app template architecture (preview)
 
 [This article is pre-release documentation and is subject to change.]
 
 In this article, you'll learn about the collections and global variables used by
-the [Boards](boards.md) app, and understand how to
+the Boards app, and understand how to
 use them effectively. If you want to learn more about how to install, and use
-the Boards sample app instead, go to [Boards app](boards.md).
+the Boards sample app instead, go to [Boards sample app template](boards.md).
 
 ## Prerequisites
 
