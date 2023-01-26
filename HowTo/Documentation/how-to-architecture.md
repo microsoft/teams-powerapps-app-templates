@@ -1,4 +1,4 @@
-# Understand How To app sample app template architecture (preview)
+# Understand How To sample app template architecture (preview)
 
 [This article is pre-release documentation and is subject to change.]
 
