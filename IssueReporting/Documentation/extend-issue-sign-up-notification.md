@@ -1,13 +1,12 @@
 
 # Add the ability to be notified when an issue is resolved
 
-In the Issue reporting sample app for Teams, tasks are created in Microsoft Planner. By default, there's no notification when the issue is closed, but you can easily add one with Power Automate.
+In the Issue Reporting sample app template for Microsoft Teams, tasks are created in Microsoft Planner. By default, there's no notification when the issue is closed, but you can easily add one with Power Automate.
 
 > [NOTE]
-> This lesson customizes the Issue reporting Power App template for Microsoft Teams. Before you proceed with this article, read [Customize the Issue reporting sample app](customize-issue-reporting.md).
+> This lesson customizes the Issue Reporting Power App template for Microsoft Teams. Before you proceed with this article, read [Customize the Issue Reporting sample app template](customize-issue-reporting.md).
 
-Watch this video to learn how to add the ability to be notified when an issue is resolved:
-> [VIDEO https://www.microsoft.com/videoplayer/embed/RWLiBP]
+Watch this video to learn how to add the ability to be notified when an issue is resolved: https://www.microsoft.com/videoplayer/embed/RWLiBP
 
 To add the ability for notification when issue is resolved:
 
@@ -17,7 +16,7 @@ To add the ability for notification when issue is resolved:
 
 1. Select the **Build** tab.
 
-1. Select a team with Issue reporting app installed.
+1. Select a team with Issue Reporting app installed.
 
 1. Select the **Installed apps** tab.
 
@@ -43,7 +42,7 @@ To add the ability for notification when issue is resolved:
 
 Now that we've created the field, we'll add the Notify column to the Issue Report screen:
 
-1. Open Issue reporting in Power Apps app in Teams.
+1. Open Issue Reporting in Power Apps app in Teams.
 
 1. Select **Tree view**.
 
@@ -77,9 +76,9 @@ Now that we've created the field, we'll add the Notify column to the Issue Repor
 
 Now we want to verify the Notify field is populated correctly when creating an issue.
 
-1. In Teams, open the team channel in which the Issue reporting app is installed.
+1. In Teams, open the team channel in which the Issue Reporting app is installed.
 
-1. Select the **Issue reporting** tab.
+1. Select the **Issue Reporting** tab.
 
 1. Select **Report an issue** button.
 
@@ -97,13 +96,13 @@ Next, check the recently created record in Dataverse and verify that the **Notif
 
 1. Select the **Build** tab.
 
-1. Select the team with Issue reporting app installed.
+1. Select the team with Issue Reporting app installed.
 
 1. Select the **Installed apps** tab.
 
 1. Select **See all**.
 
-    ![See for Issue reporting tile](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/IssueReporting/Documentation/media/extend-issue-sign-up-notification/issue-tile-see-all.png "See for Issue reporting tile")
+    ![See for Issue Reporting tile](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/IssueReporting/Documentation/media/extend-issue-sign-up-notification/issue-tile-see-all.png "See for Issue Reporting tile")
 
 1. Select **Tables**.
 
@@ -173,7 +172,7 @@ Now that the Notify column is being set correctly in Dataverse, we'll create a f
 
 1. From the middle field in the Condition step, select **is greater than.**
 
-    ![See all on Issue reporting tile](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/IssueReporting/Documentation/media/extend-issue-sign-up-notification/length-condition.png "See all on Issue reporting tile")
+    ![See all on Issue Reporting tile](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/IssueReporting/Documentation/media/extend-issue-sign-up-notification/length-condition.png "See all on Issue Reporting tile")
 
     This means that if there is at least one matching Issue Report record, then do what is in the **Yes** column.
 
@@ -213,7 +212,7 @@ Now that the Notify column is being set correctly in Dataverse, we'll create a f
 
 Now that your flow is published, test the process.
 
-1. Open Issue reporting app.
+1. Open Issue Reporting app.
 
 1. Create an issue.
 
@@ -227,10 +226,7 @@ Now that your flow is published, test the process.
 
 ### See also
 
-- [Understand Issue reporting sample app architecture](issue-reporting-architecture.md)
+- [Understand Issue Reporting sample app architecture](issue-reporting-architecture.md)
 - [Customize issue reporting app](customize-issue-reporting.md)
-- [Sample apps FAQs](sample-apps-faqs.md)
-- [Use sample apps from the Teams store](use-sample-apps-from-teams-store.md)
-
-
-[!INCLUDE[footer-include](../includes/footer-banner.md)]
+- [Customize sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/customize-sample-apps) <br>
+- [Frequently Asked Questions (FAQs) for sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)
