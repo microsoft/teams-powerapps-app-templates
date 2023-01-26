@@ -135,6 +135,6 @@ All the changes to the Manage Ideas app are completed. The app can now be publis
 
 ### See also
 
-- [Understand Employee ideas app architecture](employee-ideas-architecture.md)
+- [Understand Employee ideas sample app template architecture](employee-ideas-architecture.md)
 - [Customize sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/customize-sample-apps) <br>
 - [Frequently Asked Questions (FAQs) for sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)
