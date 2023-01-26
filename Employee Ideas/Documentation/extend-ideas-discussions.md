@@ -5,12 +5,11 @@ The Employee Ideas sample app for Microsoft Teams makes it easy to capture ideas
 
 Currently the Employee Ideas app posts messages to a teams channel when an Idea is submitted. In this article, we'll extend the app to provide a mechanism for users to go to the idea channel message so the can interact and discuss the idea with other users.
 
-Watch this video to learn how to enable users to discuss ideas:
-> [VIDEO https://www.microsoft.com/videoplayer/embed/RWLxVr]
+Watch this video to learn how to enable users to discuss ideas: https://www.microsoft.com/videoplayer/embed/RWLxVr
 
 ## Prerequisites
 
-- Install the Employee Ideas app in a team from <https://aka.ms/TeamsEmployeeIdeas>.
+- Install the Employee Ideas app to a team by following these [instructions](../../INSTALLATION.md).
 
 - Enable posting of Teams channel messages in the app settings.
 
@@ -158,9 +157,6 @@ Now that you've the discuss button to the app, lets test the process:
 
 ### See also
 
-- [Understand Employee ideas app architecture](employee-ideas-architecture.md)
-- [Customize sample apps](customize-sample-apps.md)
-- [Sample apps FAQs](sample-apps-faqs.md)
-- [Use sample apps from the Teams store](use-sample-apps-from-Teams-store.md)
-
-[!INCLUDE[footer-include](../includes/footer-banner.md)]
+- [Understand Employee ideas sample app template architecture](employee-ideas-architecture.md)
+- [Customize sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/customize-sample-apps)
+- [Frequently Asked Questions (FAQs) for sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)
