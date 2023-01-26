@@ -2,12 +2,11 @@
 
 The Employee Ideas sample app for Microsoft Teams is designed to be a complete app experience but allow makers to easily extend it for their own purposes. In this article, covers how to customize the Employee Ideas app in Power Apps in Teams.
 
-Before you can customize the app, you must install it from the Teams store. You can get the app at <https://aka.ms/TeamsEmployeeIdeas> .
+Before you can customize the app, you must install it. You can get the app by following the instructions [here](../../INSTALLATION.md).
 
 Once the app is installed, follow the steps in this article to customize the app.
 
-Watch this video to learn how to customize the Employee Ideas app:
-> [VIDEO https://www.microsoft.com/videoplayer/embed/RWL2Uu]
+Watch this video to learn how to customize the Employee Ideas app: https://www.microsoft.com/videoplayer/embed/RWL2Uu
 
 ## Opening Power Apps app in Teams
 
@@ -237,8 +236,5 @@ The app theming has been developed to support dark and high contrast mode in Tea
 
 - [Export Employee ideas for reporting](export-employee-ideas-for-reporting.md)
 - [Understand Employee ideas app architecture](employee-ideas-architecture.md)
-- [Customize sample apps](customize-sample-apps.md)
-- [Sample apps FAQs](sample-apps-faqs.md)
-- [Use sample apps from the Teams store](use-sample-apps-from-Teams-store.md)
-
-[!INCLUDE[footer-include](../includes/footer-banner.md)]
+- [Customize sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/customize-sample-apps)
+- [Frequently Asked Questions (FAQs) for sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)
