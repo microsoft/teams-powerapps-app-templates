@@ -1,4 +1,4 @@
-# Employee Ideas App Template - Documentations
+# Employee Ideas Sample App Template - Documentation
 
 ## How to use
 * [Use Employee ideas sample app template](employee-ideas.md)
