@@ -1,4 +1,4 @@
-# Understand Bulletins sample app architecture
+# Understand Bulletins sample app template architecture
 
 In this article, you'll learn about the collections and global variables used by the [Manage Bulletins](bulletins.md#manage-bulletins-app) and [Bulletins](bulletins.md#bulletins-app) apps, and understand how to use them effectively. If you want to learn more about how to install, and use the Bulletins sample app instead, go to [Bulletins sample app](bulletins.md).
 
