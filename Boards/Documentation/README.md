@@ -1,4 +1,4 @@
-# Boards App Template - Documentations
+# Boards Sample App Template - Documentation
 
 ## How to use
 * [Use Boards sample app template](boards.md)
