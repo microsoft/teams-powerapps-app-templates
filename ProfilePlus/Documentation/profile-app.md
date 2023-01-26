@@ -153,5 +153,5 @@ Open positions now appear in Profile+ linked to the manager responsible for them
 - [Deploy Profile+ app broadly in your organization](deploy-profile-plus-broad-distribution.md)
 - [Profile+ sample app architecture](profile-plus-architecture.md)
 - [Extend Profile+ app (preview) with additional org-specific data](profile-plus-org-specific.md)
-- [Customize Bulletins app](customize-bulletins.md)
+- [Customize sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/customize-sample-apps)
 - [Frequently Asked Questions (FAQs) for sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)
