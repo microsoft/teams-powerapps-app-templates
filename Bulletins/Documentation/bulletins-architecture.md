@@ -898,6 +898,6 @@ More information: [View links and contacts](bulletins.md#view-links-and-contacts
 
 ### See also
 
-[Bulletins sample app template (preview)](bulletins.md) <br>
-[Customize sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/customize-sample-apps) <br>
-[Frequently Asked Questions (FAQs) for sample apps](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)
+- [Bulletins sample app template (preview)](bulletins.md) <br>
+- [Customize sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/customize-sample-apps) <br>
+- [Frequently Asked Questions (FAQs) for sample apps](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)
