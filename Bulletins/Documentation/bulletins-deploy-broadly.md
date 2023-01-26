@@ -10,8 +10,7 @@ The app addresses the following personas:
 
 Consider that you want everyone at in your org, department, or location to be able to view bulletins. These users are people outside of the Teams team where the app is installed. In this article, we'll learn how to share the Bulletins app with them.
 
-Watch this video to learn how to deploy Bulletins app as a broad distribution app:
-> [VIDEO https://www.microsoft.com/videoplayer/embed/RWLxVq]
+Watch this video to learn how to deploy Bulletins app as a broad distribution app: https://www.microsoft.com/videoplayer/embed/RWLxVq
 
 ## Prerequisites
 
@@ -167,7 +166,4 @@ Currently, Teams apps can only be shared with a single Azure Active Directory gr
 
 - [Understand Bulletins sample app architecture](bulletins-architecture.md)
 - [Customize Bulletins app](customize-bulletins.md)
-- [Sample apps FAQs](sample-apps-faqs.md)
-- [Use sample apps from the Teams store](use-sample-apps-from-teams-store.md)
-
-[!INCLUDE[footer-include](../includes/footer-banner.md)]
+- [Frequently Asked Questions (FAQs) for sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)
