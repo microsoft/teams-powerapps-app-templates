@@ -1,4 +1,4 @@
-# Get Connected App Template - Documentations
+# Get Connected Sample App Template - Documentation
 
 ## How to use
 * [Use Get Connected sample app template](get-connected.md)
