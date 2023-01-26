@@ -675,4 +675,4 @@ Selecting the back button on the **conNavigtion_About** container navigates back
 
 - [Boards sample app template (preview)](boards.md) <br>
 - [Customize sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/customize-sample-apps) <br>
-- [Frequently Asked Questions (FAQs) for sample apps](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)
+- [Frequently Asked Questions (FAQs) for sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)
