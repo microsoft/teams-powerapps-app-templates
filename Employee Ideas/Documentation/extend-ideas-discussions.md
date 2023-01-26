@@ -157,6 +157,6 @@ Now that you've the discuss button to the app, lets test the process:
 
 ### See also
 
-- [Understand Employee ideas sample app template architecture](employee-ideas-architecture.md)
+- [Understand Employee Ideas sample app template architecture](employee-ideas-architecture.md)
 - [Customize sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/customize-sample-apps)
 - [Frequently Asked Questions (FAQs) for sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)
