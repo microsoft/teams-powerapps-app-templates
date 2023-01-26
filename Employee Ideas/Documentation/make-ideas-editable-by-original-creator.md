@@ -668,6 +668,6 @@ Finally, let’s test the app and try editing an idea.
 
 ### See also
 
-- [Understand Employee ideas sample app template architecture](employee-ideas-architecture.md)
+- [Understand Employee Ideas sample app template architecture](employee-ideas-architecture.md)
 - [Customize sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/customize-sample-apps)
 - [Frequently Asked Questions (FAQs) for sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)
