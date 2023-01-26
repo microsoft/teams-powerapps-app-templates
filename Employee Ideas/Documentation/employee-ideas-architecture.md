@@ -1,5 +1,5 @@
 
-# Understand Employee ideas sample app architecture
+# Understand Employee ideas sample app template architecture
 
 In this article, you'll learn about the collections and global variables used by the [Employee ideas](employee-ideas.md) app, and understand how to use them effectively. If you want to learn more about how to install, and use the Employee ideas sample app instead, go to [Employee ideas](employee-ideas.md).
 
@@ -7,13 +7,13 @@ In this article, you'll learn about the collections and global variables used by
 
 To understand and use information in this article, you'll need to know about different controls, features, and capabilities of canvas apps.
 
-- [Create and update a collection in a canvas app](../maker/canvas-apps/create-update-collection.md)
-- [Collect, Clear, and ClearCollect functions in Power Apps](../maker/canvas-apps/functions/function-clear-collect-clearcollect.md)
-- [Understand canvas-app variables in Power Apps](../maker/canvas-apps/working-with-variables.md)
-- [Add and configure a canvas-app control in Power Apps](../maker/canvas-apps/add-configure-controls.md)
-- [Add a screen to a canvas app and navigate between screens](../maker/canvas-apps/add-screen-context-variables.md)
+-   [Create and update a collection in a canvas app](https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/create-update-collection)
+-   [Collect, Clear, and ClearCollect functions in Power Apps](https://learn.microsoft.com/en-us/power-platform/power-fx/reference/function-clear-collect-clearcollect)
+-   [Understand canvas-app variables in Power Apps](https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/working-with-variables)
+-   [Add and configure a canvas-app control in Power Apps](https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/add-configure-controls)
+-   [Add a screen to a canvas app and navigate between screens](https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/add-screen-context-variables)
 
-You'll also need to know about how to [install](use-sample-apps-from-teams-store.md), and [use](employee-ideas.md) Employee ideas sample app.
+You'll also need to know about how to [install](../../INSTALLATION.md), and [use](employee-ideas.md) Employee ideas sample app.
 
 ## Architecture model
 
@@ -773,8 +773,7 @@ The about screen doesn't use any variables.
 
 ### See also
 
-[Customize employee ideas app](customize-employee-ideas.md) <br>
-[Employee ideas sample app](employee-ideas.md) <br>
-[Use sample apps from the Microsoft Teams store](use-sample-apps-from-teams-store.md) <br>
-[Customize sample apps installed from Teams store](customize-sample-apps.md) <br>
-[Frequently Asked Questions (FAQs) for sample apps](sample-apps-faqs.md)
+- [Customize employee ideas app](customize-employee-ideas.md) <br>
+- [Employee ideas sample app template](employee-ideas.md) <br>
+- [Customize sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/customize-sample-apps) <br>
+- [Frequently Asked Questions (FAQs) for sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)
