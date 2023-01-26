@@ -1,4 +1,4 @@
-# Profile+ App Template
+# Profile+ Sample App Template
 
 | [Documentation](Documentation/README.md) | [Installation guide](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/INSTALLATION.md)
 | ---- | ---- |
