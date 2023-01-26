@@ -32,7 +32,6 @@ For details about the above steps, view these [instructions](../../INSTALLATION.
 
 > [IMPORTANT]
 > - This is a preview feature.
-> - [!INCLUDE[cc_preview_features_definition](../includes/cc-preview-features-definition.md)]
 
 ## Open the Profile+ app
 
