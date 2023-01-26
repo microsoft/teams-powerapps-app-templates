@@ -1,10 +1,9 @@
 
-# Deploy Issue reporting app as broad distribution app
+# Deploy Issue Reporting app as broad distribution app
 
-The Issue reporting sample app for Microsoft Teams is designed to make it easy to capture issues with your equipment, facility, or store.
+The Issue Reporting sample app for Microsoft Teams is designed to make it easy to capture issues with your equipment, facility, or store.
 
-Watch this video to learn how to deploy Issue reporting app as broad distribution app:
-> [VIDEO https://www.microsoft.com/videoplayer/embed/RWLvkW]
+Watch this video to learn how to deploy Issue reporting app as broad distribution app: https://www.microsoft.com/videoplayer/embed/RWLvkW
 
 The app addresses the following personas:
 
@@ -168,10 +167,6 @@ Currently, Teams apps can only be shared with a single Azure Active Directory gr
 
 ### See also
 
-- [Understand Issue reporting sample app architecture](issue-reporting-architecture.md)
-- [Customize issue reporting app](customize-issue-reporting.md)
-- [Sample apps FAQs](sample-apps-faqs.md)
-- [Use sample apps from the Teams store](use-sample-apps-from-teams-store.md)
-
-
-[!INCLUDE[footer-include](../includes/footer-banner.md)]
+- [Understand Issue Reporting sample app template architecture](issue-reporting-architecture.md)
+- [Customize Issue Reporting app](customize-issue-reporting.md)
+- [Frequently Asked Questions (FAQs) for sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)
