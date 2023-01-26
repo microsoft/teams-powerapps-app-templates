@@ -14,8 +14,7 @@ You can use **Share with Colleague** feature to accomplish this. In this case, y
 
 In this article, we'll explain how to share the app with colleagues outside of the team.
 
-Watch this video to learn how to deploy Employee Ideas app as a broad distribution app:
-> [VIDEO https://www.microsoft.com/videoplayer/embed/RWLkvR]
+Watch this video to learn how to deploy Employee Ideas app as a broad distribution app: https://www.microsoft.com/videoplayer/embed/RWLkvR
 
 ## Prerequisites
 
@@ -153,9 +152,6 @@ Currently, Teams apps can only be shared with a single Azure Active Directory gr
 
 ### See also
 
-- [Understand Employee ideas app architecture](employee-ideas-architecture.md)
+- [Understand Employee ideas sample app template architecture](employee-ideas-architecture.md)
 - [Customize employee ideas app](customize-employee-ideas.md)
-- [Sample apps FAQs](sample-apps-faqs.md)
-- [Use sample apps from the Microsoft Teams store](use-sample-apps-from-teams-store.md)
-
-[!INCLUDE[footer-include](../includes/footer-banner.md)]
+- [Frequently Asked Questions (FAQs) for sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)
