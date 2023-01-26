@@ -1,11 +1,11 @@
-# Understand Get connected sample app architecture (preview)
+# Understand Get Connected sample app template architecture (preview)
 
 [This article is pre-release documentation and is subject to change.]
 
-In this article, you'll learn about the collections and global variables used by the Get connected ap, and understand how to use them effectively. This article covers the following details:
+In this article, you'll learn about the collections and global variables used by the Get Connected ap, and understand how to use them effectively. This article covers the following details:
 
 - Data model and purpose of the various entities used.
-- Architecture model of the Get connected solution.
+- Architecture model of the Get Connected solution.
 - List of all collections and variables used.
 - Detailed breakdown of each functionality.
 
@@ -13,17 +13,17 @@ In this article, you'll learn about the collections and global variables used by
 
 To understand and use information in this article, you'll need to know about different controls, features, and capabilities of canvas apps.
 
-- [Create and update a collection in a canvas app](../maker/canvas-apps/create-update-collection.md)
-- [Collect, Clear, and ClearCollect functions in Power Apps](../maker/canvas-apps/functions/function-clear-collect-clearcollect.md)
-- [Understand canvas-app variables in Power Apps](../maker/canvas-apps/working-with-variables.md)
-- [Add and configure a canvas-app control in Power Apps](../maker/canvas-apps/add-configure-controls.md)
-- [Add a screen to a canvas app and navigate between screens](../maker/canvas-apps/add-screen-context-variables.md)
+-   [Create and update a collection in a canvas app](https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/create-update-collection)
+-   [Collect, Clear, and ClearCollect functions in Power Apps](https://learn.microsoft.com/en-us/power-platform/power-fx/reference/function-clear-collect-clearcollect)
+-   [Understand canvas-app variables in Power Apps](https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/working-with-variables)
+-   [Add and configure a canvas-app control in Power Apps](https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/add-configure-controls)
+-   [Add a screen to a canvas app and navigate between screens](https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/add-screen-context-variables)
 
 ## Data model
 
-The following diagram explains the data model used by the Get connected sample app.
+The following diagram explains the data model used by the Get Connected sample app.
 
-![Get connected sample app data model](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/GetConnected/Documentation/media/get-connected-architecture/data-model.png "Get connected sample app data model")
+![Get Connected sample app data model](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/GetConnected/Documentation/media/get-connected-architecture/data-model.png "Get Connected sample app data model")
 
 | Table name | Description |
 | - | - |
@@ -36,11 +36,11 @@ The following diagram explains the data model used by the Get connected sample a
 
 The following architecture model diagram illustrates the way that users and systems interact with data:
 
-![Get connected sample app architecture model](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/GetConnected/Documentation/media/get-connected-architecture/architecture-model.png "Get connected sample app architecture")
+![Get Connected sample app architecture model](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/GetConnected/Documentation/media/get-connected-architecture/architecture-model.png "Get Connected sample app architecture")
 
 ## Connectors
 
-The following connectors are used in the Get connected app:
+The following connectors are used in the Get Connected app:
 
 - **Microsoft Dataverse**&mdash;used to read and write data in Dataverse.
 - **Office 365 Users**&mdash;used to read Microsoft 365 user profile data.
@@ -466,12 +466,6 @@ The following variables are used in the about screen:
 
 ### See also
 
-- [Use Get connected sample app (preview)](get-connected.md)
-- [Customize sample apps](customize-sample-apps.md)
-- [Sample apps FAQs](sample-apps-faqs.md)
-- [Use sample apps from the Microsoft Teams store](use-sample-apps-from-teams-store.md)
-
-[!INCLUDE[footer-include](../includes/footer-banner.md)]
-
-
-
+- [Use Get Connected sample app template (preview)](get-connected.md)
+- [Customize sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/customize-sample-apps) <br>
+- [Frequently Asked Questions (FAQs) for sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)
