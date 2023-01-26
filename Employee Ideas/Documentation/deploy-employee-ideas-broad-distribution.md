@@ -152,6 +152,6 @@ Currently, Teams apps can only be shared with a single Azure Active Directory gr
 
 ### See also
 
-- [Understand Employee ideas sample app template architecture](employee-ideas-architecture.md)
+- [Understand Employee Ideas sample app template architecture](employee-ideas-architecture.md)
 - [Customize employee ideas app](customize-employee-ideas.md)
 - [Frequently Asked Questions (FAQs) for sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)
