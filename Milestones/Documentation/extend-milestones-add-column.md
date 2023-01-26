@@ -1,17 +1,16 @@
 
 
-# Add a new column to Milestones sample app to track work items
+# Add a new column to Milestones sample app template to track work items
 
-The Power Apps templates for Microsoft Teams include many pre-defined columns to track the most common data points for their scenario. For example, in the Milestones app (https://aka.ms/TeamsMilestones), users can track the category and priority of work items.
+The Power Apps sample app templates for Microsoft Teams include many pre-defined columns to track the most common data points for their scenario. For example, in the Milestones app, users can track the category and priority of work items.
 
 In this article, we'll learn how to add a new column/field to a work item. For our example, we'll add a new field to capture the effort required for a particular work item. we'll add this field to the **New** and **Edit** Work Item screens for both desktop and mobile.
 
-Watch this video to learn how to add a new column to Milestones sample app to track work items:
-> [VIDEO https://www.microsoft.com/videoplayer/embed/RWLiBS]
+Watch this video to learn how to add a new column to Milestones sample app to track work items: https://www.microsoft.com/videoplayer/embed/RWLiBS
 
 ## Prerequisites
 
-To complete this exercise, we'd need the ability to log in into Teams&mdash;which will be available as part of select Microsoft 365 subscriptions, and also have the Milestones app installed in a Teams channel. If you don’t have it installed, you can install it from https://aka.ms/teamsmilestones.
+To complete this exercise, we'd need the ability to log into Teams&mdash;which will be available as part of select Microsoft 365 subscriptions, and also have the Milestones app installed in a Teams channel. If you don’t have it installed, you can install it using the [installation guide](../../INSTALLATION.md).
 
 ## Open Power Apps
 
@@ -270,10 +269,7 @@ Work items are also displayed in a list on the main screen of the app in context
 ### See also
 
 - [Deploy Milestones sample app broad distribution app](milestones-broad-distribution.md)
-- [Customize Milestones sample app](customize-milestones.md)
-- [Understand Milestones sample app architecture](milestones-architecture.md)
-- [Customize sample apps](customize-sample-apps.md)
-- [Sample apps FAQs](sample-apps-faqs.md)
-- [Use sample apps from the Microsoft Teams store](use-sample-apps-from-teams-store.md)
-
-[!INCLUDE[footer-include](../includes/footer-banner.md)]
+- [Customize Milestones sample app template](customize-milestones.md)
+- [Understand Milestones sample app template architecture](milestones-architecture.md)
+- [Customize sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/customize-sample-apps)
+- [Frequently Asked Questions (FAQs) for sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)
