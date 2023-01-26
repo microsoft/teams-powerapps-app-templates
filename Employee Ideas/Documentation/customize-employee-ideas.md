@@ -234,7 +234,7 @@ The app theming has been developed to support dark and high contrast mode in Tea
 
 ### See also
 
-- [Export Employee ideas for reporting](export-employee-ideas-for-reporting.md)
+- [Export Employee Ideas for reporting](export-employee-ideas-for-reporting.md)
 - [Understand Employee ideas app architecture](employee-ideas-architecture.md)
 - [Customize sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/customize-sample-apps)
 - [Frequently Asked Questions (FAQs) for sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)
