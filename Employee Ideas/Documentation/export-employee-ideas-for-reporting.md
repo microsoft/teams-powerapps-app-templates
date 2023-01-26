@@ -3,16 +3,15 @@
 
 This article covers how to export your ideas data from your Microsoft Teams database to another location so you can archive and report on it.
 
-Watch this video to learn how to export ideas for reporting:
-> [VIDEO https://www.microsoft.com/videoplayer/embed/RWLkvT]
+Watch this video to learn how to export ideas for reporting: https://www.microsoft.com/videoplayer/embed/RWLkvT
 
 ## Prerequisites
 
 To complete this lesson, you must first perform the following prerequisites:
 
-1. Install the Employee Ideas template app from [https://aka.ms/teamsemployeeideas](https://aka.ms/teamsemployeeideas).
+1. Install the Employee Ideas sample app template using these [instructions](../../INSTALLATION.md).
    
-2. Delete the sample idea data. The reason is because our data extract captures the user who created the idea, and sample data is created by a system account, which may cause an error in the flow (since the user won’t exist in your Active Directory). To delete ideas, see [Employee ideas sample app](/teams/employee-ideas.md).
+2. Delete the sample idea data. The reason is because our data extract captures the user who created the idea, and sample data is created by a system account, which may cause an error in the flow (since the user won’t exist in your Active Directory). To delete ideas, see [Employee ideas sample app template](employee-ideas.md).
    
 3. Create some ideas, and have colleagues vote for them. Adding ideas will ensure that the data extract returns data.
 
@@ -239,8 +238,5 @@ Test the flow to make sure that it works.
 ### See also
 
 - [Understand Employee ideas app architecture](employee-ideas-architecture.md)
-- [Customize sample apps](customize-sample-apps.md)
-- [Sample apps FAQs](sample-apps-faqs.md)
-- [Use sample apps from the Teams store](use-sample-apps-from-Teams-store.md)
-
-[!INCLUDE[footer-include](../includes/footer-banner.md)]
+- [Customize sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/customize-sample-apps) <br>
+- [Frequently Asked Questions (FAQs) for sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)
