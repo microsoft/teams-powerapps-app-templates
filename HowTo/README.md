@@ -1,4 +1,4 @@
-# HowTo App Template
+# HowTo Sample App Template
 
 | [Documentation](Documentation/README.md) | [Installation guide](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/INSTALLATION.md)
 | ---- | ---- |
