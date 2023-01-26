@@ -1,5 +1,5 @@
 
-# Convert Issue reporting sample app to Work order management app
+# Convert Issue Reporting sample app template to Work order management app
 
 The Issue Reporting template Power Apps for Microsoft Teams is designed to be flexible and extendable, including for scenarios other than tracking issues.
 
@@ -7,8 +7,7 @@ For example, in a simple work scheduling scenario, you may want to use it as a w
 
 In this lesson, we'll walk through changing the app to a work order management app.
 
-Watch this video to learn how to convert Issue reporting app to Work order management app:
-> [VIDEO https://www.microsoft.com/videoplayer/embed/RWLiBX]
+Watch this video to learn how to convert Issue reporting app to Work order management app: https://www.microsoft.com/videoplayer/embed/RWLiBX
 
 1. Open the Power Apps app in Teams. We recommend you right-click on the icon for Power Apps in Teams, and pop out the app so you won’t lose your changes if you go somewhere else in Teams.
 
@@ -169,9 +168,7 @@ To complete the scenario, consider making similar changes to the Manage Issues a
 
 ### See also
 
-- [Understand Issue Reporting sample app architecture](issue-reporting-architecture.md)
-- [Customize issue reporting app](customize-issue-reporting.md)
-- [Sample apps FAQs](sample-apps-faqs.md)
-- [Use sample apps from the Teams store](use-sample-apps-from-teams-store.md)
-
-[!INCLUDE[footer-include](../includes/footer-banner.md)]
+- [Understand Issue Reporting sample app template architecture](issue-reporting-architecture.md)
+- [Customize Issue Reporting app](customize-issue-reporting.md)
+- [Customize sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/customize-sample-apps) <br>
+- [Frequently Asked Questions (FAQs) for sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)
