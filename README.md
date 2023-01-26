@@ -16,7 +16,7 @@ A simple way to connect and share with people in your organization with similar 
 
 Manager and user apps for company communications.
 
-### [Employee ideas](https://aka.ms/EmployeeIdeas)
+### [Employee Ideas](https://aka.ms/EmployeeIdeas)
 ![image](https://user-images.githubusercontent.com/84343636/210890443-abc27abc-576b-47aa-bb00-171919704530.png)
 
 App for campaigns and ideas.
@@ -31,7 +31,7 @@ Learn how to be a Power Apps maker.
 
 Manager and user apps for area inspections.
 
-### [Issue reporting](https://aka.ms/IssueReporting)
+### [Issue Reporting](https://aka.ms/IssueReporting)
 ![image](https://user-images.githubusercontent.com/84343636/210890704-46c5fca7-ca87-42ef-b6be-07f60e78c381.png)
 
 Manager and user apps for issue reporting.
@@ -51,7 +51,7 @@ A simple way to add topics and extend the topics with Q&A for discussions
 
 Quickly find out about people in your organization.
 
-### [Get connected](https://aka.ms/GetConnected-TeamsSampleApp)
+### [Get Connected](https://aka.ms/GetConnected-TeamsSampleApp)
 ![image](https://user-images.githubusercontent.com/84343636/210891291-edf22da2-67f3-4d8c-bff6-1cbc26201c1c.png)
 
 Connect with people in your organization with similar skills.
