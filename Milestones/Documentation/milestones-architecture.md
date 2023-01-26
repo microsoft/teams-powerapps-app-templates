@@ -2,19 +2,19 @@
 
 # Understand Milestones sample app architecture
 
-In this article, you'll learn about the collections and global variables used by the [Milestones](milestones.md) app, and understand how to use them effectively. If you want to learn more about how to install, and use the Milestones sample app instead, go to [Milestones sample app](milestones.md).
+In this article, you'll learn about the collections and global variables used by the Milestones app, and understand how to use them effectively. If you want to learn more about how to install and use the Milestones sample app instead, go to [Milestones sample app template](milestones.md).
 
 ## Prerequisites
 
 To understand and use information in this article, you'll need to know about different controls, features, and capabilities of canvas apps.
 
-- [Create and update a collection in a canvas app](../maker/canvas-apps/create-update-collection.md)
-- [Collect, Clear, and ClearCollect functions in Power Apps](../maker/canvas-apps/functions/function-clear-collect-clearcollect.md)
-- [Understand canvas-app variables in Power Apps](../maker/canvas-apps/working-with-variables.md)
-- [Add and configure a canvas-app control in Power Apps](../maker/canvas-apps/add-configure-controls.md)
-- [Add a screen to a canvas app and navigate between screens](../maker/canvas-apps/add-screen-context-variables.md)
+-   [Create and update a collection in a canvas app](https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/create-update-collection)
+-   [Collect, Clear, and ClearCollect functions in Power Apps](https://learn.microsoft.com/en-us/power-platform/power-fx/reference/function-clear-collect-clearcollect)
+-   [Understand canvas-app variables in Power Apps](https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/working-with-variables)
+-   [Add and configure a canvas-app control in Power Apps](https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/add-configure-controls)
+-   [Add a screen to a canvas app and navigate between screens](https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/add-screen-context-variables)
 
-You'll also need to know about how to [install](use-sample-apps-from-teams-store.md), and [use](milestones.md) Milestones sample app.
+You'll also need to know about how to [install](../../INSTALLATION.md) and [use](milestones.md) Milestones sample app template.
 
 ## Data Model  
 
@@ -1426,8 +1426,7 @@ The following variables are used when a status is deleted.
 
 ### See also
 
-- [Customize Milestones sample app](customize-milestones.md)
-- [Milestones sample app](milestones.md)
-- [Customize sample apps](customize-sample-apps.md)
-- [Sample apps FAQs](sample-apps-faqs.md)
-- [Use sample apps from the Microsoft Teams store](use-sample-apps-from-teams-store.md)
+- [Customize Milestones sample app template](customize-milestones.md)
+- [Milestones sample app template](milestones.md)
+- [Customize sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/customize-sample-apps) <br>
+- [Frequently Asked Questions (FAQs) for sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)
