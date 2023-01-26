@@ -15,7 +15,7 @@ contributors:
   - mduelae
 ---
 
-# Boards sample app (preview)
+# Boards sample app template (preview)
 
 [This article is pre-release documentation and is subject to change.]
 
@@ -255,6 +255,6 @@ To add categories:
 
 ### See also
 
-- [Understand Boards (preview) sample app architecture](boards-architecture.md)
-- [Customize sample apps](customize-sample-apps.md)
+- [Understand Boards sample app template architecture (preview)](boards-architecture.md)
+- [Customize sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/customize-sample-apps)
 - [Frequently Asked Questions (FAQs) for sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)
