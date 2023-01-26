@@ -13,13 +13,9 @@ To understand and use information in this article, you'll need to know about
 different controls, features, and capabilities of canvas apps.
 
 -   [Create and update a collection in a canvas app](https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/create-update-collection)
-    
 -   [Collect, Clear, and ClearCollect functions in Power Apps](https://learn.microsoft.com/en-us/power-platform/power-fx/reference/function-clear-collect-clearcollect)
-    
 -   [Understand canvas-app variables in Power Apps](https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/working-with-variables)
-    
 -   [Add and configure a canvas-app control in Power Apps](https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/add-configure-controls)
-    
 -   [Add a screen to a canvas app and navigate between screens](https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/add-screen-context-variables)
 
 You'll also need to know about how to [install](../../INSTALLATION.md), and [use](boards.md)
