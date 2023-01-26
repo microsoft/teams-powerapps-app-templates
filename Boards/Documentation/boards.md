@@ -1,5 +1,5 @@
 ---
-title: Boards sample app template (preview)
+title: Boards sample app (preview)
 description: Learn how to use the Boards app.
 author: joel-lindstrom
 
@@ -19,7 +19,7 @@ contributors:
 
 [This article is pre-release documentation and is subject to change.]
 
-In this tutorial, you'll learn about configuring and using the **Boards** sample app template.
+In this tutorial, you'll learn about configuring and using the **Boards** sample app.
 
 ## Overview
 
@@ -32,8 +32,8 @@ Benefits of using the Boards app:
 -   Discover items pinned by colleagues.
 
 > [NOTE]
-> - Before you can use this app, you may be asked for your permissions to use the connection. More information: [Allow connections in sample apps](use-sample-apps-from-teams-store.md#step-1---allow-connections)
-> - This app is available in three different Teams themes: Default, Dark and High contrast. When you [change the theme in Teams](https://support.microsoft.com/en-us/office/change-settings-in-teams-b506e8f1-1a96-4cf1-8c6b-b6ed4f424bc7), the app automatically updates to match the selected theme. More information: [Get the Teams theme using the Teams integration object](use-teams-integration-object.md#get-the-teams-theme)
+> - Before you can use this app, you may be asked for your permissions to use the connection. More information: [Allow connections in sample apps](https://learn.microsoft.com/en-us/power-apps/teams/use-sample-apps#run-the-sample-app-template)
+> - This app is available in three different Teams themes: Default, Dark and High contrast. When you [change the theme in Teams](https://support.microsoft.com/en-us/office/change-settings-in-teams-b506e8f1-1a96-4cf1-8c6b-b6ed4f424bc7), the app automatically updates to match the selected theme. More information: [Get the Teams theme using the Teams integration object](https://learn.microsoft.com/en-us/power-apps/teams/use-teams-integration-object#get-the-teams-theme)
 
 > [IMPORTANT]
 >-   This is a preview feature.
@@ -255,9 +255,6 @@ To add categories:
 
 ### See also
 
-- [Understand Boards sample app template architecture (preview)](boards-architecture.md)
-- [Customize sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/customize-sample-apps)
-- [Sample apps FAQs](sample-apps-faqs.md)
-- [Use sample apps from the Microsoft Teams store](use-sample-apps-from-teams-store.md)
-
-[!INCLUDE[footer-include](../includes/footer-banner.md)]
+- [Understand Boards (preview) sample app architecture](boards-architecture.md)
+- [Customize sample apps](customize-sample-apps.md)
+- [Frequently Asked Questions (FAQs) for sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)
