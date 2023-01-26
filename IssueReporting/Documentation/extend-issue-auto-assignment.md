@@ -1,7 +1,7 @@
 
 # Add business logic for automated task assignment
 
-In the Issue reporting template Power Apps for Microsoft Teams, you can specify a specific user for a type of issue. This will make tasks for that issue type automatically assigned in Planner to that user.
+In the Issue Reporting template for Microsoft Teams, you can specify a specific user for a type of issue. This will make tasks for that issue type automatically assigned in Planner to that user.
 
 But what if you want additional logic to further automate issue assignment?
 
@@ -144,7 +144,7 @@ Set the assignment logic using the following steps:
 
 ## Test your flow
 
-1. In the Teams environment in which you modified the flow, run the Issue reporting app.
+1. In the Teams environment in which you modified the flow, run the Issue Reporting app.
 
 1. Create an issue.
 
@@ -155,11 +155,11 @@ Set the assignment logic using the following steps:
 1. Verify that the task was assigned to the manager of the person you selected in the app.
 
     > [NOTE]
-    > This flow will work if a single assigned to was selected for the task in the Issue reporting app. The selected person must also have a manager defined in Active Directory.
+    > This flow will work if a single assigned to was selected for the task in the Issue Reporting app. The selected person must also have a manager defined in Active Directory.
 
 ## Next steps
 
-You can use this method to add other conditional business logic to Issue reporting. Some examples include:
+You can use this method to add other conditional business logic to Issue Reporting. Some examples include:
 
 - Conditionally assigning based on time of day.
 - Conditionally assigning based on responses to issue form questions.
@@ -170,6 +170,6 @@ You can use this method to add other conditional business logic to Issue reporti
 ### See also
 
 - [Understand Issue Reporting sample app template architecture](issue-reporting-architecture.md)
-- [Customize Issue reporting app](customize-issue-reporting.md)
+- [Customize Issue Reporting app](customize-issue-reporting.md)
 - [Customize sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/customize-sample-apps) <br>
 - [Frequently Asked Questions (FAQs) for sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)
