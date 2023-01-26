@@ -5,8 +5,7 @@
 
 The Profile+ sample app is designed to give you a single place to see complete information about the people in your organization, your organization hierarchy, and open positions for which you may want to apply.
 
-Watch this video to learn how to deploy Profile+ app as broad distribution app:
-> [!VIDEO https://www.microsoft.com/videoplayer/embed/RWLiBV]
+Watch this video to learn how to deploy Profile+ app as broad distribution app: https://www.microsoft.com/videoplayer/embed/RWLiBV
 
 The app addresses the following personas:
 
@@ -152,7 +151,6 @@ Currently, Teams apps can only be shared with a single Azure Active Directory gr
 
 ### See also
 
-- [Profile+ (preview) sample app](profile-app.md)
-- [Customize sample apps](customize-sample-apps.md)
-- [Sample apps FAQs](sample-apps-faqs.md)
-- [Use sample apps from the Microsoft Teams store](use-sample-apps-from-teams-store.md)
+- [Profile+ (preview) sample app template](profile-app.md)
+- [Customize sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/customize-sample-apps) <br>
+- [Frequently Asked Questions (FAQs) for sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)
