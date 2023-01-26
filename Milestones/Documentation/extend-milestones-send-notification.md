@@ -1,6 +1,6 @@
 
 
-# Send notification to the Team when work item status is updated in the Milestones sample app
+# Send notification to the Team when work item status is updated in the Milestones sample app template
 
 The Milestones sample app for Microsoft Teams allows users to track progress of completion of work items in projects across milestones. While the app allows work items to be updated and maintained, there's currently no standard notifications about work item updates to the team.
 
