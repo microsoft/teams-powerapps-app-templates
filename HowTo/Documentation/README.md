@@ -1,7 +1,7 @@
-# HowTo App Template - Documentations
+# How To App Template - Documentations
 
 ## How to use
-* [Use HowTo sample app template](how-to.md)
+* [Use How To sample app template](how-to.md)
 
-## Customize HowTo app
-* [Understand HowTo sample app template architecture](how-to-architecture.md)
+## Customize How To app
+* [Understand How To sample app template architecture](how-to-architecture.md)
