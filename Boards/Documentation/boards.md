@@ -1,5 +1,5 @@
 ---
-title: Boards sample app (preview)
+title: Boards sample app template (preview)
 description: Learn how to use the Boards app.
 author: joel-lindstrom
 
@@ -19,7 +19,7 @@ contributors:
 
 [This article is pre-release documentation and is subject to change.]
 
-In this tutorial, you'll learn about configuring and using the **Boards** sample app.
+In this tutorial, you'll learn about configuring and using the **Boards** sample app template.
 
 ## Overview
 
@@ -255,8 +255,8 @@ To add categories:
 
 ### See also
 
-- [Understand Boards (preview) sample app architecture](boards-architecture.md)
-- [Customize sample apps](customize-sample-apps.md)
+- [Understand Boards sample app template architecture (preview)](boards-architecture.md)
+- [Customize sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/customize-sample-apps)
 - [Sample apps FAQs](sample-apps-faqs.md)
 - [Use sample apps from the Microsoft Teams store](use-sample-apps-from-teams-store.md)
 
