@@ -244,6 +244,6 @@ To delete an idea:
 ### See also
 
 - [Deploy Employee Ideas app as broad distribution app](deploy-employee-ideas-broad-distribution.md)
-- [Understand Employee ideas sample app template architecture](employee-ideas-architecture.md)
+- [Understand Employee Ideas sample app template architecture](employee-ideas-architecture.md)
 - [Customize employee ideas app](customize-employee-ideas.md)
 - [Frequently Asked Questions (FAQs) for sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)
