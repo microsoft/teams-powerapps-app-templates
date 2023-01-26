@@ -1,5 +1,5 @@
 ---
-title: Send a weekly report on project status from the Milestones sample app (contains video)
+title: Send a weekly report on project status from the Milestones sample app template (contains video)
 description: Learn how to extend the Milestones sample app for Microsoft Teams to send a weekly summary of the status of work items for a project.
 
 ms.topic: conceptual
@@ -17,16 +17,15 @@ contributors:
 
 # Send weekly report on project status from the Milestones sample app
 
-The Milestones sample app allows users to create milestones for a team and track their progress using work items and work item status. The app can be extended further to send weekly emails to project managers or person creating the project with a list of all the work items and their status.
+The Milestones sample app template allows users to create milestones for a team and track their progress using work items and work item status. The app can be extended further to send weekly emails to project managers or person creating the project with a list of all the work items and their status.
 
 In this article, we'll learn how to create a Power Automate flow to send a project weekly report to the person who created the project with the work items listed along with their status.
 
-Watch this video to learn how to send weekly report on project status from Milestones app:
-> [VIDEO https://www.microsoft.com/videoplayer/embed/RWLiBU]
+Watch this video to learn how to send weekly report on project status from Milestones app: https://www.microsoft.com/videoplayer/embed/RWLiBU
 
 ## Prerequisites
 
-To complete this exercise, we'd need the ability to log in into Teams that will be available as part of select Microsoft 365 subscriptions, and will also need to have the Milestones sample app for Teams installed. This app can be installed from <https://aka.ms/TeamsInspection>.
+To complete this exercise, we'd need the ability to log in into Teams that will be available as part of select Microsoft 365 subscriptions, and will also need to have the Milestones sample app for Teams installed. This app can be installed using the [installation guide](../../INSTALLATION.md).
 
 ## Create the Power Automate flow
 
@@ -124,11 +123,8 @@ To complete this exercise, we'd need the ability to log in into Teams that will 
 
 ### See also
 
-- [Deploy Milestones sample app broad distribution app](milestones-broad-distribution.md)
-- [Customize Milestones sample app](customize-milestones.md)
-- [Understand Milestones sample app architecture](milestones-architecture.md)
-- [Customize sample apps](customize-sample-apps.md)
-- [Sample apps FAQs](sample-apps-faqs.md)
-- [Use sample apps from the Microsoft Teams store](use-sample-apps-from-teams-store.md)
-
-[!INCLUDE[footer-include](../includes/footer-banner.md)]
+- [Deploy Milestones as broad distribution app](milestones-broad-distribution.md)
+- [Customize Milestones sample app template](customize-milestones.md)
+- [Understand Milestones sample app template architecture](milestones-architecture.md)
+- [Customize sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/customize-sample-apps)
+- [Frequently Asked Questions (FAQs) for sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)
