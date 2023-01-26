@@ -1,4 +1,4 @@
-# How To App Template - Documentations
+# How To Sample App Template - Documentation
 
 ## How to use
 * [Use How To sample app template](how-to.md)
