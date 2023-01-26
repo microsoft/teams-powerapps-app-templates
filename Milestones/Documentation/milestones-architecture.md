@@ -1,6 +1,6 @@
 
 
-# Understand Milestones sample app architecture
+# Understand Milestones sample app template architecture
 
 In this article, you'll learn about the collections and global variables used by the Milestones app, and understand how to use them effectively. If you want to learn more about how to install and use the Milestones sample app instead, go to [Milestones sample app template](milestones.md).
 
