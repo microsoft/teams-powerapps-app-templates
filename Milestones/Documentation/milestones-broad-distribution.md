@@ -1,10 +1,9 @@
 
-# Deploy Milestone apps as broad distribution app
+# Deploy Milestone app as broad distribution app
 
 The Milestones sample app is designed to make it easy to manage project work items based on Milestones, and track them through the completion.
 
-Watch this video to learn how to deploy Milestone apps as broad distribution app:
-> [VIDEO https://www.microsoft.com/videoplayer/embed/RWLiBW]
+Watch this video to learn how to deploy Milestone apps as broad distribution app: https://www.microsoft.com/videoplayer/embed/RWLiBW
 
 The app addresses the following personas:
 
@@ -152,10 +151,7 @@ Currently, Teams apps can only be shared with a single Azure Active Directory gr
 ### See also
 
 - [Customize Milestones sample app](customize-milestones.md)
-- [Use Milestones apps from teams store](milestones.md)
-- [Understand Milestones sample app architecture](milestones-architecture.md)
-- [Customize sample apps](customize-sample-apps.md)
-- [Sample apps FAQs](sample-apps-faqs.md)
-- [Use sample apps from the Microsoft Teams store](use-sample-apps-from-teams-store.md)
-
-[!INCLUDE[footer-include](../includes/footer-banner.md)]
+- [Use Milestones sample app template](milestones.md)
+- [Understand Milestones sample app template architecture](milestones-architecture.md)
+- [Customize sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/customize-sample-apps) <br>
+- [Frequently Asked Questions (FAQs) for sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)
