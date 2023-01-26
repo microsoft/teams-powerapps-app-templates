@@ -7,8 +7,7 @@ But what if you want additional logic to further automate issue assignment?
 
 Let’s say you want any urgent issues to be automatically assigned to a manager. Power Automate is a great option to automate conditional logic like task creation.
 
-Watch this video to learn how to add business logic for automated task assignment:
-> [VIDEO https://www.microsoft.com/videoplayer/embed/RWLiBY]
+Watch this video to learn how to add business logic for automated task assignment: https://www.microsoft.com/videoplayer/embed/RWLiBY
 
 ## Open Power Automate
 
@@ -170,10 +169,7 @@ You can use this method to add other conditional business logic to Issue reporti
 
 ### See also
 
-- [Understand Issue reporting sample app architecture](issue-reporting-architecture.md)
+- [Understand Issue Reporting sample app template architecture](issue-reporting-architecture.md)
 - [Customize Issue reporting app](customize-issue-reporting.md)
-- [Sample apps FAQs](sample-apps-faqs.md)
-- [Use sample apps from the Microsoft Teams store](use-sample-apps-from-teams-store.md)
-
-
-[!INCLUDE[footer-include](../includes/footer-banner.md)]
+- [Customize sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/customize-sample-apps) <br>
+- [Frequently Asked Questions (FAQs) for sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)
