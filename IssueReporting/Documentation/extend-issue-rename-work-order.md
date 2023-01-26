@@ -7,7 +7,7 @@ For example, in a simple work scheduling scenario, you may want to use it as a w
 
 In this lesson, we'll walk through changing the app to a work order management app.
 
-Watch this video to learn how to convert Issue reporting app to Work order management app: https://www.microsoft.com/videoplayer/embed/RWLiBX
+Watch this video to learn how to convert Issue Reporting app to Work order management app: https://www.microsoft.com/videoplayer/embed/RWLiBX
 
 1. Open the Power Apps app in Teams. We recommend you right-click on the icon for Power Apps in Teams, and pop out the app so you won’t lose your changes if you go somewhere else in Teams.
 
@@ -19,7 +19,7 @@ Watch this video to learn how to convert Issue reporting app to Work order manag
 
 1. Select **Installed apps** tab.
 
-1. Select **Issue reporting** in Issue reporting tile.
+1. Select **Issue Reporting** in Issue Reporting tile.
 
    ![Select Installed apps](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/IssueReporting/Documentation/media/extend-issue-rename-work-order/installed-apps.png "Select Installed apps")
 
@@ -29,7 +29,7 @@ Watch this video to learn how to convert Issue reporting app to Work order manag
 
 ## Understanding localization
 
-Before we continue, it's important to understand localization in canvas apps. All text labels in Issue reporting use localization variables to localize text language to eight different languages. If you overwrite this formula with static text, the app won't be localized for other languages.
+Before we continue, it's important to understand localization in canvas apps. All text labels in Issue Reporting use localization variables to localize text language to eight different languages. If you overwrite this formula with static text, the app won't be localized for other languages.
 
 To maintain localization, create a spreadsheet with these three columns:
 
