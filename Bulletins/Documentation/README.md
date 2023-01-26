@@ -1,4 +1,4 @@
-# Bulletins App Template - Documentations
+# Bulletins Sample App Template - Documentation
 
 ## How to use
 * [Use Bulletins sample app template](bulletins.md)
