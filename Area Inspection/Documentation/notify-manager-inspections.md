@@ -40,23 +40,24 @@ To complete this lesson, we'd need the ability to log into Microsoft Teams that 
 
 1. Select **Manage Inspections** to open the app in the editor.
 
-![Select Manage Inspections app](media/notify-manager-on-completion-of-inspections/select-manage-inspections-app.png "Select Manage Inspections App")
+![Select Manage Inspections app](https://user-images.githubusercontent.com/122298060/215219483-96344100-7b33-43e9-895c-829c9f7f3b5d.png)
 
 ### Add a new field to the Locations table
 
 Next, we'll add a responsible person column to the location table so we can choose the responsible person for the area.
 
 1. On the Home screen, select **See more** under the **Recent apps** section.
+    
+    ![Select See more under the Recent apps section](https://user-images.githubusercontent.com/122298060/215219549-6ed3cfa9-f6a4-4886-9289-15c1ab335996.png)
 
-    ![Select See more under the Recent apps section](media/notify-manager-on-completion-of-inspections/select-see-more.png "Select See more under the Recent apps section")
 
 1. Go to the **Installed apps** tab, and select **See all**.
 
-    ![Select See all option](media/notify-manager-on-completion-of-inspections/installed-apps-see-all-option.png "Select See all option")
+    ![Select See all option](https://user-images.githubusercontent.com/122298060/215219588-8596a6ae-f4fa-4e30-b85e-b38978b4b112.png)
 
 1. Select **Area Inspection Location**.
 
-    ![Select Area Inspection Location table](media/notify-manager-on-completion-of-inspections/area-inspection-location-from-list-of-objects.png "Select Area Inspection Location table")
+    ![[Select Area Inspection Location table]](https://user-images.githubusercontent.com/122298060/215219619-6d1641f5-53d1-456f-8886-b001e2f17e04.png)
 
 1. Select **Add Column** on the top-left.
 
@@ -66,7 +67,7 @@ Next, we'll add a responsible person column to the location table so we can choo
    - Data type – **Lookup**
    - Related table – **User**
 
-    ![Add Responsible User column](media/notify-manager-on-completion-of-inspections/add-responsible-user-column.png "Add Responsible User column")
+    ![Add Responsible User column](https://user-images.githubusercontent.com/122298060/215219649-c6782856-cf72-4141-9eae-9b421837a07a.png)
 
     > [!NOTE]
     > Users must log in to the app one time before they can be selected from the user table.
@@ -75,13 +76,13 @@ Next, we'll add a responsible person column to the location table so we can choo
 
 1. Select **Area Inspection Locations** from the left-pane, and then select **Edit**.
 
-    ![Edit Area Inspection Locations Table](media/notify-manager-on-completion-of-inspections/edit-area-inspection-locations-table.png "Edit Area Inspection Locations Table")
+    ![Edit Area Inspection Locations Table](https://user-images.githubusercontent.com/122298060/215219688-29a8202b-e110-4409-9318-e34e65a1e255.png)
 
     The **Responsible User ID** column gets added to the **Area Inspection Locations** table.
 
 1. Update the **Area Inspection Location** with the Responsible User values.
 
-    ![Responsible User column in the Area Inspection Locations table](media/notify-manager-on-completion-of-inspections/responsible-user-column-in-area-inspection-location-table.png "Responsible User column in the Area Inspection Locations table")
+    ![Responsible User column in the Area Inspection Locations table](https://user-images.githubusercontent.com/122298060/215219715-0f0a9642-9eb6-4fa8-81e0-dc1c615c6a29.png)
 
 ### Add Responsible User field on the Items Screen on Locations table
 
@@ -91,7 +92,7 @@ Now that we've added the responsible user to the location, we'll now display it 
 
 1. Press down the **Ctrl** key, and select the label **Title**.
 
-    ![Copy Title label](media/notify-manager-on-completion-of-inspections/copy-title-label-from-Locations-screen.png "Copy Title label")
+  ![Copy Title label]https://user-images.githubusercontent.com/122298060/215219759-c2a886c2-73ba-4782-b4c0-4636f83d0d8f.png)
 
 1. Copy the Title label control by highlighting it, and selecting **Ctrl + C** to copy it.
 
@@ -119,7 +120,7 @@ Now that we've added the responsible user to the location, we'll now display it 
 
     The screen then looks like this.
 
-    ![Responsible User field on Locations screen](media/notify-manager-on-completion-of-inspections/responsible-user-field-on-locations-screen.png "Responsible User field on Locations screen")
+![Responsible User field on Locations screen](https://user-images.githubusercontent.com/122298060/215219815-d9ce781f-2701-4518-b03e-57fe64e5d3b1.png)
 
 1. Press **Alt** key, and select the **Edit** label on the top-right of the **Items** screen. The Title label is same as created above.
 
@@ -135,23 +136,23 @@ Now that we've added the responsible user to the location, we'll now display it 
 
     The screen then looks like this.
 
-    ![Locations Screen](media/notify-manager-on-completion-of-inspections/locations-screen.png "Locations Screen")
+![Locations Screen](https://user-images.githubusercontent.com/122298060/215219835-6d02a08b-0ffc-4d52-83ba-3138e8faee6e.png)
 
 1. Now, press **Alt** key, and select **Cancel** on the top-right. And then press **Alt** key, and select the **Add location** button on the top-left of the **Items** screen.
 
-    ![Select Add Location button](media/notify-manager-on-completion-of-inspections/select-add-location-button.png "Select Add Location button")
+    ![Select Add Location button](https://user-images.githubusercontent.com/122298060/215219898-68bdaed7-5aac-40ac-b6dc-eb56a62bd41f.png)
 
 1. Verify that the Responsible User label and the textbox show up while adding a new Location.
 
     The screen then looks like this.
 
-    ![Responsible User field on the Add Location screen](media/notify-manager-on-completion-of-inspections/responsible-user-field-on-add-location-screen.png "Responsible User field on the Add Location screen")
-
+    ![Responsible User field on the Add Location screen](https://user-images.githubusercontent.com/122298060/215219937-531c7e82-da84-48e7-a45e-01bc2388174b.png)
+    
 1. Select the **Save** button, and on the **OnSelect** property, add the following formula to the Patch functions `, 'Responsible User': txtArea_EditResponsibleUser in the two places shown below -`.
 
-    ![Update patch with Responsible User definition](media/notify-manager-on-completion-of-inspections/update-patch-with-responsible-user-definition.png "Update patch with Responsible User definition")
+    ![Update patch with Responsible User definition](https://user-images.githubusercontent.com/122298060/215219998-c5d00b94-6ef9-4a84-9d99-3a4cac2c4cc4.png)
 
-    ![Update second patch with Responsible User definition](media/notify-manager-on-completion-of-inspections/update-second-patch-with-responsible-user-definition.png "Update second patch with Responsible User definition")
+![Update second patch with Responsible User definition](https://user-images.githubusercontent.com/122298060/215220023-d376301a-491c-483c-994d-b0aae1b12bb7.png)
 
 Whenever a location is created or updated now, the **Responsible User** value will also be captured and saved on the **Location** record.
 
@@ -159,11 +160,11 @@ Whenever a location is created or updated now, the **Responsible User** value wi
 
 All the changes to the Manage Inspections app are completed. The app can now be published by selecting the **Publish to Teams** button on the top-right.
 
-![Publish to Teams](media/notify-manager-on-completion-of-inspections/publish-to-teams.png "Publish to Teams")
+![Publish to Teams](https://user-images.githubusercontent.com/122298060/215220058-08fdab11-c915-4c81-9220-00355bd36d33.png)
 
-![Confirm publishing to Teams](media/notify-manager-on-completion-of-inspections/confirm-publishing-manage-inspections-to-teams.png "Confirm publishing to Teams")
+![Confirm publishing to Teams](https://user-images.githubusercontent.com/122298060/215220087-d61cc570-b484-48be-a26b-336d475cc836.png)
 
-![Add to Channel](media/notify-manager-on-completion-of-inspections/add-to-channel.png)
+![Add to Channel](https://user-images.githubusercontent.com/122298060/215220120-7a0c06b5-c506-45a7-a5ea-ceb7671d5535.png)
 
 ## Edit the inspection app
 
@@ -171,7 +172,7 @@ Now that we've added the field to the Manage Inspections app, we'll create a pro
 
 After publishing the Manage Inspections app, select the **Back** button to go back to the **Build** > **Installed Apps** screen > Select **Inspection**.
 
-![Select Inspection App](media/notify-manager-on-completion-of-inspections/select-inspection-app.png "Select Inspection App")
+![Select Inspection App](https://user-images.githubusercontent.com/122298060/215220160-33273ca4-7d9a-40ee-a1ad-92b5d816ab4a.png)
 
 ### Add a Flow to send an Email to the Manager
 
@@ -182,8 +183,8 @@ After publishing the Manage Inspections app, select the **Back** button to go ba
 1. Select the OnSelect property option, copy the entire formula from the formula bar, and then paste it in a text editor.
 
 1. Select the **Continue Inspection** button, and select **...** (ellipsis) on the top, and then select **Power Automate**.
-
-    ![Trigger a Flow on the click of Continue Inspection button](media/notify-manager-on-completion-of-inspections/add-flow-on-continue-inspection-button.png "Trigger a Flow on the click of Continue Inspection button")
+    
+    ![Trigger a Flow on the click of Continue Inspection button](https://user-images.githubusercontent.com/122298060/215220210-9fd7c7dd-a9f7-4257-b7a6-cfe04dfc2454.png)
 
 1. Select **+ Create** to create a new flow on [Power Automate](https://flow.microsoft.com).
 
@@ -195,9 +196,9 @@ After publishing the Manage Inspections app, select the **Back** button to go ba
 
 1. Select **Ask in Power Apps** option for the **Get Inspection Record** – Row ID step, and for the **Send an Email** – To step.
 
-    ![Flow steps to send notification](media/notify-manager-on-completion-of-inspections/notification-flow-steps.png "Flow steps to send notification")
+    ![Flow steps to send notification](https://user-images.githubusercontent.com/122298060/215220257-431007b4-34c5-46a3-8914-ff997c3f29b8.png)
 
-    ![Notification flow send email step](media/notify-manager-on-completion-of-inspections/notification-flow-send-email-step.png "Notification flow send email step")
+    ![Notification flow send email step](https://user-images.githubusercontent.com/122298060/215220280-69a987f9-a1bb-4c1e-a36d-a619c77dd780.png)
 
 1. Save the flow.
 
@@ -223,11 +224,11 @@ After publishing the Manage Inspections app, select the **Back** button to go ba
 
 All the changes to the Inspection app are completed. The app can now be published by selecting the **Publish to Teams** button on the top-right.
 
-![Inspection App Publish to Teams](media/notify-manager-on-completion-of-inspections/inspection-app-publish-to-teams.png "Inspection App Publish to Teams")
+![Inspection App Publish to Teams](https://user-images.githubusercontent.com/122298060/215220327-934d98d1-1d07-41d4-8be1-44d53bc54ca3.png)
 
-![Confirm publishing Inspections app to Teams](media/notify-manager-on-completion-of-inspections/confirm-publishing-inspections-to-teams.png "Confirm publishing Inspections app to Teams")
+![Confirm publishing Inspections app to Teams](https://user-images.githubusercontent.com/122298060/215220346-fc0653c1-f6ef-4729-9e16-beced4f165ed.png)
 
-![Add Inspection App to Channel](media/notify-manager-on-completion-of-inspections/add-inspection-app-to-channel.png "Add Inspection App to Channel")
+![Add Inspection App to Channel](https://user-images.githubusercontent.com/122298060/215220370-fe9b5d8f-2339-4cee-89c5-22027d705e98.png)
 
 ## Verify that a manager exists for the Responsible User
 
@@ -235,7 +236,7 @@ All the changes to the Inspection app are completed. The app can now be publishe
 
 1. Select Edit a user.
 
-    ![Verify User has a Manager](media/notify-manager-on-completion-of-inspections/verify-user-manager.png "Verify User has a Manager")
+    ![Verify User has a Manager](https://user-images.githubusercontent.com/122298060/215220406-f776df18-e1c6-4491-82eb-542180f04522.png)
 
 1. Select a User and confirm that the user has a Manager assigned.
 
@@ -248,29 +249,29 @@ All the changes to the Inspection app are completed. The app can now be publishe
 
 1. Select the **Preview** button to run the app.
 
-    ![Preview Inspection App](media/notify-manager-on-completion-of-inspections/preview-inspection-app.png "Preview Inspection App")
+    ![Preview Inspection App](https://user-images.githubusercontent.com/122298060/215220453-c47af3e1-1d1a-435c-8ee8-23e77d09381f.png)
 
 1. Select **Perform an Inspection**.
 
-    ![Perform an inspection button](media/notify-manager-on-completion-of-inspections/perform-an-inspection-button.png "Perform an inspection button")
+    ![Perform an inspection button](https://user-images.githubusercontent.com/122298060/215220482-ae262db7-6931-45e7-9521-3210523b403c.png)
 
 1. Perform the inspection as shown below.
-
-    ![Complete Inspection Demo](media/notify-manager-on-completion-of-inspections/complete-inspection-demo.gif "Complete Inspection Demo")
+    
+    ![Complete Inspection Demo](https://user-images.githubusercontent.com/122298060/215221002-f1cdbd0a-ad7d-4353-888a-1067ad5d9bad.gif)
 
     The flow should run after the Submit Inspection button is selected.
 
 1. The easiest way to confirm if the flow ran fine is by opening the Power Automate flow and checking the last run.
 
-    ![Flow run history](media/notify-manager-on-completion-of-inspections/flow-runs.png "Flow run history")
+   ![Flow run history](https://user-images.githubusercontent.com/122298060/215220574-7f0f3fbc-0175-41fd-bb7d-28bcb1082512.png)
 
-    ![Flow successful run steps](media/notify-manager-on-completion-of-inspections/flow-successful-run-steps.png "Flow successful run steps")
+   ![Flow successful run steps](https://user-images.githubusercontent.com/122298060/215220606-38df1a76-cb1b-4a1e-8b1c-55064f6d301d.png)
 
 1. Confirm that the email was sent to the right address by selecting and expanding the Send an email step from the flow results.
 
     The email received is as shown below.
 
-    ![Email screenshot](media/notify-manager-on-completion-of-inspections/email-screenshot.png "Email screenshot")
+    ![Email screenshot](https://user-images.githubusercontent.com/122298060/215220668-81f8e604-6157-4c80-803c-1cc71048cc91.png)
 
 ### See also
 

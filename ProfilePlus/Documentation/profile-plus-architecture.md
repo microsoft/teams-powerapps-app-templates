@@ -22,7 +22,7 @@ Profile+ sample app.
 
 The following diagram shows the intersection of users, data, and systems.
 
-![Profile+ sample app data model.](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/ProfilePlus/Documentation/media/Profile-plus-architecture/architecture-model.png "Profile+ sample app data model")
+![Profile+ sample app data model](https://user-images.githubusercontent.com/122298060/215223407-fc9a1489-0a51-41f5-bce4-774766bd61c0.png)
 
 The following connectors are used in the Profile+ app:
 
