@@ -20,8 +20,7 @@ contributors:
 
 The Bulletins sample app for Microsoft Teams provides a central location for all company communication such as broadcasts, memos, announcements, and company news. The app allows you to create, categorize, bookmark, search, and read bulletin posts.
 
-Watch this video to learn how to send an alert when a new bulletin is posted:
-> [!VIDEO https://www.microsoft.com/videoplayer/embed/RWLkvU]
+Watch this video to learn how to send an alert when a new bulletin is posted: https://www.microsoft.com/videoplayer/embed/RWLkvU
 
 The Bulletins app solution consists of two apps:
 
@@ -44,7 +43,7 @@ In this article, we'll learn how to send an email notification using Power Autom
 
 ## Prerequisites
 
-To complete this lesson, we'd need the ability to log in into Teams that will be available as part of select Microsoft 365 subscriptions, and will also need to have the Bulletins Power Apps template for Teams installed. This app can be installed from <https://aka.ms/TeamsBulletins>.
+To complete this lesson, we'd need the ability to log in into Teams that will be available as part of select Microsoft 365 subscriptions, and will also need to have the Bulletins Power Apps template for Teams installed. This app can be installed from by following the [installation guide](../../INSTALLATION.md)
 
 ## Create Power Automate flow to send email notification
 
@@ -70,7 +69,7 @@ We'll create a flow to send the email notification. Power Automate makes sending
 
 1. Select **Scope** as **Organization**.
 
-    ![Select trigger for the alert flow.](media/new-bulletin-alert/bulletin-alert-flow-trigger.png "Select trigger for the alert flow")
+    ![Select trigger for the alert flow](https://user-images.githubusercontent.com/122298060/215223992-97a40f64-d7a4-449e-a5b2-f4abb6edfa09.png)
 
 1. Select **+ New** step.
 
@@ -78,7 +77,7 @@ We'll create a flow to send the email notification. Power Automate makes sending
 
 1. In the **To field**, enter the email address you would like to send notifications to. For example, if you want all people in a team to be notified, you could create an email with the address for the team channel. To find this email address, select the three dots by the team channel and select **Get email address.** 
 
-    ![Get Team Channel's email address.](media/new-bulletin-alert/get-email-address.png "Get Team Channel's email address")
+    ![Get Team Channel's email address](https://user-images.githubusercontent.com/122298060/215224009-925b7644-08d7-45dd-a8cb-65bb8ccbec5f.png)
 
 1. In the **Subject** field, enter **New Bulletin created**.
 
@@ -88,7 +87,7 @@ We'll create a flow to send the email notification. Power Automate makes sending
     A new Bulletin board {select Title from dynamic content} ({select Subtitle from dynamic content}) was added.
     ```
 
-    ![Send email flow step.](media/new-bulletin-alert/send-email-flow-step.png "Send email flow step")
+    ![Send email flow step](https://user-images.githubusercontent.com/122298060/215224039-a3abfa07-f7cb-4caa-8a7a-fd4a45e0c270.png)
 
     > [!NOTE]
     > You can also add a hyperlink to the Bulletin app by selecting the team in which Bulletins is installed, open the app tab, then select the pop  out button to open the app in a new window. The URL of the app is in URL field for this window, and you can use this as a hyperlink in your email.
@@ -115,13 +114,11 @@ We'll create a flow to send the email notification. Power Automate makes sending
 
 In a few minutes, an email as shown in the image below should appear in the inbox of the email address provided in the Power Automate flow.
 
-![New Bulletin Email alert screenshot.](media/new-bulletin-alert/new-bulletin-email-screenshot.png "New Bulletin Email alert screenshot")
+![New Bulletin Email alert screenshot](https://user-images.githubusercontent.com/122298060/215224091-d15c5e29-98ee-4030-8487-9e1a00a33db3.png)
+
 
 ### See also
 
-- [Understand Bulletins sample app architecture](bulletins-architecture.md)
+- [Understand Bulletins sample app template architecture](bulletins-architecture.md)
 - [Customize Bulletins app](customize-bulletins.md)
-- [Sample apps FAQs](sample-apps-faqs.md)
-- [Use sample apps from the Teams store](use-sample-apps-from-teams-store.md)
-
-[!INCLUDE[footer-include](../includes/footer-banner.md)]
+- [Frequently Asked Questions (FAQs) for sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)
