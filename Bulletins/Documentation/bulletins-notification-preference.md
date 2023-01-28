@@ -2,8 +2,7 @@
 
 The Bulletins sample app for Microsoft Teams provides a central location for all company communication such as broadcasts, memos, announcements, and company news. The app allows you to create, categorize, bookmark, search, and read bulletin posts.
 
-Watch this video to learn how to customize apps for end user to add notification preferences:
-> [VIDEO https://www.microsoft.com/videoplayer/embed/RWLn9F]
+Watch this video to learn how to customize apps for end user to add notification preferences: https://www.microsoft.com/videoplayer/embed/RWLn9F
 
 The Bulletins app solution consists of two apps:
 
@@ -26,7 +25,7 @@ In this article, we'll learn how to enable users to set notification preferences
 
 ## Prerequisites
 
-To complete this lesson, we'd need the ability to log in into Teams that will be available as part of select Microsoft 365 subscriptions and will also need to have the Bulletins Power Apps template for Teams installed. This app can be installed from <https://aka.ms/TeamsBulletins>. Also, we'd need to review [Send an alert when a new bulletin is posted](new-bulletin-alert.md).
+To complete this lesson, we'd need the ability to log in into Teams that will be available as part of select Microsoft 365 subscriptions and will also need to have the Bulletins Power Apps template for Teams installed. This app can be installed by following these [instructions](../../INSTALLATION.md). Also, we'd need to review [Send an alert when a new bulletin is posted](new-bulletin-alert.md).
 
 ## Add a column to the Bulletin Notifications table
 
@@ -189,9 +188,6 @@ All the changes to the Bulletins app are completed. The app can now be published
 
 ### See also
 
-- [Understand Bulletins sample app architecture](bulletins-architecture.md)
+- [Understand Bulletins sample app template architecture](bulletins-architecture.md)
 - [Customize Bulletins app](customize-bulletins.md)
-- [Sample apps FAQs](sample-apps-faqs.md)
-- [Use sample apps from the Teams store](use-sample-apps-from-teams-store.md)
-
-[!INCLUDE[footer-include](../includes/footer-banner.md)]
+- [Frequently Asked Questions (FAQs) for sample apps](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)

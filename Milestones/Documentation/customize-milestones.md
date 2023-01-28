@@ -1,16 +1,15 @@
 
-# Customize Milestones sample app
+# Customize Milestones sample app template
 
-The Milestones sample app for Microsoft Teams is designed to be a complete app experience. At the same time, allow makers to easily extend it for their own purposes.
+The Milestones sample app template for Microsoft Teams is designed to be a complete app experience. At the same time, allow makers to easily extend it for their own purposes.
 
 We'll go over how to customize the Milestones app using Power Apps Studio in Microsoft Teams.
 
-Before you can customize the app, you must install it from the Teams store. You can get the app at <https://aka.ms/teamsmilestones>.
+Before you can customize the app, you must install it by following this [installation guide](../../INSTALLATION.md).
 
 Once the app is installed, you can then customize it using the following steps.
 
-Watch this video to learn how to customize Milestones sample app:
-> [VIDEO https://www.microsoft.com/videoplayer/embed/RWLiBR]
+Watch this video to learn how to customize Milestones sample app: https://www.microsoft.com/videoplayer/embed/RWLiBR
 
 ## Open Power Apps app in Teams
 
@@ -116,10 +115,7 @@ Before modifying the Milestones app, consider the following items:
 
 ### See also
 
-- [Use Milestones apps from teams store](milestones.md)
-- [Understand Milestones sample app architecture](milestones-architecture.md)
-- [Customize sample apps](customize-sample-apps.md)
-- [Sample apps FAQs](sample-apps-faqs.md)
-- [Use sample apps from the Microsoft Teams store](use-sample-apps-from-teams-store.md)
-
-[!INCLUDE[footer-include](../includes/footer-banner.md)]
+- [Use Milestones sample app template](milestones.md)
+- [Understand Milestones sample app template architecture](milestones-architecture.md)
+- [Customize sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/customize-sample-apps)
+- [Frequently Asked Questions (FAQs) for sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)

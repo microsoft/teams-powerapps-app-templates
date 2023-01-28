@@ -1,10 +1,9 @@
 
 # Add urgency flag to reported issues
 
-As a user of the Issue reporting sample app for Microsoft Teams, you may want to modify the logic of how reported issues are create in Planner. We've included many of the standard fields in Planner in the standard app, but based on your specific requirements, you may want to make further changes.
+As a user of the Issue Reporting sample app for Microsoft Teams, you may want to modify the logic of how reported issues are create in Planner. We've included many of the standard fields in Planner in the standard app, but based on your specific requirements, you may want to make further changes.
 
-Watch this video to learn how to add urgency flag to reported issues:
-> [VIDEO https://www.microsoft.com/videoplayer/embed/RWLkWO]
+Watch this video to learn how to add urgency flag to reported issues: https://www.microsoft.com/videoplayer/embed/RWLkWO
 
 ## Create tasks in app vs using Power Automate
 
@@ -32,24 +31,24 @@ When creating records, like tasks, you can have your app directly trigger the fl
 
 The primary shortcoming of a data triggered flow vs a flow called from the app is the records created or modified by the flow will show created by and modified by the user who owns the flow.
 
-In this lesson, we'll update the Issue reporting app to use a Power Automate flow to create tasks in Microsoft Planner and populate the priority field for urgent tasks.
+In this lesson, we'll update the Issue Reporting app to use a Power Automate flow to create tasks in Microsoft Planner and populate the priority field for urgent tasks.
 
 ## Enable users to set urgency of issue being reported
 
-In this lesson, we want to extend the functionality of the Issue reporting app by adding the ability for users to flag an issue as urgent. The reason you might want to do this is so that urgent issues can be prioritized or notify a supervisor.
+In this lesson, we want to extend the functionality of the Issue Reporting app by adding the ability for users to flag an issue as urgent. The reason you might want to do this is so that urgent issues can be prioritized or notify a supervisor.
 
 The outcome of this exercise will include:
 
-- Urgency flag added to the Issue reporting form.
+- Urgency flag added to the Issue Reporting form.
 
  Urgent task created in Microsoft Planner with priority set to urgent.
 
-## Add urgency flag in Issue reporting app
+## Add urgency flag in Issue Reporting app
 
-In this step, we'll update the Issue reporting app to add a checkbox to flag urgent tasks. This process assumes that you've installed the Issue reporting template app in Teams and configured it to use Microsoft Planner/Tasks.
+In this step, we'll update the Issue Reporting app to add a checkbox to flag urgent tasks. This process assumes that you've installed the Issue Reporting template app in Teams and configured it to use Microsoft Planner/Tasks.
 
 > [TIP]
-> For architecture details of the app and the data model, see [Issue reporting architecture](issue-reporting-architecture.md).
+> For architecture details of the app and the data model, see [Issue Reporting architecture](issue-reporting-architecture.md).
 
 1. Open the Power Apps app in Teams.
 
@@ -63,15 +62,15 @@ In this step, we'll update the Issue reporting app to add a checkbox to flag urg
 
     ![Pop out the Power Apps app](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/IssueReporting/Documentation/media/extend-issue-urgency/pop-out-power-apps.png "Pop out the Power Apps app")
 
-1. Select the team in which the Issue reporting app is installed, and select the **Installed apps** tab.
+1. Select the team in which the Issue Reporting app is installed, and select the **Installed apps** tab.
 
     ![Select Installed apps tab](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/IssueReporting/Documentation/media/extend-issue-urgency/installed-apps.png "Select Installed apps tab")
 
-1. On the Issue reporting tile, select **Issue reporting**.
+1. On the Issue Reporting tile, select **Issue Reporting**.
 
-   ![Select Issue reporting](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/IssueReporting/Documentation/media/extend-issue-urgency/issue-reporting-tile.png "Select Issue reporting")
+   ![Select Issue Reporting](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/IssueReporting/Documentation/media/extend-issue-urgency/issue-reporting-tile.png "Select Issue Reporting")
 
-    Issue reporting app will open in Power Apps in Teams.
+    Issue Reporting app will open in Power Apps in Teams.
 
    On left side of screen, select the **Tree View**, then select the Issue Report screen
 
@@ -267,7 +266,7 @@ In this section we'll be creating a flow and replacing the app logic that create
 
 You've now created a flow to create Planner tasks and replaced the in-app task creation with the flow. In the process, we added additional functionality by conditionally setting the **Priority** field. But you don’t have to stop there, you can enhance the flow to set additional planner task properties or do other actions, such as having the flow create the task in some other task management system like **Microsoft To-Do**.
 
-1. To test the app, in Teams, go to the team in which your Issue reporting app is published and report an issue.
+1. To test the app, in Teams, go to the team in which your Issue Reporting app is published and report an issue.
 
 2. In Power Automate, view the execution log for your flow. Verify the flow executed successfully.
 
@@ -277,10 +276,6 @@ You've now created a flow to create Planner tasks and replaced the in-app task c
 
 ### See also
 
-- [Understand Issue reporting sample app architecture](issue-reporting-architecture.md)
-- [Customize sample apps](customize-sample-apps.md)
-- [Sample apps FAQs](sample-apps-faqs.md)
-- [Use sample apps from the Teams store](use-sample-apps-from-teams-store.md)
-
-
-[!INCLUDE[footer-include](../includes/footer-banner.md)]
+- [Understand Issue Reporting sample app template architecture](issue-reporting-architecture.md)
+- [Customize sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/customize-sample-apps) <br>
+- [Frequently Asked Questions (FAQs) for sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)

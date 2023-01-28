@@ -1,12 +1,11 @@
 
-# Remove the Planner dependency for task creation in the Issue reporting sample app
+# Remove the Planner dependency for task creation in the Issue Reporting sample app template
 
-In the Issue reporting sample app, you can share the app for broad distribution. When you do this, the users outside of the Microsoft Teams team may not have access to the Planner. If this case is true, creation of tasks will fail because the users submitting the issue.
+In the Issue Reporting sample app, you can share the app for broad distribution. When you do this, the users outside of the Microsoft Teams team may not have access to the Planner. If this case is true, creation of tasks will fail because the users submitting the issue.
 
-Watch this video to learn how to remove the Planner dependency for task creation in the Issue reporting sample app:
-> [VIDEO https://www.microsoft.com/videoplayer/embed/RWLiBZ]
+Watch this video to learn how to remove the Planner dependency for task creation in the Issue Reporting sample app: https://www.microsoft.com/videoplayer/embed/RWLiBZ
 
-Issue reporting is heavily dependent on Planner, and the users of the app must have access to the Planner that the app uses to create issues. Planner is referenced in multiple places in the app:
+Issue Reporting is heavily dependent on Planner, and the users of the app must have access to the Planner that the app uses to create issues. Planner is referenced in multiple places in the app:
 
 1. During the app OnLoad, the app checks to see if Planner environment has been set in the app settings, and that the user of the app has access to that Planner environment.
 
@@ -208,7 +207,7 @@ Now that we've removed the current OnSelect formula, we're going to create a flo
 
 Now that we've created a new flow to create the task directly in Dataverse, test the process:
 
-1. Go to the team in which the Issue reporting app is installed.
+1. Go to the team in which the Issue Reporting app is installed.
 
 1. Submit a new issue.
 
@@ -218,7 +217,7 @@ Now that we've created a new flow to create the task directly in Dataverse, test
 
     ![View installed apps](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/IssueReporting/Documentation/media/extend-issue-remove-planner/installed-apps.png "View installed apps")
 
-1. Select **See all** on the **Issue reporting** tile.
+1. Select **See all** on the **Issue Reporting** tile.
 
     ![See all apps](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/IssueReporting/Documentation/media/extend-issue-remove-planner/select-all.png "See all apps")
 
@@ -242,15 +241,11 @@ Now that you've updated the app to create the task directly in Dataverse, you ca
 - Asana
 - Trello
 
-To integrate the process, you can add an action to the flow created earlier to create a record in the task system of your choice. If any required fields aren't provided in the standard Issue reporting configuration, add them to the app and then update the flow to pass those values to the flow.
+To integrate the process, you can add an action to the flow created earlier to create a record in the task system of your choice. If any required fields aren't provided in the standard Issue Reporting configuration, add them to the app and then update the flow to pass those values to the flow.
 
 ### See also
 
-- [Understand Issue Reporting sample app architecture](issue-reporting-architecture.md)
-- [Customize issue reporting app](customize-issue-reporting.md)
-- [Sample apps FAQs](sample-apps-faqs.md)
-- [Use sample apps from the Microsoft Teams store](use-sample-apps-from-teams-store.md)
-
-
-[!INCLUDE[footer-include](../includes/footer-banner.md)]
-
+- [Understand Issue Reporting sample app template architecture](issue-reporting-architecture.md)
+- [Customize Issue Reporting app](customize-issue-reporting.md)
+- [Customize sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/customize-sample-apps) <br>
+- [Frequently Asked Questions (FAQs) for sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)

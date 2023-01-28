@@ -1,44 +1,44 @@
-# Understand How to app sample app architecture (preview)
+# Understand How To sample app template architecture (preview)
 
 [This article is pre-release documentation and is subject to change.]
 
-In this article, you'll learn about the collections and global variables used by the How to app, and understand how to use them effectively.
+In this article, you'll learn about the collections and global variables used by the How To app, and understand how to use them effectively.
 
 ## Prerequisites
 
 To understand and use information in this article, you'll need to know about different controls, features, and capabilities of canvas apps.
 
-- [Create and update a collection in a canvas app](../maker/canvas-apps/create-update-collection.md)
-- [Collect, Clear, and ClearCollect functions in Power Apps](../maker/canvas-apps/functions/function-clear-collect-clearcollect.md)
-- [Understand canvas-app variables in Power Apps](../maker/canvas-apps/working-with-variables.md)
-- [Add and configure a canvas-app control in Power Apps](../maker/canvas-apps/add-configure-controls.md)
-- [Add a screen to a canvas app and navigate between screens](../maker/canvas-apps/add-screen-context-variables.md)
+-   [Create and update a collection in a canvas app](https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/create-update-collection)
+-   [Collect, Clear, and ClearCollect functions in Power Apps](https://learn.microsoft.com/en-us/power-platform/power-fx/reference/function-clear-collect-clearcollect)
+-   [Understand canvas-app variables in Power Apps](https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/working-with-variables)
+-   [Add and configure a canvas-app control in Power Apps](https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/add-configure-controls)
+-   [Add a screen to a canvas app and navigate between screens](https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/add-screen-context-variables)
 
 ## Data model
-The following diagram shows the tables, columns, and relationships in the How to app solution:
+The following diagram shows the tables, columns, and relationships in the How To app solution:
 
-![How to app sample app data model.](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/HowTo/Documentation/media/how-to-architecture/data-model.png "How to app sample app data model")
+![How To app sample app data model.](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/HowTo/Documentation/media/how-to-architecture/data-model.png "How To app sample app data model")
 
 ## Tables
 
 | Table                      | Description                                                  |
 | -------------------------- | ------------------------------------------------------------ |
-| Item Demo                  | How to app is designed to help new makers learn how to make Power Apps. This table is provided as an example of the table the users will create to store items that are available to be checked out. |
-| Item Checkout Demo         | How to app is designed to help new makers learn how to make Power Apps. This table is provided as an example of the table that the users will create to store item checkout records. |
-| Item Type Demo             | How to app is designed to help new makers learn how to make Power Apps. This table is provided as an example of the table that the users will create to store item types for classification of items. |
+| Item Demo                  | How To app is designed to help new makers learn how to make Power Apps. This table is provided as an example of the table the users will create to store items that are available to be checked out. |
+| Item Checkout Demo         | How To app is designed to help new makers learn how to make Power Apps. This table is provided as an example of the table that the users will create to store item checkout records. |
+| Item Type Demo             | How To app is designed to help new makers learn how to make Power Apps. This table is provided as an example of the table that the users will create to store item types for classification of items. |
 | Item Checkout  App Stage   | As the user goes through the lessons in the app, the app will store the status of their progress through the app, enabling the user to pick back up where they left off. |
-| Item Checkout Instructions | The instructions for proceeding through the How to app are stored in the item checkout instructions table. |
+| Item Checkout Instructions | The instructions for proceeding through the How To app are stored in the item checkout instructions table. |
 
 
 
 ## Architecture model
-The following diagram illustrates the way that people, systems, and data interact in the How to app solution
+The following diagram illustrates the way that people, systems, and data interact in the How To app solution
 
-![How to app sample app architecture model.](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/HowTo/Documentation/media/how-to-architecture/architecture-model.png "How to app sample app architecture model")
+![How To app sample app architecture model.](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/HowTo/Documentation/media/how-to-architecture/architecture-model.png "How To app sample app architecture model")
 
 ### Connectors
 
-The following connectors are used in the How to app:
+The following connectors are used in the How To app:
 
 - **Microsoft Dataverse** - Used to read and write data in Dataverse.
 - **Office 365 Users** - Used to read Microsoft 365 user profile data.
@@ -46,14 +46,14 @@ The following connectors are used in the How to app:
 
 
 ## Collections 
-The following collection is used in the How to app solution:
+The following collection is used in the How To app solution:
 
 | Collection Name | Description                                                        | Screen Used                 |
 |-----------------|--------------------------------------------------------------------|-----------------------------|
 | colLocalization | Used to build a Localization Collection based on the User Language | OnStart property of the App |
 
 ## Global variables
-The following global variables are used in the How to app solution:
+The following global variables are used in the How To app solution:
 
 | Variable Name                   | Type    | Description                                                           |
 |---------------------------------|---------|-----------------------------------------------------------------------|
@@ -72,7 +72,7 @@ The following global variables are used in the How to app solution:
 
 
 ## App OnStart
-This section explains the collections, variables, and execution details used in the OnStart of How to app:
+This section explains the collections, variables, and execution details used in the OnStart of How To app:
 
 ### OnStart collections
 The following collections are used on start of the application:
@@ -220,10 +220,6 @@ The following variables are used on the My checkout screen:
 
 ### See also
 
-- [Use How to sample app (preview)](how-to.md)
-- [Customize sample apps](customize-sample-apps.md)
-- [Sample apps FAQs](sample-apps-faqs.md)
-- [Use sample apps from the Microsoft Teams store](use-sample-apps-from-teams-store.md)
-
-[!INCLUDE[footer-include](../includes/footer-banner.md)]
-
+- [Use How To sample app template (preview)](how-to.md)
+- [Customize sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/customize-sample-apps) <br>
+- [Frequently Asked Questions (FAQs) for sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)

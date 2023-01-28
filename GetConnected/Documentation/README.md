@@ -1,7 +1,7 @@
-# GetConnected App Template - Documentations
+# Get Connected Sample App Template - Documentation
 
 ## How to use
-* [Use GetConnected sample app](get-connected.md)
+* [Use Get Connected sample app template](get-connected.md)
 
 ## Customize GetConnected app
-* [Understand GetConnected sample app architecture](get-connected-architecture.md)
+* [Understand Get Connected sample app template architecture](get-connected-architecture.md)

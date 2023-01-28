@@ -4,12 +4,11 @@ In this article, you'll be changing the inspection notifications that come from 
 
 Adaptive cards make notifications more interactive. Posts to channels are great, but they're a one-way communication. Adaptive cards offer more interactive notifications, allowing customization of the message, and the ability to hyperlink to the app or provide the ability to update the app data from the card.
 
-Watch this video to learn how to update inspection notification to use an adaptive card:
-> [VIDEO https://www.microsoft.com/videoplayer/embed/RWLn9H]
+Watch this video to learn how to update inspection notification to use an adaptive card: https://www.microsoft.com/videoplayer/embed/RWLn9H
 
 ## Prerequisites
 
-Before you begin, you must have installed and configured [the Inspection sample apps](inspection.md) with the required permissions to edit the app in Teams.
+Before you begin, you must have installed and configured [the Inspection sample app template](inspection.md) with the required permissions to edit the app in Teams.
 
 ## Create the Power Automate flow to generate the adaptive card
 
@@ -34,7 +33,7 @@ Start with Power Apps personal app in Teams, and locating the Inspection app. Fo
     - Initialize variable: Work Type
     - Initialize variable: Review Inspections Link
 
-    ![Inspection notification adaptive card flow steps](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentation/media/update-inspection-notification-to-use-adaptive-card/inspection-adaptive-card-flow-steps.png "Inspection notification adaptive card flow steps")
+    ![Inspection notification adaptive card flow steps](https://user-images.githubusercontent.com/122298060/215222182-049c08cc-6e09-4e59-a9b6-a7722000c4fc.png)
 
 1. Set each of the "Type" values to "String", and add a name for each: **varCardTitle**, **varLocation**, **varWorkType**, and **varReviewInspectionLink**, respectively.
 
@@ -45,7 +44,7 @@ Start with Power Apps personal app in Teams, and locating the Inspection app. Fo
 1. For the Review Inspections Link action, we'll the link to the tab the app is in. Open the Review Inspections app in the Teams channel, and select the button in the upper right corner to pop out the app to its own window. From there, you can copy the direct URL to the app. Navigate back to the Power Automate studio. Right-click on the Value field area in the Review Inspection Link action and Paste the link.
 
     > [TIP]
-    > To learn about creating deep links in Microsoft Teams, see [Create deep link](/microsoftteams/platform/concepts/build-and-test/deep-links).
+    > To learn about creating deep links in Microsoft Teams, see [Create deep link](https://learn.microsoft.com/en-us/microsoftteams/platform/concepts/build-and-test/deep-links).
 
 1. Add a **Post adaptive card in a chat or channel** action. Set the **Post as** value to *User* and the **Post in** value to *Channel*.
 
@@ -92,8 +91,8 @@ You can generate your adaptive card JSON by going to <https://adaptivecards.io>.
     ```
     New @{variables('varWorkType')} submitted
     ```
-
-    ![Post adaptive card step in the flow](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentation/media/update-inspection-notification-to-use-adaptive-card/post-adaptive-card-step.png "Post adaptive card step in the flow")
+    
+    ![Post adaptive card step in the flow](https://user-images.githubusercontent.com/122298060/215222234-1007652b-1bc0-4ce9-a773-efd34104d9d5.png)
 
     This will set the adaptive card’s characteristics and use the variables from Power Apps in the adaptive card.
 
@@ -109,7 +108,7 @@ Once you've verified that the flow is working properly, you can add it to the In
 
 1. Select the Submit inspection button (named **btnContinueSubmitInspection** in the Tree View). We'll add the Power Automate flow we created to this button.
 
-    ![Submit Inspection button on Inspection Overview screen](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentation/media/update-inspection-notification-to-use-adaptive-card/submit-inspection-button-on-inspection-overview-screen.png "Submit Inspection button on Inspection Overview screen")
+    ![Submit Inspection button on Inspection Overview screen](https://user-images.githubusercontent.com/122298060/215222269-262386fb-bae9-4a65-ad78-c335e9c6b96f.png)
 
 1. First, we'll copy the code currently in the OnSelect property of the button. One issue with adding Power Automate flows to controls in Power Apps is that any existing code on the control will be removed. To work around this, paste the copied code into a text editor, such as Notepad, and edit it to paste back in the OnSelect property when done. After pasting the code, ensure that all the code was added.
 
@@ -183,7 +182,7 @@ Once you've verified that the flow is working properly, you can add it to the In
     gblLastInspection.Location.Name, Lower(gblWorkType))
     ```
 
-    :::image type="content" source="media\inspection\inspection-submit-flow.png" alt-text="Submit inspection formula updated.":::
+    ![Submit inspection formula updated](https://user-images.githubusercontent.com/122298060/215222366-bfff9909-76c3-49ea-afa5-e2e473c89cb8.png)
 
     This formula contains the reference to the flow we just added and the variables to pass to Power Automate.
 
@@ -191,14 +190,11 @@ Once you've verified that the flow is working properly, you can add it to the In
 
 1. Select the Welcome Screen from the Tree View, preview the app, and input a test inspection to verify that the flow is posting the adaptive card to the Team channel that you defined in the flow.
 
-    ![Inspection notification adaptive card in Teams](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Area%20Inspection/Documentation/media/update-inspection-notification-to-use-adaptive-card/inspection-notification-adaptive-card.png "Inspection notification adaptive card in Teams")
+    ![Inspection notification adaptive card in Teams](https://user-images.githubusercontent.com/122298060/215222396-21c95713-9282-462d-b84e-4b8e74671fc4.png)
 
 ### See also
 
-- [Understand Inspection sample apps architecture](inspection-architecture.md)
+- [Understand Inspection sample app templates architecture](inspection-architecture.md)
 - [Customize Inspection sample app](customize-inspections.md)
-- [Customize sample apps](customize-sample-apps.md)
-- [Sample apps FAQs](sample-apps-faqs.md)
-- [Use sample apps from the Microsoft Teams store](use-sample-apps-from-teams-store.md)
-
-[!INCLUDE[footer-include](../includes/footer-banner.md)]
+- [Customize sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/customize-sample-apps)
+- [Frequently Asked Questions (FAQs) for sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)

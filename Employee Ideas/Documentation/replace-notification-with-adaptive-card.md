@@ -3,12 +3,11 @@
 
 In this article, we'll be changing the notifications that come from the Employee Ideas app from HTML-based messages in Teams to adaptive cards in Teams. Currently, Teams notifications are started from within the app and are sent as a message posted to the Teams channel. We'll replace this Teams channel notification with an adaptive card notification that will be initiated using a Power Automate flow.
 
-Watch this video to learn how to replace notifications with adaptive card:
-> [VIDEO https://www.microsoft.com/videoplayer/embed/RWLn9C]
+Watch this video to learn how to replace notifications with adaptive card: https://www.microsoft.com/videoplayer/embed/RWLn9C
 
 ## Prerequisites
 
-To complete this lesson, we would need the ability to sign in into Microsoft Teams that will be available as part of select Microsoft 365 subscriptions, and will also need to have the [Employee Ideas sample app](employee-ideas.md).
+To complete this lesson, we would need the ability to sign in into Microsoft Teams that will be available as part of select Microsoft 365 subscriptions, and will also need to have the [Employee Ideas sample app template](employee-ideas.md).
 
 ## Create the Power Automate flow to generate the adaptive card
 
@@ -495,9 +494,6 @@ This action should load all the required data appropriately after the app opens.
 
 ### See also
 
-- [Understand Employee ideas app architecture](employee-ideas-architecture.md)
-- [Customize sample apps](customize-sample-apps.md)
-- [Sample apps FAQs](sample-apps-faqs.md)
-- [Use sample apps from the Teams store](use-sample-apps-from-Teams-store.md)
-
-[!INCLUDE[footer-include](../includes/footer-banner.md)]
+- [Understand Employee Ideas sample app template architecture](employee-ideas-architecture.md)
+- [Customize sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/customize-sample-apps)
+- [Frequently Asked Questions (FAQs) for sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)

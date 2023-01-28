@@ -1,4 +1,4 @@
-# Bulletins sample app
+# Bulletins sample app template
 
 In this tutorial, you'll learn about configuring, and using the **Bulletins** sample app.
 
@@ -24,8 +24,8 @@ The Bulletins app solution consists of two apps.
     - Shows bulletins, FAQs, links, and contacts created using the **Manage bulletins** app.
 
 > [NOTE]
-> - Before you can use this app, you may be asked for your permissions to use the connection. More information: [Allow connections in sample apps](use-sample-apps-from-teams-store.md#step-1---allow-connections)
-> - This app is available in three different Teams themes: Default, Dark and High contrast. When you [change the theme in Teams](https://support.microsoft.com/en-us/office/change-settings-in-teams-b506e8f1-1a96-4cf1-8c6b-b6ed4f424bc7), the app automatically updates to match the selected theme. More information: [Get the Teams theme using the Teams integration object](use-teams-integration-object.md#get-the-teams-theme)
+> - Before you can use this app, you may be asked for your permissions to use the connection. More information: [Allow connections in sample apps](https://learn.microsoft.com/en-us/power-apps/teams/use-sample-apps#step-1---allow-connections)
+> - This app is available in three different Teams themes: Default, Dark and High contrast. When you [change the theme in Teams](https://support.microsoft.com/en-us/office/change-settings-in-teams-b506e8f1-1a96-4cf1-8c6b-b6ed4f424bc7), the app automatically updates to match the selected theme. More information: [Get the Teams theme using the Teams integration object](https://learn.microsoft.com/en-us/power-apps/teams/use-teams-integration-object#get-the-teams-theme)
 
 
 ## Manage bulletins app
@@ -427,9 +427,6 @@ To view links, and contacts:
 
 ### See also
 
-- [Understand Bulletins sample app architecture](bulletins-architecture.md)
+- [Understand Bulletins sample app template architecture](bulletins-architecture.md)
 - [Customize Bulletins app](customize-bulletins.md)
-- [Sample apps FAQs](sample-apps-faqs.md)
-- [Use sample apps from the Microsoft Teams store](use-sample-apps-from-teams-store.md)
-
-[!INCLUDE[footer-include](../includes/footer-banner.md)]
+- [Frequently Asked Questions (FAQs) for sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)

@@ -1,5 +1,5 @@
 
-# Employee ideas sample app
+# Employee ideas sample app template
 
 In this tutorial, learn about the Employee ideas app, and how to use them effectively.
 
@@ -18,12 +18,11 @@ Employee ideas app is used by the Teams users to perform the following activitie
 - Vote on the most-liked ideas.
 - Review how their own idea is performing compared to others within a campaign.
 
-Watch this video for a demonstration of this app.
-> [VIDEO https://www.microsoft.com/videoplayer/embed/RE4LK0d]
+Watch this video for a demonstration of this app: https://www.microsoft.com/videoplayer/embed/RE4LK0d
 
 > [NOTE]
-> - Before you can use this app, you may be asked for your permissions to use the connection. More information: [Allow connections in sample apps](use-sample-apps-from-teams-store.md#step-1---allow-connections)
-> - This app is available in three different Teams themes: Default, Dark and High contrast. When you [change the theme in Teams](https://support.microsoft.com/en-us/office/change-settings-in-teams-b506e8f1-1a96-4cf1-8c6b-b6ed4f424bc7), the app automatically updates to match the selected theme. More information: [Get the Teams theme using the Teams integration object](use-teams-integration-object.md#get-the-teams-theme)
+> - Before you can use this app, you may be asked for your permissions to use the connection. More information: [Allow connections in sample apps](https://learn.microsoft.com/en-us/power-apps/teams/use-sample-apps#step-1---allow-connections)
+> - This app is available in three different Teams themes: Default, Dark and High contrast. When you [change the theme in Teams](https://support.microsoft.com/en-us/office/change-settings-in-teams-b506e8f1-1a96-4cf1-8c6b-b6ed4f424bc7), the app automatically updates to match the selected theme. More information: [Get the Teams theme using the Teams integration object](https://learn.microsoft.com/en-us/power-apps/teams/use-teams-integration-object#get-the-teams-theme)
 
 
 ## Configure the app
@@ -245,9 +244,6 @@ To delete an idea:
 ### See also
 
 - [Deploy Employee Ideas app as broad distribution app](deploy-employee-ideas-broad-distribution.md)
-- [Understand Employee ideas app architecture](employee-ideas-architecture.md)
+- [Understand Employee Ideas sample app template architecture](employee-ideas-architecture.md)
 - [Customize employee ideas app](customize-employee-ideas.md)
-- [Sample apps FAQs](sample-apps-faqs.md)
-- [Use sample apps from the Microsoft Teams store](use-sample-apps-from-teams-store.md)
-
-[!INCLUDE[footer-include](../includes/footer-banner.md)]
+- [Frequently Asked Questions (FAQs) for sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)

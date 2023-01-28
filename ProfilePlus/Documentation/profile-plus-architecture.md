@@ -1,32 +1,28 @@
 
-# Understand Profile+ sample apps architecture (preview)
+# Understand Profile+ sample app template architecture (preview)
 
 [This article is pre-release documentation and is subject to change.]
 
-In this article, you'll learn about the collections and global variables used by the [Profile +](profile-app.md) app, and understand how to use them effectively. If you want to learn more about how to install, and use the Inspection sample app instead, go to [Profile + sample apps](profile-app.md).
+In this article, you'll learn about the collections and global variables used by the Profile+ app, and understand how to use them effectively. If you want to learn more about how to install, and use the Inspection sample app instead, go to [Profile+ sample app template](profile-app.md).
 
 ## Prerequisites
 
 To understand and use information in this article, you'll need to know about different controls, features, and capabilities of canvas apps.
 
--   [Create and update a collection in a canvas app](../maker/canvas-apps/create-update-collection.md)
-    
--   [Collect, Clear, and ClearCollect functions in Power Apps](../maker/canvas-apps/functions/function-clear-collect-clearcollect.md)
-    
--   [Understand canvas-app variables in Power Apps](../maker/canvas-apps/working-with-variables.md)
-    
--   [Add and configure a canvas-app control in Power Apps](../maker/canvas-apps/add-configure-controls.md)
-    
--   [Add a screen to a canvas app and navigate between screens](../maker/canvas-apps/add-screen-context-variables.md)
+-   [Create and update a collection in a canvas app](https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/create-update-collection)
+-   [Collect, Clear, and ClearCollect functions in Power Apps](https://learn.microsoft.com/en-us/power-platform/power-fx/reference/function-clear-collect-clearcollect)
+-   [Understand canvas-app variables in Power Apps](https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/working-with-variables)
+-   [Add and configure a canvas-app control in Power Apps](https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/add-configure-controls)
+-   [Add a screen to a canvas app and navigate between screens](https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/add-screen-context-variables)
 
-You'll also need to know about how to [install](use-sample-apps-from-teams-store.md), and [use](profile-app.md) the
-Profile + sample app.
+You'll also need to know about how to [install](../../INSTALLATION.md), and [use](profile-app.md) the
+Profile+ sample app.
 
 ## Application Data Flow
 
 The following diagram shows the intersection of users, data, and systems.
 
-![Profile + sample app data model.](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/ProfilePlus/Documentation/media/Profile-plus-architecture/architecture-model.png "Profile + sample app data model")
+![Profile+ sample app data model](https://user-images.githubusercontent.com/122298060/215223407-fc9a1489-0a51-41f5-bce4-774766bd61c0.png)
 
 The following connectors are used in the Profile+ app:
 
@@ -38,7 +34,7 @@ The following connectors are used in the Profile+ app:
 
 ## Data Model
 
-![Profile + app data model.](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/ProfilePlus/Documentation/media/profile-plus-architecture/data-model.png "Profile + sample app data model")
+![Profile+ app data model.](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/ProfilePlus/Documentation/media/profile-plus-architecture/data-model.png "Profile+ sample app data model")
 
 ## Tables
 
@@ -617,7 +613,6 @@ Admin Screen has toggles to change the user language and settings of Dark Mode o
 
 ### See also
 
-- [Profile+ (preview) sample app](profile-app.md)
-- [Customize sample apps](customize-sample-apps.md)
-- [Sample apps FAQs](sample-apps-faqs.md)
-- [Use sample apps from the Microsoft Teams store](use-sample-apps-from-teams-store.md)
+- [Profile+ sample app template (preview)](profile-app.md)
+- [Customize sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/customize-sample-apps) <br>
+- [Frequently Asked Questions (FAQs) for sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)

@@ -1,6 +1,8 @@
 # Power Apps Teams Sample App Templates
 
-Sample app templates that were created by using [Power Apps](https://learn.microsoft.com/en-us/power-apps/powerapps-overview) are available in the Teams. You can select the sample app that best fits your business requirement and quickly install it to get started. After you install the sample app, you can go to the team that you added the app to and use the tabs for the app. Sample app templates created with Power Apps and published to the Teams can consist of multiple components such as apps, flows, and tables.
+Several sample app templates are available for use in Microsoft Teams. You can choose the sample app template that best fits your business requirement and quickly install it to get started. Sample app templates created with [Power Apps](https://learn.microsoft.com/en-us/power-apps/powerapps-overview) typically consist of multiple components such as apps, flows, and tables.
+
+Refer to [this link](https://learn.microsoft.com/en-us/power-apps/teams/use-sample-apps) for more information on Power Apps sample app templates in Teams.
 
 This repo has 10 sample app templates:
 
@@ -14,7 +16,7 @@ A simple way to connect and share with people in your organization with similar 
 
 Manager and user apps for company communications.
 
-### [Employee ideas](https://aka.ms/EmployeeIdeas)
+### [Employee Ideas](https://aka.ms/EmployeeIdeas)
 ![image](https://user-images.githubusercontent.com/84343636/210890443-abc27abc-576b-47aa-bb00-171919704530.png)
 
 App for campaigns and ideas.
@@ -29,7 +31,7 @@ Learn how to be a Power Apps maker.
 
 Manager and user apps for area inspections.
 
-### [Issue reporting](https://aka.ms/IssueReporting)
+### [Issue Reporting](https://aka.ms/IssueReporting)
 ![image](https://user-images.githubusercontent.com/84343636/210890704-46c5fca7-ca87-42ef-b6be-07f60e78c381.png)
 
 Manager and user apps for issue reporting.
@@ -49,13 +51,13 @@ A simple way to add topics and extend the topics with Q&A for discussions
 
 Quickly find out about people in your organization.
 
-### [Get connected](https://aka.ms/GetConnected-TeamsSampleApp)
+### [Get Connected](https://aka.ms/GetConnected-TeamsSampleApp)
 ![image](https://user-images.githubusercontent.com/84343636/210891291-edf22da2-67f3-4d8c-bff6-1cbc26201c1c.png)
 
 Connect with people in your organization with similar skills.
 
 ## Installation
-To install the app, you can download the app package from this repo's release. Then upload the package as a teams custom app or import the app as a solution to your Power Apps environment. Refer to [installation guide](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/INSTALLATION.md) for details.
+To install the app, you can download the app package from this repo's release. Then upload the package as a teams custom app or import the app as a solution to your Power Apps environment. Refer to the [installation guide](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/INSTALLATION.md) for details.
 
 ## Trademarks
 

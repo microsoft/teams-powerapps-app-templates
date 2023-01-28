@@ -1,18 +1,18 @@
-# Milestones App Template
+# Milestones Sample App Template
 
 | [Documentation](Documentation/README.md) | [Installation guide](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/INSTALLATION.md)
 | ---- | ---- |
 
 This can be viewed as the PowerApps version of the Azure-based [Great Ideas](https://github.com/OfficeDev/microsoft-teams-apps-greatideas).
 
-The Milestones sample app for Microsoft Teams provides a simple way to keep track of your projects and initiatives.
+The Milestones sample app template for Microsoft Teams provides a simple way to keep track of your projects and initiatives.
 
 Benefits of using the Milestones app:
 
-Managers can easily set up projects, and work items.
-Assign work items to employees.
-Classify work items by milestones.
-Configure work item categories, priorities, and status options.
+- Managers can easily set up projects, and work items
+- Assign work items to employees
+- Classify work items by milestones
+- Configure work item categories, priorities, and status options
 
 For more information, please visit: https://docs.microsoft.com/en-us/powerapps/teams/milestones
 

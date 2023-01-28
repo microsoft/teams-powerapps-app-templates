@@ -1,17 +1,16 @@
 
 
-# Send notification to the Team when work item status is updated in the Milestones sample app
+# Send notification to the Team when work item status is updated in the Milestones sample app template
 
 The Milestones sample app for Microsoft Teams allows users to track progress of completion of work items in projects across milestones. While the app allows work items to be updated and maintained, there's currently no standard notifications about work item updates to the team.
 
 In this article, we'll learn how to create a Power Automate flow to send an adaptive card notification to the Team (in which the app is installed) when work item status changes.
 
-Watch this video to learn how to configure notification to the Team when work item status is updated in the Milestones sample app:
-> [VIDEO https://www.microsoft.com/videoplayer/embed/RWLkWN]
+Watch this video to learn how to configure notifications to the Team when work item status is updated in the Milestones sample app template: https://www.microsoft.com/videoplayer/embed/RWLkWN
 
 ## Prerequisites
 
-To complete this exercise, we would need the ability to log in into Teams that will be available as part of select Microsoft 365 subscriptions and will also need to have the Milestones Power Apps template for Teams installed. This app can be installed from <https://aka.ms/TeamsInspection>.
+To complete this exercise, we would need the ability to log into Teams that will be available as part of select Microsoft 365 subscriptions and will also need to have the Milestones Power Apps template for Teams installed. This app can be installed using the [installation guide](../../INSTALLATION.md).
 
 ## Log in into the Milestones app
 
@@ -585,11 +584,8 @@ All the changes to the Milestones app are completed. The app can now be publishe
 
 ### See also
 
-- [Deploy Milestones sample app broad distribution app](milestones-broad-distribution.md)
-- [Customize Milestones sample app](customize-milestones.md)
-- [Understand Milestones sample app architecture](milestones-architecture.md)
-- [Customize sample apps](customize-sample-apps.md)
-- [Sample apps FAQs](sample-apps-faqs.md)
-- [Use sample apps from the Microsoft Teams store](use-sample-apps-from-teams-store.md)
-
-[!INCLUDE[footer-include](../includes/footer-banner.md)]
+- [Deploy Milestones as broad distribution app](milestones-broad-distribution.md)
+- [Customize Milestones sample app template](customize-milestones.md)
+- [Understand Milestones sample app template architecture](milestones-architecture.md)
+- [Customize sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/customize-sample-apps) <br>
+- [Frequently Asked Questions (FAQs) for sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)

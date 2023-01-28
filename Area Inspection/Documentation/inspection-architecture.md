@@ -1,18 +1,18 @@
-# Understand Inspection sample apps architecture
+# Understand the Inspection sample app template architecture
 
-In this article, you'll learn about the collections and global variables used by the [Inspection](inspection.md) app, and understand how to use them effectively. If you want to learn more about how to install, and use the Inspection sample app instead, go to [Inspection sample apps](inspection.md).
+In this article, you'll learn about the collections and global variables used by the [Inspection](inspection.md) app, and understand how to use them effectively. If you want to learn more about how to install, and use the Inspection sample app template instead, go to [Inspection sample app template](inspection.md).
 
 ## Prerequisites
 
 To understand and use information in this article, you'll need to know about different controls, features, and capabilities of canvas apps.
 
-- [Create and update a collection in a canvas app](../maker/canvas-apps/create-update-collection.md)
-- [Collect, Clear, and ClearCollect functions in Power Apps](../maker/canvas-apps/functions/function-clear-collect-clearcollect.md)
-- [Understand canvas-app variables in Power Apps](../maker/canvas-apps/working-with-variables.md)
-- [Add and configure a canvas-app control in Power Apps](../maker/canvas-apps/add-configure-controls.md)
-- [Add a screen to a canvas app and navigate between screens](../maker/canvas-apps/add-screen-context-variables.md)
+- [Create and update a collection in a canvas app](https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/create-update-collection)
+- [Collect, Clear, and ClearCollect functions in Power Apps](https://learn.microsoft.com/en-us/power-platform/power-fx/reference/function-clear-collect-clearcollect)
+- [Understand canvas-app variables in Power Apps](https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/working-with-variables)
+- [Add and configure a canvas-app control in Power Apps](https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/add-configure-controls)
+- [Add a screen to a canvas app and navigate between screens](https://learn.microsoft.com/en-us/power-apps/maker/canvas-apps/add-screen-context-variables)
 
-You'll also need to know about how to [install](use-sample-apps-from-teams-store.md), and [use](inspection.md) the Inspection sample app.
+You'll also need to know about how to [install](../../INSTALLATION.md), and [use](inspection.md) the Inspection sample app.
 
 ## Data model
 
@@ -1292,7 +1292,5 @@ The following variables are used by the review inspection screen.
 
 ### See also
 
-[Inspection sample apps](inspection.md) <br>
-[Use sample apps from the Microsoft Teams store](use-sample-apps-from-teams-store.md) <br>
-[Customize sample apps installed from Teams store](customize-sample-apps.md) <br>
-[Frequently Asked Questions (FAQs) for sample apps](sample-apps-faqs.md)
+* [Inspection sample app templates](inspection.md) <br>
+* [Frequently Asked Questions (FAQs) for sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)

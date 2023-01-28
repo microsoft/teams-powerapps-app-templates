@@ -3,8 +3,7 @@
 
 The Bulletins Power App Template for Teams provides a central location for all company communication such as broadcasts, memos, announcements, and company news. The app allows you to create, categorize, bookmark, search, and read bulletin posts.
 
-Watch this video to add "Notify me" settings to category:
-> [VIDEO https://www.microsoft.com/videoplayer/embed/RWLxVs]
+Watch this video to add "Notify me" settings to category: https://www.microsoft.com/videoplayer/embed/RWLxVs
 
 The Bulletins app solution consists of two apps:
 
@@ -29,7 +28,7 @@ When users are busy, excessive notifications can be a distraction. Users want to
 
 ## Prerequisites
 
-To complete this lesson, we'd need the ability to log in into Teams that will be available as part of select Microsoft 365 subscriptions, and will also need to have the Bulletins Power Apps template for Teams installed. This app can be installed from <https://aka.ms/TeamsBulletins>.
+To complete this lesson, we'd need the ability to log in into Teams that will be available as part of select Microsoft 365 subscriptions, and will also need to have the Bulletins Power Apps template for Teams installed. This app can be installed by following these [instructions](../../INSTALLATION.md).
 
 ## Create a new table called Bulletin Notifications
 
@@ -142,9 +141,6 @@ All the changes to the Bulletins app are completed. The app can now be published
 
 ### See also
 
-- [Understand Bulletins sample app architecture](bulletins-architecture.md)
+- [Understand Bulletins sample app template architecture](bulletins-architecture.md)
 - [Customize Bulletins app](customize-bulletins.md)
-- [Sample apps FAQs](sample-apps-faqs.md)
-- [Use sample apps from the Microsoft Teams store](use-sample-apps-from-teams-store.md)
-
-[!INCLUDE[footer-include](../includes/footer-banner.md)]
+- [Frequently Asked Questions (FAQs) for sample apps](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)

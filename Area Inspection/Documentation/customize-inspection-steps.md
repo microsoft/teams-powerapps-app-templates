@@ -1,15 +1,14 @@
-# Inspections App – Customize inspection steps
+# Customize inspection steps
 
 The Inspections sample app allows users to create and perform inspections in the app. There are three apps, one per persona to perform, manage, and review Inspections. The three apps are&mdash;Inspections, Manage Inspections and Review Inspections.
 
 In this article, we'll learn how to customize inspection steps in the user app. For example, removing the ability to add pictures to checklist steps. This customization is important because just deleting the particular control can cause issues with responsiveness, and the look and feel of the app can get affected.
 
-Watch this video to learn how to customize inspection steps:
-> [VIDEO https://www.microsoft.com/videoplayer/embed/RWLiBT]
+Watch this video to learn how to customize inspection steps: https://www.microsoft.com/videoplayer/embed/RWLiBT
 
 ## Prerequisites
 
-To complete this lesson, we'd need the ability to sign-in to Microsoft Teams that will be available as part of select Microsoft 365 subscriptions, and will also need to have the Inspections sample app for Teams installed. This app can be installed from <https://aka.ms/TeamsInspection>.
+To complete this lesson, we'd need the ability to sign-in to Microsoft Teams that will be available as part of select Microsoft 365 subscriptions, and will also need to have the Inspections sample app for Teams installed. This app can be installed by following these [instructions](../../INSTALLATION.md).
 
 ## Open the Inspections app
 
@@ -126,10 +125,7 @@ Make sure to check for responsiveness by shrinking the size of the screen when t
 
 ### See also
 
-- [Understand Inspection sample apps architecture](inspection-architecture.md)
+- [Understand Inspection sample app template architecture](inspection-architecture.md)
 - [Customize Inspection sample app](customize-inspections.md)
-- [Customize sample apps](customize-sample-apps.md)
-- [Sample apps FAQs](sample-apps-faqs.md)
-- [Use sample apps from the Teams store](use-sample-apps-from-teams-store.md)
-
-[!INCLUDE[footer-include](../includes/footer-banner.md)]
+- [Customize sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/customize-sample-apps)
+- [Frequently Asked Questions (FAQs) for sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)

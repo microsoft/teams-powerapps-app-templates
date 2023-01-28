@@ -3,10 +3,7 @@
 
 The Bulletins sample app for Microsoft Teams provides a central location for all company communication such as broadcasts, memos, announcements, and company news. The app allows you to create, categorize, bookmark, search and read bulletin posts.
 
-Watch this video to learn how to add contact phone in links and contacts section:
-> [VIDEO https://www.microsoft.com/videoplayer/embed/RWLkvV]
-
-The Bulletins app solution consists of two apps:
+Watch this video to learn how to add contact phone in links and contacts section: https://www.microsoft.com/videoplayer/embed/RWLkvV
 
 The Bulletins app solution consists of two apps:
 
@@ -33,7 +30,7 @@ By default, there's no phone number to call the person. We'll add the ability to
 
 ## Prerequisites
 
-To complete this lesson, we'd need the ability to login into Teams which will be available as part of select Microsoft 365 subscriptions, and will also need to have the Bulletins app for Teams installed. This app can be installed from <https://aka.ms/TeamsBulletins>. Also, we'd need to complete [Add "notify me" settings to category](bulletins-notify-me.md). We'll use steps followed in that lesson and build up on those in this topic.
+To complete this lesson, we'd need the ability to login into Teams which will be available as part of select Microsoft 365 subscriptions, and will also need to have the Bulletins app for Teams installed. This app can be installed by following these [instructions](../../INSTALLATION.md). Also, we'd need to complete [Add "notify me" settings to category](bulletins-notify-me.md). We'll use steps followed in that lesson and build up on those in this topic.
 
 > [NOTE]
 > Follow below steps on both the Bulletins and the Manage Bulletins apps where you want the "Call contact" functionality enabled.
@@ -101,9 +98,6 @@ All the changes to the Bulletins app are completed. The app can now be published
 
 ### See also
 
-- [Understand Bulletins sample app architecture](bulletins-architecture.md)
+- [Understand Bulletins sample app template architecture](bulletins-architecture.md)
 - [Customize Bulletins app](customize-bulletins.md)
-- [Sample apps FAQs](sample-apps-faqs.md)
-- [Use sample apps from the Teams store](use-sample-apps-from-teams-store.md)
-
-[!INCLUDE[footer-include](../includes/footer-banner.md)]
+- [Frequently Asked Questions (FAQs) for sample apps](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)

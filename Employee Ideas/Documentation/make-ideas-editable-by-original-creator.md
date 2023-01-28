@@ -12,12 +12,11 @@ In this article, we'll learn how to enable the editing of an idea by the origina
 > [NOTE]
 > Before starting with the steps in this article, read [Customize the Employee Ideas app](customize-employee-ideas.md).
 
-Watch this video to learn about how to make ideas editable by original creator:
-> [VIDEO https://www.microsoft.com/videoplayer/embed/RWMToi]
+Watch this video to learn about how to make ideas editable by original creator: https://www.microsoft.com/videoplayer/embed/RWMToi
 
 ## Prerequisites
 
-To complete this tutorial, you'll need the ability to sign in to Microsoft Teams, which will be available as part of select Microsoft 365 subscriptions. You'll also need to have the [Employee Ideas sample app](employee-ideas.md) installed. This app can also be installed using <https://aka.ms/TeamsEmployeeIdeas>.
+To complete this tutorial, you'll need the ability to sign in to Microsoft Teams, which will be available as part of select Microsoft 365 subscriptions. You'll also need to have the [Employee Ideas sample app](employee-ideas.md) installed. This app can be installed by following these [instructions](../../INSTALLATION.md).
 
 ## Open Employee Ideas in Power Apps
 
@@ -669,9 +668,6 @@ Finally, let’s test the app and try editing an idea.
 
 ### See also
 
-- [Understand Employee ideas app architecture](employee-ideas-architecture.md)
-- [Customize sample apps](customize-sample-apps.md)
-- [Sample apps FAQs](sample-apps-faqs.md)
-- [Use sample apps from the Teams store](use-sample-apps-from-Teams-store.md)
-
-[!INCLUDE[footer-include](../includes/footer-banner.md)]
+- [Understand Employee Ideas sample app template architecture](employee-ideas-architecture.md)
+- [Customize sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/customize-sample-apps)
+- [Frequently Asked Questions (FAQs) for sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)

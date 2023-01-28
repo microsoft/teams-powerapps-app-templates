@@ -14,8 +14,7 @@ You can use **Share with Colleague** feature to accomplish this. In this case, y
 
 In this article, we'll explain how to share the app with colleagues outside of the team.
 
-Watch this video to learn how to deploy Employee Ideas app as a broad distribution app:
-> [VIDEO https://www.microsoft.com/videoplayer/embed/RWLkvR]
+Watch this video to learn how to deploy Employee Ideas app as a broad distribution app: https://www.microsoft.com/videoplayer/embed/RWLkvR
 
 ## Prerequisites
 
@@ -46,29 +45,29 @@ This process begins by opening the app in the **Power Apps** app. You may have P
 
 1. Type **Power Apps** in the search field.
 
-    ![Search for Power Apps.](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Employee%20Ideas/Documentation/media/profile-plus-broad-distribution/app-search.png "Search for Power Apps")
+    ![Search for Power Apps](https://user-images.githubusercontent.com/122298060/215223010-3dc21432-5cd6-4eb7-b811-0bc4305a7bd7.png)
 
 1. Select the Power Apps app from the list to open the app. Power Apps will open in teams.
 
 1. Right-click on the **Power Apps** logo, and select **Pin** to lock the app to the side menu to pin the app.
 
-    ![Pin the app.](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Employee%20Ideas/Documentation/media/profile-plus-broad-distribution/pin.png "Pin the app")
+    ![Pin the app](https://user-images.githubusercontent.com/122298060/215223060-b960470e-f27d-4dcd-a17c-c89ab28cd6b9.png)
 
 1. We recommended that you **pop out** Power Apps so that if you need to navigate somewhere else in Teams you won't lose your app configuration. To pop out the Power Apps app, right-click on the Power Apps logo, and select **Pop out app**.
 
-    ![Pop out app.](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Employee%20Ideas/Documentation/media/profile-plus-broad-distribution/pop-out-app.png "Pop out app")
+    ![[Pop out app](https://user-images.githubusercontent.com/122298060/215223084-11d3bdc9-5f72-4758-8cdb-8fae7decf605.png)
 
 1. Now that you've loaded the Power Apps app, select **Build**.
 
 1. This screen will show all the teams that have Power Apps installed in them. Select the team that contain the app you want to share. Select **Share with colleagues**.
 
-    ![Share with colleagues.](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Employee%20Ideas/Documentation/media/deploy-employee-ideas-broad-distribution/share-with-colleagues.png "Share with colleagues")
+    ![Share with colleagues](https://user-images.githubusercontent.com/122298060/215223114-ed2cde25-0763-40a6-912e-38cb9889b39f.png)
 
 1. Enter Azure AD security group or a different team with which you would like to share access to the app.
 
 1. Set the **on/off** toggle to **on** for Ideas.
 
-   ![Toggle share to on.](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Employee%20Ideas/Documentation/media/deploy-employee-ideas-broad-distribution/share-with-colleagues-2.png "Toggle share to on")
+   ![Toggle share to on](https://user-images.githubusercontent.com/122298060/215223139-9d5611d3-3b10-42e1-b87d-e56c87723309.png)
 
 1. Select **Save**.
 
@@ -98,11 +97,11 @@ By default, all of the table permissions for colleagues not in the Team are set 
 
 1. Select **See All** in the **Employee Ideas** tile.
 
-   ![Select See all.](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Employee%20Ideas/Documentation/media/deploy-employee-ideas-broad-distribution/ideas-tile.png "Select See all")
+   ![Select See all](https://user-images.githubusercontent.com/122298060/215223172-518d3803-48b3-4538-aece-6990e9e63069.png)
 
 1. Select **Tables** from the solution components bar.
 
-   ![Select tables.](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Employee%20Ideas/Documentation/media/deploy-employee-ideas-broad-distribution/tables.png "Select tables")
+   ![Select tables](https://user-images.githubusercontent.com/122298060/215223198-88d0e833-7919-4e7f-ad99-82b6211b2ebe.png)
 
 1. Select the tables listed individually then **Manage Permissions.**
 
@@ -133,7 +132,7 @@ So now that you have shared. Ideas with colleagues outside of your team, here's 
 
 1. Select **Built for your org**.
 
-   ![Built for your org.](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Employee%20Ideas/Documentation/media/deploy-employee-ideas-broad-distribution/built-for-your-org.png "Built for your org")
+   ![Built for your org](https://user-images.githubusercontent.com/122298060/215223228-ef58e87d-6b19-4ff1-9d8a-42460fe13ee2.png)
 
 1. When the app information screen appears, select **Add** to add the app to the main teams app menu.
 
@@ -141,11 +140,11 @@ So now that you have shared. Ideas with colleagues outside of your team, here's 
 
 1. If you want to make the app always appear in the app menu so you can easily find it, right-click on the Ideas button on the app menu and select **Pin**.
 
-   ![Pin Ideas.](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Employee%20Ideas/Documentation/media/deploy-employee-ideas-broad-distribution/pin.png "Pin Ideas")
+    ![Pin Ideas](https://user-images.githubusercontent.com/122298060/215223252-7627e35c-ffa8-4af8-8b9b-c5776dc2ceae.png)
 
 1. If you would prefer to add the app to another team, select the drop-down by the **Add** button, and select **Add to a team**.
 
-   ![Add app to a Team.](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Employee%20Ideas/Documentation/media/deploy-employee-ideas-broad-distribution/add-to-team.png "Add app to a Team")
+   ![Add app to a Team](https://user-images.githubusercontent.com/122298060/215223274-9d1ed467-6c29-4424-80b6-59b72e9f9a65.png)
 
 ## Limitations
 
@@ -153,9 +152,6 @@ Currently, Teams apps can only be shared with a single Azure Active Directory gr
 
 ### See also
 
-- [Understand Employee ideas app architecture](employee-ideas-architecture.md)
+- [Understand Employee Ideas sample app template architecture](employee-ideas-architecture.md)
 - [Customize employee ideas app](customize-employee-ideas.md)
-- [Sample apps FAQs](sample-apps-faqs.md)
-- [Use sample apps from the Microsoft Teams store](use-sample-apps-from-teams-store.md)
-
-[!INCLUDE[footer-include](../includes/footer-banner.md)]
+- [Frequently Asked Questions (FAQs) for sample app templates](https://learn.microsoft.com/en-us/power-apps/teams/sample-apps-faqs)
