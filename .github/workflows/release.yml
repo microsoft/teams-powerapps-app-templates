@@ -19,22 +19,22 @@ jobs:
       run: .\PowerApps-Language-Tooling\build.cmd
     - name: Prepare output folder
       run: mkdir buildoutput
-    - name: Pack Area Inspection
+    - name: Pack Inspection
       run: |
-            cd "Area Inspection"
+            cd "Inspection"
             ..\PowerApps-Language-Tooling\bin\Debug\PASopa\PASopa.exe -pack .\DataverseSolution\CanvasApps\msft_areainspection_9036a_DocumentUri.msapp .\DataverseSolution\CanvasApps\msft_areainspection_9036a_DocumentUri_src\
             ..\PowerApps-Language-Tooling\bin\Debug\PASopa\PASopa.exe -pack .\DataverseSolution\CanvasApps\msft_areainspectionmanager_a6427_DocumentUri.msapp .\DataverseSolution\CanvasApps\msft_areainspectionmanager_a6427_DocumentUri_src\
             ..\PowerApps-Language-Tooling\bin\Debug\PASopa\PASopa.exe -pack .\DataverseSolution\CanvasApps\msft_reviewinspections_1dd45_DocumentUri.msapp .\DataverseSolution\CanvasApps\msft_reviewinspections_1dd45_DocumentUri_src\
             powershell rm -r DataverseSolution\CanvasApps\msft_areainspection_9036a_DocumentUri_src\
             powershell rm -r DataverseSolution\CanvasApps\msft_areainspectionmanager_a6427_DocumentUri_src\
             powershell rm -r DataverseSolution\CanvasApps\msft_reviewinspections_1dd45_DocumentUri_src\
-            mkdir "Area Inspection"
+            mkdir "Inspection"
             cd DataverseSolution
-            powershell tar -acf ..\"Area Inspection\DataverseSolution.zip" *
+            powershell tar -acf ..\"Inspection\DataverseSolution.zip" *
             cd ..
             powershell Compress-Archive TeamsCustomApp\* TeamsCustomApp.zip
-            move TeamsCustomApp.zip "Area Inspection"
-            move "Area Inspection" ..\buildoutput
+            move TeamsCustomApp.zip "Inspection"
+            move "Inspection" ..\buildoutput
             cd ..
     - name: Pack Boards
       run: |
@@ -64,20 +64,20 @@ jobs:
             move TeamsCustomApp.zip "Bulletins"
             move "Bulletins" ..\buildoutput
             cd ..
-    - name: Pack Employee Ideas
+    - name: Pack EmployeeIdeas
       run: |
-            cd "Employee Ideas"
+            cd "EmployeeIdeas"
             ..\PowerApps-Language-Tooling\bin\Debug\PASopa\PASopa.exe -pack .\DataverseSolution\CanvasApps\msft_employeeideas_955d7_DocumentUri.msapp .\DataverseSolution\CanvasApps\msft_employeeideas_955d7_DocumentUri_src\
             ..\PowerApps-Language-Tooling\bin\Debug\PASopa\PASopa.exe -pack .\DataverseSolution\CanvasApps\msft_employeeideasmanager_f172c_DocumentUri.msapp .\DataverseSolution\CanvasApps\msft_employeeideasmanager_f172c_DocumentUri_src\
             powershell rm -r DataverseSolution\CanvasApps\msft_employeeideas_955d7_DocumentUri_src\
             powershell rm -r DataverseSolution\CanvasApps\msft_employeeideasmanager_f172c_DocumentUri_src\
-            mkdir "Employee Ideas"
+            mkdir "EmployeeIdeas"
             cd DataverseSolution
-            powershell tar -acf ..\"Employee Ideas\DataverseSolution.zip" *
+            powershell tar -acf ..\"EmployeeIdeas\DataverseSolution.zip" *
             cd ..
             powershell Compress-Archive TeamsCustomApp\* TeamsCustomApp.zip
-            move TeamsCustomApp.zip "Employee Ideas"
-            move "Employee Ideas" ..\buildoutput
+            move TeamsCustomApp.zip "EmployeeIdeas"
+            move "EmployeeIdeas" ..\buildoutput
             cd ..
     - name: Pack HowTo
       run: |
