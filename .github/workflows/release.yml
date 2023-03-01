@@ -33,7 +33,11 @@ jobs:
             powershell tar -acf ..\"Inspection\DataverseSolution.zip" *
             cd ..
             powershell Compress-Archive TeamsCustomApp\* TeamsCustomApp.zip
+            del TeamsCustomApp\manifest.json
+            move TeamsCustomApp\manifest_GCC.json TeamsCustomApp\manifest.json
+            powershell Compress-Archive TeamsCustomApp\* TeamsCustomApp_GCC.zip
             move TeamsCustomApp.zip "Inspection"
+            move TeamsCustomApp_GCC.zip "Inspection"
             move "Inspection" ..\buildoutput
             cd ..
     - name: Pack Boards
@@ -59,9 +63,21 @@ jobs:
             mkdir "Bulletins"
             cd DataverseSolution
             powershell tar -acf ..\"Bulletins\DataverseSolution.zip" *
-            cd ..
+            cd .. 
             powershell Compress-Archive TeamsCustomApp\* TeamsCustomApp.zip
+            del TeamsCustomApp\manifest.json
+            move TeamsCustomApp\manifest_DoD.json TeamsCustomApp\manifest.json
+            powershell Compress-Archive TeamsCustomApp\* TeamsCustomApp_DoD.zip
+            del TeamsCustomApp\manifest.json
+            move TeamsCustomApp\manifest_GCC.json TeamsCustomApp\manifest.json
+            powershell Compress-Archive TeamsCustomApp\* TeamsCustomApp_GCC.zip
+            del TeamsCustomApp\manifest.json
+            move TeamsCustomApp\manifest_GCCH.json TeamsCustomApp\manifest.json
+            powershell Compress-Archive TeamsCustomApp\* TeamsCustomApp_GCCH.zip
             move TeamsCustomApp.zip "Bulletins"
+            move TeamsCustomApp_DoD.zip "Bulletins"
+            move TeamsCustomApp_GCC.zip "Bulletins"
+            move TeamsCustomApp_GCCH.zip "Bulletins"
             move "Bulletins" ..\buildoutput
             cd ..
     - name: Pack EmployeeIdeas
@@ -76,7 +92,19 @@ jobs:
             powershell tar -acf ..\"EmployeeIdeas\DataverseSolution.zip" *
             cd ..
             powershell Compress-Archive TeamsCustomApp\* TeamsCustomApp.zip
+            del TeamsCustomApp\manifest.json
+            move TeamsCustomApp\manifest_DoD.json TeamsCustomApp\manifest.json
+            powershell Compress-Archive TeamsCustomApp\* TeamsCustomApp_DoD.zip
+            del TeamsCustomApp\manifest.json
+            move TeamsCustomApp\manifest_GCC.json TeamsCustomApp\manifest.json
+            powershell Compress-Archive TeamsCustomApp\* TeamsCustomApp_GCC.zip
+            del TeamsCustomApp\manifest.json
+            move TeamsCustomApp\manifest_GCCH.json TeamsCustomApp\manifest.json
+            powershell Compress-Archive TeamsCustomApp\* TeamsCustomApp_GCCH.zip
             move TeamsCustomApp.zip "EmployeeIdeas"
+            move TeamsCustomApp_DoD.zip "EmployeeIdeas"
+            move TeamsCustomApp_GCC.zip "EmployeeIdeas"
+            move TeamsCustomApp_GCCH.zip "EmployeeIdeas"
             move "EmployeeIdeas" ..\buildoutput
             cd ..
     - name: Pack HowTo
@@ -104,7 +132,11 @@ jobs:
             powershell tar -acf ..\"IssueReporting\DataverseSolution.zip" *
             cd ..
             powershell Compress-Archive TeamsCustomApp\* TeamsCustomApp.zip
+            del TeamsCustomApp\manifest.json
+            move TeamsCustomApp\manifest_GCC.json TeamsCustomApp\manifest.json
+            powershell Compress-Archive TeamsCustomApp\* TeamsCustomApp_GCC.zip
             move TeamsCustomApp.zip "IssueReporting"
+            move TeamsCustomApp_GCC.zip "IssueReporting"
             move "IssueReporting" ..\buildoutput
             cd ..
     - name: Pack GetConnected
@@ -130,7 +162,19 @@ jobs:
             powershell tar -acf ..\"Milestones\DataverseSolution.zip" *
             cd ..
             powershell Compress-Archive TeamsCustomApp\* TeamsCustomApp.zip
+            del TeamsCustomApp\manifest.json
+            move TeamsCustomApp\manifest_DoD.json TeamsCustomApp\manifest.json
+            powershell Compress-Archive TeamsCustomApp\* TeamsCustomApp_DoD.zip
+            del TeamsCustomApp\manifest.json
+            move TeamsCustomApp\manifest_GCC.json TeamsCustomApp\manifest.json
+            powershell Compress-Archive TeamsCustomApp\* TeamsCustomApp_GCC.zip
+            del TeamsCustomApp\manifest.json
+            move TeamsCustomApp\manifest_GCCH.json TeamsCustomApp\manifest.json
+            powershell Compress-Archive TeamsCustomApp\* TeamsCustomApp_GCCH.zip
             move TeamsCustomApp.zip "Milestones"
+            move TeamsCustomApp_DoD.zip "Milestones"
+            move TeamsCustomApp_GCC.zip "Milestones"
+            move TeamsCustomApp_GCCH.zip "Milestones"
             move "Milestones" ..\buildoutput
             cd ..
     - name: Pack Perspectives
