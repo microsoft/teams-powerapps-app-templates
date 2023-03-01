@@ -58,7 +58,11 @@ You need to have a [Power Apps Teams environment](https://learn.microsoft.com/en
 4. Open Teams. Go to the Power Apps personal app. If you do not have it installed, install the app from the Teams app store.  
 ![03](https://user-images.githubusercontent.com/84343636/210960240-224a9a54-5bd6-40a7-9b09-07af23847027.jpeg)
 
-5. Browse to the Teams team environment where you’d like to import the solution. If there are apps in the 'Built by this team' section, select 'See all', and go to Step 6.  
+5. In the 'Build' tab, browse to the Teams team environment where you’d like to import the solution. If you don't see the team you're interested in, an environment needs to be created for that team. Kick-off environment creation by creating a blank app in that team. Click the 'Create' button and follow the prompts.
+
+![image](https://user-images.githubusercontent.com/122298060/222273910-ee15efdc-c808-4d33-95e3-05a5f97d33dc.png)
+
+6. If there are apps in the 'Built by this team' section, select 'See all', and go to Step 6.  
 ![04](https://user-images.githubusercontent.com/84343636/210960269-fec54f92-8d0f-44bc-85b2-1182f6414534.jpeg)  
 Otherwise, if there are no apps in this section, click the 'Import your solution' button, and skip to Step 7.
 ![image](https://user-images.githubusercontent.com/122298060/213597055-e0f42705-f15f-4c5f-a642-ae4a6dd55f91.png)
@@ -77,6 +81,6 @@ The import process will start in the background. This might take a while; you ca
 9. After the solution has been imported, you can view the app's content in 'Installed Apps' - 'See all'.  
 ![image](https://user-images.githubusercontent.com/84343636/210960714-6c0e86a0-0673-47f4-96b0-b0fdba1bbe11.png)
 
-10. You can use 'Add to Teams' to add the canvas app as a tab in your Teams channels. Refer to [this link](https://learn.microsoft.com/en-us/power-apps/teams/embed-teams-app) for detailed instructions.  
+10. You can use 'Add to Teams' to add each canvas app in the solution as a tab in your Teams channels. Refer to [this link](https://learn.microsoft.com/en-us/power-apps/teams/embed-teams-app) for detailed instructions.  
 ![image](https://user-images.githubusercontent.com/84343636/210961683-a46ee0e6-b21d-405d-82ac-a71dbd887519.png)
 
