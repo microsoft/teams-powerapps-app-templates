@@ -62,25 +62,25 @@ You need to have a [Power Apps Teams environment](https://learn.microsoft.com/en
 
 ![image](https://user-images.githubusercontent.com/122298060/222273910-ee15efdc-c808-4d33-95e3-05a5f97d33dc.png)
 
-6. If there are apps in the 'Built by this team' section, select 'See all', and go to Step 6.  
+6. If there are apps in the 'Built by this team' section, select 'See all', and go to Step 7.  
 ![04](https://user-images.githubusercontent.com/84343636/210960269-fec54f92-8d0f-44bc-85b2-1182f6414534.jpeg)  
 Otherwise, if there are no apps in this section, click the 'Import your solution' button, and skip to Step 7.
 ![image](https://user-images.githubusercontent.com/122298060/213597055-e0f42705-f15f-4c5f-a642-ae4a6dd55f91.png)
 
-6. Click 'Import'.  
+7. Click 'Import'.  
 ![05](https://user-images.githubusercontent.com/84343636/210960307-3f03e9f4-8833-4884-bfae-09bfd7a09c81.jpeg)
 
-7. Browse to the Dataverse solution file downloaded in Step 3 and click 'Next'.  
+8. Browse to the Dataverse solution file downloaded in Step 3 and click 'Next'.  
 ![image](https://user-images.githubusercontent.com/84343636/210960530-6d5ac726-1b77-48f3-935d-4ef7312d5b3a.png)
 
-8. Select the components you want to import (note: it is recommended that you select all) and click 'Import'.  
+9. Select the components you want to import (note: it is recommended that you select all) and click 'Import'.  
 ![07](https://user-images.githubusercontent.com/84343636/210960585-cfbebdb2-82e7-4873-9171-697d7b9e0e87.jpeg)
 
 The import process will start in the background. This might take a while; you can continue with other activities.  
 
-9. After the solution has been imported, you can view the app's content in 'Installed Apps' - 'See all'.  
+10. After the solution has been imported, you can view the app's content in 'Installed Apps' - 'See all'.  
 ![image](https://user-images.githubusercontent.com/84343636/210960714-6c0e86a0-0673-47f4-96b0-b0fdba1bbe11.png)
 
-10. You can use 'Add to Teams' to add each canvas app in the solution as a tab in your Teams channels. Refer to [this link](https://learn.microsoft.com/en-us/power-apps/teams/embed-teams-app) for detailed instructions.  
+11. You can use 'Add to Teams' to add each canvas app in the solution as a tab in your Teams channels. Refer to [this link](https://learn.microsoft.com/en-us/power-apps/teams/embed-teams-app) for detailed instructions.  
 ![image](https://user-images.githubusercontent.com/84343636/210961683-a46ee0e6-b21d-405d-82ac-a71dbd887519.png)
 
