@@ -654,13 +654,13 @@ Finally, let’s test the app and try editing an idea.
 
 1. Verify that the **Edit** button shows up on the **Campaign Details Screen**.
 
-    ![Select edit option on the Idea screen.](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Employee%20Ideas/Documentation/media/make-ideas-editable-by-original-creator/select-edit-option-on-campaign-details-screen.png "Select edit option on the Idea screen")
+    ![Select edit option on the Idea screen.](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/EmployeeIdeas/Documentation/media/make-ideas-editable-by-original-creator/select-edit-option-on-campaign-details-screen.png "Select edit option on the Idea screen")
 
 1. Select the **Edit** button, and verify that the **Edit Idea** screen opens.
 
 1. Verify that all the details are displayed on the screen.
 
-    ![Idea details screen.](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Employee%20Ideas/Documentation/media/make-ideas-editable-by-original-creator/idea-details.png "Idea details screen")
+    ![Idea details screen.](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/EmployeeIdeas/Documentation/media/make-ideas-editable-by-original-creator/idea-details.png "Idea details screen")
 
 1. Make some changes to the idea and then select the **Update** button.
 
