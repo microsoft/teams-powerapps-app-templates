@@ -370,13 +370,13 @@ Now, we'll add a container that will include the idea details section on our ide
 
 1. We need to copy controls from **dtcFilesImages** from the **Campaign Detail Screen** to the canvas.
 
-    ![List of controls under dtcFileImages.](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Employee%20Ideas/Documentation/media/make-ideas-editable-by-original-creator/controls-under-dtcfileimages-group.png "List of controls under dtcFileImages")
+    ![List of controls under dtcFileImages.](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/EmployeeIdeas/Documentation/media/make-ideas-editable-by-original-creator/controls-under-dtcfileimages-group.png "List of controls under dtcFileImages")
 
 1. Select to expand the **Edit Idea Screen**.
 
 1. Select **galIdeaResponses_2**, and then paste the copied controls. When you paste the controls, you'll also see a few errors:
 
-    ![Errors on idea responses gallery.](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Employee%20Ideas/Documentation/media/make-ideas-editable-by-original-creator/errors-on-idea-responses-gallery.png "Errors on idea responses gallery")
+    ![Errors on idea responses gallery.](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/EmployeeIdeas/Documentation/media/make-ideas-editable-by-original-creator/errors-on-idea-responses-gallery.png "Errors on idea responses gallery")
 
 1. All errors except one are related to visibility of the controls. You can select the error, and select **Edit In Formula Bar**.
 
