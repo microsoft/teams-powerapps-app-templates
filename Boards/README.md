@@ -5,7 +5,7 @@
 
 With the Boards app, you and your team can create boards about anything — interests, initiatives, onboarding, etc. You can also post just about anything to a board—images, articles, websites, and even direct links to teams, channels, and specific discussion threads within Microsoft Teams. This flexibility makes sharing ideas and content discovery efficient and seamless. Refer [here](https://aka.ms/TeamsBoardsDocs) for more detailed view of the feature.
 
-Boards is a template application built on the [Datatverse for Teams](https://powerapps.microsoft.com/en-us/blog/reshape-the-future-of-work-with-microsoft-dataverse-for-teams-now-generally-available/) on the Power Platform. Once installed, it can be [customized and extended](https://docs.microsoft.com/en-us/powerapps/teams/customize-sample-apps) by the installer of the application.
+Boards is a template application built on the [Dataverse for Teams](https://powerapps.microsoft.com/en-us/blog/reshape-the-future-of-work-with-microsoft-dataverse-for-teams-now-generally-available/) on the Power Platform. Once installed, it can be [customized and extended](https://docs.microsoft.com/en-us/powerapps/teams/customize-sample-apps) by the installer of the application.
 
 ## Trademarks
 
