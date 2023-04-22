@@ -59,6 +59,13 @@ Below are the steps for uploading the app via the [Teams client](#p1a) and via t
 10. Go back to your Teams channel and start using the Milestones app in the tab.  
 ![image](https://user-images.githubusercontent.com/84343636/210912785-5e5b0048-506f-49dd-8763-5a8403d58dbc.png)
 
+_NOTE_
+
+If the Microsoft-supported versions of the OOB apps were installed to your tenant before OOB apps were made open source, as an admin, you will see the app in the Teams admin center. If you have installed the custom app ZIPs of the OOB apps too, you will also see these versions. They can be distinguished by the app "Publisher" as shown below:
+![image](https://user-images.githubusercontent.com/122298060/233753313-28b90e1d-5fab-4a49-bec2-73bd21a35a19.png)
+
+Note that if you select the app published by "Microsoft Corporation" and try to use the "Add to Team" button, this will result in an error. That is because the Microsoft-supported versions of these apps can no longer be added to a team. However, these apps remain in the Teams admin center so that admins can choose to block or allow these apps in the places where they have already been installed.
+
 ## Import the solution to Power Apps environment<a name="p2"></a>
 Below are the steps for import sample app 'Boards' as a dataverse solution. You can use similar steps to install other sample apps.
 You need to have a [Power Apps Teams environment](https://learn.microsoft.com/en-us/power-platform/admin/about-teams-environment) as a prerequisite.
