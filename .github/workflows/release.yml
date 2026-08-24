@@ -8,11 +8,11 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@a37ce9120846195fa4ece8f58b268e6043cb2f26 # v3.7.0
     - name: Checkout and build PowerApps pack/unpack tool
       run:  git clone https://github.com/microsoft/PowerApps-Language-Tooling.git
     - name: Setup .NET
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@55ec9447dda3d1cf6bd587150f3262f30ee10815 # v3.4.2
       with:
         dotnet-version: 6.0.x
     - name: Build PowerApps pack/unpack tool
@@ -209,7 +209,7 @@ jobs:
             dir
     - name: Create Release
       id: create_release
-      uses: actions/create-release@v1
+      uses: actions/create-release@0cb9c9b65d5d1901c1f53e5e66eaf4afd303e70e # v1.1.4
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
@@ -217,7 +217,7 @@ jobs:
         draft: false
         prerelease: false
     - name: Upload Release Asset
-      uses: actions/upload-release-asset@v1
+      uses: actions/upload-release-asset@e8f9f06c4b078e705bd2ea027f0926603fc9b4d5 # v1.0.2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
