@@ -130,7 +130,7 @@ All the changes to the Manage Ideas app are completed. The app can now be publis
 
 1. Verify that the label showing the creator of the idea plus the timestamp also shows whether the idea was prioritized or not.
 
-    ![Priority displayed on Idea details screen.](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Employee%20Ideas/Documentation/media/add-tag-to-mark-ideas-prioritized/priority-displayed-on-idea-details-screen.png "Priority displayed on Idea details screen")
+    ![Priority displayed on Idea details screen.](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/EmployeeIdeas/Documentation/media/add-tag-to-mark-ideas-prioritized/priority-displayed-on-idea-details-screen.png "Priority displayed on Idea details screen")
 
 
 ### See also

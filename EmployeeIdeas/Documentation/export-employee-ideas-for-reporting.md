@@ -115,12 +115,12 @@ Next, we'll add a step to get the idea records and for each idea, get the campai
 5. Inside the apply to each step, add a Dataverse **Get row** action. Rename it to **Get campaign.** Set the **Row ID** to the Campaign value from the List ideas step.
    
     > [!div class="mx-imgBorder"]
-    > ![List ideas and get campaign steps.](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Employee%20Ideas/Documentation/media/export-employee-ideas-for-reporting/list-ideas-and-get-campaign-steps.png "List ideas and get campaign steps")
+    > ![List ideas and get campaign steps.](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/EmployeeIdeas/Documentation/media/export-employee-ideas-for-reporting/list-ideas-and-get-campaign-steps.png "List ideas and get campaign steps")
 
 6. In the Apply to each action, select **Add an action**, and select the Office 365 Users **Get user profile (V2)** action. Set **User (UPN)** to Created By Primary Email. This action will get the details of the contact who created the idea.
    
    > [!div class="mx-imgBorder"]
-   > ![Get user record of the creator of the idea record.](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Employee%20Ideas/Documentation/media/export-employee-ideas-for-reporting/get-user-record-from-created-by-of-the-idea.png "Get user record of the creator of the idea record")
+   > ![Get user record of the creator of the idea record.](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/EmployeeIdeas/Documentation/media/export-employee-ideas-for-reporting/get-user-record-from-created-by-of-the-idea.png "Get user record of the creator of the idea record")
 
 7.  Add an Excel **Add a row into a table** step so you can write the details of the ideas, user, and campaign to the spreadsheet table we created earlier.
 
@@ -156,7 +156,7 @@ Next, we'll add a step to get the idea records and for each idea, get the campai
     - Email (set to Mail value from Get user profile (V2) step
     
       > [!div class="mx-imgBorder"]
-      > ![Add idea row to excel table.](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Employee%20Ideas/Documentation/media/export-employee-ideas-for-reporting/add-idea-row-to-excel-step.png "Add idea row to excel table")
+      > ![Add idea row to excel table.](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/EmployeeIdeas/Documentation/media/export-employee-ideas-for-reporting/add-idea-row-to-excel-step.png "Add idea row to excel table")
     
 9.  Next, we're going to capture the vote details. To do that, we again need to get the idea data, so add another list rows step outside of the apply to each step to get employee ideas.
 
@@ -192,7 +192,7 @@ Next, we'll add a step to get the idea records and for each idea, get the campai
 
 
 > [!div class="mx-imgBorder"]
->![List voters flow step.](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Employee%20Ideas/Documentation/media/export-employee-ideas-for-reporting/list-voters-flow-step.png "List voters flow step")
+>![List voters flow step.](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/EmployeeIdeas/Documentation/media/export-employee-ideas-for-reporting/list-voters-flow-step.png "List voters flow step")
 
 13. We now are going to update the excel workbook vote table with the votes by idea. Add an apply to each step inside the apply to each created in step 10. For the output field, select the value from the list rows step created in step 12.
     
@@ -211,14 +211,14 @@ Next, we'll add a step to get the idea records and for each idea, get the campai
 16. Save the flow. Your flow should look like this:
 
     > [!div class="mx-imgBorder"]
-    > ![Complete flow.](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Employee%20Ideas/Documentation/media/export-employee-ideas-for-reporting/complete-flow-screenshot.png "Complete flow")
+    > ![Complete flow.](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/EmployeeIdeas/Documentation/media/export-employee-ideas-for-reporting/complete-flow-screenshot.png "Complete flow")
 
 
     > [NOTE]
     > Flow checker may give you a warning recommending that you use an Odata query on the list rows step. Using an Odata query will be advantageous if you have many idea records or want to filter ideas to a subset, such as ideas associated with open campaigns. This warning is not an error, and can be safely ignored. Select the X in the upper right corner to close the flow checker.
     
     > [!div class="mx-imgBorder"]
-    > ![Flow checker showing warnings.](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Employee%20Ideas/Documentation/media/export-employee-ideas-for-reporting/flow-checker-showing-warnings.png "Flow checker showing warnings")
+    > ![Flow checker showing warnings.](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/EmployeeIdeas/Documentation/media/export-employee-ideas-for-reporting/flow-checker-showing-warnings.png "Flow checker showing warnings")
 
 ### Test the flow
 
@@ -229,7 +229,7 @@ Test the flow to make sure that it works.
 2. Select **Manually** and select **Test**.
 
    > [!div class="mx-imgBorder"]
-   > ![Test the flow manually.](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/Employee%20Ideas/Documentation/media/export-employee-ideas-for-reporting/test-flow-manually.png "Test the flow manually")
+   > ![Test the flow manually.](https://github.com/microsoft/teams-powerapps-app-templates/blob/main/EmployeeIdeas/Documentation/media/export-employee-ideas-for-reporting/test-flow-manually.png "Test the flow manually")
 
 3. Select **Run flow**.
 
